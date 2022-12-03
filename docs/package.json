@@ -1,0 +1,33 @@
+{
+  "name": "@elog/doc",
+  "version": "1.0.0",
+  "description": "Elog文档",
+  "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-doc#readme",
+  "author": "1874 <i@1874.cool>",
+  "license": "MIT",
+  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LetTTGACO/elog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LetTTGACO/elog/issues"
+  },
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs",
+    "elog:init": "node node_modules/@elog/cli/bin/elog.js init",
+    "elog:sync": "node node_modules/@elog/cli/bin/elog.js sync -e .env",
+    "elog:clean": "node node_modules/@elog/cli/bin/elog.js clean"
+  },
+  "dependencies": {
+    "@elog/cli": "workspace:*",
+    "@types/node": "^18.11.9",
+    "vitepress": "1.0.0-alpha.29",
+    "vue": "^3.2.45"
+  }
+}

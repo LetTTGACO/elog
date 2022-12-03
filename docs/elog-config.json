@@ -1,0 +1,24 @@
+{
+  "writing": {
+    "platform": "yuque",
+    "login": "1874w",
+    "repo": "yuque-hexo-demo",
+    "onlyPublic": true,
+    "onlyPublished": true
+  },
+  "deploy": {
+    "platform": "default",
+    "classify": "classify",
+    "postPath": "./docs/docs",
+    "mdNameFormat": "title",
+    "adapter": "matter-markdown"
+  },
+  "image": {
+    "enable": true,
+    "bed": "github",
+    "user": "LetTTGACO",
+    "repo": "image",
+    "branch": "master",
+    "prefixKey": "elog-test"
+  }
+}
