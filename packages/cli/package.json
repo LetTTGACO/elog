@@ -1,0 +1,40 @@
+{
+  "name": "@elog/cli",
+  "version": "0.0.1",
+  "description": "elog的脚手架，主要用来生成配置文件并调用@elog/core的API",
+  "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-cli#readme",
+  "author": "1874 <i@1874.cool>",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "elog": "./bin/elog"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LetTTGACO/elog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LetTTGACO/elog/issues"
+  },
+  "scripts": {
+    "build": "father build"
+  },
+  "dependencies": {
+    "@elog/core": "workspace:*",
+    "@elog/shared": "workspace:*",
+    "commander": "^9.4.1",
+    "dotenv": "^16.0.3",
+    "inquirer": "^8.2.5",
+    "latest-version": "^7.0.0",
+    "rimraf": "^3.0.2",
+    "semver": "^7.3.8"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^8.2.5",
+    "@types/rimraf": "^3.0.2"
+  }
+}

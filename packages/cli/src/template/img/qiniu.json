@@ -1,0 +1,11 @@
+{
+  "image": {
+    "enable": true,
+    "bed": "qiniu",
+    "user": "",
+    "repo": "",
+    "branch": "",
+    "token": "",
+    "prefixKey": "bolg-images"
+  }
+}

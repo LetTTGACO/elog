@@ -1,0 +1,15 @@
+{
+  "writing": {
+    "platform": "yuque",
+    "login": "",
+    "repo": "",
+    "onlyPublic": true,
+    "onlyPublished": true
+  },
+  "deploy": {
+    "platform": "default",
+    "postPath": "source/_posts",
+    "mdNameFormat": "title",
+    "adapter": "matter-markdown"
+  }
+}

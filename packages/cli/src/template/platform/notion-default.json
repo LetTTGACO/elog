@@ -1,0 +1,17 @@
+{
+  "writing": {
+    "platform": "notion",
+    "databaseId": "",
+    "status": {
+      "name": "",
+      "published": "",
+      "released": ""
+    }
+  },
+  "deploy": {
+    "platform": "default",
+    "postPath": "source/_posts",
+    "mdNameFormat": "title",
+    "adapter": "matter-markdown"
+  }
+}

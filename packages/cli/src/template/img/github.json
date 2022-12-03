@@ -1,0 +1,10 @@
+{
+  "image": {
+    "enable": true,
+    "bed": "github",
+    "user": "",
+    "repo": "",
+    "branch": "",
+    "prefixKey": "bolg-images"
+  }
+}
