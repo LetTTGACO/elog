@@ -1,0 +1,34 @@
+{
+  "name": "@elog/deploy",
+  "version": "0.0.1",
+  "description": "elog的通用部署平台的处理逻辑，将文章生成到指定目录",
+  "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-deploy#readme",
+  "author": "1874 <i@1874.cool>",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LetTTGACO/elog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LetTTGACO/elog/issues"
+  },
+  "scripts": {
+    "build": "father build"
+  },
+  "dependencies": {
+    "@elog/plugin-adapter": "workspace:*",
+    "@elog/shared": "workspace:*",
+    "filenamify": "^4.3.0",
+    "mkdirp": "^1.0.4"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.189",
+    "@types/mkdirp": "^1.0.2",
+    "@types/rimraf": "^3.0.2"
+  }
+}
