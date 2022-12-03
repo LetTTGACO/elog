@@ -1,0 +1,34 @@
+{
+  "name": "@elog/plugin-adapter",
+  "version": "0.0.1",
+  "description": "elog的适配器插件，处理各大部署平台文件适配问题",
+  "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-plugin-adapter#readme",
+  "author": "1874 <i@1874.cool>",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LetTTGACO/elog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LetTTGACO/elog/issues"
+  },
+  "scripts": {
+    "build": "father build"
+  },
+  "dependencies": {
+    "@elog/shared": "workspace:*",
+    "gray-matter": "^4.0.3",
+    "html-entities": "^2.3.3",
+    "moment": "^2.29.4",
+    "prettier": "^2.7.1"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.1",
+    "@types/lodash": "^4.14.189"
+  }
+}
