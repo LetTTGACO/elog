@@ -1,0 +1,34 @@
+{
+  "name": "@elog/sdk-notion",
+  "version": "0.0.1",
+  "description": "elog的Notion SDK，从Notion写作平台获取文章",
+  "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-sdk-notion#readme",
+  "author": "1874 <i@1874.cool>",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LetTTGACO/elog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LetTTGACO/elog/issues"
+  },
+  "scripts": {
+    "build": "father build",
+    "test": "ts-node ./__test__/test-notion-sdk.ts"
+  },
+  "dependencies": {
+    "@elog/shared": "workspace:*",
+    "@notionhq/client": "^2.2.2",
+    "notion-to-md": "^2.5.5",
+    "tiny-async-pool": "^1.3.0",
+    "moment": "^2.29.4"
+  },
+  "devDependencies": {
+    "@types/tiny-async-pool": "^1.0.1"
+  }
+}
