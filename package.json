@@ -62,7 +62,8 @@
     "peerDependencyRules": {
       "ignoreMissing": [
         "webpack",
-        "eslint"
+        "eslint",
+        "@algolia/client-search"
       ]
     }
   }
