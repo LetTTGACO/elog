@@ -8,8 +8,7 @@ export default defineConfig({
   themeConfig: {
     sidebar: [
       {
-        text: '开始',
-        items: genSideBar('docs'),
+        items: genSideBar('elog'),
       },
     ],
     nav: [

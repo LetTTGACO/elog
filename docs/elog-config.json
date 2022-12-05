@@ -2,14 +2,14 @@
   "writing": {
     "platform": "yuque",
     "login": "1874w",
-    "repo": "yuque-hexo-demo",
+    "repo": "elog-doc",
     "onlyPublic": true,
     "onlyPublished": true
   },
   "deploy": {
     "platform": "default",
     "classify": "classify",
-    "postPath": "./docs/docs",
+    "postPath": "./docs/elog",
     "mdNameFormat": "title",
     "adapter": "matter-markdown"
   },
