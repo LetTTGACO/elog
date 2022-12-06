@@ -1,0 +1,14 @@
+{{ $socials := where (partialCached "func/socials/Get" "socials/Get") "follow" "!=" false }}
+<div class="ananke-socials">
+  {{ range $socials }}
+    {{ $rel := .rel | default "noopener" }}
+    <a href="{{ .url }}" target="_blank" rel="{{ $rel }}" class="{{ .name }} ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l {{ cond (eq $.Site.Language.LanguageDirection "rtl") "ml1" "mr1" }}" title="{{ .label }} link" aria-label="follow on {{ .label }}——Opens in a new window">
+      {{ with .icon }}
+        <span class="icon">{{ . }}</span>
+      {{ else }}
+        {{ .label }}
+      {{ end }}
+      {{- partial "new-window-icon.html" . -}}
+    </a>
+  {{ end }}
+</div>

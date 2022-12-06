@@ -1,0 +1,46 @@
+[more]
+other = "Més"
+
+[allTitle]
+other = "Tots els {{.Title }}"
+
+[recentTitle]
+other = "{{.Title }} recents"
+
+[readMore]
+other = "Llegir més"
+
+[by]
+other = "Per"
+
+[whatsInThis]
+other = "Qué hi ha en aquest {{ .Type }}"
+
+[related]
+other = "Relacionat"
+
+[yourName]
+other = "El teu nom"
+
+[emailAddress]
+other = "Adreça de correu electrònic"
+
+[message]
+other = "Missatge"
+
+[emailRequiredNote]
+other = "És necesari una adreça de correu electrònic."
+
+[send]
+other = "Enviar"
+
+[taxonomyPageList]
+other = "A continuació trobarà les pàgines associades al terme taxonòmic “{{ .Title }}”"
+
+[readingTime]
+one = "Lectura en un minut"
+other = "Lectura en {{ .Count }} minuts"
+
+[wordCount]
+one = "Una paraula"
+other = "{{ .Count }} paraules"

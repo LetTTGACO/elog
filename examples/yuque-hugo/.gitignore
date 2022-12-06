@@ -1,0 +1,9 @@
+dist/
+type/
+.idea
+node_modules
+packages/**/package-lock.json
+.env
+.env*
+.DS_Store
+.hugo_build.lock
