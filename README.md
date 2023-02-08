@@ -65,6 +65,7 @@
 - Hexo
 - Vitepress
 - HuGo
+
 一种是内容管理系统软件，相对上面这些比较重，初期涉及到数据库和手动部署，拥有自己的编辑器，代表产品
 - WordPress
 - GHost
