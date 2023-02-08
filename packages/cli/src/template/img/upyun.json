@@ -1,8 +1,0 @@
-{
-  "image": {
-    "enable": true,
-    "bed": "upyun",
-    "bucket": "",
-    "prefixKey": "bolg-images"
-  }
-}

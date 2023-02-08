@@ -1,9 +1,0 @@
-{
-  "image": {
-    "enable": true,
-    "bed": "oss",
-    "bucket": "",
-    "region": "",
-    "prefixKey": "bolg-images"
-  }
-}
