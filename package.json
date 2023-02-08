@@ -63,7 +63,8 @@
       "ignoreMissing": [
         "webpack",
         "eslint",
-        "@algolia/client-search"
+        "@algolia/client-search",
+        "caniuse-db"
       ]
     }
   }
