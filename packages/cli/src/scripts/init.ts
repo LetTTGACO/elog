@@ -24,14 +24,11 @@ const init = async (name: string) => {
         type: 'list',
         name: 'deploy',
         message: '请选择部署平台',
+        default: 'default',
         choices: [
           {
             name: '默认(适用于Hexo/HuGo/Vitepress等)',
             value: 'default',
-          },
-          {
-            name: 'WordPress',
-            value: 'wordpress',
           },
         ],
       },
@@ -39,6 +36,7 @@ const init = async (name: string) => {
         type: 'list',
         name: 'imgCdn',
         message: '请选择图床',
+        default: '',
         choices: [
           {
             name: '暂不',
@@ -69,6 +67,8 @@ const init = async (name: string) => {
     ])
     .then(async (answers) => {
       genConfig(answers, name)
+      out.access('初始化', '🎉初始化成功🎉')
+      out.info('下一步', `配置${name || 'elog-config'}.json`)
     })
     .catch((error) => {
       if (error.isTtyError) {
