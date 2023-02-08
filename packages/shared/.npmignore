@@ -1,0 +1,7 @@
+node_modules
+.env
+.env*
+.DS_Store
+__test__/**
+.fatherrc.ts
+tsconfig.json
