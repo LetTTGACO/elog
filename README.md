@@ -108,4 +108,5 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和部署�
 文档正在建设中...
 
 ## 交流与反馈
-![11675909078_ pic](https://user-images.githubusercontent.com/37357188/217700142-07b50769-ce46-4ee5-9e84-ded4f65816dc.jpg)
+<img style="width: 200px; height: 200px" src="https://user-images.githubusercontent.com/37357188/217702971-47dd05ea-e689-4091-b4e7-3ae4559ca215.png">
+
