@@ -108,5 +108,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和部署�
 文档正在建设中...
 
 ## 交流与反馈
+<p>微信扫码加入群聊</p>
 <img style="width: 200px; height: 200px" src="https://user-images.githubusercontent.com/37357188/217702971-47dd05ea-e689-4091-b4e7-3ae4559ca215.png">
+
 
