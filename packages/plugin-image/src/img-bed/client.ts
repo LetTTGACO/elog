@@ -4,6 +4,7 @@ import OssClient from './oss'
 import UPClient from './upyun'
 import GithubClient from './github'
 import QiniuClient from './qiniu'
+import LocalClient from './local'
 import { out } from '@elog/shared'
 
 import {
@@ -14,6 +15,7 @@ import {
   OssConfig,
   QiniuConfig,
   UPYunConfig,
+  LocalConfig,
 } from './types'
 import { imageBedList } from './const'
 
@@ -52,9 +54,12 @@ class ImgBedClient {
     } else if (imageBed === ImgBedEnum.GITHUB) {
       const config = this.config as GithubConfig
       return new GithubClient(config)
+    } else if (imageBed === ImgBedEnum.LOCAL) {
+      const config = this.config as LocalConfig
+      return new LocalClient(config)
     } else {
-      const config = this.config as GithubConfig
-      return new GithubClient(config)
+      const config = this.config as LocalConfig
+      return new LocalClient(config)
     }
   }
 

@@ -1,7 +1,7 @@
 import { ArticleInfo } from './types'
 import { getFileName, getFileType, getUrlListFromContent } from './utils'
 import ImgClient from './img-bed'
-import { ImgConfig } from './img-bed/types'
+import { ImgBedEnum, ImgConfig } from './img-bed/types'
 import axios from 'axios'
 import { out } from '@elog/shared'
 
@@ -77,7 +77,11 @@ class ImageUploader {
       if (img.upload) {
         newUrl = await this.ctx.uploadImg(img.buffer, img.fileName)
         if (newUrl) {
-          out.access('上传成功', newUrl)
+          if (this.config.bed === ImgBedEnum.LOCAL) {
+            out.access('生成图片', newUrl)
+          } else {
+            out.access('上传成功', newUrl)
+          }
           output.push({ original: img.origin, newUrl: newUrl })
         }
       } else {

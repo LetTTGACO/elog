@@ -24,7 +24,7 @@ export interface QiniuConfig extends ImgBaseConfig {
   secretId: string
   secretKey: string
   bucket: string
-  region: 'Zone_z0' | 'Zone_z1' | 'Zone_z2' | 'Zone_na0' | 'Zone_as0'
+  region: string
   prefixKey?: string
   host?: string
 }
@@ -46,12 +46,24 @@ export interface GithubConfig extends ImgBaseConfig {
   host?: string
 }
 
+export interface LocalConfig extends ImgBaseConfig {
+  output: string
+  pathPrefix: string
+}
+
 export enum ImgBedEnum {
   QINIU = 'qiniu',
   UPYUN = 'upyun',
   COS = 'cos',
   GITHUB = 'github',
   OSS = 'oss',
+  LOCAL = 'local',
 }
 
-export type ImgConfig = CosConfig | OssConfig | QiniuConfig | UPYunConfig | GithubConfig
+export type ImgConfig =
+  | CosConfig
+  | OssConfig
+  | QiniuConfig
+  | UPYunConfig
+  | GithubConfig
+  | LocalConfig

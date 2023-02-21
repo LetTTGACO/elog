@@ -1,7 +1,6 @@
 // 七牛云图床
 import * as qiniu from 'qiniu'
 import { QiniuConfig } from './types'
-import { ZoneMap } from './const'
 
 class QiNiuClient {
   config: QiniuConfig
@@ -23,7 +22,8 @@ class QiNiuClient {
     const mac = new qiniu.auth.digest.Mac(secretId, secretKey)
     const putPolicy = new qiniu.rs.PutPolicy({ scope: this.config.bucket }) // 配置
     this.uploadToken = putPolicy.uploadToken(mac) // 获取上传凭证
-    const qiniuConfig = new qiniu.conf.Config({ zone: ZoneMap[this.config.region] })
+    // @ts-ignore
+    const qiniuConfig = new qiniu.conf.Config({ zone: this.config.region })
     // 空间对应的机房
     this.formUploader = new qiniu.form_up.FormUploader(qiniuConfig)
     this.bucketManager = new qiniu.rs.BucketManager(mac, qiniuConfig)

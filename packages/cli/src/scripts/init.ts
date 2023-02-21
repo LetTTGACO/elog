@@ -43,6 +43,10 @@ const init = async (name: string) => {
             value: '',
           },
           {
+            name: '本地',
+            value: 'local',
+          },
+          {
             name: '腾讯云图床',
             value: 'cos',
           },

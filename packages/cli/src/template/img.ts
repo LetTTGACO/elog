@@ -49,6 +49,14 @@ const UPYun = {
     prefixKey: 'bolg-images',
   },
 }
+const Local = {
+  image: {
+    enable: true,
+    bed: 'local',
+    output: '',
+    pathPrefix: '',
+  },
+}
 
 export const imgTemplate: any = {
   cos: COS,
@@ -56,4 +64,5 @@ export const imgTemplate: any = {
   oss: OSS,
   qiniu: QiNiu,
   upyun: UPYun,
+  local: Local,
 }
