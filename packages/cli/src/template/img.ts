@@ -54,7 +54,7 @@ const Local = {
     enable: true,
     bed: 'local',
     output: '',
-    pathPrefix: '',
+    prefixKey: '',
   },
 }
 

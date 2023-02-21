@@ -29,12 +29,12 @@ class CosClient {
       // 文件路径
       const filePath = path.resolve(process.cwd(), this.config.output, fileName)
       fs.writeFileSync(filePath, imgBuffer)
-      let pathPrefix = this.config.pathPrefix || '/'
-      if (!pathPrefix.endsWith('/')) {
-        pathPrefix = pathPrefix + '/'
+      let prefixKey = this.config.prefixKey || '/'
+      if (!prefixKey.endsWith('/')) {
+        prefixKey = prefixKey + '/'
       }
       // 计算root和output的相对路径
-      return pathPrefix + fileName
+      return prefixKey + fileName
     } catch (e) {
       // @ts-ignore
       out.err('写入错误', e.message)

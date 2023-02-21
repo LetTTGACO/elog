@@ -1,5 +1,7 @@
 interface ImgBaseConfig {
   bed: ImgBedEnum
+  host?: string
+  prefixKey?: string
 }
 
 export interface CosConfig extends ImgBaseConfig {
@@ -7,8 +9,6 @@ export interface CosConfig extends ImgBaseConfig {
   secretKey: string
   bucket: string
   region: string
-  prefixKey?: string
-  host?: string
 }
 
 export interface OssConfig extends ImgBaseConfig {
@@ -16,8 +16,6 @@ export interface OssConfig extends ImgBaseConfig {
   secretKey: string
   bucket: string
   region: string
-  prefixKey?: string
-  host?: string
 }
 
 export interface QiniuConfig extends ImgBaseConfig {
@@ -25,30 +23,23 @@ export interface QiniuConfig extends ImgBaseConfig {
   secretKey: string
   bucket: string
   region: string
-  prefixKey?: string
-  host?: string
 }
 
 export interface UPYunConfig extends ImgBaseConfig {
   bucket: string
   user: string
   password: string
-  host?: string
-  prefixKey?: string
 }
 
 export interface GithubConfig extends ImgBaseConfig {
   user: string
   token: string
   repo: string
-  prefixKey?: string
   branch?: string
-  host?: string
 }
 
 export interface LocalConfig extends ImgBaseConfig {
   output: string
-  pathPrefix: string
 }
 
 export enum ImgBedEnum {
