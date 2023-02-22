@@ -70,9 +70,13 @@ const init = async (name: string) => {
       },
     ])
     .then(async (answers) => {
-      genConfig(answers, name)
+      let configName = name || 'elog-config'
+      if (!configName.endsWith('.json')) {
+        configName = configName + '.json'
+      }
+      genConfig(answers, configName)
       out.access('初始化', '🎉初始化成功🎉')
-      out.info('下一步', `配置${name || 'elog-config'}.json`)
+      out.info('下一步', `配置${configName || 'elog-config.json'}`)
     })
     .catch((error) => {
       if (error.isTtyError) {

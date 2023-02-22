@@ -12,8 +12,7 @@ export const genConfig = (platform: any, name: string) => {
   const platformConfig = platformTemplate[platformName]
   const imgConfig = imgTemplate[imgName]
   const config = { ...platformConfig, ...imgConfig }
-  const configName = name || 'elog-config'
-  fs.writeFileSync(`${process.cwd()}/${configName}.json`, JSON.stringify(config, null, 2), {
+  fs.writeFileSync(`${process.cwd()}/${name}`, JSON.stringify(config, null, 2), {
     encoding: 'utf-8',
   })
 }

@@ -22,7 +22,7 @@
     "url": "https://github.com/LetTTGACO/elog/issues"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "scripts": {
     "build": "father build"
@@ -33,12 +33,13 @@
     "commander": "^9.4.1",
     "dotenv": "^16.0.3",
     "inquirer": "^8.2.5",
-    "latest-version": "^7.0.0",
+    "latest-version": "5.1.0",
     "rimraf": "^3.0.2",
     "semver": "^7.3.8"
   },
   "devDependencies": {
     "@types/inquirer": "^8.2.5",
-    "@types/rimraf": "^3.0.2"
+    "@types/rimraf": "^3.0.2",
+    "@types/semver": "^7.3.13"
   }
 }
