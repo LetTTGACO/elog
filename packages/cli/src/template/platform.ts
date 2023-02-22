@@ -18,13 +18,11 @@ const NotionDefault = {
 
 const YuqueDefault = {
   writing: {
-    platform: 'notion',
-    databaseId: '',
-    status: {
-      name: '',
-      published: '',
-      released: '',
-    },
+    platform: 'yuque',
+    login: '',
+    repo: '',
+    onlyPublic: true,
+    onlyPublished: true,
   },
   deploy: {
     platform: 'default',
