@@ -1,5 +1,34 @@
 # @elog/cli
 
+## 0.0.2
+
+### Patch Changes
+
+- 图床支持本地存储
+- Updated dependencies
+  - @elog/core@0.0.2
+  - @elog/shared@0.0.2
+
+## 0.0.1
+
+### Patch Changes
+
+- 图床支持本地存储 & bugs fix
+- 图床支持本地存储
+- Updated dependencies
+- Updated dependencies
+  - @elog/core@0.0.1
+  - @elog/shared@0.0.1
+
+## 0.0.1-beta.1
+
+### Patch Changes
+
+- 图床支持本地存储 & bugs fix
+- Updated dependencies
+  - @elog/core@0.0.1-beta.1
+  - @elog/shared@0.0.1-beta.1
+
 ## 0.0.1-beta.0
 
 ### Patch Changes
