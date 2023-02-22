@@ -1,5 +1,17 @@
 # @elog/core
 
+## 0.0.3
+
+### Patch Changes
+
+- 修复 cli 模版错误问题
+- Updated dependencies
+  - @elog/deploy@0.0.3
+  - @elog/plugin-image@0.0.3
+  - @elog/sdk-notion@0.0.3
+  - @elog/sdk-yuque@0.0.3
+  - @elog/shared@0.0.3
+
 ## 0.0.2
 
 ### Patch Changes

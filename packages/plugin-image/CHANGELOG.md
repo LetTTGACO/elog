@@ -1,5 +1,13 @@
 # @elog/plugin-image
 
+## 0.0.3
+
+### Patch Changes
+
+- 修复 cli 模版错误问题
+- Updated dependencies
+  - @elog/shared@0.0.3
+
 ## 0.0.2
 
 ### Patch Changes

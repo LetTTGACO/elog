@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.0.3
+
+### Patch Changes
+
+- 修复 cli 模版错误问题
+
 ## 0.0.2
 
 ### Patch Changes
