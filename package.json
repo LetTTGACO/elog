@@ -28,7 +28,7 @@
     "postinstall": "husky install",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "pnpm build && pnpm changeset publish --registry=https://registry.npmjs.org/"
+    "release": "pnpm build && pnpm changeset publish"
   },
   "lint-staged": {
     "*.ts": [
