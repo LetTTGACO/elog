@@ -25,6 +25,7 @@
         "node_modules/*"
       ]
     },
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true
   }
 }
