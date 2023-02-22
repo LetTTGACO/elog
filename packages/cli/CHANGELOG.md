@@ -1,5 +1,14 @@
 # @elog/cli
 
+## 0.0.4
+
+### Patch Changes
+
+- 修复--version 错误
+- Updated dependencies
+  - @elog/core@0.0.4
+  - @elog/shared@0.0.4
+
 ## 0.0.3
 
 ### Patch Changes
