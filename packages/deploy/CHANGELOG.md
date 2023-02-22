@@ -1,5 +1,17 @@
 # @elog/deploy
 
+## 0.1.0
+
+### Minor Changes
+
+- 新增 upgrade 命令
+
+### Patch Changes
+
+- Updated dependencies
+  - @elog/plugin-adapter@0.1.0
+  - @elog/shared@0.1.0
+
 ## 0.0.5
 
 ### Patch Changes
