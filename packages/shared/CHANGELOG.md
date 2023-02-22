@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.0.5
+
+### Patch Changes
+
+- 新增 upgrade 命令，用于更新 elog
+
 ## 0.0.4
 
 ### Patch Changes

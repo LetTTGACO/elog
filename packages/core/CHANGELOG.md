@@ -1,5 +1,17 @@
 # @elog/core
 
+## 0.0.5
+
+### Patch Changes
+
+- 新增 upgrade 命令，用于更新 elog
+- Updated dependencies
+  - @elog/deploy@0.0.5
+  - @elog/plugin-image@0.0.5
+  - @elog/sdk-notion@0.0.5
+  - @elog/sdk-yuque@0.0.5
+  - @elog/shared@0.0.5
+
 ## 0.0.4
 
 ### Patch Changes
