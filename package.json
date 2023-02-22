@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LetTTGACO/eblog.git"
+    "url": "git+https://github.com/LetTTGACO/elog.git"
   },
   "scripts": {
     "build": "pnpm --filter=@elog/* run build",
