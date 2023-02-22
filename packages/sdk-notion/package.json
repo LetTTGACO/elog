@@ -3,7 +3,7 @@
   "version": "0.0.4",
   "description": "elog的Notion SDK，从Notion写作平台获取文章",
   "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-sdk-notion#readme",
-  "author": "1874 <i@1874.cool>",
+  "author": "1874 <me@mail.1874.cool>",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "license": "MIT",

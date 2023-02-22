@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "一个多写作平台多部署平台的博客生成工具",
   "homepage": "https://github.com/LetTTGACO/eblog#readme",
-  "author": "1874 <i@1874.cool>",
+  "author": "1874 <me@mail.1874.cool>",
   "main": "index.js",
   "license": "MIT",
   "private": true,
