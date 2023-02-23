@@ -1,5 +1,14 @@
 # @elog/deploy
 
+## 0.1.2
+
+### Patch Changes
+
+- 修复正则匹配图片遗漏的问题
+- Updated dependencies
+  - @elog/plugin-adapter@0.1.2
+  - @elog/shared@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes

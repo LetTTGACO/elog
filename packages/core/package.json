@@ -1,6 +1,6 @@
 {
   "name": "@elog/core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "elog的核心处理逻辑，从写作平台获取文章并部署到博客平台",
   "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-core#readme",
   "author": "1874 <me@mail.1874.cool>",
