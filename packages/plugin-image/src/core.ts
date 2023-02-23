@@ -18,11 +18,15 @@ class ImageUploader {
    * 获取图片buffer
    */
   async getPicBufferFromURL(url: string) {
-    const res = await axios.request({
-      url,
-      responseType: 'arraybuffer',
-    })
-    return res.data
+    try {
+      const res = await axios.request({
+        url,
+        responseType: 'arraybuffer',
+      })
+      return res.data
+    } catch (e) {
+      out.warning('下载失败', `图片下载失败: ${url}`)
+    }
   }
 
   /**

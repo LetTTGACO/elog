@@ -26,7 +26,7 @@ const cleanParameter = (originalUrl: string) => {
  * @param content
  */
 export const getUrlListFromContent = (content: string) => {
-  const markdownURLList = (content.match(/\!\[.*\]\(.*\)/g) || [])
+  const markdownURLList = (content.match(/!\[[^\]]*\]\(([^)]+)\)/g) || [])
     .map((item: string) => {
       const res = item.match(/\!\[.*\]\((.*?)( ".*")?\)/)
       if (res) {
