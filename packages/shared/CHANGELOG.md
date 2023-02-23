@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.1.1
+
+### Patch Changes
+
+- 修复图片下载失败的问题
+
 ## 0.1.0
 
 ### Minor Changes

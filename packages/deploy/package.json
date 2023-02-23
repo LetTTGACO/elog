@@ -1,6 +1,6 @@
 {
   "name": "@elog/deploy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "elog的通用部署平台的处理逻辑，将文章生成到指定目录",
   "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-deploy#readme",
   "author": "1874 <me@mail.1874.cool>",
