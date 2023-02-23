@@ -26,38 +26,44 @@ const upgrade = async () => {
           message: '是否更新',
           default: true,
         },
-        {
-          type: 'list',
-          name: 'cli',
-          message: '请选择包管理器',
-          default: 'npm',
-          choices: [
-            {
-              name: PackageManager.NPM,
-              value: PackageManager.NPM,
-            },
-            {
-              name: PackageManager.PNPM,
-              value: PackageManager.PNPM,
-            },
-            {
-              name: PackageManager.YARN,
-              value: PackageManager.YARN,
-            },
-          ],
-        },
       ])
       .then((answers) => {
-        const { confirmed, cli } = answers
-        if (confirmed) {
-          if (cli === PackageManager.YARN) {
-            runCmdSync(`yarn global add ${pkgJson.name}@${newVersion}`)
-          } else {
-            runCmdSync(`${cli} install ${pkgJson.name}@${newVersion} -g`)
-          }
-        } else {
+        const confirmed = answers.confirmed
+        if (!confirmed) {
           out.info('取消更新')
           process.exit(0)
+        } else {
+          inquirer
+            .prompt([
+              {
+                type: 'list',
+                name: 'cli',
+                message: '请选择包管理器',
+                default: 'npm',
+                choices: [
+                  {
+                    name: PackageManager.NPM,
+                    value: PackageManager.NPM,
+                  },
+                  {
+                    name: PackageManager.PNPM,
+                    value: PackageManager.PNPM,
+                  },
+                  {
+                    name: PackageManager.YARN,
+                    value: PackageManager.YARN,
+                  },
+                ],
+              },
+            ])
+            .then((answers) => {
+              const { cli } = answers
+              if (cli === PackageManager.YARN) {
+                runCmdSync(`yarn global add ${pkgJson.name}@${newVersion}`)
+              } else {
+                runCmdSync(`${cli} install ${pkgJson.name}@${newVersion} -g`)
+              }
+            })
         }
       })
   } else {
