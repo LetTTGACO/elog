@@ -1,6 +1,25 @@
 // @ts-ignore
 import { getEtag } from './qetag.js'
-import { getFileTypeFromBuffer, getFileTypeFromUrl, getFileType } from './url'
+import { getFileType, getFileTypeFromBuffer, getFileTypeFromUrl } from './url'
+
+/**
+ * 去除图片链接中多余的参数
+ * @param originalUrl
+ */
+const cleanParameter = (originalUrl: string) => {
+  let newUrl = originalUrl
+  // 去除#号
+  const indexPoundSign = originalUrl.indexOf('#')
+  if (indexPoundSign !== -1) {
+    newUrl = originalUrl.substring(0, indexPoundSign)
+  }
+  // 去除?号
+  const indexQuestionMark = originalUrl.indexOf('?')
+  if (indexQuestionMark !== -1) {
+    newUrl = originalUrl.substring(0, indexQuestionMark)
+  }
+  return newUrl
+}
 
 /**
  * 获取图片链接
@@ -11,7 +30,9 @@ export const getUrlListFromContent = (content: string) => {
     .map((item: string) => {
       const res = item.match(/\!\[.*\]\((.*?)( ".*")?\)/)
       if (res) {
-        return res[1]
+        const url = res[1]
+        // 去除#?号
+        return cleanParameter(url)
       }
       return null
     })
@@ -20,7 +41,9 @@ export const getUrlListFromContent = (content: string) => {
     .map((item: string) => {
       const res = item.match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
       if (res) {
-        return res[1]
+        const url = res[1]
+        // 去除#?号
+        return cleanParameter(url)
       }
       return null
     })

@@ -15,6 +15,8 @@ const enum PackageManager {
 const upgrade = async () => {
   const newVersion = await latestVersion(pkgJson.name)
   const currentVersion = pkgJson.version
+  out.info('当前版本', currentVersion)
+  out.info('最新版本', newVersion)
   if (gt(newVersion, currentVersion)) {
     inquirer
       .prompt([
@@ -22,7 +24,7 @@ const upgrade = async () => {
           type: 'confirm',
           name: 'confirmed',
           message: '是否更新',
-          default: false,
+          default: true,
         },
         {
           type: 'list',
