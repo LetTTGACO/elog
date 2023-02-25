@@ -1,5 +1,13 @@
 # @elog/sdk-yuque
 
+## 0.1.3
+
+### Patch Changes
+
+- 修复 upgrade 命令
+- Updated dependencies
+  - @elog/shared@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes

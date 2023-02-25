@@ -1,5 +1,17 @@
 # @elog/core
 
+## 0.1.3
+
+### Patch Changes
+
+- 修复 upgrade 命令
+- Updated dependencies
+  - @elog/deploy@0.1.3
+  - @elog/plugin-image@0.1.3
+  - @elog/sdk-notion@0.1.3
+  - @elog/sdk-yuque@0.1.3
+  - @elog/shared@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes
