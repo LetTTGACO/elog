@@ -4,6 +4,9 @@ import { out } from '@elog/shared'
 import { Doc, DocInfo, Properties, RequestError, YuqueConfig } from './types'
 import { getProps } from './utils'
 
+/** 默认语雀API 路径 */
+const DEFAULT_API_URL = 'https://www.yuque.com/api/v2'
+
 class YuqueClient {
   config: YuqueConfig
   namespace: string
@@ -20,7 +23,12 @@ class YuqueClient {
    */
   async request<T>(api: string, reqOpts: RequestOptions): Promise<T> {
     const { token } = this.config
-    const url = `https://www.yuque.com/api/v2/${api}`
+    let baseUrl = this.config.baseUrl || DEFAULT_API_URL
+    if (baseUrl.endsWith('/')) {
+      // 删除最后一个斜杠
+      baseUrl = baseUrl.slice(0, -1)
+    }
+    const url = `${baseUrl}/${api}`
     const opts: RequestOptions = {
       method: 'GET',
       contentType: 'json',

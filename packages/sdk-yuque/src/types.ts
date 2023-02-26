@@ -3,6 +3,8 @@ export interface YuqueConfig {
    * yuque token, https://www.yuque.com/settings/tokens
    */
   token: string
+  /** 语雀API 路径，默认https://www.yuque.com/api/v2/ */
+  baseUrl?: string
   login: string
   repo: string
   onlyPublic?: boolean
