@@ -1,5 +1,20 @@
 # @elog/core
 
+## 0.2.0
+
+### Minor Changes
+
+- 增加对语雀空间的 API 支持
+
+### Patch Changes
+
+- Updated dependencies
+  - @elog/deploy@0.2.0
+  - @elog/plugin-image@0.2.0
+  - @elog/sdk-notion@0.2.0
+  - @elog/sdk-yuque@0.2.0
+  - @elog/shared@0.2.0
+
 ## 0.1.3
 
 ### Patch Changes
