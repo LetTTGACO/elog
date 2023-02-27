@@ -117,20 +117,22 @@ importers:
     specifiers:
       '@elog/shared': workspace:*
       '@types/ejs': ^3.1.1
-      '@types/lodash': ^4.14.189
+      '@types/marked': ^4.0.8
       gray-matter: ^4.0.3
       html-entities: ^2.3.3
+      marked: ^4.2.12
       moment: ^2.29.4
       prettier: ^2.7.1
     dependencies:
       '@elog/shared': link:../shared
       gray-matter: 4.0.3
       html-entities: 2.3.3
+      marked: 4.2.12
       moment: 2.29.4
       prettier: 2.8.0
     devDependencies:
       '@types/ejs': 3.1.1
-      '@types/lodash': 4.14.191
+      '@types/marked': 4.0.8
 
   packages/plugin-image:
     specifiers:
@@ -173,6 +175,12 @@ importers:
       tiny-async-pool: 1.3.0
     devDependencies:
       '@types/tiny-async-pool': 1.0.1
+
+  packages/sdk-wiki:
+    specifiers:
+      '@elog/shared': workspace:*
+    dependencies:
+      '@elog/shared': link:../shared
 
   packages/sdk-yuque:
     specifiers:
@@ -1921,6 +1929,10 @@ packages:
 
   /@types/lodash/4.14.191:
     resolution: {integrity: sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==}
+    dev: true
+
+  /@types/marked/4.0.8:
+    resolution: {integrity: sha512-HVNzMT5QlWCOdeuBsgXP8EZzKUf0+AXzN+sLmjvaB3ZlLqO+e4u0uXrdw9ub69wBKFs+c6/pA4r9sy6cCDvImw==}
     dev: true
 
   /@types/mime-types/2.1.1:
@@ -6586,6 +6598,12 @@ packages:
     resolution: {integrity: sha512-Ezda85ToJUBhM6WGaG6veasyym+Tbs3cMAw/ZhOPqXiYsr0jgocBV3j3nx+4lk47plLlIqjwuTm/ywVI+zjJ/A==}
     dependencies:
       repeat-string: 1.6.1
+    dev: false
+
+  /marked/4.2.12:
+    resolution: {integrity: sha512-yr8hSKa3Fv4D3jdZmtMMPghgVt6TWbk86WQaWhDloQjRSQhMMYCAro7jP7VDJrjjdV8pxVxMssXS8B8Y5DZ5aw==}
+    engines: {node: '>= 12'}
+    hasBin: true
     dev: false
 
   /md5.js/1.3.5:

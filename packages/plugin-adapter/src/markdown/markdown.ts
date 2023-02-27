@@ -1,4 +1,4 @@
-import { formatRaw } from './utils'
+import { formatRaw } from '../utils'
 
 export function markdownAdapter(post: any) {
   const { body } = post

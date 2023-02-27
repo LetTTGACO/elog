@@ -1,6 +1,6 @@
-import { DocDetail, Properties } from './types'
+import { DocDetail, Properties } from '../types'
 import matter from 'gray-matter'
-import { formatColorBlocks, formatRaw } from './utils'
+import { formatColorBlocks, formatRaw } from '../utils'
 import { decode } from 'html-entities'
 
 /**

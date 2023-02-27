@@ -2,7 +2,7 @@
   "name": "@elog/shared",
   "version": "0.2.0",
   "description": "共享包",
-  "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-shared#readme",
+  "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/shared#readme",
   "author": "1874 <me@mail.1874.cool>",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
