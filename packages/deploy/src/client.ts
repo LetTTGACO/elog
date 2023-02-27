@@ -2,7 +2,7 @@ import { DeployOptions, DocDetail } from './types'
 import path from 'path'
 import fs from 'fs'
 import filenamify from 'filenamify'
-import { markdownAdapter, matterMarkdownAdapter } from '@elog/plugin-adapter'
+import { markdownAdapter, matterMarkdownAdapter, wikiAdapter } from '@elog/plugin-adapter'
 import { out } from '@elog/shared'
 import mkdirp from 'mkdirp'
 
@@ -34,6 +34,8 @@ class Deploy {
     } else if (adapter === 'html') {
       // TODO HTML适配器
       // formatBody = await transform.htmlAdapter(post)
+    } else if (adapter === 'wiki') {
+      formatBody = wikiAdapter(post)
     } else {
       formatBody = markdownAdapter(post)
     }
