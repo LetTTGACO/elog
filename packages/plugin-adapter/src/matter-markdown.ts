@@ -11,15 +11,15 @@ import { decode } from 'html-entities'
  */
 export function matterMarkdownAdapter(post: DocDetail) {
   let body = post.body
-  body = decode(body)
-  body = formatColorBlocks(body)
   const properties = post.properties
-  const raw = formatRaw(body)
   const props: Properties = {
     ...properties,
     title: properties.title.replace(/"/g, ''), // 临时去掉标题中的引号，至少保证文章页面是正常可访问的
   }
-  return matter.stringify(raw, props)
+  body = decode(body)
+  body = formatColorBlocks(body)
+  const raw = matter.stringify(body, props)
+  return formatRaw(raw)
 }
 
 export default matterMarkdownAdapter
