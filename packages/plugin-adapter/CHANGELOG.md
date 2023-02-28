@@ -1,5 +1,13 @@
 # @elog/plugin-adapter
 
+## 0.2.1-beta.0
+
+### Patch Changes
+
+- 1. 修复拉取语雀文章超时 2.修复本地生成图片时文件夹找不到 3.修复 Vitepress 渲染表格出错
+- Updated dependencies
+  - @elog/shared@0.2.1-beta.0
+
 ## 0.2.0
 
 ### Minor Changes
