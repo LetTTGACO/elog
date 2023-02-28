@@ -35,7 +35,7 @@ class GithubClient {
         method,
         url: path,
         data,
-        timeout: 10000,
+        timeout: 60000,
         headers: {
           'Content-Type': mime.lookup(fileName),
           'User-Agent': '@elog/plugin-image',
