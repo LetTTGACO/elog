@@ -1,6 +1,6 @@
 {
   "name": "@elog/plugin-adapter",
-  "version": "0.2.0",
+  "version": "0.2.1-beta.1",
   "description": "elog的适配器插件，处理各大部署平台文件适配问题",
   "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/plugin-adapter#readme",
   "author": "1874 <me@mail.1874.cool>",

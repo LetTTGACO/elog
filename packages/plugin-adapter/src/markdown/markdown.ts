@@ -1,6 +1,9 @@
-import { formatRaw } from '../utils'
+import { formatRaw, formatColorBlocks } from '../utils'
+import { decode } from 'html-entities'
 
 export function markdownAdapter(post: any) {
-  const { body } = post
+  let { body } = post
+  body = decode(body)
+  body = formatColorBlocks(body)
   return formatRaw(body)
 }

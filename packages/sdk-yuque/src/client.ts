@@ -42,8 +42,8 @@ class YuqueClient {
       rejectUnauthorized: !process.env.http_proxy,
       enableProxy: !!process.env.http_proxy,
       proxy: process.env.http_proxy,
-      // 超时时间 10s
-      timeout: 10000,
+      // 超时时间 60s
+      timeout: 60000,
       ...reqOpts,
     }
     const res = await request(url, opts)

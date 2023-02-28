@@ -1,6 +1,6 @@
 {
   "name": "@elog/plugin-image",
-  "version": "0.2.0",
+  "version": "0.2.1-beta.1",
   "description": "elog的图片处理插件，将文章中的图片上传到cdn，用来解决图片防盗链的问题",
   "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/plugin-image#readme",
   "author": "1874 <me@mail.1874.cool>",
@@ -29,10 +29,12 @@
     "image-size": "^1.0.2",
     "mime-types": "^2.1.35",
     "qiniu": "^7.8.0",
-    "upyun": "^3.4.6"
+    "upyun": "^3.4.6",
+    "mkdirp": "^1.0.4"
   },
   "devDependencies": {
     "@types/ali-oss": "^6.16.6",
-    "@types/mime-types": "^2.1.1"
+    "@types/mime-types": "^2.1.1",
+    "@types/mkdirp": "^1.0.2"
   }
 }
