@@ -1,6 +1,7 @@
 import { LocalConfig } from './types'
 import * as fs from 'fs'
 import path from 'path'
+import mkdirp from 'mkdirp'
 import { out } from '@elog/shared'
 
 class CosClient {
@@ -28,6 +29,7 @@ class CosClient {
       // 将文件写入本地
       // 文件路径
       const filePath = path.resolve(process.cwd(), this.config.output, fileName)
+      mkdirp.sync(filePath)
       fs.writeFileSync(filePath, imgBuffer)
       let prefixKey = this.config.prefixKey || '/'
       if (!prefixKey.endsWith('/')) {
