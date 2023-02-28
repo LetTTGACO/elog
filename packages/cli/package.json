@@ -1,6 +1,6 @@
 {
   "name": "@elog/cli",
-  "version": "0.2.0",
+  "version": "0.2.1-beta.0",
   "description": "elog的脚手架，主要用来生成配置文件并调用@elog/core的API",
   "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-cli#readme",
   "author": "1874 <me@mail.1874.cool>",
