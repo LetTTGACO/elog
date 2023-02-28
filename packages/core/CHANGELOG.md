@@ -1,5 +1,17 @@
 # @elog/core
 
+## 0.2.1-beta.1
+
+### Patch Changes
+
+- 修复文件创建失败
+- Updated dependencies
+  - @elog/deploy@0.2.1-beta.1
+  - @elog/plugin-image@0.2.1-beta.1
+  - @elog/sdk-notion@0.2.1-beta.1
+  - @elog/sdk-yuque@0.2.1-beta.1
+  - @elog/shared@0.2.1-beta.1
+
 ## 0.2.1-beta.0
 
 ### Patch Changes
