@@ -218,6 +218,12 @@ importers:
       '@types/lodash': 4.14.191
       '@types/shelljs': 0.8.11
 
+  test/yuque-default:
+    specifiers:
+      '@elog/cli': workspace:*
+    dependencies:
+      '@elog/cli': link:../../packages/cli
+
 packages:
 
   /@ampproject/remapping/2.2.0:
