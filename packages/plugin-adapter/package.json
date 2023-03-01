@@ -24,9 +24,11 @@
   "dependencies": {
     "@elog/shared": "workspace:*",
     "gray-matter": "^4.0.3",
-    "html-entities": "^2.3.3",
-    "moment": "^2.29.4",
-    "prettier": "^2.7.1"
+    "prettier": "^2.8.4",
+    "remark-gfm": "^3.0.1",
+    "remark-parse": "^10.0.1",
+    "remark-stringify": "^10.0.2",
+    "unified": "^10.1.2"
   },
   "devDependencies": {
     "@types/ejs": "^3.1.1",

@@ -1,5 +1,5 @@
-import moment from 'moment'
 import prettier from 'prettier'
+import { processMarkdown } from './markdown/render'
 
 /**
  * 格式化markdown文件
@@ -38,6 +38,8 @@ export const formatColorBlocks = (body: string) => {
  * @return {String} body
  */
 export function formatRaw(body: string) {
+  body = processMarkdown(body)
+  body = formatColorBlocks(body)
   const multiBr = /(<br>[\s\n]){2}/gi
   const multiBrEnd = /(<br \/>[\n]?){2}/gi
   const brBug = /<br \/>/g
@@ -53,12 +55,4 @@ export function formatRaw(body: string) {
     .replace(brBug, '\n')
     .replace(emptyAnchor, '')
   return formatMarkdown(body)
-}
-
-/**
- * 格式化日期
- * @param date
- */
-export function formatDate(date: string) {
-  return moment(new Date(date).toISOString()).format('YYYY-MM-DD HH:mm:ss ZZ')
 }
