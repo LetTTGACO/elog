@@ -1,4 +1,4 @@
-import { matterMarkdownAdapter } from './matter-markdown'
-import { markdownAdapter } from './markdown'
+import { matterMarkdownAdapter } from './markdown/matter-markdown'
+import { markdownAdapter } from './markdown/markdown'
 
 export { matterMarkdownAdapter, markdownAdapter }

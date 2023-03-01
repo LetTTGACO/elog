@@ -1,7 +1,6 @@
-import { DocDetail, Properties } from './types'
+import { DocDetail, Properties } from '../types'
 import matter from 'gray-matter'
-import { formatColorBlocks, formatRaw } from './utils'
-import { decode } from 'html-entities'
+import { formatRaw } from '../utils'
 
 /**
  * hexo 文章生产适配器
@@ -16,8 +15,6 @@ export function matterMarkdownAdapter(post: DocDetail) {
     ...properties,
     title: properties.title.replace(/"/g, ''), // 临时去掉标题中的引号，至少保证文章页面是正常可访问的
   }
-  body = decode(body)
-  body = formatColorBlocks(body)
   const raw = matter.stringify(body, props)
   return formatRaw(raw)
 }

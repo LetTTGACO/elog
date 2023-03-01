@@ -1,6 +1,6 @@
 {
   "name": "@elog/plugin-adapter",
-  "version": "0.2.1-beta.0",
+  "version": "0.2.1-beta.1",
   "description": "elog的适配器插件，处理各大部署平台文件适配问题",
   "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-plugin-adapter#readme",
   "author": "1874 <me@mail.1874.cool>",
@@ -24,9 +24,11 @@
   "dependencies": {
     "@elog/shared": "workspace:*",
     "gray-matter": "^4.0.3",
-    "html-entities": "^2.3.3",
-    "moment": "^2.29.4",
-    "prettier": "^2.7.1"
+    "prettier": "^2.8.4",
+    "remark-gfm": "^3.0.1",
+    "remark-parse": "^10.0.1",
+    "remark-stringify": "^10.0.2",
+    "unified": "^10.1.2"
   },
   "devDependencies": {
     "@types/ejs": "^3.1.1",
