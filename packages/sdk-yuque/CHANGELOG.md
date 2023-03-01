@@ -1,5 +1,13 @@
 # @elog/sdk-yuque
 
+## 0.2.1-beta.2
+
+### Patch Changes
+
+- 🐞 修复拉取语雀文章超时 🐞 修复本地生成图片时文件夹找不到 🐞 修复渲染表格出错
+- Updated dependencies
+  - @elog/shared@0.2.1-beta.2
+
 ## 0.2.1-beta.1
 
 ### Patch Changes
