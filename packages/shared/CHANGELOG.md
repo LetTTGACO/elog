@@ -1,5 +1,13 @@
 # @elog/shared
 
+## 0.2.2
+
+### Patch Changes
+
+- 8ae4405: 🐞 修复 frontmatter 渲染不正常
+- 9ddcb6d: 🐞 修复 frontmatter 渲染不正常
+- 🐞 修复 frontmatter 渲染不正常
+
 ## 0.2.2-beta.1
 
 ### Patch Changes

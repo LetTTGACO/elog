@@ -11,3 +11,4 @@ test/yuque-default/source/
 test/yuque-default/images/
 test/yuque-default/elog-cache.json
 test/yuque-default/elog-timestamp.txt
+link.sh
