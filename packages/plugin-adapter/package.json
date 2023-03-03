@@ -25,6 +25,7 @@
     "@elog/shared": "workspace:*",
     "gray-matter": "^4.0.3",
     "prettier": "^2.8.4",
+    "remark-frontmatter": "^3.0.0",
     "remark-gfm": "^1.0.0",
     "remark-parse": "^9.0.0",
     "remark-stringify": "^9.0.1",
