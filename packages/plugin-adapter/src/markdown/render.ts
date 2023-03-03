@@ -1,13 +1,13 @@
-import { unified } from 'unified'
+import unified from 'unified'
 import remarkParse from 'remark-parse'
-import remarkGfm, { Root } from 'remark-gfm'
+import remarkGfm from 'remark-gfm'
 import remarkStringify from 'remark-stringify'
 
 /**
  * 处理表格中的特殊字符
  * @param tree
  */
-const processTable = (tree: Root) => {
+const processTable = (tree) => {
   // 找到type为table的节点
   const node = tree.children.find((n) => n.type == 'table') as any
   if (node) {
@@ -40,5 +40,7 @@ export const processMarkdown = (content: string) => {
     .use(remarkStringify)
     // 开始同步执行解析
     .processSync(content)
-  return processValue.value as string
+  const res = processValue.contents as string
+  console.log(res)
+  return res
 }
