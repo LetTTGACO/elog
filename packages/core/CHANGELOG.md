@@ -1,5 +1,17 @@
 # @elog/core
 
+## 0.2.2-beta.0
+
+### Patch Changes
+
+- 🐞 修复 frontmatter 渲染不正常
+- Updated dependencies
+  - @elog/deploy@0.2.2-beta.0
+  - @elog/plugin-image@0.2.2-beta.0
+  - @elog/sdk-notion@0.2.2-beta.0
+  - @elog/sdk-yuque@0.2.2-beta.0
+  - @elog/shared@0.2.2-beta.0
+
 ## 0.2.1
 
 ### Patch Changes

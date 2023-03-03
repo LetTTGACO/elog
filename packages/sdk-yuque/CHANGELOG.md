@@ -1,5 +1,13 @@
 # @elog/sdk-yuque
 
+## 0.2.2-beta.0
+
+### Patch Changes
+
+- 🐞 修复 frontmatter 渲染不正常
+- Updated dependencies
+  - @elog/shared@0.2.2-beta.0
+
 ## 0.2.1
 
 ### Patch Changes
