@@ -1,5 +1,21 @@
 # @elog/core
 
+## 0.2.1
+
+### Patch Changes
+
+- fb79bfc: 🐞 修复拉取语雀文章超时 🐞 修复本地生成图片时文件夹找不到 🐞 修复渲染表格出错
+- 33e1734: 🐞 修复渲染表格出错
+- 🐞 修复拉取语雀文章超时 🐞 修复本地生成图片时文件夹找不到 🐞 修复渲染表格出错
+- Updated dependencies [fb79bfc]
+- Updated dependencies [33e1734]
+- Updated dependencies
+  - @elog/deploy@0.2.1
+  - @elog/plugin-image@0.2.1
+  - @elog/sdk-notion@0.2.1
+  - @elog/sdk-yuque@0.2.1
+  - @elog/shared@0.2.1
+
 ## 0.2.1-beta.3
 
 ### Patch Changes
