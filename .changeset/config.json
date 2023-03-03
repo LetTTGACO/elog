@@ -5,7 +5,7 @@
   "fixed": [],
   "linked": [["@elog/*"]],
   "access": "public",
-  "baseBranch": "master",
+  "baseBranch": "beta",
   "updateInternalDependencies": "patch",
   "ignore": ["yuque-default"],
   "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
