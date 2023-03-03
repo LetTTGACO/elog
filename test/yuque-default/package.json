@@ -10,6 +10,7 @@
     "elog:upgrade": "elog upgrade",
     "elog:version": "elog --version"
   },
+  "private": true,
   "keywords": [],
   "author": "",
   "license": "ISC",
