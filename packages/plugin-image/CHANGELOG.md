@@ -1,5 +1,13 @@
 # @elog/plugin-image
 
+## 0.2.1-beta.3
+
+### Patch Changes
+
+- 🐞 修复渲染表格出错
+- Updated dependencies
+  - @elog/shared@0.2.1-beta.3
+
 ## 0.2.1-beta.2
 
 ### Patch Changes

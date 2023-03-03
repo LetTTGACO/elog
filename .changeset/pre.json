@@ -1,17 +1,19 @@
 {
-  "mode": "exit",
+  "mode": "pre",
   "tag": "beta",
   "initialVersions": {
-    "@elog/cli": "0.2.1-beta.1",
-    "@elog/core": "0.2.1-beta.1",
-    "@elog/deploy": "0.2.1-beta.1",
-    "@elog/plugin-adapter": "0.2.1-beta.1",
-    "@elog/plugin-image": "0.2.1-beta.1",
-    "@elog/sdk-notion": "0.2.1-beta.1",
-    "@elog/sdk-yuque": "0.2.1-beta.1",
-    "@elog/shared": "0.2.1-beta.1"
+    "@elog/cli": "0.2.1-beta.2",
+    "@elog/core": "0.2.1-beta.2",
+    "@elog/deploy": "0.2.1-beta.2",
+    "@elog/plugin-adapter": "0.2.1-beta.2",
+    "@elog/plugin-image": "0.2.1-beta.2",
+    "@elog/sdk-notion": "0.2.1-beta.2",
+    "@elog/sdk-yuque": "0.2.1-beta.2",
+    "@elog/shared": "0.2.1-beta.2",
+    "yuque-default": "1.0.0"
   },
   "changesets": [
-    "giant-cycles-worry"
+    "giant-cycles-worry",
+    "perfect-dolphins-cross"
   ]
 }
