@@ -2,6 +2,7 @@ import unified from 'unified'
 import remarkParse from 'remark-parse'
 import remarkGfm from 'remark-gfm'
 import remarkStringify from 'remark-stringify'
+import remarkFrontmatter from 'remark-frontmatter'
 
 /**
  * 处理表格中的特殊字符
@@ -34,13 +35,12 @@ export const processMarkdown = (content: string) => {
   const processValue = unified()
     .use(remarkParse)
     .use(remarkGfm)
+    .use(remarkFrontmatter, ['yaml'])
     .use(() => (tree) => {
       processTable(tree)
     })
     .use(remarkStringify)
     // 开始同步执行解析
     .processSync(content)
-  const res = processValue.contents as string
-  console.log(res)
-  return res
+  return processValue.contents as string
 }
