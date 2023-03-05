@@ -121,6 +121,23 @@ export interface DocInfo {
   word_count: number
 }
 
+/**
+ * // NOTE 官方文档说不稳定
+ * 目录详情
+ */
+export interface TocDetail {
+  /** 类型：文章/分组 */
+  type: 'DOC' | 'TITLE'
+  /** 名称 */
+  title: string
+  uuid: string
+  child_uuid: string
+  parent_uuid: string
+  slug: string
+  depth: number
+  level: number
+}
+
 export class RequestError extends Error {
   status?: number
   code?: number
@@ -130,6 +147,7 @@ export class RequestError extends Error {
 export interface Doc extends DocInfo {
   properties: Properties
   updated: number
+  toc?: TocDetail[]
 }
 
 export interface Properties {

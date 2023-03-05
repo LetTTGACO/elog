@@ -7,8 +7,5 @@ packages/**/package-lock.json
 .env*
 .DS_Store
 **/__test__/**
-test/yuque-default/source/
-test/yuque-default/images/
-test/yuque-default/elog-cache.json
-test/yuque-default/elog-timestamp.txt
+/test/**
 link.sh

@@ -25,7 +25,8 @@
     "@elog/plugin-adapter": "workspace:*",
     "@elog/shared": "workspace:*",
     "filenamify": "^4.3.0",
-    "mkdirp": "^1.0.4"
+    "mkdirp": "^1.0.4",
+    "urllib": "2.40.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.189",

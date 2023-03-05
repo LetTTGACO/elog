@@ -104,8 +104,9 @@ class Elog {
       const deployOptions = config.deploy as DeployOptions
       deployOptions.lastGenerate = this.lastGenerate
       this.deployClient = new Deploy(deployOptions)
-    } else if (config.deploy.platform === DeployPlatform.WORDPRESS) {
-      // TODO wordpress
+    } else if (config.deploy.platform === DeployPlatform.CONFLUENCE) {
+      const deployOptions = config.deploy as DeployOptions
+      this.deployClient = new Deploy(deployOptions)
     } else {
       const deployOptions = config.deploy.platform as DeployOptions
       deployOptions.lastGenerate = this.lastGenerate

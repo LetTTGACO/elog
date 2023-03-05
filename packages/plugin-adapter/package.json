@@ -24,6 +24,7 @@
   "dependencies": {
     "@elog/shared": "workspace:*",
     "gray-matter": "^4.0.3",
+    "marked": "^4.2.12",
     "prettier": "^2.8.4",
     "remark-frontmatter": "^3.0.0",
     "remark-gfm": "^1.0.0",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@types/ejs": "^3.1.1",
-    "@types/lodash": "^4.14.189"
+    "@types/lodash": "^4.14.189",
+    "@types/marked": "^4.0.8"
   }
 }

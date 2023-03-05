@@ -1,9 +1,23 @@
+/**
+ * confluence wiki 配置
+ */
+import { TocDetail } from './wiki/types'
+
+export interface WikiConfig {
+  user: string
+  password: string
+  baseUrl: string
+  spaceKey: string
+  rootPageId: string
+}
+
 export interface DeployOptions {
   classify?: string
   postPath: string
   lastGenerate?: number
   mdNameFormat?: 'title' | 'urlname'
-  adapter?: 'matter-markdown' | 'markdown' | 'html' | any
+  adapter?: 'matter-markdown' | 'markdown' | 'html' | 'wiki' | any
+  wiki?: WikiConfig
 }
 
 export interface DocDetail {
@@ -12,6 +26,9 @@ export interface DocDetail {
   properties: Properties
   body: string
   updated: number
+  title: string
+  toc?: TocDetail[]
+  body_wiki?: string
 }
 interface Properties {
   urlname: string

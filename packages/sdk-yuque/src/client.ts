@@ -1,7 +1,7 @@
 import { request, RequestOptions } from 'urllib'
 import asyncPool from 'tiny-async-pool'
 import { out } from '@elog/shared'
-import { Doc, DocInfo, Properties, RequestError, YuqueConfig } from './types'
+import { Doc, DocInfo, Properties, RequestError, TocDetail, YuqueConfig } from './types'
 import { getProps } from './utils'
 
 /** 默认语雀API 路径 */
@@ -10,6 +10,7 @@ const DEFAULT_API_URL = 'https://www.yuque.com/api/v2'
 class YuqueClient {
   config: YuqueConfig
   namespace: string
+  toc: TocDetail[] = []
 
   constructor(config: YuqueConfig) {
     this.config = config
@@ -59,6 +60,15 @@ class YuqueClient {
   }
 
   /**
+   * 获取目录
+   */
+  async getToc() {
+    return this.request<TocDetail[]>(`repos/${this.namespace}/toc`, {
+      method: 'GET',
+    })
+  }
+
+  /**
    * 获取文章列表(不带详情)
    */
   async getDocList() {
@@ -76,6 +86,17 @@ class YuqueClient {
       data: { raw: 1 },
     })
     res.doc_id = res.slug
+    const find = this.toc.find((item) => item.slug === res.slug)
+    if (find) {
+      let tocPath = []
+      let parentId = find.parent_uuid
+      for (let i = 0; i < find.depth - 1; i++) {
+        const current = this.toc.find((item) => item.uuid === parentId)!
+        parentId = current.parent_uuid
+        tocPath.push(current)
+      }
+      res.toc = tocPath.reverse()
+    }
     return res
   }
 
@@ -85,6 +106,8 @@ class YuqueClient {
    * @param ids
    */
   async getDocDetailList(cachedDocs: DocInfo[], ids?: string[]) {
+    // 获取目录信息
+    this.toc = await this.getToc()
     let articleList: Doc[] = []
     let docs: DocInfo[]
     if (cachedDocs) {
