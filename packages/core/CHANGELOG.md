@@ -1,5 +1,20 @@
 # @elog/core
 
+## 0.3.0-beta.0
+
+### Minor Changes
+
+- 新增对 confluence 部署平台的支持
+
+### Patch Changes
+
+- Updated dependencies
+  - @elog/deploy@0.3.0-beta.0
+  - @elog/plugin-image@0.3.0-beta.0
+  - @elog/sdk-notion@0.3.0-beta.0
+  - @elog/sdk-yuque@0.3.0-beta.0
+  - @elog/shared@0.3.0-beta.0
+
 ## 0.2.2
 
 ### Patch Changes

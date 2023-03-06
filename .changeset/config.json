@@ -7,7 +7,7 @@
   "access": "public",
   "baseBranch": "beta",
   "updateInternalDependencies": "patch",
-  "ignore": ["yuque-default"],
+  "ignore": [],
   "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
     "onlyUpdatePeerDependentsWhenOutOfRange": true
   }

@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.3.0-beta.0
+
+### Minor Changes
+
+- 新增对 confluence 部署平台的支持
+
 ## 0.2.2
 
 ### Patch Changes
