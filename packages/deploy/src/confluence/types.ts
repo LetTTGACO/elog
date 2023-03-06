@@ -1,3 +1,12 @@
+import { ConfluenceConfig } from '../types'
+
+export interface DeployWikiConfig {
+  /** 最后更新时间 */
+  lastGenerate?: number
+  adapter?: 'matter-markdown' | 'markdown' | 'html' | 'wiki'
+  confluence?: ConfluenceConfig
+}
+
 export class RequestError extends Error {
   status?: number
   code?: number

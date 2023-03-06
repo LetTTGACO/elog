@@ -32,7 +32,26 @@ const YuqueDefault = {
   },
 }
 
+const YuqueConfluence = {
+  writing: {
+    platform: 'yuque',
+    login: '',
+    repo: '',
+    onlyPublic: true,
+    onlyPublished: true,
+  },
+  deploy: {
+    platform: 'confluence',
+    confluence: {
+      baseUrl: '',
+      spaceKey: '',
+      rootPageId: '',
+    },
+  },
+}
+
 export const platformTemplate: any = {
   'notion-default': NotionDefault,
   'yuque-default': YuqueDefault,
+  'yuque-confluence': YuqueConfluence,
 }

@@ -1,23 +1,25 @@
-import { DocDetail, WikiConfig } from '../types'
+import { DocDetail, ConfluenceConfig } from '../types'
 import { request, RequestOptions } from 'urllib'
 import { RequestError, WikiPageDetail, WikiPageList, WikiPageListResponse } from './types'
 import { out } from '@elog/shared'
 
-class WikiClient {
-  config: WikiConfig
+class ConfluenceClient {
+  config: ConfluenceConfig
   auth: string
 
-  constructor(config: WikiConfig) {
+  constructor(config: ConfluenceConfig) {
     this.config = config
-    if (!config.user || !config.password) {
-      out.err('缺少参数', '缺少Confluence账号密码')
-      process.exit(-1)
-    }
     if (!config.baseUrl) {
       out.err('缺少参数', '缺少Confluence baseUrl')
       process.exit(-1)
     }
-    this.auth = `${config.user}:${config.password}`
+    const user = config.user || process.env.CONFLUENCE_USER
+    const password = config.password || process.env.CONFLUENCE_PWD
+    if (!user || !password) {
+      out.err('缺少参数', '缺少Confluence账号或密码')
+      process.exit(-1)
+    }
+    this.auth = `${user}:${password}`
   }
 
   /**
@@ -45,8 +47,6 @@ class WikiClient {
       timeout: 60000,
       ...reqOpts,
     }
-    // @ts-ignore
-    out.info(JSON.stringify(opts))
     const res = await request(url, opts)
     if (res.status !== 200) {
       const err = new RequestError(res.data.message)
@@ -185,4 +185,4 @@ class WikiClient {
   }
 }
 
-export default WikiClient
+export default ConfluenceClient

@@ -30,6 +30,10 @@ const init = async (name: string) => {
             name: '默认(适用于Hexo/HuGo/Vitepress等)',
             value: 'default',
           },
+          {
+            name: 'Confluence',
+            value: 'confluence',
+          },
         ],
       },
       {

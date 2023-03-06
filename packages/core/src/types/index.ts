@@ -9,8 +9,6 @@ interface ElogConfig {
   /** 部署平台 */
   deploy: DefaultConfig
   /** 具体配置文件 */
-  /** 下载文章并发数，默认5 */
-  concurrency?: number
   /** 缓存文件路径 */
   articleCachePath?: string
   /** 增量更新文件路径 */

@@ -5,29 +5,36 @@ import filenamify from 'filenamify'
 import { markdownAdapter, matterMarkdownAdapter, wikiAdapter } from '@elog/plugin-adapter'
 import { out } from '@elog/shared'
 import mkdirp from 'mkdirp'
-import WikiClient from './wiki/client'
-import { WikiMap } from './wiki/types'
+import ConfluenceClient from './confluence/client'
+import { WikiMap } from './confluence/types'
 
 /**
  * 部署器
  */
 class Deploy {
   config: DeployOptions
-  postBasicPath: string
+  postBasicPath?: string
   cacheFileNames: string[] = []
 
   constructor(config: DeployOptions) {
     this.config = config
-    this.postBasicPath = path.join(process.cwd(), config.postPath)
+    if (config.postPath) {
+      this.postBasicPath = path.join(process.cwd(), config.postPath)
+    }
   }
 
-  async generatePost(post: DocDetail) {
-    const classifyName = this.config.classify
+  /**
+   * 默认部署方式
+   * @param post
+   */
+  async deployDefault(post: DocDetail) {
     if (post.updated < (this.config.lastGenerate || 0)) {
       out.access('跳过部署', post.properties.title)
       return
     }
-    const { postPath: postBasicPath, adapter = 'markdown', mdNameFormat = 'title' } = this.config
+    const { adapter = 'markdown', mdNameFormat = 'title' } = this.config
+    const postBasicPath = this.config.postPath!
+    const classifyName = this.config.classify
     let formatBody = ''
 
     if (adapter === 'matter-markdown') {
@@ -84,19 +91,19 @@ class Deploy {
   }
 
   async deployWiki(articleList: DocDetail[]) {
-    if (!this.config.wiki) {
+    if (!this.config.confluence) {
       out.err('配置错误', 'confluence 配置缺失，请检查')
       process.exit(1)
     }
+    out.access('正在部署到Confluence...')
     // 重新排序articleList，按照层级更新文章
     // 先更新第一级，再更新第二级...
     const sortArticleList = articleList.sort((a, b) => {
       return a.toc!.length - b.toc!.length
     })
-
-    const wiki = new WikiClient(this.config.wiki)
+    const confluenceClient = new ConfluenceClient(this.config.confluence)
     // 获取rootPage下的文章列表
-    const rootPageList = await wiki.getRootPageList()
+    const rootPageList = await confluenceClient.getRootPageList()
     let rootPageMap: WikiMap = {}
     // List转Map
     rootPageList.forEach((item) => {
@@ -104,16 +111,22 @@ class Deploy {
     })
     // 根据目录上传到wiki上
     for (const articleInfo of sortArticleList) {
+      if (articleInfo.updated < (this.config.lastGenerate || 0)) {
+        out.access('跳过部署', articleInfo.properties.title)
+        break
+      }
       // 将markdown转wiki
       articleInfo.body_wiki = wikiAdapter(articleInfo)
       // 是否存在
       const cacheWikiPage = rootPageMap[articleInfo.title]
       if (cacheWikiPage) {
+        out.info('更新文章', cacheWikiPage.title)
         // 获取版本信息
-        const updatingPage = await wiki.getPageById(cacheWikiPage.id)
+        const updatingPage = await confluenceClient.getPageById(cacheWikiPage.id)
         const version = updatingPage.version.number + 1
-        await wiki.updatePage(articleInfo, cacheWikiPage.id, version)
+        await confluenceClient.updatePage(articleInfo, cacheWikiPage.id, version)
       } else {
+        out.info('新增文章', articleInfo.title)
         // 新增
         // 在rootPageMap中找到parent title
         let parentId = ''
@@ -124,7 +137,7 @@ class Deploy {
         }
         // 直接新增
         // 如果有parentId就存在parentPage下，没有则存在空间的rootPage下
-        const createdPage = await wiki.createPage(articleInfo, parentId)
+        const createdPage = await confluenceClient.createPage(articleInfo, parentId)
         // 临时更新Map
         rootPageMap[createdPage.title] = createdPage
       }
@@ -136,13 +149,14 @@ class Deploy {
    * @param articleList
    */
   async deploy(articleList: DocDetail[]) {
-    if (this.config.adapter === 'wiki') {
+    if (this.config.platform === 'confluence') {
       return this.deployWiki(articleList)
-    }
-    mkdirp.sync(this.postBasicPath)
-    for (const articleInfo of articleList) {
-      // 在指定位置生成md文档
-      await this.generatePost(articleInfo)
+    } else if (this.config.platform === 'default') {
+      mkdirp.sync(this.postBasicPath!)
+      for (const articleInfo of articleList) {
+        // 在指定位置生成md文档
+        await this.deployDefault(articleInfo)
+      }
     }
   }
 }

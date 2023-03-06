@@ -1,9 +1,9 @@
 /**
  * confluence wiki 配置
  */
-import { TocDetail } from './wiki/types'
+import { TocDetail } from './confluence/types'
 
-export interface WikiConfig {
+export interface ConfluenceConfig {
   user: string
   password: string
   baseUrl: string
@@ -12,12 +12,14 @@ export interface WikiConfig {
 }
 
 export interface DeployOptions {
+  platform: 'default' | 'confluence'
   classify?: string
-  postPath: string
+  postPath?: string
+  /** 最后更新时间 */
   lastGenerate?: number
   mdNameFormat?: 'title' | 'urlname'
-  adapter?: 'matter-markdown' | 'markdown' | 'html' | 'wiki' | any
-  wiki?: WikiConfig
+  adapter?: 'matter-markdown' | 'markdown' | 'html' | 'wiki'
+  confluence?: ConfluenceConfig
 }
 
 export interface DocDetail {

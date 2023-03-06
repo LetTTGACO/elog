@@ -9,15 +9,7 @@ import Deploy, { DeployOptions } from '@elog/deploy'
 import ImgCdnClient from '@elog/plugin-image'
 
 // types
-import {
-  DeployPlatform,
-  Doc,
-  DocDetail,
-  DocStatus,
-  DocStatusMap,
-  ElogConfig,
-  WritingPlatform,
-} from './types'
+import { Doc, DocDetail, DocStatus, DocStatusMap, ElogConfig, WritingPlatform } from './types'
 import { __cwd, CACHE_FILE_NAME, LAST_GENERATE_FILE_NAME } from './const'
 import { out } from '@elog/shared'
 
@@ -100,18 +92,9 @@ class Elog {
    * @param config
    */
   initDeployPlatform(config: ElogConfig) {
-    if (config.deploy.platform === DeployPlatform.DEFAULT) {
-      const deployOptions = config.deploy as DeployOptions
-      deployOptions.lastGenerate = this.lastGenerate
-      this.deployClient = new Deploy(deployOptions)
-    } else if (config.deploy.platform === DeployPlatform.CONFLUENCE) {
-      const deployOptions = config.deploy as DeployOptions
-      this.deployClient = new Deploy(deployOptions)
-    } else {
-      const deployOptions = config.deploy.platform as DeployOptions
-      deployOptions.lastGenerate = this.lastGenerate
-      this.deployClient = new Deploy(deployOptions)
-    }
+    const deployOptions = config.deploy as DeployOptions
+    deployOptions.lastGenerate = this.lastGenerate
+    this.deployClient = new Deploy(deployOptions)
   }
 
   /**
