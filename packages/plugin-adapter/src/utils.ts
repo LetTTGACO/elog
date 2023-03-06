@@ -44,12 +44,14 @@ export function formatRaw(body: string) {
   const multiBrEnd = /(<br \/>[\n]?){2}/gi
   const brBug = /<br \/>/g
   const nul = /\x00/g
+  const nul1 = /\u0000/g
   const hiddenContent = /<div style="display:none">[\s\S]*?<\/div>/gi
   // 删除语雀特有的锚点
   const emptyAnchor = /<a name=\".*?\"><\/a>/g
   body = body
     .replace(hiddenContent, '')
     .replace(nul, '')
+    .replace(nul1, '')
     .replace(multiBr, '<br>')
     .replace(multiBrEnd, '<br />\n')
     .replace(brBug, '\n')
