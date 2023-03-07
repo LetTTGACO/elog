@@ -99,7 +99,10 @@ class Deploy {
     // 重新排序articleList，按照层级更新文章
     // 先更新第一级，再更新第二级...
     const sortArticleList = articleList.sort((a, b) => {
-      return a.toc!.length - b.toc!.length
+      if (!a.toc || !b.toc) {
+        return 0
+      }
+      return a.toc.length - b.toc.length
     })
     const confluenceClient = new ConfluenceClient(this.config.confluence)
     // 获取rootPage下的文章列表
@@ -130,16 +133,25 @@ class Deploy {
         // 新增
         // 在rootPageMap中找到parent title
         let parentId = ''
-        const toc = articleInfo.toc!
-        if (toc.length) {
+        const toc = articleInfo.toc
+        if (toc?.length) {
           const parentTitle = toc[toc.length - 1].title
           parentId = rootPageMap[parentTitle].id
         }
         // 直接新增
         // 如果有parentId就存在parentPage下，没有则存在空间的rootPage下
-        const createdPage = await confluenceClient.createPage(articleInfo, parentId)
-        // 临时更新Map
-        rootPageMap[createdPage.title] = createdPage
+        try {
+          const createdPage = await confluenceClient.createPage(articleInfo, parentId)
+          // 临时更新Map
+          rootPageMap[createdPage.title] = createdPage
+        } catch (e: any) {
+          // 有可能是重名更新失败
+          if (e.message.indexOf('A page with this title already exists') > -1) {
+            out.err('跳过部署', `文章标题已存在于confluence, 请检查: ${articleInfo.title}`)
+          } else {
+            out.err('跳过部署', e.message)
+          }
+        }
       }
     }
   }
@@ -150,7 +162,7 @@ class Deploy {
    */
   async deploy(articleList: DocDetail[]) {
     if (this.config.platform === 'confluence') {
-      return this.deployWiki(articleList)
+      await this.deployWiki(articleList)
     } else if (this.config.platform === 'default') {
       mkdirp.sync(this.postBasicPath!)
       for (const articleInfo of articleList) {
