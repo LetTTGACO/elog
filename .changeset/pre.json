@@ -13,6 +13,7 @@
     "yuque-confluence": "1.0.0"
   },
   "changesets": [
+    "gentle-years-change",
     "odd-shoes-whisper"
   ]
 }

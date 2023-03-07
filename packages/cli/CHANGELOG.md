@@ -1,5 +1,15 @@
 # @elog/cli
 
+## 0.3.0-beta.1
+
+### Patch Changes
+
+- 1. 修复不可见文章的目录为空的问题
+  2. 修复创建文章失败阻碍流程的问题
+- Updated dependencies
+  - @elog/core@0.3.0-beta.1
+  - @elog/shared@0.3.0-beta.1
+
 ## 0.3.0-beta.0
 
 ### Minor Changes
