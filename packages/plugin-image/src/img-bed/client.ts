@@ -7,6 +7,7 @@ import QiniuClient from './qiniu'
 import LocalClient from './local'
 import { out } from '@elog/shared'
 import path from 'path'
+import { awaitSync } from '@kaciras/deasync'
 
 import {
   CosConfig,
@@ -48,8 +49,7 @@ class ImgBedClient {
         const secretExtPath = path.resolve(process.cwd(), this.config.secretExt)
         // 拓展点需要暴露getSecret方法
         const { getSecret } = require(secretExtPath)
-        const secret = getSecret()
-        // 拿
+        const secret = awaitSync(getSecret())
         this.config = { ...this.config, ...secret }
       } catch (e: any) {
         out.err(e.message)
