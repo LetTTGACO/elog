@@ -1,5 +1,14 @@
 # @elog/cli
 
+## 0.3.0-beta.3
+
+### Patch Changes
+
+- 增加 oss sts 支持
+- Updated dependencies
+  - @elog/core@0.3.0-beta.3
+  - @elog/shared@0.3.0-beta.3
+
 ## 0.3.0-beta.2
 
 ### Patch Changes
