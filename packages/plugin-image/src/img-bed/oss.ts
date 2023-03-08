@@ -15,6 +15,9 @@ class OssClient {
       // 阿里云账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM用户进行API访问或日常运维，请登录RAM控制台创建RAM用户。
       accessKeyId: config.secretId || process.env.OSS_SECRET_ID!,
       accessKeySecret: config.secretKey || process.env.OSS_SECRET_KEY!,
+      // 鉴权拓展点支持
+      stsToken: config.stsToken,
+      secure: config.secure,
     })
   }
 

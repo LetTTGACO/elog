@@ -17,6 +17,8 @@ export interface OssConfig extends ImgBaseConfig {
   secretKey: string
   bucket: string
   region: string
+  stsToken?: string
+  secure?: boolean
 }
 
 export interface QiniuConfig extends ImgBaseConfig {

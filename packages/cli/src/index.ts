@@ -18,7 +18,7 @@ export async function run() {
         void init(options.name)
       } catch (error) {
         // @ts-ignore
-        out.err('运行失败', error)
+        out.err('运行失败', error.message)
         process.exit(1)
       }
     })
@@ -34,7 +34,7 @@ export async function run() {
         void sync(options.config, options.env)
       } catch (error) {
         // @ts-ignore
-        out.err('运行失败', error)
+        out.err('运行失败', error.message)
         // process.exit(1)
       }
     })
@@ -51,7 +51,7 @@ export async function run() {
         void clean(options.config, options.cache, options.timestamp)
       } catch (error) {
         // @ts-ignore
-        out.err('运行失败', error)
+        out.err('运行失败', error.message)
         process.exit(1)
       }
     })
@@ -65,7 +65,7 @@ export async function run() {
         upgrade()
       } catch (error) {
         // @ts-ignore
-        out.err('更新失败', error)
+        out.err('更新失败', error.message)
         process.exit(1)
       }
     })

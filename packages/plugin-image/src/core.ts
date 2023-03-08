@@ -23,9 +23,10 @@ class ImageUploader {
         url,
         responseType: 'arraybuffer',
       })
+      out.access('下载成功', `图片下载成功: ${url}`)
       return res.data
-    } catch (e) {
-      out.warning('下载失败', `图片下载失败: ${url}`)
+    } catch (e: any) {
+      out.warning('下载失败', `图片下载失败: ${url}，错误信息：${e.message}`)
     }
   }
 
