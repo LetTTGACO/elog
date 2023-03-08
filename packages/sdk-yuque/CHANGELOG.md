@@ -1,5 +1,13 @@
 # @elog/sdk-yuque
 
+## 0.3.0-beta.2
+
+### Patch Changes
+
+- 增加密钥拓展点
+- Updated dependencies
+  - @elog/shared@0.3.0-beta.2
+
 ## 0.3.0-beta.1
 
 ### Patch Changes

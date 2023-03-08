@@ -10,9 +10,11 @@
     "@elog/sdk-notion": "0.2.2",
     "@elog/sdk-yuque": "0.2.2",
     "@elog/shared": "0.2.2",
-    "yuque-confluence": "1.0.0"
+    "yuque-confluence": "1.0.0",
+    "yuque-default": "1.0.0"
   },
   "changesets": [
+    "fair-plants-enjoy",
     "gentle-years-change",
     "odd-shoes-whisper"
   ]

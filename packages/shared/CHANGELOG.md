@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.3.0-beta.2
+
+### Patch Changes
+
+- 增加密钥拓展点
+
 ## 0.3.0-beta.1
 
 ### Patch Changes
