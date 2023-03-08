@@ -19,6 +19,7 @@ export interface OssConfig extends ImgBaseConfig {
   region: string
   stsToken?: string
   secure?: boolean
+  endpoint?: string
 }
 
 export interface QiniuConfig extends ImgBaseConfig {
