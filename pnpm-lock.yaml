@@ -234,6 +234,12 @@ importers:
     dependencies:
       '@elog/cli': link:../../packages/cli
 
+  test/yuque-default:
+    specifiers:
+      '@elog/cli': workspace:*
+    dependencies:
+      '@elog/cli': link:../../packages/cli
+
 packages:
 
   /@ampproject/remapping/2.2.0:
