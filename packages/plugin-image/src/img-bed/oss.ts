@@ -18,6 +18,7 @@ class OssClient {
       // 鉴权拓展点支持
       stsToken: config.stsToken,
       secure: config.secure,
+      endpoint: config.endpoint,
     })
   }
 
