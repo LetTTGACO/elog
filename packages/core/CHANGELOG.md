@@ -1,5 +1,17 @@
 # @elog/core
 
+## 0.3.0-beta.4
+
+### Patch Changes
+
+- 修复 OSS STS 上传
+- Updated dependencies
+  - @elog/deploy@0.3.0-beta.4
+  - @elog/plugin-image@0.3.0-beta.4
+  - @elog/sdk-notion@0.3.0-beta.4
+  - @elog/sdk-yuque@0.3.0-beta.4
+  - @elog/shared@0.3.0-beta.4
+
 ## 0.3.0-beta.3
 
 ### Patch Changes

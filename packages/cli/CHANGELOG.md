@@ -1,5 +1,14 @@
 # @elog/cli
 
+## 0.3.0-beta.4
+
+### Patch Changes
+
+- 修复 OSS STS 上传
+- Updated dependencies
+  - @elog/core@0.3.0-beta.4
+  - @elog/shared@0.3.0-beta.4
+
 ## 0.3.0-beta.3
 
 ### Patch Changes
