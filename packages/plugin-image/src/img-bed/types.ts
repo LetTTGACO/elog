@@ -2,6 +2,7 @@ interface ImgBaseConfig {
   bed: ImgBedEnum
   host?: string
   prefixKey?: string
+  secretExt?: string
 }
 
 export interface CosConfig extends ImgBaseConfig {
