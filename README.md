@@ -45,6 +45,13 @@
 [//]: # (  </a>)
 </div>
 
+## ⚠️ 注意
+Elog 正处于内测阶段，迭代较为频繁，使用时请锁定Elog的版本号，并加入下方交流反馈群，获取最新进展。
+
+## 交流与反馈
+<p>微信扫码加入群聊</p>
+<img style="width: 200px; height: 200px" src="https://user-images.githubusercontent.com/37357188/217702971-47dd05ea-e689-4091-b4e7-3ae4559ca215.png">
+
 ## 前言
 在遇到Elog之前，你的博客可能是：
 - 本地编辑器书写 + Hexo/Hugo/Vitepress部署
@@ -83,6 +90,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和部署�
 - [x] Hexo
 - [x] Vitepress
 - [x] HuGo
+- [x] Confluence【内测中】
 > 部署平台目前支持所有类似Hexo的框架：通过向指定目录存放md文档来进行渲染的方式
 
 ## 图床功能
@@ -106,9 +114,5 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和部署�
 
 ## 最佳实践
 文档正在建设中...
-
-## 交流与反馈
-<p>微信扫码加入群聊</p>
-<img style="width: 200px; height: 200px" src="https://user-images.githubusercontent.com/37357188/217702971-47dd05ea-e689-4091-b4e7-3ae4559ca215.png">
 
 
