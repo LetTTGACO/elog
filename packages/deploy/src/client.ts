@@ -43,44 +43,57 @@ class Deploy {
       formatBody = markdownAdapter(post)
     } else if (adapter === 'html') {
       // TODO HTML适配器
-      // formatBody = await transform.htmlAdapter(post)
+    } else if (adapter === 'wiki') {
+      formatBody = wikiAdapter(post)
     } else {
       formatBody = markdownAdapter(post)
     }
     let fileName = filenamify(post.properties[mdNameFormat])
 
-    let outdir: string
-    // 分类文件夹
-    let classify
-    // 校验文件名重复的问题
-    let checkName
-    if (classifyName) {
-      classify = post.properties[classifyName]
-      // 说明需要按文件夹生成
-      if (classify) {
-        outdir = path.join(postBasicPath, classify)
-        checkName = classify + fileName
-        mkdirp.sync(outdir)
+    let postPath: string
+    // 处理文件夹存放的问题
+    if (post.toc?.length) {
+      // NOTE 目前只有语雀返回了这个目录信息
+      const tocPath = post.toc.map((item) => item.title).join('/')
+      const outdir = path.join(postBasicPath, tocPath)
+      mkdirp.sync(outdir)
+      postPath = path.join(outdir, `${fileName}.md`)
+      // 生成文件夹
+      out.info('文件生成', `${fileName}.md`)
+    } else {
+      let outdir: string
+      // 分类文件夹
+      let classify
+      // 校验文件名重复的问题
+      let checkName
+      if (classifyName) {
+        classify = post.properties[classifyName]
+        // 说明需要按文件夹生成
+        if (classify) {
+          outdir = path.join(postBasicPath, classify)
+          checkName = classify + fileName
+          mkdirp.sync(outdir)
+        } else {
+          outdir = postBasicPath
+          checkName = fileName
+        }
       } else {
         outdir = postBasicPath
         checkName = fileName
       }
-    } else {
-      outdir = postBasicPath
-      checkName = fileName
+      fileName = this.checkFileName(checkName, fileName, post.doc_id)
+      postPath = path.join(outdir, `${fileName}.md`)
+      out.info('文件生成', classify ? `${classify}/${fileName}.md` : `${fileName}.md`)
     }
-    fileName = this.checkFileName(checkName, fileName)
-    const postPath = path.join(outdir, `${fileName}.md`)
-    out.info('文件生成', classify ? `${classify}/${fileName}.md` : `${fileName}.md`)
     fs.writeFileSync(postPath, formatBody, {
       encoding: 'utf8',
     })
   }
 
-  checkFileName(fileName: string, originName = '') {
+  checkFileName(fileName: string, originName = '', doc_id: string) {
     let newName: string
     if (this.cacheFileNames.includes(fileName)) {
-      const newFileName = `${originName || fileName}_${new Date().getTime()}`
+      const newFileName = `${originName || fileName}_${doc_id}`
       out.warning('文件重复', `${fileName}.md文件重复，将为自动重命名为${newFileName}.md`)
       newName = newFileName
     } else {
