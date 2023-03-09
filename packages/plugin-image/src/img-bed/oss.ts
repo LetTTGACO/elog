@@ -1,6 +1,7 @@
 // 阿里云图床
 import OSS from 'ali-oss'
 import { OssConfig } from './types'
+import { out } from '@elog/shared'
 
 class OssClient {
   config: OssConfig
@@ -8,6 +9,9 @@ class OssClient {
 
   constructor(config: OssConfig) {
     this.config = config
+    if (this.config.prefixKey?.endsWith('/')) {
+      this.config.prefixKey = this.config.prefixKey.slice(0, -1)
+    }
     this.imgClient = new OSS({
       bucket: config.bucket,
       // yourRegion填写Bucket所在地域。以华东1（杭州）为例，Region填写为oss-cn-hangzhou。
@@ -34,7 +38,7 @@ class OssClient {
         return `https://${this.config.host}/${this.config.prefixKey}/${fileName}`
       }
       return `https://${this.config.bucket}.${this.config.region}.aliyuncs.com/${this.config.prefixKey}/${fileName}`
-    } catch (e) {
+    } catch (e: any) {
       // out.warn(`检查图片信息时出错: ${transformRes(e)}`)
       // TODO DEBUG 模式下输出
     }
@@ -53,8 +57,8 @@ class OssClient {
         return `https://${this.config.host}/${this.config.prefixKey}/${fileName}`
       }
       return res.url
-    } catch (e) {
-      // out.warn(`上传图片失败，请检查: ${e}`)
+    } catch (e: any) {
+      out.warning('跳过上传', `上传图片失败，请检查: ${e.message}`)
       // TODO DEBUG 模式下输出
     }
   }
