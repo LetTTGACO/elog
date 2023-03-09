@@ -1,11 +1,15 @@
 import COS from 'cos-nodejs-sdk-v5'
 import { CosConfig } from './types'
+import { out } from '@elog/shared'
 
 class CosClient {
   config: CosConfig
   imgClient: COS
   constructor(config: CosConfig) {
     this.config = config
+    if (this.config.prefixKey?.endsWith('/')) {
+      this.config.prefixKey = this.config.prefixKey.slice(0, -1)
+    }
     this.imgClient = new COS({
       SecretId: config.secretId || process.env.COS_SECRET_ID, // 身份识别ID
       SecretKey: config.secretKey || process.env.COS_SECRET_KEY, // 身份秘钥
@@ -51,7 +55,8 @@ class CosClient {
         return `https://${this.config.host}/${this.config.prefixKey}/${fileName}`
       }
       return `https://${res.Location}`
-    } catch (e) {
+    } catch (e: any) {
+      out.warning('跳过上传', `上传图片失败，请检查: ${e.message}`)
       // TODO DEBUG 模式下输出
     }
   }
