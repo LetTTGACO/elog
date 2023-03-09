@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.3.0-beta.5
+
+### Patch Changes
+
+- 增加日志输出
+
 ## 0.3.0-beta.4
 
 ### Patch Changes
