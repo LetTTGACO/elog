@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.3.0-beta.6
+
+### Patch Changes
+
+- 自动生成文档目录
+
 ## 0.3.0-beta.5
 
 ### Patch Changes
