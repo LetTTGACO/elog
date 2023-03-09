@@ -158,7 +158,7 @@ class ConfluenceClient {
   }
 
   /**
-   * 更新文章
+   * 更新文档
    * @param post
    * @param id
    * @param version

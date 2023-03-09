@@ -13,7 +13,7 @@ export interface ConfluenceConfig {
 
 export interface DeployOptions {
   platform: 'default' | 'confluence'
-  classify?: string
+  directory?: boolean
   postPath?: string
   /** 最后更新时间 */
   lastGenerate?: number
