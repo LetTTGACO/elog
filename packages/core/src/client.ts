@@ -165,10 +165,10 @@ class Elog {
     for (const docDetail of docDetailList) {
       const { index, status } = idMap[docDetail.doc_id]
       if (status === DocStatus.create) {
-        // 新增文章
+        // 新增文档
         this.cachedArticles.push(docDetail)
       } else {
-        // 更新文章
+        // 更新文档
         this.cachedArticles[index!] = docDetail
       }
     }
@@ -213,11 +213,11 @@ class Elog {
     await this.deployClient.deploy(this.cachedArticles)
   }
 
-  // 文章下载 => 增量更新文章到缓存 json 文件
+  // 下载文档 => 增量更新文章到缓存 json 文件
   async deploy() {
     // 读取文章缓存
     this.readArticleCache()
-    // 下载文章
+    // 下载文档
     await this.fetchArticles()
     if (!this.needUpdate) {
       // 结束进程

@@ -130,7 +130,7 @@ class YuqueClient {
       return articleList
     }
     const promise = async (doc: DocInfo) => {
-      out.info('文章下载', doc.title)
+      out.info('下载文档', doc.title)
       let article = await this.getDocDetail(doc.slug)
       // 解析出properties
       const { body, properties } = getProps(article)

@@ -96,7 +96,7 @@ class NotionClient {
     }
     const promise = async (page: NotionPage) => {
       let article = await this.download(page)
-      out.info('文章下载', article.properties.title)
+      out.info('下载文档', article.properties.title)
       await this.published(page)
       articleList.push(article)
     }

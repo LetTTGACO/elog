@@ -29,12 +29,11 @@ class Deploy {
    */
   async deployDefault(post: DocDetail) {
     if (post.updated < (this.config.lastGenerate || 0)) {
-      out.access('跳过部署', post.properties.title)
+      out.access('跳过部署', `${post.properties.title}未更新`)
       return
     }
     const { adapter = 'markdown', mdNameFormat = 'title' } = this.config
     const postBasicPath = this.config.postPath!
-    const classifyName = this.config.classify
     let formatBody = ''
 
     if (adapter === 'matter-markdown') {
@@ -43,45 +42,49 @@ class Deploy {
       formatBody = markdownAdapter(post)
     } else if (adapter === 'html') {
       // TODO HTML适配器
-      // formatBody = await transform.htmlAdapter(post)
+    } else if (adapter === 'wiki') {
+      formatBody = wikiAdapter(post)
     } else {
       formatBody = markdownAdapter(post)
     }
     let fileName = filenamify(post.properties[mdNameFormat])
 
-    let outdir: string
-    // 分类文件夹
-    let classify
-    // 校验文件名重复的问题
-    let checkName
-    if (classifyName) {
-      classify = post.properties[classifyName]
-      // 说明需要按文件夹生成
-      if (classify) {
-        outdir = path.join(postBasicPath, classify)
-        checkName = classify + fileName
+    let postPath: string
+    if (this.config.directory) {
+      // 开启按目录生成
+      if (Array.isArray(post.toc)) {
+        // 是否存在目录
+        // NOTE 目前只有语雀返回了这个目录信息
+        const tocPath = post.toc.map((item) => item.title).join('/')
+        fileName = this.checkFileName(fileName + tocPath, fileName, post.doc_id)
+        const outdir = path.join(postBasicPath, tocPath)
         mkdirp.sync(outdir)
+        postPath = path.join(outdir, `${fileName}.md`)
+        // 生成文件夹
+        out.info('生成文档', `${fileName}.md`)
       } else {
-        outdir = postBasicPath
-        checkName = fileName
+        out.warning('目录缺失', `${fileName}缺失目录信息，所有文档将生成在指定目录`)
+        // 不存在则直接生成
+        fileName = this.checkFileName(fileName, fileName, post.doc_id)
+        postPath = path.join(postBasicPath, `${fileName}.md`)
+        out.info('生成文档', `${fileName}.md`)
       }
     } else {
-      outdir = postBasicPath
-      checkName = fileName
+      // 直接生成
+      fileName = this.checkFileName(fileName, fileName, post.doc_id)
+      postPath = path.join(postBasicPath, `${fileName}.md`)
+      out.info('生成文档', `${fileName}.md`)
     }
-    fileName = this.checkFileName(checkName, fileName)
-    const postPath = path.join(outdir, `${fileName}.md`)
-    out.info('文件生成', classify ? `${classify}/${fileName}.md` : `${fileName}.md`)
     fs.writeFileSync(postPath, formatBody, {
       encoding: 'utf8',
     })
   }
 
-  checkFileName(fileName: string, originName = '') {
+  checkFileName(fileName: string, originName: string, doc_id: string) {
     let newName: string
     if (this.cacheFileNames.includes(fileName)) {
-      const newFileName = `${originName || fileName}_${new Date().getTime()}`
-      out.warning('文件重复', `${fileName}.md文件重复，将为自动重命名为${newFileName}.md`)
+      const newFileName = `${originName}_${doc_id}`
+      out.warning('文档重复', `${originName}.md文档重复，将为自动重命名为${newFileName}.md`)
       newName = newFileName
     } else {
       newName = originName
@@ -123,13 +126,13 @@ class Deploy {
       // 是否存在
       const cacheWikiPage = rootPageMap[articleInfo.title]
       if (cacheWikiPage) {
-        out.info('更新文章', cacheWikiPage.title)
+        out.info('更新文档', cacheWikiPage.title)
         // 获取版本信息
         const updatingPage = await confluenceClient.getPageById(cacheWikiPage.id)
         const version = updatingPage.version.number + 1
         await confluenceClient.updatePage(articleInfo, cacheWikiPage.id, version)
       } else {
-        out.info('新增文章', articleInfo.title)
+        out.info('新增文档', articleInfo.title)
         // 新增
         // 在rootPageMap中找到parent title
         let parentId = ''
