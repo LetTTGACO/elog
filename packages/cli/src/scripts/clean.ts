@@ -7,12 +7,12 @@ const clean = async (config = 'elog-config.json', cache = 'elog-cache.json') => 
     const configPath = path.resolve(process.cwd(), `${config}`)
     const {
       deploy: { postPath },
-      image: { enable, bed, output },
+      image: { bed, output },
     } = require(configPath)
     cleanCache(cache)
     cleanPost(postPath)
     // 清楚本地图片
-    if (!enable || bed === 'local') {
+    if (bed === 'local' && output) {
       cleanImages(output)
     }
   } catch (error) {
