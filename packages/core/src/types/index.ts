@@ -8,13 +8,15 @@ interface ElogConfig {
   writing: YuqueConfig | NotionConfig
   /** 部署平台 */
   deploy: DefaultConfig
-  /** 具体配置文件 */
-  /** 缓存文件路径 */
-  articleCachePath?: string
-  /** 增量更新文件路径 */
-  lastGeneratePath?: string
   /** 图片转CDN配置 */
   image?: ImgConfig
+  /** 缓存路径 */
+  cachePath: string
+}
+
+interface CacheJSON {
+  docs: DocDetail[]
+  catalog: any[]
 }
 
 enum DocStatus {
@@ -42,4 +44,5 @@ export {
   DocDetail,
   DocStatusMap,
   DocStatus,
+  CacheJSON,
 }

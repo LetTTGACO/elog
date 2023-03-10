@@ -26,12 +26,13 @@ export async function run() {
   program
     .version(pkgJson.version)
     .command('sync')
-    .option('-c, --config <string>', 'use config with custom')
-    .option('-e, --env <string>', 'use env with custom')
+    .option('-c, --config <string>', 'use config with custom, default is elog-config.json')
+    .option('-a --cache <string>', 'use cache file name, default is elog-cache.json')
+    .option('-e, --env <string>', 'use env with custom, default is .env')
     .description('sync doc')
     .action((options) => {
       try {
-        void sync(options.config, options.env)
+        void sync(options.config, options.cache, options.env)
       } catch (error) {
         // @ts-ignore
         out.err('运行失败', error.message)
@@ -44,11 +45,10 @@ export async function run() {
     .command('clean')
     .option('-c --config <string>', 'assign config file name, default is elog-config.json')
     .option('-a --cache <string>', 'assign cache file name, default is elog-cache.json')
-    .option('-t --timestamp <string>', 'assign timestamp file name, default is elog-timestamp.txt')
     .description('clean cache')
     .action((options) => {
       try {
-        void clean(options.config, options.cache, options.timestamp)
+        void clean(options.config, options.cache)
       } catch (error) {
         // @ts-ignore
         out.err('运行失败', error.message)

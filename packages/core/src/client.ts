@@ -9,8 +9,16 @@ import Deploy, { DeployOptions } from '@elog/deploy'
 import ImgCdnClient from '@elog/plugin-image'
 
 // types
-import { Doc, DocDetail, DocStatus, DocStatusMap, ElogConfig, WritingPlatform } from './types'
-import { __cwd, CACHE_FILE_NAME, LAST_GENERATE_FILE_NAME } from './const'
+import {
+  CacheJSON,
+  Doc,
+  DocDetail,
+  DocStatus,
+  DocStatusMap,
+  ElogConfig,
+  WritingPlatform,
+} from './types'
+import { __cwd } from './const'
 import { out } from '@elog/shared'
 
 /**
@@ -25,21 +33,15 @@ class Elog {
   deployClient: any
   /** 图片转CDN转换器 */
   imgCdnClient: any
-  /** 文章缓存路径 */
-  articleCachePath: string
   /** 缓存文章 */
   cachedArticles: DocDetail[] = []
-  /** 增量更新路径 */
-  lastGeneratePath: string | undefined
-  /** 增量更新时间戳 */
-  lastGenerate = 0
+  /** 是否需要更新，当所有文章都不需要更新，这个标记就会阻止后续流程 */
   needUpdate = false
+  needUpdateArticles: DocDetail[] = []
 
   constructor(config: ElogConfig) {
     // 初始化配置
     this.config = config
-    // 初始化文章缓存配置
-    this.articleCachePath = path.join(__cwd, config.articleCachePath || CACHE_FILE_NAME)
     // 初始化增量配置
     this.initIncrementalUpdate(config)
     // 初始化写作平台
@@ -56,10 +58,12 @@ class Elog {
    */
   initIncrementalUpdate(config: ElogConfig) {
     try {
-      this.lastGeneratePath = path.join(__cwd, config.lastGeneratePath || LAST_GENERATE_FILE_NAME)
-      this.lastGenerate = Number(fs.readFileSync(this.lastGeneratePath).toString())
+      const cacheJson: CacheJSON = require(path.join(__cwd, config.cachePath))
+      const { docs } = cacheJson
+      // 获取缓存文章
+      this.cachedArticles = docs || []
     } catch (error) {
-      // out.warning('获取最后更新时间失败，可能会导致重复部署', error)
+      out.info('全量更新', '未获取到缓存，将全量更新文档')
     }
   }
 
@@ -70,19 +74,9 @@ class Elog {
   initWritingPlatform(config: ElogConfig) {
     if (config.writing.platform === WritingPlatform.YUQUE) {
       let yuqueConfig = config.writing as YuqueConfig
-      yuqueConfig.token = yuqueConfig.token || process.env.YUQUE_TOKEN!
-      if (!yuqueConfig.token) {
-        out.err('缺少参数', '缺少语雀Token')
-        process.exit(-1)
-      }
       this.downloaderClient = new Yuque(yuqueConfig)
     } else if (config.writing.platform === WritingPlatform.NOTION) {
       let notionConfig = config.writing as NotionConfig
-      notionConfig.token = notionConfig.token || process.env.NOTION_TOKEN!
-      if (!notionConfig.token) {
-        out.err('缺少参数', '缺少Notion Token')
-        process.exit(-1)
-      }
       this.downloaderClient = new Notion(notionConfig)
     }
   }
@@ -93,7 +87,6 @@ class Elog {
    */
   initDeployPlatform(config: ElogConfig) {
     const deployOptions = config.deploy as DeployOptions
-    deployOptions.lastGenerate = this.lastGenerate
     this.deployClient = new Deploy(deployOptions)
   }
 
@@ -161,6 +154,8 @@ class Elog {
     if (this.config.image?.enable) {
       docDetailList = await this.processImage(docDetailList)
     }
+    // 缓存需要更新的文档
+    this.needUpdateArticles = docDetailList
     // 更新缓存里的文章
     for (const docDetail of docDetailList) {
       const { index, status } = idMap[docDetail.doc_id]
@@ -175,28 +170,26 @@ class Elog {
   }
 
   /**
-   * 读取语雀的文章缓存 json 文件
-   */
-  readArticleCache() {
-    const { articleCachePath } = this
-    try {
-      const articles = require(articleCachePath)
-      if (Array.isArray(articles)) {
-        this.cachedArticles = articles
-        return
-      }
-    } catch (error) {}
-    this.cachedArticles = []
-  }
-
-  /**
    * 写入语雀的文章缓存 json 文件
    */
   writeArticleCache() {
-    const { articleCachePath, cachedArticles } = this
-    fs.writeFileSync(articleCachePath, JSON.stringify(cachedArticles, null, 2), {
-      encoding: 'utf8',
-    })
+    try {
+      let catalog: any[] = []
+      if (this.config.writing.platform === WritingPlatform.YUQUE) {
+        // 目前只适配语雀
+        const yuqueClient = this.downloaderClient as Yuque
+        catalog = yuqueClient.ctx.toc
+      }
+      const cacheJson: CacheJSON = {
+        docs: this.cachedArticles,
+        catalog,
+      }
+      fs.writeFileSync(this.config.cachePath, JSON.stringify(cacheJson, null, 2), {
+        encoding: 'utf8',
+      })
+    } catch (e: any) {
+      out.warning('缓存失败', `写入缓存信息失败，请检查${e.message}`)
+    }
   }
 
   /**
@@ -210,13 +203,11 @@ class Elog {
    * 部署文章
    */
   async deployArticles() {
-    await this.deployClient.deploy(this.cachedArticles)
+    await this.deployClient.deploy(this.needUpdateArticles)
   }
 
   // 下载文档 => 增量更新文章到缓存 json 文件
   async deploy() {
-    // 读取文章缓存
-    this.readArticleCache()
     // 下载文档
     await this.fetchArticles()
     if (!this.needUpdate) {
@@ -228,8 +219,6 @@ class Elog {
     this.writeArticleCache()
     // 部署文章
     await this.deployArticles()
-    // 更新增量更新时间
-    fs.writeFileSync(this.lastGeneratePath!, new Date().getTime().toString())
     out.access('任务结束', '🎉更新成功🎉')
   }
 }

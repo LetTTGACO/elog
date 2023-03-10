@@ -46,7 +46,7 @@ class Yuque {
    * 获取文章详情列表
    * @param ids 需要下载的doc_id列表
    */
-  async getDocDetailList(ids?: string[]) {
+  async getDocDetailList(ids: string[]) {
     return await this.ctx.getDocDetailList(this.pages, ids)
   }
 }

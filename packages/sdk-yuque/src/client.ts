@@ -14,6 +14,11 @@ class YuqueClient {
 
   constructor(config: YuqueConfig) {
     this.config = config
+    this.config.token = config.token || process.env.YUQUE_TOKEN!
+    if (!this.config.token) {
+      out.err('缺少参数', '缺少语雀Token')
+      process.exit(-1)
+    }
     this.namespace = `${config.login}/${config.repo}`
   }
 
@@ -105,7 +110,7 @@ class YuqueClient {
    * @param cachedDocs
    * @param ids
    */
-  async getDocDetailList(cachedDocs: DocInfo[], ids?: string[]) {
+  async getDocDetailList(cachedDocs: DocInfo[], ids: string[]) {
     // 获取目录信息
     this.toc = await this.getToc()
     let articleList: Doc[] = []
@@ -115,7 +120,7 @@ class YuqueClient {
     } else {
       docs = await this.getDocList()
     }
-    if (ids?.length) {
+    if (ids.length) {
       // 取交集，过滤不需要下载的page
       docs = docs.filter((doc) => {
         const exist = ids.indexOf(doc.slug) > -1
@@ -141,7 +146,7 @@ class YuqueClient {
       articleList.push(article as Doc)
     }
     await asyncPool(5, docs, promise)
-    out.access('已下载数', String(articleList.length))
+    out.access('待更新数', String(articleList.length))
     return articleList
   }
 }
