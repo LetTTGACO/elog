@@ -28,10 +28,6 @@ class Deploy {
    * @param post
    */
   async deployDefault(post: DocDetail) {
-    if (post.updated < (this.config.lastGenerate || 0)) {
-      out.access('跳过部署', `${post.properties.title}未更新`)
-      return
-    }
     const { adapter = 'markdown', mdNameFormat = 'title' } = this.config
     const postBasicPath = this.config.postPath!
     let formatBody = ''
@@ -50,7 +46,7 @@ class Deploy {
     let fileName = filenamify(post.properties[mdNameFormat])
 
     let postPath: string
-    if (this.config.directory) {
+    if (this.config.needCatalog) {
       // 开启按目录生成
       if (Array.isArray(post.toc)) {
         // 是否存在目录
@@ -117,10 +113,6 @@ class Deploy {
     })
     // 根据目录上传到wiki上
     for (const articleInfo of sortArticleList) {
-      if (articleInfo.updated < (this.config.lastGenerate || 0)) {
-        out.access('跳过部署', articleInfo.properties.title)
-        break
-      }
       // 将markdown转wiki
       articleInfo.body_wiki = wikiAdapter(articleInfo)
       // 是否存在

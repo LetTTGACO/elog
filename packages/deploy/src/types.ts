@@ -13,10 +13,8 @@ export interface ConfluenceConfig {
 
 export interface DeployOptions {
   platform: 'default' | 'confluence'
-  directory?: boolean
+  needCatalog?: boolean
   postPath?: string
-  /** 最后更新时间 */
-  lastGenerate?: number
   mdNameFormat?: 'title' | 'urlname'
   adapter?: 'matter-markdown' | 'markdown' | 'html' | 'wiki'
   confluence?: ConfluenceConfig

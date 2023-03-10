@@ -1,22 +1,15 @@
-import elog from '@elog/core'
+import Elog, { ElogConfig } from '@elog/core'
 import path from 'path'
 import * as dotenv from 'dotenv'
 import { out } from '@elog/shared'
 
-const sync = async (customConfigName?: string, envPath?: string) => {
-  let filename: string
-  if (!customConfigName) {
-    filename = 'elog-config.json'
-  } else {
-    const existExt = customConfigName.includes('.')
-    if (existExt) {
-      filename = customConfigName
-    } else {
-      filename = customConfigName + '.json'
-    }
-  }
-  const configPath = path.resolve(process.cwd(), `${filename}`)
-  const config = require(configPath)
+const sync = async (customConfigPath?: string, customCachePath?: string, envPath?: string) => {
+  const configFilePath = customConfigPath || 'elog-config.json'
+  const cacheFilePath = customCachePath || 'elog-cache.json'
+
+  const configPath = path.resolve(process.cwd(), `${configFilePath}`)
+  let config: ElogConfig = require(configPath)
+  config.cachePath = cacheFilePath
   // 加载环境变量
   if (envPath) {
     // 本地模式
@@ -27,8 +20,8 @@ const sync = async (customConfigName?: string, envPath?: string) => {
     // 生产模式
     out.info('环境变量', `未指定env文件，将从系统环境变量中读取`)
   }
-  const ctx = new elog(config)
-  await ctx.deploy()
+  const elog = new Elog(config)
+  await elog.deploy()
 }
 
 export default sync

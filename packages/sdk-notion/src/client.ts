@@ -14,8 +14,12 @@ class NotionClient {
   n2m: NotionToMarkdown
   constructor(config: NotionConfig) {
     this.config = config
-    const token = config.token || process.env.NOTION_TOKEN
-    this.notion = new Client({ auth: token })
+    this.config.token = config.token || process.env.NOTION_TOKEN!
+    if (!this.config.token) {
+      out.err('缺少参数', '缺少Notion Token')
+      process.exit(-1)
+    }
+    this.notion = new Client({ auth: this.config.token })
     this.n2m = new NotionToMarkdown({ notionClient: this.notion })
     // debug(`create client: database_id: ${config.database_id}`)
   }

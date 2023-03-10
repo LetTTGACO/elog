@@ -34,11 +34,11 @@ export const cleanCache = (cachePath: string) => {
 }
 
 /**
- * 清理时间缓存
+ * 清理本地图片
  */
-export const cleanTimestamp = (timestampPath: string) => {
+export const cleanImages = (imgsPath: string) => {
   try {
-    const dist = path.join(__cwd, timestampPath)
+    const dist = path.join(__cwd, imgsPath)
     rimraf.sync(dist)
     out.info('清理成功', dist)
   } catch (error) {
