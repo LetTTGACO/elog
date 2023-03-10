@@ -1,5 +1,17 @@
 # @elog/core
 
+## 0.3.0-beta.7
+
+### Patch Changes
+
+- 1.优化部署流程 2.缓存目录信息
+- Updated dependencies
+  - @elog/deploy@0.3.0-beta.7
+  - @elog/plugin-image@0.3.0-beta.7
+  - @elog/sdk-notion@0.3.0-beta.7
+  - @elog/sdk-yuque@0.3.0-beta.7
+  - @elog/shared@0.3.0-beta.7
+
 ## 0.3.0-beta.6
 
 ### Patch Changes

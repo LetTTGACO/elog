@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.3.0-beta.7
+
+### Patch Changes
+
+- 1.优化部署流程 2.缓存目录信息
+
 ## 0.3.0-beta.6
 
 ### Patch Changes
