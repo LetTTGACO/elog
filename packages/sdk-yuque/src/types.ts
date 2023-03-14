@@ -163,3 +163,7 @@ export interface BaseDoc {
   doc_id: string
   updated: number
 }
+
+export type YuQueResponse<T> = {
+  data: T
+}

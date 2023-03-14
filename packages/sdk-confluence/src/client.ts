@@ -1,7 +1,12 @@
-import { DocDetail, ConfluenceConfig } from '../types'
-import { request, RequestOptions } from 'urllib'
-import { RequestError, WikiPageDetail, WikiPageList, WikiPageListResponse } from './types'
-import { out } from '@elog/shared'
+import { out, RequestOptions, request } from '@elog/shared'
+import {
+  ConfluenceConfig,
+  DocDetail,
+  WikiContent,
+  WikiPageDetail,
+  WikiPageList,
+  WikiPageListResponse,
+} from './types'
 
 class ConfluenceClient {
   config: ConfluenceConfig
@@ -13,13 +18,13 @@ class ConfluenceClient {
       out.err('缺少参数', '缺少Confluence baseUrl')
       process.exit(-1)
     }
-    const user = config.user || process.env.CONFLUENCE_USER
-    const password = config.password || process.env.CONFLUENCE_PWD
-    if (!user || !password) {
+    this.config.user = config.user || process.env.CONFLUENCE_USER!
+    this.config.password = config.password || process.env.CONFLUENCE_PWD!
+    if (!this.config.user || !this.config.password) {
       out.err('缺少参数', '缺少Confluence账号或密码')
       process.exit(-1)
     }
-    this.auth = `${user}:${password}`
+    this.auth = `${this.config.user}:${this.config.password}`
   }
 
   /**
@@ -35,27 +40,10 @@ class ConfluenceClient {
     }
     const url = `${baseUrl}/${api}`
     const opts: RequestOptions = {
-      method: 'GET',
-      contentType: 'json',
-      dataType: 'json',
-      headers: {
-        'User-Agent': '@elog/deploy',
-      },
-      gzip: true,
       auth: this.auth,
-      // 超时时间 60s
-      timeout: 60000,
       ...reqOpts,
     }
-    const res = await request(url, opts)
-    if (res.status !== 200) {
-      const err = new RequestError(res.data.message)
-      /* istanbul ignore next */
-      err.status = res.data.status || res.status
-      err.code = res.data.code
-      err.data = res
-      throw err
-    }
+    const res = await request<T>(url, opts)
     return res.data
   }
 
@@ -66,7 +54,7 @@ class ConfluenceClient {
    * @param parentId
    */
   processBody(post: DocDetail, id?: string, parentId?: string) {
-    let params = {
+    let params: any = {
       type: 'page',
       title: post.title,
       space: {
@@ -86,7 +74,6 @@ class ConfluenceClient {
       expand: ['ancestors'],
     }
     if (id) {
-      // @ts-ignore
       params.id = id
     }
     return params
@@ -122,7 +109,7 @@ class ConfluenceClient {
   /**
    * 根据parentId查询文章
    */
-  async getRootPageList() {
+  async getRootPageList(): Promise<WikiContent[]> {
     const res = await this.request<WikiPageListResponse>(
       `search?cql=space=${this.config.spaceKey} and ancestor=${this.config.rootPageId}&limit=1000`,
       {

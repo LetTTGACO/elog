@@ -24,6 +24,7 @@
   "dependencies": {
     "@elog/plugin-adapter": "workspace:*",
     "@elog/shared": "workspace:*",
+    "@elog/sdk-confluence": "workspace:*",
     "filenamify": "^4.3.0",
     "mkdirp": "^1.0.4",
     "urllib": "2.40.0"

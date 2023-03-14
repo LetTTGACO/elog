@@ -1,7 +1,6 @@
-import { request, RequestOptions } from 'urllib'
 import asyncPool from 'tiny-async-pool'
-import { out } from '@elog/shared'
-import { Doc, DocInfo, Properties, RequestError, TocDetail, YuqueConfig } from './types'
+import { out, request, RequestOptions } from '@elog/shared'
+import { Doc, DocInfo, Properties, TocDetail, YuqueConfig, YuQueResponse } from './types'
 import { getProps } from './utils'
 
 /** 默认语雀API 路径 */
@@ -36,30 +35,14 @@ class YuqueClient {
     }
     const url = `${baseUrl}/${api}`
     const opts: RequestOptions = {
-      method: 'GET',
-      contentType: 'json',
-      dataType: 'json',
       headers: {
-        'User-Agent': '@elog/sdk-yuque',
         'X-Auth-Token': token,
       },
-      gzip: true,
-      // proxy
-      rejectUnauthorized: !process.env.http_proxy,
-      enableProxy: !!process.env.http_proxy,
-      proxy: process.env.http_proxy,
-      // 超时时间 60s
-      timeout: 60000,
       ...reqOpts,
     }
-    const res = await request(url, opts)
+    const res = await request<YuQueResponse<T>>(url, opts)
     if (res.status !== 200) {
-      const err = new RequestError(res.data.message)
-      /* istanbul ignore next */
-      err.status = res.data.status || res.status
-      err.code = res.data.code
-      err.data = res
-      throw err
+      out.warning(JSON.stringify(res))
     }
     return res.data.data
   }

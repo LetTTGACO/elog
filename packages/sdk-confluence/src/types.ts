@@ -1,4 +1,10 @@
-import { ConfluenceConfig } from '../types'
+export interface ConfluenceConfig {
+  user: string
+  password: string
+  baseUrl: string
+  spaceKey: string
+  rootPageId: string
+}
 
 export interface DeployWikiConfig {
   /** 最后更新时间 */
@@ -14,7 +20,7 @@ export class RequestError extends Error {
 }
 
 /**
- * // NOTE 官方文档说不稳定
+ * // NOTE 语雀官方文档说不稳定
  * 目录详情
  */
 export interface TocDetail {
@@ -155,13 +161,40 @@ export interface WikiMap {
   }
 }
 
+export interface WikiContent {
+  id: string
+  status: string
+  title: string
+  type: string
+}
+
 export interface WikiPageListResponse {
   results: {
-    content: {
-      id: string
-      status: string
-      title: string
-      type: string
-    }
+    content: WikiContent
   }[]
+}
+
+/**
+ * 文章详情
+ */
+export interface DocDetail {
+  id: string
+  doc_id: string
+  properties: Properties
+  body: string
+  updated: number
+  title: string
+  toc?: TocDetail[]
+  body_wiki?: string
+}
+
+/**
+ * 文章属性
+ */
+interface Properties {
+  urlname: string
+  title: string
+  date: string
+  updated: string
+  [key: string]: any
 }
