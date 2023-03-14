@@ -6,19 +6,6 @@ export interface ConfluenceConfig {
   rootPageId: string
 }
 
-export interface DeployWikiConfig {
-  /** 最后更新时间 */
-  lastGenerate?: number
-  adapter?: 'matter-markdown' | 'markdown' | 'html' | 'wiki'
-  confluence?: ConfluenceConfig
-}
-
-export class RequestError extends Error {
-  status?: number
-  code?: number
-  data?: any
-}
-
 /**
  * // NOTE 语雀官方文档说不稳定
  * 目录详情

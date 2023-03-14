@@ -26,12 +26,9 @@
     "@elog/shared": "workspace:*",
     "@elog/sdk-confluence": "workspace:*",
     "filenamify": "^4.3.0",
-    "mkdirp": "^1.0.4",
-    "urllib": "2.40.0"
+    "mkdirp": "^1.0.4"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.189",
-    "@types/mkdirp": "^1.0.2",
-    "@types/rimraf": "^3.0.2"
+    "@types/mkdirp": "^1.0.2"
   }
 }

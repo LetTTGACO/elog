@@ -1,8 +1,6 @@
 /**
- * confluence wiki 配置
+ * confluence 配置
  */
-import { TocDetail } from './confluence/types'
-
 export interface ConfluenceConfig {
   user: string
   password: string
@@ -20,6 +18,26 @@ export interface DeployOptions {
   confluence?: ConfluenceConfig
 }
 
+/**
+ * // NOTE 语雀官方文档说不稳定
+ * 目录详情
+ */
+export interface TocDetail {
+  /** 类型：文章/分组 */
+  type: 'DOC' | 'TITLE'
+  /** 名称 */
+  title: string
+  uuid: string
+  child_uuid: string
+  parent_uuid: string
+  slug: string
+  depth: number
+  level: number
+}
+
+/**
+ * 文章详情
+ */
 export interface DocDetail {
   id: string
   doc_id: string
@@ -30,6 +48,10 @@ export interface DocDetail {
   toc?: TocDetail[]
   body_wiki?: string
 }
+
+/**
+ * 文章属性
+ */
 interface Properties {
   urlname: string
   title: string

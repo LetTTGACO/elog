@@ -1,6 +1,6 @@
 import { ImgConfig } from './img'
 import { NotionConfig, YuqueConfig, Doc, DocDetail } from './writing'
-import { DeployPlatform, DefaultConfig, WordpressConfig } from './deploy'
+import { DeployPlatform, DefaultConfig } from './deploy'
 import { WritingPlatform } from './writing/common'
 
 interface ElogConfig {
@@ -39,7 +39,6 @@ export {
   YuqueConfig,
   DeployPlatform,
   DefaultConfig,
-  WordpressConfig,
   Doc,
   DocDetail,
   DocStatusMap,

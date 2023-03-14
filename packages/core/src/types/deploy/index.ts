@@ -1,9 +1,3 @@
-import { DefaultConfig } from './default'
-import { WordpressConfig } from './wordpress'
+import { DefaultConfig, DeployPlatform } from './default'
 
-enum DeployPlatform {
-  DEFAULT = 'default',
-  CONFLUENCE = 'confluence',
-}
-
-export { DefaultConfig, WordpressConfig, DeployPlatform }
+export { DefaultConfig, DeployPlatform }

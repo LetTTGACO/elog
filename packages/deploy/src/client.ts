@@ -7,6 +7,9 @@ import { out } from '@elog/shared'
 import mkdirp from 'mkdirp'
 import ConfluenceClient, { WikiMap } from '@elog/sdk-confluence'
 
+const mdNameFormatList = ['title', 'urlname']
+const adapterList = ['matter-markdown', 'markdown', 'wiki']
+
 /**
  * 部署器
  */
@@ -27,7 +30,15 @@ class Deploy {
    * @param post
    */
   async deployDefault(post: DocDetail) {
-    const { adapter = 'markdown', mdNameFormat = 'title' } = this.config
+    const { adapter = 'markdown' } = this.config
+    let { mdNameFormat = 'title' } = this.config
+    if (!mdNameFormatList.includes(mdNameFormat)) {
+      mdNameFormat = 'title'
+      out.warning(
+        '配置错误',
+        `文件命名方式目前只支持${mdNameFormatList.toString()}，将默认以title形式命名`,
+      )
+    }
     const postBasicPath = this.config.postPath!
     let formatBody = ''
 
@@ -40,6 +51,10 @@ class Deploy {
     } else if (adapter === 'wiki') {
       formatBody = wikiAdapter(post)
     } else {
+      out.warning(
+        '配置错误',
+        `目前只支持将文档转换为${adapterList.toString()}，将默认以markdown形式转换`,
+      )
       formatBody = markdownAdapter(post)
     }
     let fileName = filenamify(post.properties[mdNameFormat])
