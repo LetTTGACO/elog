@@ -1,5 +1,18 @@
 # @elog/core
 
+## 0.3.0-beta.8
+
+### Patch Changes
+
+- 1. 修复不可见字符
+  2. 调整构建逻辑
+- Updated dependencies
+  - @elog/deploy@0.3.0-beta.8
+  - @elog/plugin-image@0.3.0-beta.8
+  - @elog/sdk-notion@0.3.0-beta.8
+  - @elog/sdk-yuque@0.3.0-beta.8
+  - @elog/shared@0.3.0-beta.8
+
 ## 0.3.0-beta.7
 
 ### Patch Changes

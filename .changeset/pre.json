@@ -11,7 +11,8 @@
     "@elog/sdk-yuque": "0.2.2",
     "@elog/shared": "0.2.2",
     "yuque-confluence": "1.0.0",
-    "yuque-default": "1.0.0"
+    "yuque-default": "1.0.0",
+    "@elog/sdk-confluence": "0.2.2"
   },
   "changesets": [
     "angry-badgers-enjoy",
@@ -21,6 +22,7 @@
     "new-snails-admire",
     "odd-shoes-whisper",
     "rare-emus-attack",
+    "shy-bobcats-remain",
     "thick-pears-whisper"
   ]
 }
