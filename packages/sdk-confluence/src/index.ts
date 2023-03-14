@@ -1,6 +1,6 @@
 import ConfluenceClient from './client'
-import { WikiMap } from './types'
+import { WikiMap, ConfluenceConfig } from './types'
 
-export { WikiMap }
+export { WikiMap, ConfluenceConfig }
 
 export default ConfluenceClient
