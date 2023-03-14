@@ -5,8 +5,7 @@ import filenamify from 'filenamify'
 import { markdownAdapter, matterMarkdownAdapter, wikiAdapter } from '@elog/plugin-adapter'
 import { out } from '@elog/shared'
 import mkdirp from 'mkdirp'
-import ConfluenceClient from './confluence/client'
-import { WikiMap } from './confluence/types'
+import ConfluenceClient, { WikiMap } from '@elog/sdk-confluence'
 
 /**
  * 部署器

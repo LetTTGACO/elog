@@ -1,8 +1,8 @@
 {
-  "name": "@elog/shared",
+  "name": "@elog/sdk-confluence",
   "version": "0.2.2",
-  "description": "共享包",
-  "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-shared#readme",
+  "description": "elog的Notion SDK，从Notion写作平台获取文章",
+  "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/sdk-confluence#readme",
   "author": "1874 <me@mail.1874.cool>",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -22,15 +22,6 @@
     "build": "father build"
   },
   "dependencies": {
-    "chalk": "^4.1.2",
-    "debug": "^4.3.4",
-    "lodash": "^4.17.21",
-    "shelljs": "^0.8.5",
-    "urllib": "2.40.0"
-  },
-  "devDependencies": {
-    "@types/debug": "^4.1.7",
-    "@types/lodash": "^4.14.189",
-    "@types/shelljs": "^0.8.11"
+    "@elog/shared": "workspace:*"
   }
 }

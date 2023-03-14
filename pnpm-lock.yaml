@@ -97,6 +97,7 @@ importers:
   packages/deploy:
     specifiers:
       '@elog/plugin-adapter': workspace:*
+      '@elog/sdk-confluence': workspace:*
       '@elog/shared': workspace:*
       '@types/lodash': ^4.14.189
       '@types/mkdirp': ^1.0.2
@@ -106,6 +107,7 @@ importers:
       urllib: 2.40.0
     dependencies:
       '@elog/plugin-adapter': link:../plugin-adapter
+      '@elog/sdk-confluence': link:../sdk-confluence
       '@elog/shared': link:../shared
       filenamify: 4.3.0
       mkdirp: 1.0.4
@@ -175,6 +177,12 @@ importers:
       '@types/mime-types': 2.1.1
       '@types/mkdirp': 1.0.2
 
+  packages/sdk-confluence:
+    specifiers:
+      '@elog/shared': workspace:*
+    dependencies:
+      '@elog/shared': link:../shared
+
   packages/sdk-notion:
     specifiers:
       '@elog/shared': workspace:*
@@ -218,11 +226,13 @@ importers:
       debug: ^4.3.4
       lodash: ^4.17.21
       shelljs: ^0.8.5
+      urllib: 2.40.0
     dependencies:
       chalk: 4.1.2
       debug: 4.3.4
       lodash: 4.17.21
       shelljs: 0.8.5
+      urllib: 2.40.0
     devDependencies:
       '@types/debug': 4.1.7
       '@types/lodash': 4.14.191
