@@ -1,16 +1,10 @@
+import { ImagePlatformEnum } from './const'
+
 interface ImgBaseConfig {
   host?: string
   prefixKey?: string
   secretExt?: string
 }
-
-// "secretId": "",
-//   "secretKey": "",
-//   "bucket": "",
-//   "region": "",
-//   "host": "",
-//   "prefixKey": "",
-//   "secretExt": "" // 可选
 
 export interface CosConfig extends ImgBaseConfig {
   secretId: string
@@ -52,15 +46,6 @@ export interface GithubConfig extends ImgBaseConfig {
 export interface LocalConfig {
   outputDir: string
   prefixKey: string
-}
-
-export enum ImagePlatformEnum {
-  QINIU = 'qiniu',
-  UPYUN = 'upyun',
-  COS = 'cos',
-  GITHUB = 'github',
-  OSS = 'oss',
-  LOCAL = 'local',
 }
 
 /**

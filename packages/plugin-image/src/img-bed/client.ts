@@ -5,18 +5,16 @@ import GithubClient from './github'
 import QiniuClient from './qiniu'
 import LocalClient from './local'
 import { out } from '@elog/shared'
-
 import {
   CosConfig,
   GithubConfig,
-  ImagePlatformEnum,
   ImageConfig,
   OssConfig,
   QiniuConfig,
   UPYunConfig,
   LocalConfig,
 } from './types'
-import { imageBedList } from './const'
+import { imageBedList, ImagePlatformEnum } from './const'
 
 class ImgBedClient {
   config: ImageConfig

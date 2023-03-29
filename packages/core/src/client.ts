@@ -6,7 +6,8 @@ import DeployClient, { DeployConfig } from '@elog/deploy'
 // imageClient
 import ImageClient from '@elog/plugin-image'
 // types
-import { ElogConfig, DocDetail, CacheJSON, Doc, DocStatusMap } from './types'
+import { ElogConfig, CacheJSON, DocStatusMap } from './types'
+import { BaseDoc, DocDetail } from '@elog/types'
 // const
 import { WritePlatform, DocStatus } from './const'
 // utils
@@ -98,7 +99,7 @@ class Elog {
    * 下载文章详情列表
    */
   async fetchArticles() {
-    let articleList = (await this.downloaderClient.getDocList()) as Doc[]
+    let articleList = (await this.downloaderClient.getDocList()) as BaseDoc[]
     if (!articleList?.length) {
       this.needUpdate = false
       return

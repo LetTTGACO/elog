@@ -1,4 +1,7 @@
-import { DeployPlatformEnum, DocStatus, ImagePlatformEnum, WritePlatform } from './const'
+import { DocStatus, WritePlatform } from './const'
+import { Catalog, DocDetail } from '@elog/types'
+import { DeployConfig } from '@elog/deploy'
+import { ImageConfig } from '@elog/plugin-image'
 
 /**
  * 写作配置
@@ -8,23 +11,6 @@ type WriteConfig = {
   platform: WritePlatform
   [key: string]: any
 } & WritePlatformConfig
-
-/**
- * 部署配置
- */
-type DeployPlatformConfig = { [key in DeployPlatformEnum]: any }
-type DeployConfig = {
-  platform: DeployPlatformEnum
-} & DeployPlatformConfig
-
-/**
- * 图床配置
- */
-type ImagePlatformConfig = { [key in ImagePlatformEnum]: any }
-type ImageConfig = {
-  enable: boolean
-  bed: ImagePlatformEnum
-} & ImagePlatformConfig
 
 /**
  * Elog 配置
@@ -41,29 +27,9 @@ export interface ElogConfig {
 }
 
 // region 文章相关
-interface BaseDoc {
-  id: string
-  doc_id: string
-}
-
-export type Doc = BaseDoc & { updated: number }
-
-export interface Properties {
-  urlname: string
-  title: string
-  date: string
-  updated: string
-  [key: string]: any
-}
-export interface DocDetail extends BaseDoc {
-  properties: Properties
-  body: string
-  updated: number
-}
-
 export interface CacheJSON {
   docs: DocDetail[]
-  catalog: any[]
+  catalog: Catalog[]
 }
 
 export interface DocStatusMap {

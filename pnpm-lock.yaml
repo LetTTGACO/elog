@@ -82,6 +82,7 @@ importers:
       '@elog/sdk-notion': workspace:*
       '@elog/sdk-yuque': workspace:*
       '@elog/shared': workspace:*
+      '@elog/types': workspace:*
       '@types/lodash': ^4.14.189
       '@types/mkdirp': ^1.0.2
       '@types/rimraf': ^3.0.2
@@ -91,6 +92,7 @@ importers:
       '@elog/sdk-notion': link:../sdk-notion
       '@elog/sdk-yuque': link:../sdk-yuque
       '@elog/shared': link:../shared
+      '@elog/types': link:../types
     devDependencies:
       '@types/lodash': 4.14.191
       '@types/mkdirp': 1.0.2
@@ -139,6 +141,7 @@ importers:
   packages/plugin-image:
     specifiers:
       '@elog/shared': workspace:*
+      '@elog/types': workspace:*
       '@kaciras/deasync': ^1.0.3
       '@types/ali-oss': ^6.16.6
       '@types/mime-types': ^2.1.1
@@ -152,6 +155,7 @@ importers:
       upyun: ^3.4.6
     dependencies:
       '@elog/shared': link:../shared
+      '@elog/types': link:../types
       '@kaciras/deasync': 1.0.3
       ali-oss: 6.17.1
       cos-nodejs-sdk-v5: 2.11.16

@@ -26,7 +26,8 @@
     "@elog/plugin-image": "workspace:*",
     "@elog/sdk-notion": "workspace:*",
     "@elog/sdk-yuque": "workspace:*",
-    "@elog/shared": "workspace:*"
+    "@elog/shared": "workspace:*",
+    "@elog/types": "workspace:*"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.189",

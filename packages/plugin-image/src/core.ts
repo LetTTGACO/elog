@@ -1,8 +1,9 @@
-import { ArticleInfo } from './types'
 import { getFileName, getFileType, getUrlListFromContent } from './utils'
 import ImgClient from './img-bed'
-import { ImagePlatformEnum, ImageConfig } from './img-bed/types'
+import { ImageConfig } from './img-bed/types'
 import { out, request } from '@elog/shared'
+import { DocDetail } from '@elog/types'
+import { ImagePlatformEnum } from './img-bed/const'
 
 class ImageUploader {
   config: ImageConfig
@@ -112,7 +113,7 @@ class ImageUploader {
    * 替换图片
    * @param articleList
    */
-  async replaceImages(articleList: ArticleInfo[]) {
+  async replaceImages(articleList: DocDetail[]) {
     // 遍历文章列表
     for (let i = 0; i < articleList.length; i++) {
       const articleInfo = articleList[i]

@@ -1,6 +1,6 @@
 import Notion from './core'
-import { NotionConfig, Doc as NotionDoc, DocDetail as NotionDocDetail } from './types'
+import { NotionConfig } from './types'
 
-export { NotionConfig, NotionDoc, NotionDocDetail }
+export { NotionConfig }
 
 export default Notion
