@@ -1,3 +1,5 @@
+import { DeployPlatformEnum, FileNameEnum, FormatEnum } from './const'
+
 /**
  * confluence 配置
  */
@@ -7,22 +9,33 @@ export interface ConfluenceConfig {
   baseUrl: string
   spaceKey: string
   rootPageId: string
+  plugin?: string
 }
 
-export interface DeployOptions {
-  platform: 'default' | 'confluence'
-  needCatalog?: boolean
-  postPath?: string
-  mdNameFormat?: 'title' | 'urlname'
-  adapter?: 'matter-markdown' | 'markdown' | 'html' | 'wiki'
-  confluence?: ConfluenceConfig
+/**
+ * local 配置
+ */
+export interface LocalConfig {
+  outputDir: string
+  filename: FileNameEnum
+  format: FormatEnum
+  catalog: boolean
+  plugin?: string
 }
+
+/**
+ * 部署配置
+ */
+type DeployPlatformConfig = { [key in DeployPlatformEnum]: any }
+export type DeployConfig = {
+  platform: DeployPlatformEnum
+} & DeployPlatformConfig
 
 /**
  * // NOTE 语雀官方文档说不稳定
  * 目录详情
  */
-export interface TocDetail {
+export interface CatalogDetail {
   /** 类型：文章/分组 */
   type: 'DOC' | 'TITLE'
   /** 名称 */
@@ -45,7 +58,7 @@ export interface DocDetail {
   body: string
   updated: number
   title: string
-  toc?: TocDetail[]
+  catalog?: CatalogDetail[]
   body_wiki?: string
 }
 

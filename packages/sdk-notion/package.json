@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@elog/shared": "workspace:*",
+    "@elog/types": "workspace:*",
     "@notionhq/client": "^2.2.2",
     "notion-to-md": "^2.5.5",
     "tiny-async-pool": "^1.3.0",

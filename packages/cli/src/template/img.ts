@@ -2,9 +2,12 @@ const COS = {
   image: {
     enable: true,
     bed: 'cos',
-    bucket: '',
-    region: '',
-    prefixKey: 'bolg-images',
+    oss: {
+      bucket: '',
+      region: '',
+      host: '',
+      prefixKey: '',
+    },
   },
 }
 
@@ -12,10 +15,14 @@ const Github = {
   image: {
     enable: true,
     bed: 'github',
-    user: '',
-    repo: '',
-    branch: '',
-    prefixKey: 'bolg-images',
+    github: {
+      user: '',
+      token: '',
+      repo: '',
+      branch: '',
+      host: '',
+      prefixKey: '',
+    },
   },
 }
 
@@ -23,9 +30,12 @@ const OSS = {
   image: {
     enable: true,
     bed: 'oss',
-    bucket: '',
-    region: '',
-    prefixKey: 'bolg-images',
+    oss: {
+      bucket: '',
+      region: '',
+      host: '',
+      prefixKey: '',
+    },
   },
 }
 
@@ -33,11 +43,12 @@ const QiNiu = {
   image: {
     enable: true,
     bed: 'qiniu',
-    user: '',
-    repo: '',
-    branch: '',
-    token: '',
-    prefixKey: 'bolg-images',
+    qiniu: {
+      bucket: '',
+      region: '',
+      host: '',
+      prefixKey: '',
+    },
   },
 }
 
@@ -45,20 +56,25 @@ const UPYun = {
   image: {
     enable: true,
     bed: 'upyun',
-    bucket: '',
-    prefixKey: 'bolg-images',
+    upyun: {
+      bucket: '',
+      host: '',
+      prefixKey: '',
+    },
   },
 }
 const Local = {
   image: {
     enable: true,
     bed: 'local',
-    output: '',
-    prefixKey: '',
+    local: {
+      outputDir: '',
+      prefixKey: '',
+    },
   },
 }
 
-export const imgTemplate: any = {
+export const imageTemplate: any = {
   cos: COS,
   github: Github,
   oss: OSS,

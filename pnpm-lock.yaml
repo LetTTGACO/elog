@@ -22,6 +22,7 @@ importers:
       jest: ^29.3.1
       lint-staged: ^13.0.4
       prettier: ^2.7.1
+      ts-node: ^10.9.1
       tslib: ^2.4.1
       typescript: ^4.9.3
     devDependencies:
@@ -40,9 +41,10 @@ importers:
       eslint-plugin-prettier: 4.2.1_nrhoyyjffvfyk4vtlt5destxgm
       father: 4.1.0
       husky: 8.0.2
-      jest: 29.3.1_@types+node@18.11.10
+      jest: 29.3.1_j5wyyouvf5aixckc7ltaxrydha
       lint-staged: 13.1.0
       prettier: 2.8.0
+      ts-node: 10.9.1_eoe7put6ewfbqpy6gs36tihw6y
       tslib: 2.4.1
       typescript: 4.9.3
 
@@ -99,23 +101,17 @@ importers:
       '@elog/plugin-adapter': workspace:*
       '@elog/sdk-confluence': workspace:*
       '@elog/shared': workspace:*
-      '@types/lodash': ^4.14.189
       '@types/mkdirp': ^1.0.2
-      '@types/rimraf': ^3.0.2
       filenamify: ^4.3.0
       mkdirp: ^1.0.4
-      urllib: 2.40.0
     dependencies:
       '@elog/plugin-adapter': link:../plugin-adapter
       '@elog/sdk-confluence': link:../sdk-confluence
       '@elog/shared': link:../shared
       filenamify: 4.3.0
       mkdirp: 1.0.4
-      urllib: 2.40.0
     devDependencies:
-      '@types/lodash': 4.14.191
       '@types/mkdirp': 1.0.2
-      '@types/rimraf': 3.0.2
 
   packages/plugin-adapter:
     specifiers:
@@ -154,7 +150,6 @@ importers:
       '@types/mime-types': ^2.1.1
       '@types/mkdirp': ^1.0.2
       ali-oss: ^6.17.1
-      axios: 1.1.3
       cos-nodejs-sdk-v5: ^2.11.16
       image-size: ^1.0.2
       mime-types: ^2.1.35
@@ -165,7 +160,6 @@ importers:
       '@elog/shared': link:../shared
       '@kaciras/deasync': 1.0.3
       ali-oss: 6.17.1
-      axios: 1.1.3
       cos-nodejs-sdk-v5: 2.11.16
       image-size: 1.0.2
       mime-types: 2.1.35
@@ -186,6 +180,7 @@ importers:
   packages/sdk-notion:
     specifiers:
       '@elog/shared': workspace:*
+      '@elog/types': workspace:*
       '@notionhq/client': ^2.2.2
       '@types/tiny-async-pool': ^1.0.1
       moment: ^2.29.4
@@ -193,6 +188,7 @@ importers:
       tiny-async-pool: ^1.3.0
     dependencies:
       '@elog/shared': link:../shared
+      '@elog/types': link:../types
       '@notionhq/client': 2.2.2
       moment: 2.29.4
       notion-to-md: 2.5.5
@@ -203,16 +199,28 @@ importers:
   packages/sdk-yuque:
     specifiers:
       '@elog/shared': workspace:*
+      '@elog/types': workspace:*
       '@types/tiny-async-pool': ^1.0.1
       front-matter: ^4.0.2
       moment: ^2.29.4
+      remark-frontmatter: ^3.0.0
+      remark-gfm: ^1.0.0
+      remark-parse: ^9.0.0
+      remark-stringify: ^9.0.1
       tiny-async-pool: ^1.3.0
+      unified: ^9.2.2
       urllib: 2.40.0
     dependencies:
       '@elog/shared': link:../shared
+      '@elog/types': link:../types
       front-matter: 4.0.2
       moment: 2.29.4
+      remark-frontmatter: 3.0.0
+      remark-gfm: 1.0.0
+      remark-parse: 9.0.0
+      remark-stringify: 9.0.1
       tiny-async-pool: 1.3.0
+      unified: 9.2.2
       urllib: 2.40.0
     devDependencies:
       '@types/tiny-async-pool': 1.0.1
@@ -238,17 +246,8 @@ importers:
       '@types/lodash': 4.14.191
       '@types/shelljs': 0.8.11
 
-  test/yuque-confluence:
-    specifiers:
-      '@elog/cli': workspace:*
-    dependencies:
-      '@elog/cli': link:../../packages/cli
-
-  test/yuque-default:
-    specifiers:
-      '@elog/cli': workspace:*
-    dependencies:
-      '@elog/cli': link:../../packages/cli
+  packages/types:
+    specifiers: {}
 
 packages:
 
@@ -1164,7 +1163,7 @@ packages:
       slash: 3.0.0
     dev: true
 
-  /@jest/core/29.3.1:
+  /@jest/core/29.3.1_ts-node@10.9.1:
     resolution: {integrity: sha512-0ohVjjRex985w5MmO5L3u5GR1O30DexhBSpuwx2P+9ftyqHdJXnk7IUWiP80oHMvt7ubHCJHxV0a0vlKVuZirw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     peerDependencies:
@@ -1185,7 +1184,7 @@ packages:
       exit: 0.1.2
       graceful-fs: 4.2.10
       jest-changed-files: 29.2.0
-      jest-config: 29.3.1_@types+node@18.11.10
+      jest-config: 29.3.1_j5wyyouvf5aixckc7ltaxrydha
       jest-haste-map: 29.3.1
       jest-message-util: 29.3.1
       jest-regex-util: 29.2.0
@@ -2676,16 +2675,6 @@ packages:
     resolution: {integrity: sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==}
     dependencies:
       follow-redirects: 1.15.2
-    transitivePeerDependencies:
-      - debug
-    dev: false
-
-  /axios/1.1.3:
-    resolution: {integrity: sha512-00tXVRwKx/FZr/IDVFt4C+f9FYairX517WoGCL6dpOntqLkZofjhu43F/Xl44UOpqa+9sLFDrG/XAnFsUYgkDA==}
-    dependencies:
-      follow-redirects: 1.15.2
-      form-data: 4.0.0
-      proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -5937,7 +5926,7 @@ packages:
       - supports-color
     dev: true
 
-  /jest-cli/29.3.1_@types+node@18.11.10:
+  /jest-cli/29.3.1_j5wyyouvf5aixckc7ltaxrydha:
     resolution: {integrity: sha512-TO/ewvwyvPOiBBuWZ0gm04z3WWP8TIK8acgPzE4IxgsLKQgb377NYGrQLc3Wl/7ndWzIH2CDNNsUjGxwLL43VQ==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     hasBin: true
@@ -5947,14 +5936,14 @@ packages:
       node-notifier:
         optional: true
     dependencies:
-      '@jest/core': 29.3.1
+      '@jest/core': 29.3.1_ts-node@10.9.1
       '@jest/test-result': 29.3.1
       '@jest/types': 29.3.1
       chalk: 4.1.2
       exit: 0.1.2
       graceful-fs: 4.2.10
       import-local: 3.1.0
-      jest-config: 29.3.1_@types+node@18.11.10
+      jest-config: 29.3.1_j5wyyouvf5aixckc7ltaxrydha
       jest-util: 29.3.1
       jest-validate: 29.3.1
       prompts: 2.4.2
@@ -5965,7 +5954,7 @@ packages:
       - ts-node
     dev: true
 
-  /jest-config/29.3.1_@types+node@18.11.10:
+  /jest-config/29.3.1_j5wyyouvf5aixckc7ltaxrydha:
     resolution: {integrity: sha512-y0tFHdj2WnTEhxmGUK1T7fgLen7YK4RtfvpLFBXfQkh2eMJAQq24Vx9472lvn5wg0MAO6B+iPfJfzdR9hJYalg==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     peerDependencies:
@@ -6000,6 +5989,7 @@ packages:
       pretty-format: 29.3.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
+      ts-node: 10.9.1_eoe7put6ewfbqpy6gs36tihw6y
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -6300,7 +6290,7 @@ packages:
       supports-color: 8.1.1
     dev: true
 
-  /jest/29.3.1_@types+node@18.11.10:
+  /jest/29.3.1_j5wyyouvf5aixckc7ltaxrydha:
     resolution: {integrity: sha512-6iWfL5DTT0Np6UYs/y5Niu7WIfNv/wRTtN5RSXt2DIEft3dx3zPuw/3WJQBCJfmEzvDiEKwoqMbGD9n49+qLSA==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     hasBin: true
@@ -6310,10 +6300,10 @@ packages:
       node-notifier:
         optional: true
     dependencies:
-      '@jest/core': 29.3.1
+      '@jest/core': 29.3.1_ts-node@10.9.1
       '@jest/types': 29.3.1
       import-local: 3.1.0
-      jest-cli: 29.3.1_@types+node@18.11.10
+      jest-cli: 29.3.1_j5wyyouvf5aixckc7ltaxrydha
     transitivePeerDependencies:
       - '@types/node'
       - supports-color
@@ -9322,6 +9312,37 @@ packages:
   /trough/1.0.5:
     resolution: {integrity: sha512-rvuRbTarPXmMb79SmzEp8aqXNKcK+y0XaB298IXueQ8I2PsrATcPBCSPyK/dDNa2iWOhKlfNnOjdAOTBU/nkFA==}
     dev: false
+
+  /ts-node/10.9.1_eoe7put6ewfbqpy6gs36tihw6y:
+    resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
+    hasBin: true
+    peerDependencies:
+      '@swc/core': '>=1.2.50'
+      '@swc/wasm': '>=1.2.50'
+      '@types/node': '*'
+      typescript: '>=2.7'
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
+      '@swc/wasm':
+        optional: true
+    dependencies:
+      '@cspotcode/source-map-support': 0.8.1
+      '@tsconfig/node10': 1.0.9
+      '@tsconfig/node12': 1.0.11
+      '@tsconfig/node14': 1.0.3
+      '@tsconfig/node16': 1.0.3
+      '@types/node': 18.11.10
+      acorn: 8.8.1
+      acorn-walk: 8.2.0
+      arg: 4.1.3
+      create-require: 1.1.1
+      diff: 4.0.2
+      make-error: 1.3.6
+      typescript: 4.9.3
+      v8-compile-cache-lib: 3.0.1
+      yn: 3.1.1
+    dev: true
 
   /ts-node/10.9.1_fmwzzwah366d2apstfxajuvcwy:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}

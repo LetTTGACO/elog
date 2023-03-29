@@ -1,5 +1,5 @@
 import Deploy from './client'
-import { DeployOptions } from './types'
-export { DeployOptions }
+import { DeployConfig } from './types'
+export { DeployConfig }
 
 export default Deploy

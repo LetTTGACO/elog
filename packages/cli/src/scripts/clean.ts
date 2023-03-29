@@ -2,7 +2,7 @@ import { out } from '@elog/shared'
 import path from 'path'
 import { cleanCache, cleanImages, cleanPost } from '../utils/clean'
 
-const clean = async (config = 'elog-config.json', cache = 'elog-cache.json') => {
+const clean = async (config = 'elog.config.json', cache = 'elog.cache.json') => {
   try {
     const configPath = path.resolve(process.cwd(), `${config}`)
     const {

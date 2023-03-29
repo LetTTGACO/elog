@@ -1,18 +1,18 @@
 import * as fs from 'fs'
-import { imgTemplate, platformTemplate } from '../template'
+import { imageTemplate, platformTemplate } from '../template'
 
 /**
  * 生成配置文件
  * @param platform
- * @param name
+ * @param configName
  */
-export const genConfig = (platform: any, name: string) => {
-  const platformName = `${platform.writing}-${platform.deploy}`
-  const imgName = platform.imgCdn
+export const genConfig = (platform: any, configName: string) => {
+  const platformName = `${platform.write}-${platform.deploy}`
+  const imgName = platform.image
   const platformConfig = platformTemplate[platformName]
-  const imgConfig = imgTemplate[imgName]
+  const imgConfig = imageTemplate[imgName]
   const config = { ...platformConfig, ...imgConfig }
-  fs.writeFileSync(`${process.cwd()}/${name}`, JSON.stringify(config, null, 2), {
+  fs.writeFileSync(`${process.cwd()}/${configName}`, JSON.stringify(config, null, 2), {
     encoding: 'utf-8',
   })
 }

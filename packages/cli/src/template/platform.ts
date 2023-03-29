@@ -1,57 +1,54 @@
-const NotionDefault = {
-  writing: {
-    platform: 'notion',
-    databaseId: '',
-    status: {
-      name: '',
-      published: '',
-      released: '',
+const yuqueConfig = {
+  write: {
+    platform: 'yuque',
+    yuque: {
+      login: '',
+      repo: '',
+      onlyPublic: false,
+      onlyPublished: false,
     },
   },
-  deploy: {
-    platform: 'default',
-    postPath: 'source/_posts',
-    mdNameFormat: 'title',
-    adapter: 'matter-markdown',
+}
+
+const notionConfig = {
+  write: {
+    platform: 'notion',
+    notion: {
+      databaseId: '',
+      status: {
+        name: '',
+        released: '',
+        published: '',
+      },
+    },
   },
 }
 
-const YuqueDefault = {
-  writing: {
-    platform: 'yuque',
-    login: '',
-    repo: '',
-    onlyPublic: true,
-    onlyPublished: true,
-  },
+const localConfig = {
   deploy: {
-    platform: 'default',
-    postPath: 'source/_posts',
-    mdNameFormat: 'title',
-    adapter: 'matter-markdown',
+    platform: 'local',
+    local: {
+      outputDir: '',
+      filename: 'title | urlname',
+      format: 'markdown | matter-markdown | wiki | html',
+    },
   },
 }
 
-const YuqueConfluence = {
-  writing: {
-    platform: 'yuque',
-    login: '',
-    repo: '',
-    onlyPublic: true,
-    onlyPublished: true,
-  },
+const confluenceConfig = {
   deploy: {
     platform: 'confluence',
     confluence: {
       baseUrl: '',
       spaceKey: '',
-      rootPageId: '',
+      rootPageId: '', // 可选
     },
   },
 }
 
 export const platformTemplate: any = {
-  'notion-default': NotionDefault,
-  'yuque-default': YuqueDefault,
-  'yuque-confluence': YuqueConfluence,
+  'yuque-local': { ...yuqueConfig, ...localConfig },
+  'notion-local': { ...notionConfig, ...localConfig },
+  'yuque-confluence': { ...yuqueConfig, ...confluenceConfig },
+  'notion-confluence': { ...notionConfig, ...confluenceConfig },
 }

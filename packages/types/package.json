@@ -1,0 +1,23 @@
+{
+  "name": "@elog/types",
+  "version": "0.3.0",
+  "description": "elog的语雀SDK，从语雀写作平台获取文章",
+  "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-sdk-yuque#readme",
+  "author": "1874 <me@mail.1874.cool>",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LetTTGACO/elog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LetTTGACO/elog/issues"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
+}

@@ -1,4 +1,3 @@
-// 目前已适配图床列表
 import CosClient from './cos'
 import OssClient from './oss'
 import UPClient from './upyun'
@@ -6,14 +5,12 @@ import GithubClient from './github'
 import QiniuClient from './qiniu'
 import LocalClient from './local'
 import { out } from '@elog/shared'
-import path from 'path'
-import { awaitSync } from '@kaciras/deasync'
 
 import {
   CosConfig,
   GithubConfig,
-  ImgBedEnum,
-  ImgConfig,
+  ImagePlatformEnum,
+  ImageConfig,
   OssConfig,
   QiniuConfig,
   UPYunConfig,
@@ -22,10 +19,10 @@ import {
 import { imageBedList } from './const'
 
 class ImgBedClient {
-  config: ImgConfig
+  config: ImageConfig
   imageClient: any
 
-  constructor(config: ImgConfig) {
+  constructor(config: ImageConfig) {
     this.config = config
     this.imageClient = this.getImageBedInstance(this.config.bed)
   }
@@ -36,46 +33,31 @@ class ImgBedClient {
    * @param {string} imageBed 图床类型
    * @return {any} 图床实例
    */
-  getImageBedInstance(imageBed: ImgBedEnum) {
+  getImageBedInstance(imageBed: ImagePlatformEnum) {
     if (!imageBedList.includes(imageBed)) {
       out.err('配置错误', `目前只支持${imageBedList.toString()}`)
       process.exit(-1)
     }
-    // 账号密码拓展点
-    if (this.config.secretExt) {
-      out.warning('注意', '正在使用密钥拓展点，请遵循密钥拓展点注入规范')
-      try {
-        // 如果指定了secret拓展点，那么拓展点返回的账号密码信息，将会覆盖elog-config.json中的image信息
-        const secretExtPath = path.resolve(process.cwd(), this.config.secretExt)
-        // 拓展点需要暴露getSecret方法
-        const { getSecret } = require(secretExtPath)
-        const secret = awaitSync(getSecret())
-        this.config = { ...this.config, ...secret }
-      } catch (e: any) {
-        out.err(e.message)
-        out.err('执行失败', '密钥拓展点执行失败，请检查！')
-      }
-    }
-    if (imageBed === ImgBedEnum.COS) {
-      const config = this.config as CosConfig
+    if (imageBed === ImagePlatformEnum.COS) {
+      const config = this.config.cos as CosConfig
       return new CosClient(config)
-    } else if (imageBed === ImgBedEnum.OSS) {
-      const config = this.config as OssConfig
+    } else if (imageBed === ImagePlatformEnum.OSS) {
+      const config = this.config.oss as OssConfig
       return new OssClient(config)
-    } else if (imageBed === ImgBedEnum.QINIU) {
-      const config = this.config as QiniuConfig
+    } else if (imageBed === ImagePlatformEnum.QINIU) {
+      const config = this.config.qiniu as QiniuConfig
       return new QiniuClient(config)
-    } else if (imageBed === ImgBedEnum.UPYUN) {
-      const config = this.config as UPYunConfig
+    } else if (imageBed === ImagePlatformEnum.UPYUN) {
+      const config = this.config.upyun as UPYunConfig
       return new UPClient(config)
-    } else if (imageBed === ImgBedEnum.GITHUB) {
-      const config = this.config as GithubConfig
+    } else if (imageBed === ImagePlatformEnum.GITHUB) {
+      const config = this.config.github as GithubConfig
       return new GithubClient(config)
-    } else if (imageBed === ImgBedEnum.LOCAL) {
-      const config = this.config as LocalConfig
+    } else if (imageBed === ImagePlatformEnum.LOCAL) {
+      const config = this.config.local as LocalConfig
       return new LocalClient(config)
     } else {
-      const config = this.config as LocalConfig
+      const config = this.config.local as LocalConfig
       return new LocalClient(config)
     }
   }

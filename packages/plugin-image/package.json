@@ -25,7 +25,6 @@
     "@elog/shared": "workspace:*",
     "@kaciras/deasync": "^1.0.3",
     "ali-oss": "^6.17.1",
-    "axios": "1.1.3",
     "cos-nodejs-sdk-v5": "^2.11.16",
     "image-size": "^1.0.2",
     "mime-types": "^2.1.35",

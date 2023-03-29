@@ -1,4 +1,35 @@
-export const CACHE_FILE_NAME = 'elog-cache.json'
-export const LAST_GENERATE_FILE_NAME = 'elog-timestamp.txt'
-/** 当前命令执行目录 */
-export const __cwd = process.cwd()
+/**
+ * 文章更新状态
+ */
+export enum DocStatus {
+  update = 'update',
+  create = 'create',
+}
+
+/**
+ * 写作平台
+ */
+export enum WritePlatform {
+  YUQUE = 'yuque',
+  NOTION = 'notion',
+}
+
+/**
+ * 部署平台
+ */
+export enum DeployPlatform {
+  LOCAL = 'local',
+  CONFLUENCE = 'confluence',
+}
+
+/**
+ * 图床平台
+ */
+export enum ImagePlatformEnum {
+  COS = 'cos',
+  OSS = 'oss',
+  QINIU = 'qiniu',
+  UPYUN = 'upyun',
+  GITHUB = 'github',
+  LOCAL = 'local',
+}

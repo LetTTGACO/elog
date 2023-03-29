@@ -4,8 +4,8 @@ import * as dotenv from 'dotenv'
 import { out } from '@elog/shared'
 
 const sync = async (customConfigPath?: string, customCachePath?: string, envPath?: string) => {
-  const configFilePath = customConfigPath || 'elog-config.json'
-  const cacheFilePath = customCachePath || 'elog-cache.json'
+  const configFilePath = customConfigPath || 'elog.config.json'
+  const cacheFilePath = customCachePath || 'elog.cache.json'
 
   const configPath = path.resolve(process.cwd(), `${configFilePath}`)
   let config: ElogConfig = require(configPath)

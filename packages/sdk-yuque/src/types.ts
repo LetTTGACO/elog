@@ -1,3 +1,5 @@
+import { DocDetail } from '@elog/types'
+
 export interface YuqueConfig {
   /**
    * yuque token, https://www.yuque.com/settings/tokens
@@ -11,10 +13,14 @@ export interface YuqueConfig {
   onlyPublished?: boolean
 }
 
+export type YuQueResponse<T> = {
+  data: T
+}
+
 /**
  * @see https://www.yuque.com/yuque/developer/userserializer
  */
-export interface UserInfo {
+export interface YuqueUser {
   /** 用户编号 */
   id: number
   /** 类型 [`User`  - 用户, Group - 团队] */
@@ -35,7 +41,7 @@ export interface UserInfo {
 /**
  * @see https://www.yuque.com/yuque/developer/bookserializer
  */
-export interface BookInfo {
+export interface YuqueBook {
   /** 仓库编号 */
   id: number
   /** 类型 [Book - 文档] */
@@ -49,7 +55,7 @@ export interface BookInfo {
   /** 用户/团队编号 */
   user_id: number
   /** 用户/团队信息 */
-  user: UserInfo
+  user: YuqueUser
   /** 介绍 */
   description: string
   /** 创建人 User Id */
@@ -69,22 +75,21 @@ export interface BookInfo {
 /**
  * @see https://www.yuque.com/yuque/developer/docserializer
  */
-export interface DocInfo {
+export interface YuqueDocDetail {
   /** 文档编号 */
   id: number
   /** 文档路径 */
   slug: string
-  doc_id: string
   /** 标题 */
   title: string
   /** 仓库编号，就是 repo_id */
   book_id: string
   /** 仓库信息，就是 repo 信息 */
-  book: BookInfo
+  book: YuqueBook
   /** 用户/团队编号 */
   user_id: number
   /** 用户/团队信息 */
-  creator: UserInfo
+  creator: YuqueUser
   /** 描述了正文的格式 */
   format: 'lake' | 'markdown'
   /** 正文 Markdown 源代码 */
@@ -125,7 +130,7 @@ export interface DocInfo {
  * // NOTE 官方文档说不稳定
  * 目录详情
  */
-export interface TocDetail {
+export interface YuqueCatalog {
   /** 类型：文章/分组 */
   type: 'DOC' | 'TITLE'
   /** 名称 */
@@ -138,19 +143,63 @@ export interface TocDetail {
   level: number
 }
 
-export class RequestError extends Error {
-  status?: number
-  code?: number
-  data?: any
+/** 语雀文档（不带详情）列表返回 */
+export interface YuqueDoc {
+  cover: null | string
+  custom_description: null
+  description: string
+  draft_version: number
+  last_editor: {
+    avatar_url: string
+    created_at: string
+    description: string
+    followers_count: number
+    following_count: number
+    id: number
+    login: string
+    name: string
+    type: string
+    updated_at: string
+  }
+  last_editor_id: number
+  read_count: number
+  read_status: number
+  view_status: number
+  /** 文档编号 */
+  id: number
+  /** 文档路径 */
+  slug: string
+  /** 标题 */
+  title: string
+  /** 仓库编号，就是 repo_id */
+  book_id: string
+  /** 用户/团队编号 */
+  user_id: number
+  /** 描述了正文的格式 */
+  format: 'lake' | 'markdown'
+  /** 公开级别 [0 - 私密, 1 - 公开] */
+  public: 1 | 0
+  /** 状态 [0 - 草稿, 1 - 发布] */
+  status: 1 | 0
+  /** 赞数量 */
+  likes_count: number
+  /** 评论数量 */
+  comments_count: number
+  /** 文档内容更新时间 */
+  content_updated_at: Date
+  /** 创建时间 */
+  created_at: Date
+  /** 更新时间 */
+  updated_at: Date
+  /** 发布时间 */
+  published_at: Date
+  /** 第一次发布时间 */
+  first_published_at: Date
+  /** 字数 */
+  word_count: number
 }
 
-export interface Doc extends DocInfo {
-  properties: Properties
-  updated: number
-  toc?: TocDetail[]
-}
-
-export interface Properties {
+export interface YuqueDocProperties {
   urlname: string
   title: string
   date: string
@@ -158,12 +207,4 @@ export interface Properties {
   [key: string]: any
 }
 
-export interface BaseDoc {
-  id: string
-  doc_id: string
-  updated: number
-}
-
-export type YuQueResponse<T> = {
-  data: T
-}
+export type DocUnite = DocDetail & YuqueDocDetail

@@ -1,15 +1,14 @@
 import { ArticleInfo } from './types'
 import { getFileName, getFileType, getUrlListFromContent } from './utils'
 import ImgClient from './img-bed'
-import { ImgBedEnum, ImgConfig } from './img-bed/types'
-import axios from 'axios'
-import { out } from '@elog/shared'
+import { ImagePlatformEnum, ImageConfig } from './img-bed/types'
+import { out, request } from '@elog/shared'
 
 class ImageUploader {
-  config: ImgConfig
+  config: ImageConfig
   ctx: ImgClient
 
-  constructor(config: any) {
+  constructor(config: ImageConfig) {
     this.config = config
     this.ctx = new ImgClient(config)
   }
@@ -19,9 +18,8 @@ class ImageUploader {
    */
   async getPicBufferFromURL(url: string) {
     try {
-      const res = await axios.request({
-        url,
-        responseType: 'arraybuffer',
+      const res = await request<Buffer>(url, {
+        dataType: 'arraybuffer',
       })
       out.access('下载成功', `图片下载成功: ${url}`)
       return res.data
@@ -40,6 +38,10 @@ class ImageUploader {
       return await new Promise(async (resolve): Promise<any> => {
         try {
           const buffer = await this.getPicBufferFromURL(url)
+          if (!buffer) {
+            resolve(undefined)
+            return
+          }
           // 生成文件名
           const fileName = await getFileName(buffer)
           // 生成文件名后缀
@@ -82,7 +84,7 @@ class ImageUploader {
       if (img.upload) {
         newUrl = await this.ctx.uploadImg(img.buffer, img.fileName)
         if (newUrl) {
-          if (this.config.bed === ImgBedEnum.LOCAL) {
+          if (this.config.bed === ImagePlatformEnum.LOCAL) {
             out.access('生成图片', newUrl)
           } else {
             out.access('上传成功', newUrl)

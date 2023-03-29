@@ -1,6 +1,6 @@
-import type { YuqueConfig } from './types'
-import { BaseDoc, DocInfo } from './types'
+import type { YuqueConfig, YuqueDoc } from './types'
 import YuqueClient from './client'
+import { BaseDoc } from '@elog/types'
 
 /**
  * Yuque SDK
@@ -9,7 +9,7 @@ import YuqueClient from './client'
 class Yuque {
   config: YuqueConfig
   ctx: YuqueClient
-  pages: DocInfo[] = []
+  pages: YuqueDoc[] = []
 
   constructor(options: YuqueConfig) {
     this.config = options
@@ -18,7 +18,7 @@ class Yuque {
 
   /**
    * list docs of a repo
-   * @return {Promise<DocInfo[]>} return docs
+   * @return {Promise<DocDetail[]>} return docs
    */
   async getDocList(): Promise<BaseDoc[]> {
     let pages = await this.ctx.getDocList()

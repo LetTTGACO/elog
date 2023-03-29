@@ -1,7 +1,5 @@
-import axios, { Method } from 'axios'
 import { GithubConfig } from './types'
-import mime from 'mime-types'
-import { out } from '@elog/shared'
+import { out, request, RequestOptions } from '@elog/shared'
 
 // Github图床
 class GithubClient {
@@ -22,7 +20,11 @@ class GithubClient {
     }
   }
 
-  async _fetch(method: Method, fileName: string, base64File?: string): Promise<string | undefined> {
+  async _fetch(
+    fileName: string,
+    options: RequestOptions,
+    base64File?: string,
+  ): Promise<string | undefined> {
     const path = `https://api.github.com/repos/${this.config.user}/${this.config.repo}/contents/${this.config.prefixKey}/${fileName}`
     const data = base64File && {
       message: 'Upload by elog',
@@ -30,17 +32,14 @@ class GithubClient {
       content: base64File,
     }
     const token = this.config.token || process.env.GITHUB_TOKEN
+    const method = options.method
     try {
-      const result = await axios.request({
-        method,
-        url: path,
+      const result = await request<any>(path, {
         data,
-        timeout: 60000,
         headers: {
-          'Content-Type': mime.lookup(fileName),
-          'User-Agent': '@elog/plugin-image',
           Authorization: `token ${token}`,
         },
+        method,
       })
       if (result.status === 409) {
         out.warning('图片上传失败', '由于github并发问题，图片上传失败')
@@ -69,7 +68,7 @@ class GithubClient {
    * @param fileName
    */
   async hasImage(fileName: string): Promise<string | undefined> {
-    return await this._fetch('GET', fileName)
+    return await this._fetch(fileName, { method: 'GET' })
   }
 
   /**
@@ -79,7 +78,7 @@ class GithubClient {
    */
   async uploadImg(imgBuffer: Buffer, fileName: string): Promise<string | undefined> {
     const base64File = imgBuffer.toString('base64')
-    return await this._fetch('PUT', fileName, base64File)
+    return await this._fetch(fileName, { method: 'PUT' }, base64File)
   }
 }
 

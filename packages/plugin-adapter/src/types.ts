@@ -1,14 +1,7 @@
-interface BaseDoc {
-  id: string
-  doc_id: string
-}
-
-export interface DocDetail extends BaseDoc {
+export interface DocDetail {
   properties: Properties
   body: string
 }
-
-export type Doc = BaseDoc
 
 export interface Properties {
   urlname: string

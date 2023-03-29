@@ -11,7 +11,7 @@ export async function run() {
   program
     .version(pkgJson.version)
     .command('init')
-    .option('-n, --name <string>', 'rename elog-config.json')
+    .option('-n, --name <string>', 'rename elog.config.json')
     .description('init config')
     .action((options) => {
       try {
@@ -26,8 +26,8 @@ export async function run() {
   program
     .version(pkgJson.version)
     .command('sync')
-    .option('-c, --config <string>', 'use config with custom, default is elog-config.json')
-    .option('-a --cache <string>', 'use cache file name, default is elog-cache.json')
+    .option('-c, --config <string>', 'use config with custom, default is elog.config.json')
+    .option('-a --cache <string>', 'use cache file name, default is elog.cache.json')
     .option('-e, --env <string>', 'use env with custom, default is .env')
     .description('sync doc')
     .action((options) => {
@@ -43,8 +43,8 @@ export async function run() {
   program
     .version(pkgJson.version)
     .command('clean')
-    .option('-c --config <string>', 'assign config file name, default is elog-config.json')
-    .option('-a --cache <string>', 'assign cache file name, default is elog-cache.json')
+    .option('-c --config <string>', 'assign config file name, default is elog.config.json')
+    .option('-a --cache <string>', 'assign cache file name, default is elog.cache.json')
     .description('clean cache')
     .action((options) => {
       try {

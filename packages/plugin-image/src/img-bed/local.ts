@@ -28,7 +28,7 @@ class CosClient {
     try {
       // 将文件写入本地
       // 文件路径
-      const dirPath = path.resolve(process.cwd(), this.config.output)
+      const dirPath = path.resolve(process.cwd(), this.config.outputDir)
       mkdirp.sync(dirPath)
       const filePath = path.resolve(dirPath, fileName)
       fs.writeFileSync(filePath, imgBuffer)

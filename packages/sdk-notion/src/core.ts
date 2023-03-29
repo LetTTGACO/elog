@@ -1,5 +1,6 @@
 import NotionClient from './client'
-import { Doc, NotionConfig, NotionPage } from './types'
+import { NotionConfig, NotionPage } from './types'
+import { BaseDoc } from '@elog/types'
 
 class Notion {
   config: NotionConfig
@@ -13,7 +14,7 @@ class Notion {
   /**
    * 获取文章列表（不含详情）
    */
-  async getDocList(): Promise<Doc[]> {
+  async getDocList(): Promise<BaseDoc[]> {
     const pages = await this.ctx.getPageList()
     this.pages = pages
     return pages.map((page) => {
@@ -32,7 +33,7 @@ class Notion {
    * 获取文章详情列表
    * @param ids 需要下载的doc_id列表
    */
-  async getDocDetailList(ids?: string[]) {
+  async getDocDetailList(ids: string[]) {
     return await this.ctx.getPageDetailList(this.pages, ids)
   }
 }

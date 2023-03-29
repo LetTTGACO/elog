@@ -7,7 +7,7 @@ const init = async (name: string) => {
     .prompt([
       {
         type: 'list',
-        name: 'writing',
+        name: 'write',
         message: '请选择写作平台',
         choices: [
           {
@@ -24,11 +24,11 @@ const init = async (name: string) => {
         type: 'list',
         name: 'deploy',
         message: '请选择部署平台',
-        default: 'default',
+        default: 'local',
         choices: [
           {
-            name: '默认(适用于Hexo/HuGo/Vitepress等)',
-            value: 'default',
+            name: '本地(适用于Hexo/HuGo/Vitepress等)',
+            value: 'local',
           },
           {
             name: 'Confluence',
@@ -38,7 +38,7 @@ const init = async (name: string) => {
       },
       {
         type: 'list',
-        name: 'imgCdn',
+        name: 'image',
         message: '请选择图床',
         default: '',
         choices: [
@@ -74,13 +74,13 @@ const init = async (name: string) => {
       },
     ])
     .then(async (answers) => {
-      let configName = name || 'elog-config'
+      let configName = name || 'elog.config'
       if (!configName.endsWith('.json')) {
         configName = configName + '.json'
       }
       genConfig(answers, configName)
       out.access('初始化', '🎉初始化成功🎉')
-      out.info('下一步', `配置${configName || 'elog-config.json'}`)
+      out.info('下一步', `配置${configName || 'elog.config.json'}`)
     })
     .catch((error) => {
       if (error.isTtyError) {

@@ -1,9 +1,16 @@
 interface ImgBaseConfig {
-  bed: ImgBedEnum
   host?: string
   prefixKey?: string
   secretExt?: string
 }
+
+// "secretId": "",
+//   "secretKey": "",
+//   "bucket": "",
+//   "region": "",
+//   "host": "",
+//   "prefixKey": "",
+//   "secretExt": "" // 可选
 
 export interface CosConfig extends ImgBaseConfig {
   secretId: string
@@ -42,11 +49,12 @@ export interface GithubConfig extends ImgBaseConfig {
   branch?: string
 }
 
-export interface LocalConfig extends ImgBaseConfig {
-  output: string
+export interface LocalConfig {
+  outputDir: string
+  prefixKey: string
 }
 
-export enum ImgBedEnum {
+export enum ImagePlatformEnum {
   QINIU = 'qiniu',
   UPYUN = 'upyun',
   COS = 'cos',
@@ -55,10 +63,11 @@ export enum ImgBedEnum {
   LOCAL = 'local',
 }
 
-export type ImgConfig =
-  | CosConfig
-  | OssConfig
-  | QiniuConfig
-  | UPYunConfig
-  | GithubConfig
-  | LocalConfig
+/**
+ * 图床配置
+ */
+type ImagePlatformConfig = { [key in ImagePlatformEnum]: any }
+export type ImageConfig = {
+  enable: boolean
+  bed: ImagePlatformEnum
+} & ImagePlatformConfig

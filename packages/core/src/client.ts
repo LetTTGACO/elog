@@ -1,25 +1,18 @@
+// write
+import YuqueClient, { YuqueConfig } from '@elog/sdk-yuque'
+import NotionClient, { NotionConfig } from '@elog/sdk-notion'
+// deploy
+import DeployClient, { DeployOptions } from '@elog/deploy'
+// imageClient
+import ImageClient from '@elog/plugin-image'
+// types
+import { ElogConfig, DocDetail, CacheJSON, Doc, DocStatusMap } from './types'
+// const
+import { WritePlatform, DocStatus } from './const'
+// utils
+import { out } from '@elog/shared'
 import * as fs from 'fs'
 import * as path from 'path'
-// writing-platform
-import Yuque, { YuqueConfig } from '@elog/sdk-yuque'
-import Notion, { NotionConfig } from '@elog/sdk-notion'
-// deploy-platform
-import Deploy, { DeployOptions } from '@elog/deploy'
-// imgCdnClient
-import ImgCdnClient from '@elog/plugin-image'
-
-// types
-import {
-  CacheJSON,
-  Doc,
-  DocDetail,
-  DocStatus,
-  DocStatusMap,
-  ElogConfig,
-  WritingPlatform,
-} from './types'
-import { __cwd } from './const'
-import { out } from '@elog/shared'
 
 /**
  * 处理器
@@ -28,15 +21,16 @@ class Elog {
   /** 配置文件 */
   config: ElogConfig
   /** 下载器 */
-  downloaderClient!: Yuque | Notion
+  downloaderClient: any
   /** 部署器 */
   deployClient: any
   /** 图片转CDN转换器 */
-  imgCdnClient: any
+  imageClient: any
   /** 缓存文章 */
   cachedArticles: DocDetail[] = []
   /** 是否需要更新，当所有文章都不需要更新，这个标记就会阻止后续流程 */
   needUpdate = false
+  /** 待更新的文章列表 */
   needUpdateArticles: DocDetail[] = []
 
   constructor(config: ElogConfig) {
@@ -58,7 +52,7 @@ class Elog {
    */
   initIncrementalUpdate(config: ElogConfig) {
     try {
-      const cacheJson: CacheJSON = require(path.join(__cwd, config.cachePath))
+      const cacheJson: CacheJSON = require(path.join(process.cwd(), config.cachePath))
       const { docs } = cacheJson
       // 获取缓存文章
       this.cachedArticles = docs || []
@@ -72,12 +66,12 @@ class Elog {
    * @param config
    */
   initWritingPlatform(config: ElogConfig) {
-    if (config.writing.platform === WritingPlatform.YUQUE) {
-      let yuqueConfig = config.writing as YuqueConfig
-      this.downloaderClient = new Yuque(yuqueConfig)
-    } else if (config.writing.platform === WritingPlatform.NOTION) {
-      let notionConfig = config.writing as NotionConfig
-      this.downloaderClient = new Notion(notionConfig)
+    if (config.write.platform === WritePlatform.YUQUE) {
+      let yuqueConfig = config.write.yuque as YuqueConfig
+      this.downloaderClient = new YuqueClient(yuqueConfig)
+    } else if (config.write.platform === WritePlatform.NOTION) {
+      let notionConfig = config.write.notion as NotionConfig
+      this.downloaderClient = new NotionClient(notionConfig)
     }
   }
 
@@ -87,7 +81,7 @@ class Elog {
    */
   initDeployPlatform(config: ElogConfig) {
     const deployOptions = config.deploy as DeployOptions
-    this.deployClient = new Deploy(deployOptions)
+    this.deployClient = new DeployClient(deployOptions)
   }
 
   /**
@@ -96,7 +90,7 @@ class Elog {
    */
   initImgCdn(config: ElogConfig) {
     if (config.image?.enable) {
-      this.imgCdnClient = new ImgCdnClient(config.image)
+      this.imageClient = new ImageClient(config.image)
     }
   }
 
@@ -175,9 +169,9 @@ class Elog {
   writeArticleCache() {
     try {
       let catalog: any[] = []
-      if (this.config.writing.platform === WritingPlatform.YUQUE) {
+      if (this.config.write.platform === WritePlatform.YUQUE) {
         // 目前只适配语雀
-        const yuqueClient = this.downloaderClient as Yuque
+        const yuqueClient = this.downloaderClient as YuqueClient
         catalog = yuqueClient.ctx.toc
       }
       const cacheJson: CacheJSON = {
@@ -196,7 +190,7 @@ class Elog {
    * 处理文章图片
    */
   async processImage(docDetailList: DocDetail[]) {
-    return await this.imgCdnClient.replaceImages(docDetailList)
+    return await this.imageClient.replaceImages(docDetailList)
   }
 
   /**

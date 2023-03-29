@@ -2,8 +2,9 @@ import { Client } from '@notionhq/client'
 import { NotionToMarkdown } from 'notion-to-md'
 import asyncPool from 'tiny-async-pool'
 import { props } from './utils'
-import { DocDetail, NotionConfig, NotionPage } from './types'
+import { NotionConfig, NotionPage } from './types'
 import { out } from '@elog/shared'
+import { DocDetail } from '@elog/types'
 
 /**
  * Notion SDK
@@ -64,6 +65,7 @@ class NotionClient {
       doc_id: page.id,
       properties,
       body,
+      body_original: body,
       updated: timestamp,
     }
   }
@@ -73,15 +75,10 @@ class NotionClient {
    * @param cachedPages 已经下载过的pages
    * @param ids 需要下载的doc_id列表
    */
-  async getPageDetailList(cachedPages?: NotionPage[], ids?: string[]) {
+  async getPageDetailList(cachedPages: NotionPage[], ids: string[]) {
     // 获取待发布的文章
     let articleList: DocDetail[] = []
-    let pages: NotionPage[]
-    if (cachedPages) {
-      pages = cachedPages
-    } else {
-      pages = await this.getPageList()
-    }
+    let pages: NotionPage[] = cachedPages
     if (ids?.length) {
       // 取交集，过滤不需要下载的page
       pages = pages.filter((page) => {

@@ -1,5 +1,6 @@
-import { NotionPage, Properties } from './types'
+import { NotionPage } from './types'
 import moment from 'moment'
+import { DocProperties } from '@elog/types'
 
 /**
  * 获取元数据Val
@@ -33,7 +34,7 @@ export function getPropVal(data: any) {
  * @param {*} page
  * @returns {Object}
  */
-export function props(page: NotionPage): Properties {
+export function props(page: NotionPage): DocProperties {
   let data: any = {}
   if (!Object.keys(page.properties).length) return data
   for (const key in page.properties) {

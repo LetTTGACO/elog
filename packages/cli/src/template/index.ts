@@ -1,4 +1,4 @@
-import { imgTemplate } from './img'
+import { imageTemplate } from './img'
 import { platformTemplate } from './platform'
 
-export { imgTemplate, platformTemplate }
+export { imageTemplate, platformTemplate }

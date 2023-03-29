@@ -1,7 +1,16 @@
 import asyncPool from 'tiny-async-pool'
 import { out, request, RequestOptions } from '@elog/shared'
-import { Doc, DocInfo, Properties, TocDetail, YuqueConfig, YuQueResponse } from './types'
-import { getProps } from './utils'
+import { getProps, processRaw } from './utils'
+import {
+  YuqueCatalog,
+  YuqueConfig,
+  YuQueResponse,
+  DocUnite,
+  YuqueDoc,
+  YuqueDocDetail,
+  YuqueDocProperties,
+} from './types'
+import { DocDetail } from '@elog/types'
 
 /** 默认语雀API 路径 */
 const DEFAULT_API_URL = 'https://www.yuque.com/api/v2'
@@ -9,7 +18,7 @@ const DEFAULT_API_URL = 'https://www.yuque.com/api/v2'
 class YuqueClient {
   config: YuqueConfig
   namespace: string
-  toc: TocDetail[] = []
+  catalog: YuqueCatalog[] = []
 
   constructor(config: YuqueConfig) {
     this.config = config
@@ -51,7 +60,7 @@ class YuqueClient {
    * 获取目录
    */
   async getToc() {
-    return this.request<TocDetail[]>(`repos/${this.namespace}/toc`, {
+    return this.request<YuqueCatalog[]>(`repos/${this.namespace}/toc`, {
       method: 'GET',
     })
   }
@@ -60,7 +69,7 @@ class YuqueClient {
    * 获取文章列表(不带详情)
    */
   async getDocList() {
-    return this.request<DocInfo[]>(`repos/${this.namespace}/docs`, {
+    return this.request<YuqueDoc[]>(`repos/${this.namespace}/docs`, {
       method: 'GET',
     })
   }
@@ -69,23 +78,24 @@ class YuqueClient {
    * 获取文章详情
    */
   async getDocDetail(slug: string) {
-    const res = await this.request<Doc>(`repos/${this.namespace}/docs/${slug}`, {
+    const yuqueDoc = await this.request<YuqueDocDetail>(`repos/${this.namespace}/docs/${slug}`, {
       method: 'GET',
       data: { raw: 1 },
     })
-    res.doc_id = res.slug
-    const find = this.toc.find((item) => item.slug === res.slug)
+    const docInfo = yuqueDoc as DocUnite
+    docInfo.doc_id = yuqueDoc.slug
+    const find = this.catalog.find((item) => item.slug === yuqueDoc.slug)
     if (find) {
-      let tocPath = []
+      let catalogPath = []
       let parentId = find.parent_uuid
       for (let i = 0; i < find.depth - 1; i++) {
-        const current = this.toc.find((item) => item.uuid === parentId)!
+        const current = this.catalog.find((item) => item.uuid === parentId)!
         parentId = current.parent_uuid
-        tocPath.push(current)
+        catalogPath.push(current)
       }
-      res.toc = tocPath.reverse()
+      docInfo.catalog = catalogPath.reverse()
     }
-    return res
+    return docInfo
   }
 
   /**
@@ -93,16 +103,11 @@ class YuqueClient {
    * @param cachedDocs
    * @param ids
    */
-  async getDocDetailList(cachedDocs: DocInfo[], ids: string[]) {
+  async getDocDetailList(cachedDocs: YuqueDoc[], ids: string[]) {
     // 获取目录信息
-    this.toc = await this.getToc()
-    let articleList: Doc[] = []
-    let docs: DocInfo[]
-    if (cachedDocs) {
-      docs = cachedDocs
-    } else {
-      docs = await this.getDocList()
-    }
+    this.catalog = await this.getToc()
+    let articleList: DocDetail[] = []
+    let docs = cachedDocs
     if (ids.length) {
       // 取交集，过滤不需要下载的page
       docs = docs.filter((doc) => {
@@ -117,16 +122,18 @@ class YuqueClient {
       out.access('跳过', '没有需要下载的文章')
       return articleList
     }
-    const promise = async (doc: DocInfo) => {
+    const promise = async (doc: YuqueDoc) => {
       out.info('下载文档', doc.title)
       let article = await this.getDocDetail(doc.slug)
       // 解析出properties
       const { body, properties } = getProps(article)
-      article.properties = properties as Properties
+      article.body_original = body
+      const newBody = processRaw(body)
+      article.properties = properties as YuqueDocProperties
       // 替换body
-      article.body = body
+      article.body = newBody
       article.updated = new Date(article.updated_at).getTime()
-      articleList.push(article as Doc)
+      articleList.push(article)
     }
     await asyncPool(5, docs, promise)
     out.access('待更新数', String(articleList.length))
