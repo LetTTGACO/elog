@@ -1,7 +1,7 @@
-import { ConfluenceConfig, DocDetail } from '../types'
 import { out } from '@elog/shared'
-import ConfluenceClient, { WikiMap } from '@elog/sdk-confluence'
+import ConfluenceClient, { ConfluenceConfig, WikiMap } from '@elog/sdk-confluence'
 import { wikiAdapter } from '@elog/plugin-adapter'
+import { DocDetail } from '@elog/types'
 
 class DeployConfluence {
   config: ConfluenceConfig
@@ -34,7 +34,7 @@ class DeployConfluence {
       // 将markdown转wiki
       articleInfo.body_wiki = wikiAdapter(articleInfo)
       // 是否存在
-      const cacheWikiPage = rootPageMap[articleInfo.title]
+      const cacheWikiPage = rootPageMap[articleInfo.properties.title]
       if (cacheWikiPage) {
         out.info('更新文档', cacheWikiPage.title)
         // 获取版本信息
@@ -42,7 +42,7 @@ class DeployConfluence {
         const version = updatingPage.version.number + 1
         await this.ctx.updatePage(articleInfo, cacheWikiPage.id, version)
       } else {
-        out.info('新增文档', articleInfo.title)
+        out.info('新增文档', articleInfo.properties.title)
         // 新增
         // 在rootPageMap中找到parent title
         let parentId = ''
@@ -60,7 +60,10 @@ class DeployConfluence {
         } catch (e: any) {
           // 有可能是重名更新失败
           if (e.message.indexOf('A page with this title already exists') > -1) {
-            out.err('跳过部署', `文章标题已存在于confluence, 请检查: ${articleInfo.title}`)
+            out.err(
+              '跳过部署',
+              `文章标题已存在于confluence, 请检查: ${articleInfo.properties.title}`,
+            )
           } else {
             out.err('跳过部署', e.message)
           }

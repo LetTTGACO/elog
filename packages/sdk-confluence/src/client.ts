@@ -1,12 +1,12 @@
 import { out, RequestOptions, request } from '@elog/shared'
 import {
   ConfluenceConfig,
-  DocDetail,
   WikiContent,
   WikiPageDetail,
   WikiPageList,
   WikiPageListResponse,
 } from './types'
+import { DocDetail } from '@elog/types'
 
 class ConfluenceClient {
   config: ConfluenceConfig
@@ -56,7 +56,7 @@ class ConfluenceClient {
   processBody(post: DocDetail, id?: string, parentId?: string) {
     let params: any = {
       type: 'page',
-      title: post.title,
+      title: post.properties.title,
       space: {
         key: this.config.spaceKey,
       },
@@ -153,7 +153,7 @@ class ConfluenceClient {
   async updatePage(post: DocDetail, id: string, version: number) {
     const data = {
       type: 'page',
-      title: post.title,
+      title: post.properties.title,
       id,
       space: {
         key: this.config.spaceKey,

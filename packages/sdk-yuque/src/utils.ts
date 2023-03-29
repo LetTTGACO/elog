@@ -55,18 +55,19 @@ export function formatDate(date: Date) {
  */
 const processTable = (tree: any) => {
   // 找到type为table的节点
-  const node = tree.children.find((n: any) => n.type == 'table') as any
-  if (node) {
-    // 找到tableCell子节点
-    for (const tableRow of node.children) {
-      for (const tableCell of tableRow.children) {
-        // 删除节点
-        tableCell.children = tableCell.children.filter((raw: any) => {
-          // 判断是不是br
-          const isBr = raw.type === 'html' && raw.value === '<br />'
-          // 是的话删除这个节点
-          return !isBr
-        })
+  for (const node of tree.children) {
+    if (node.type == 'table') {
+      // 找到tableCell子节点
+      for (const tableRow of node.children) {
+        for (const tableCell of tableRow.children) {
+          // 删除节点
+          tableCell.children = tableCell.children.filter((raw: any) => {
+            // 判断是不是br
+            const isBr = raw.type === 'html' && raw.value === '<br />'
+            // 是的话删除这个节点
+            return !isBr
+          })
+        }
       }
     }
   }

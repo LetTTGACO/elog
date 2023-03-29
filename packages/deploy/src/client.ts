@@ -1,7 +1,9 @@
 import DeployLocal from './platform/local'
 import DeployConfluence from './platform/confluence'
 import { DeployPlatformEnum } from './const'
-import { ConfluenceConfig, DeployConfig, DocDetail, LocalConfig } from './types'
+import { DeployConfig, LocalConfig } from './types'
+import { ConfluenceConfig } from '@elog/sdk-confluence'
+import { DocDetail } from '@elog/types'
 
 /**
  * 部署器

@@ -17,7 +17,7 @@ export enum WritePlatform {
 /**
  * 部署平台
  */
-export enum DeployPlatform {
+export enum DeployPlatformEnum {
   LOCAL = 'local',
   CONFLUENCE = 'confluence',
 }

@@ -6,14 +6,19 @@ const clean = async (config = 'elog.config.json', cache = 'elog.cache.json') => 
   try {
     const configPath = path.resolve(process.cwd(), `${config}`)
     const {
-      deploy: { postPath },
-      image: { bed, output },
+      deploy: {
+        local: { outputDir: docOutputDir },
+      },
+      image: {
+        bed,
+        local: { outputDir: imageOutputDir },
+      },
     } = require(configPath)
     cleanCache(cache)
-    cleanPost(postPath)
+    cleanPost(docOutputDir)
     // 清楚本地图片
-    if (bed === 'local' && output) {
-      cleanImages(output)
+    if (bed === 'local' && imageOutputDir) {
+      cleanImages(imageOutputDir)
     }
   } catch (error) {
     // @ts-ignore

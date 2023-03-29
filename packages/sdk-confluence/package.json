@@ -22,6 +22,7 @@
     "build": "father build"
   },
   "dependencies": {
-    "@elog/shared": "workspace:*"
+    "@elog/shared": "workspace:*",
+    "@elog/types": "workspace:*"
   }
 }

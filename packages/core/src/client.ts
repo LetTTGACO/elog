@@ -2,7 +2,7 @@
 import YuqueClient, { YuqueConfig } from '@elog/sdk-yuque'
 import NotionClient, { NotionConfig } from '@elog/sdk-notion'
 // deploy
-import DeployClient, { DeployOptions } from '@elog/deploy'
+import DeployClient, { DeployConfig } from '@elog/deploy'
 // imageClient
 import ImageClient from '@elog/plugin-image'
 // types
@@ -80,7 +80,7 @@ class Elog {
    * @param config
    */
   initDeployPlatform(config: ElogConfig) {
-    const deployOptions = config.deploy as DeployOptions
+    const deployOptions = config.deploy as DeployConfig
     this.deployClient = new DeployClient(deployOptions)
   }
 
@@ -172,7 +172,7 @@ class Elog {
       if (this.config.write.platform === WritePlatform.YUQUE) {
         // 目前只适配语雀
         const yuqueClient = this.downloaderClient as YuqueClient
-        catalog = yuqueClient.ctx.toc
+        catalog = yuqueClient.ctx.catalog
       }
       const cacheJson: CacheJSON = {
         docs: this.cachedArticles,

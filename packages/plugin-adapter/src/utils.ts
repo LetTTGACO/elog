@@ -1,5 +1,4 @@
 import prettier from 'prettier'
-import { processMarkdown } from './markdown/render'
 
 /**
  * 格式化markdown文件
@@ -38,18 +37,6 @@ export const formatColorBlocks = (body: string) => {
  * @return {String} body
  */
 export function formatRaw(body: string) {
-  const nul = /\x00/g
-  const nul1 = /\u0000/g
-  const emptyAnchor = /<a name=\".*?\"><\/a>/g
-  const hiddenContent = /<div style="display:none">[\s\S]*?<\/div>/gi
-  // 处理不可见字符
-  body = body.replace(nul, '').replace(nul1, '').replace(hiddenContent, '').replace(emptyAnchor, '')
-  body = processMarkdown(body)
-  const multiBr = /(<br>[\s\n]){2}/gi
-  const multiBrEnd = /(<br \/>[\n]?){2}/gi
-  const brBug = /<br \/>/g
-  // 删除语雀特有的锚点
-  body = body.replace(multiBr, '<br>').replace(multiBrEnd, '<br />\n').replace(brBug, '\n')
   body = formatColorBlocks(body)
   return formatMarkdown(body)
 }

@@ -19,8 +19,7 @@
     "url": "https://github.com/LetTTGACO/elog/issues"
   },
   "scripts": {
-    "build": "father build",
-    "test": "ts-node ./__test__/core.test.ts"
+    "build": "father build"
   },
   "dependencies": {
     "@elog/deploy": "workspace:*",

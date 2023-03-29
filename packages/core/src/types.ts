@@ -1,4 +1,4 @@
-import { DeployPlatform, DocStatus, ImagePlatformEnum, WritePlatform } from './const'
+import { DeployPlatformEnum, DocStatus, ImagePlatformEnum, WritePlatform } from './const'
 
 /**
  * 写作配置
@@ -12,9 +12,9 @@ type WriteConfig = {
 /**
  * 部署配置
  */
-type DeployPlatformConfig = { [key in DeployPlatform]: any }
+type DeployPlatformConfig = { [key in DeployPlatformEnum]: any }
 type DeployConfig = {
-  platform: DeployPlatform
+  platform: DeployPlatformEnum
 } & DeployPlatformConfig
 
 /**

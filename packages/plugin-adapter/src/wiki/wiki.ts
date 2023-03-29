@@ -1,6 +1,6 @@
 import { formatRaw } from '../utils'
 import { md2Wiki } from './render'
-import { DocDetail } from '../types'
+import { DocDetail } from '@elog/types'
 
 /**
  * 将markdown转wiki

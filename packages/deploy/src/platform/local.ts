@@ -4,8 +4,9 @@ import mkdirp from 'mkdirp'
 import { markdownAdapter, matterMarkdownAdapter, wikiAdapter } from '@elog/plugin-adapter'
 import { out } from '@elog/shared'
 import fs from 'fs'
-import { DocDetail, LocalConfig } from '../types'
+import { LocalConfig } from '../types'
 import { FileNameEnum, fileNameList, FormatEnum, formatList } from '../const'
+import { DocDetail } from '@elog/types'
 
 class DeployLocal {
   config: LocalConfig
@@ -35,7 +36,7 @@ class DeployLocal {
         `目前只支持将文档转换为${formatList.toString()}，将默认以markdown形式转换`,
       )
     }
-    const { outputDir } = this.config
+    const outputDir = path.join(process.cwd(), this.config.outputDir)
 
     for (const post of articleList) {
       let formatBody = ''
@@ -68,12 +69,14 @@ class DeployLocal {
           fileName = this.checkFileName(fileName, fileName, post.doc_id)
           postPath = path.join(outputDir, `${fileName}.md`)
           out.info('生成文档', `${fileName}.md`)
+          mkdirp.sync(outputDir)
         }
       } else {
         // 直接生成
         fileName = this.checkFileName(fileName, fileName, post.doc_id)
         postPath = path.join(outputDir, `${fileName}.md`)
         out.info('生成文档', `${fileName}.md`)
+        mkdirp.sync(outputDir)
       }
       fs.writeFileSync(postPath, formatBody, {
         encoding: 'utf8',
