@@ -1,6 +1,8 @@
 // 七牛云图床
 import * as qiniu from 'qiniu'
 import { QiniuConfig } from './types'
+import { out } from '@elog/shared'
+import { getSecretExt } from './utils'
 
 class QiNiuClient {
   config: QiniuConfig
@@ -11,15 +13,8 @@ class QiNiuClient {
 
   constructor(config: QiniuConfig) {
     this.config = config
-    if (!this.config.host) {
-      // out.error('使用七牛云时，需要在imgCdn中指定域名host');
-      // TODO 没有host怎么办
-      // process.exit(-1)
-    }
-    // out.info(`图床域名：${this.config.host}`)
-    const secretId = this.config.secretId || process.env.QINIU_SECRET_ID
-    const secretKey = this.config.secretKey || process.env.QINIU_SECRET_KEY
-    const mac = new qiniu.auth.digest.Mac(secretId, secretKey)
+    this.initConfig()
+    const mac = new qiniu.auth.digest.Mac(this.config.secretId, this.config.secretKey)
     const putPolicy = new qiniu.rs.PutPolicy({ scope: this.config.bucket }) // 配置
     this.uploadToken = putPolicy.uploadToken(mac) // 获取上传凭证
     // @ts-ignore
@@ -28,6 +23,28 @@ class QiNiuClient {
     this.formUploader = new qiniu.form_up.FormUploader(qiniuConfig)
     this.bucketManager = new qiniu.rs.BucketManager(mac, qiniuConfig)
     this.putExtra = new qiniu.form_up.PutExtra()
+  }
+
+  /**
+   * 初始化配置
+   */
+  initConfig() {
+    // 判断是否开启拓展点
+    if (this.config.secretExt) {
+      // 如果开了就从拓展点读取
+      this.config = getSecretExt(this.config)
+    } else {
+      // 如果没开拓展点，就从配置文件/环境变量中读取
+      this.config = {
+        ...this.config,
+        secretId: this.config.secretId || process.env.QINIU_SECRET_ID!,
+        secretKey: this.config.secretKey || process.env.QINIU_SECRET_KEY!,
+      }
+    }
+    if (!this.config.host) {
+      out.err('使用七牛云时，需要指定域名host')
+      process.exit(-1)
+    }
   }
 
   /**

@@ -1,19 +1,36 @@
 import COS from 'cos-nodejs-sdk-v5'
 import { CosConfig } from './types'
 import { out } from '@elog/shared'
+import { getSecretExt } from './utils'
 
+/**
+ * 腾讯云COS
+ */
 class CosClient {
   config: CosConfig
   imgClient: COS
   constructor(config: CosConfig) {
     this.config = config
-    if (this.config.prefixKey?.endsWith('/')) {
-      this.config.prefixKey = this.config.prefixKey.slice(0, -1)
+    this.imgClient = this.initCos()
+  }
+
+  /**
+   * 初始化配置和COS实例
+   */
+  initCos() {
+    // 判断是否开启拓展点
+    if (this.config.secretExt) {
+      // 如果开了就从拓展点读取
+      this.config = getSecretExt(this.config)
+    } else {
+      // 如果没开拓展点，就从配置文件/环境变量中读取
+      this.config = {
+        ...this.config,
+        secretId: this.config.secretId || process.env.COS_SECRET_ID!,
+        secretKey: this.config.secretKey || process.env.COS_SECRET_KEY!,
+      }
     }
-    this.imgClient = new COS({
-      SecretId: config.secretId || process.env.COS_SECRET_ID, // 身份识别ID
-      SecretKey: config.secretKey || process.env.COS_SECRET_KEY, // 身份秘钥
-    })
+    return new COS(this.config)
   }
 
   /**

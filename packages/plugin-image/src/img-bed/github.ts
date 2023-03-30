@@ -1,5 +1,6 @@
 import { GithubConfig } from './types'
 import { out, request, RequestOptions } from '@elog/shared'
+import { getSecretExt } from './utils'
 
 // Github图床
 class GithubClient {
@@ -12,11 +13,21 @@ class GithubClient {
 
   init() {
     if (!this.config.host) {
-      // out.warn('未指定加速域名，将使用默认域名：https://raw.githubusercontent.com')
+      out.info('未指定加速域名，将使用默认域名：https://raw.githubusercontent.com')
     } else if (this.config.host?.includes('cdn.jsdelivr.net')) {
       // 如果指定了加速域名
       this.config.host = 'https://cdn.jsdelivr.net'
-      // out.info(`图床域名：${this.config.host}`)
+    }
+    // 判断是否开启拓展点
+    if (this.config.secretExt) {
+      // 如果开了就从拓展点读取
+      this.config = getSecretExt(this.config)
+    } else {
+      // 如果没开拓展点，就从配置文件/环境变量中读取
+      this.config = {
+        ...this.config,
+        token: this.config.token || process.env.GITHUB_TOKEN!,
+      }
     }
   }
 
@@ -31,13 +42,12 @@ class GithubClient {
       branch: this.config.branch,
       content: base64File,
     }
-    const token = this.config.token || process.env.GITHUB_TOKEN
     const method = options.method
     try {
       const result = await request<any>(path, {
         data,
         headers: {
-          Authorization: `token ${token}`,
+          Authorization: `token ${this.config.token}`,
         },
         method,
       })

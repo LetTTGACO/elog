@@ -36,27 +36,25 @@ class ImgBedClient {
       out.err('配置错误', `目前只支持${imageBedList.toString()}`)
       process.exit(-1)
     }
-    if (imageBed === ImagePlatformEnum.COS) {
-      const config = this.config.cos as CosConfig
-      return new CosClient(config)
-    } else if (imageBed === ImagePlatformEnum.OSS) {
-      const config = this.config.oss as OssConfig
-      return new OssClient(config)
-    } else if (imageBed === ImagePlatformEnum.QINIU) {
-      const config = this.config.qiniu as QiniuConfig
-      return new QiniuClient(config)
-    } else if (imageBed === ImagePlatformEnum.UPYUN) {
-      const config = this.config.upyun as UPYunConfig
-      return new UPClient(config)
-    } else if (imageBed === ImagePlatformEnum.GITHUB) {
-      const config = this.config.github as GithubConfig
-      return new GithubClient(config)
-    } else if (imageBed === ImagePlatformEnum.LOCAL) {
-      const config = this.config.local as LocalConfig
-      return new LocalClient(config)
-    } else {
-      const config = this.config.local as LocalConfig
-      return new LocalClient(config)
+    switch (imageBed) {
+      case ImagePlatformEnum.COS:
+        const cosConfig = this.config.cos as CosConfig
+        return new CosClient(cosConfig)
+      case ImagePlatformEnum.OSS:
+        const ossConfig = this.config.oss as OssConfig
+        return new OssClient(ossConfig)
+      case ImagePlatformEnum.QINIU:
+        const qiniuConfig = this.config.qiniu as QiniuConfig
+        return new QiniuClient(qiniuConfig)
+      case ImagePlatformEnum.UPYUN:
+        const upyunConfig = this.config.upyun as UPYunConfig
+        return new UPClient(upyunConfig)
+      case ImagePlatformEnum.GITHUB:
+        const githubConfig = this.config.github as GithubConfig
+        return new GithubClient(githubConfig)
+      default:
+        const defaultConfig = this.config.local as LocalConfig
+        return new LocalClient(defaultConfig)
     }
   }
 

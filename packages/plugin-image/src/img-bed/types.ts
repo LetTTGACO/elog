@@ -1,4 +1,6 @@
 import { ImagePlatformEnum } from './const'
+import { COSOptions } from 'cos-nodejs-sdk-v5'
+import { Options as OSSOptions } from 'ali-oss'
 
 interface ImgBaseConfig {
   host?: string
@@ -6,14 +8,16 @@ interface ImgBaseConfig {
   secretExt?: string
 }
 
-export interface CosConfig extends ImgBaseConfig {
+export interface ICosConfig extends ImgBaseConfig {
   secretId: string
   secretKey: string
   bucket: string
   region: string
 }
 
-export interface OssConfig extends ImgBaseConfig {
+export type CosConfig = ICosConfig & COSOptions
+
+export interface IOssConfig extends ImgBaseConfig {
   secretId: string
   secretKey: string
   bucket: string
@@ -22,6 +26,7 @@ export interface OssConfig extends ImgBaseConfig {
   secure?: boolean
   endpoint?: string
 }
+export type OssConfig = IOssConfig & OSSOptions
 
 export interface QiniuConfig extends ImgBaseConfig {
   secretId: string
