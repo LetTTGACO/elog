@@ -1,19 +1,24 @@
 import filenamify from 'filenamify'
 import path from 'path'
 import mkdirp from 'mkdirp'
-import { markdownAdapter, matterMarkdownAdapter, wikiAdapter } from '@elog/plugin-adapter'
 import { out } from '@elog/shared'
 import fs from 'fs'
-import { LocalConfig } from '../types'
-import { FileNameEnum, fileNameList, FormatEnum, formatList } from '../const'
+import { AdapterFunction, LocalConfig } from '../types'
+import { FileNameEnum, fileNameList } from '../const'
 import { DocDetail } from '@elog/types'
+import { AdapterClient } from '../adapter'
 
 class DeployLocal {
   config: LocalConfig
   cacheFileNames: string[] = []
+  adapterClient: AdapterClient
+  /** 文档处理适配器 */
+  adapter: AdapterFunction
 
   constructor(config: LocalConfig) {
     this.config = config
+    this.adapterClient = new AdapterClient({ format: config.format, formatExt: config.formatExt })
+    this.adapter = this.adapterClient.getAdapter()
   }
 
   /**
@@ -21,7 +26,7 @@ class DeployLocal {
    * @param articleList
    */
   async deploy(articleList: DocDetail[]) {
-    let { filename = FileNameEnum.TITLE, format = FormatEnum.MARKDOWN } = this.config
+    let { filename = FileNameEnum.TITLE } = this.config
     if (!fileNameList.includes(filename)) {
       filename = FileNameEnum.TITLE
       out.warning(
@@ -29,26 +34,10 @@ class DeployLocal {
         `文件命名方式目前只支持${fileNameList.toString()}，将默认以title形式命名`,
       )
     }
-    if (!formatList.includes(format)) {
-      format = FormatEnum.MARKDOWN
-      out.warning(
-        '配置错误',
-        `目前只支持将文档转换为${formatList.toString()}，将默认以markdown形式转换`,
-      )
-    }
     const outputDir = path.join(process.cwd(), this.config.outputDir)
 
     for (const post of articleList) {
-      let formatBody = ''
-      if (format === FormatEnum.MATTER_MARKDOWN) {
-        formatBody = matterMarkdownAdapter(post)
-      } else if (format === FormatEnum.MARKDOWN) {
-        formatBody = markdownAdapter(post)
-      } else if (format === FormatEnum.HTML) {
-        // TODO HTML适配器
-      } else if (format === FormatEnum.WIKI) {
-        formatBody = wikiAdapter(post)
-      }
+      let formatBody = this.adapter(post)
       let fileName = filenamify(post.properties[filename])
       let postPath: string
       if (this.config.catalog) {

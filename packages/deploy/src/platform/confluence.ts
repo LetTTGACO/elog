@@ -1,15 +1,22 @@
 import { out } from '@elog/shared'
 import ConfluenceClient, { ConfluenceConfig, WikiMap } from '@elog/sdk-confluence'
-import { wikiAdapter } from '@elog/plugin-adapter'
 import { DocDetail } from '@elog/types'
+import { AdapterClient } from '../adapter'
+import { AdapterFunction } from '../types'
+import { FormatEnum } from '../const'
 
 class DeployConfluence {
   config: ConfluenceConfig
   ctx: ConfluenceClient
+  adapterClient: AdapterClient
+  /** 文档处理适配器 */
+  adapter: AdapterFunction
 
   constructor(config: ConfluenceConfig) {
     this.config = config
     this.ctx = new ConfluenceClient(config)
+    this.adapterClient = new AdapterClient({ format: FormatEnum.WIKI, formatExt: config.formatExt })
+    this.adapter = this.adapterClient.getAdapter()
   }
 
   async deploy(articleList: DocDetail[]) {
@@ -32,7 +39,7 @@ class DeployConfluence {
     // 根据目录上传到wiki上
     for (const articleInfo of sortArticleList) {
       // 将markdown转wiki
-      articleInfo.body_wiki = wikiAdapter(articleInfo)
+      articleInfo.body_wiki = this.adapter(articleInfo)
       // 是否存在
       const cacheWikiPage = rootPageMap[articleInfo.properties.title]
       if (cacheWikiPage) {

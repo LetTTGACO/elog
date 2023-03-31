@@ -1,4 +1,5 @@
 import { DeployPlatformEnum, FileNameEnum, FormatEnum } from './const'
+import { DocDetail } from '@elog/types'
 
 /**
  * local 配置
@@ -8,6 +9,7 @@ export interface LocalConfig {
   filename: FileNameEnum
   format: FormatEnum
   catalog: boolean
+  formatExt?: string
 }
 
 /**
@@ -17,3 +19,11 @@ type DeployPlatformConfig = { [key in DeployPlatformEnum]: any }
 export type DeployConfig = {
   platform: DeployPlatformEnum
 } & DeployPlatformConfig
+
+/** 文档处理适配器 */
+export interface AdapterConfig {
+  format: FormatEnum
+  formatExt?: string
+}
+
+export type AdapterFunction = (doc: DocDetail) => string

@@ -4,6 +4,7 @@ export interface ConfluenceConfig {
   baseUrl: string
   spaceKey: string
   rootPageId: string
+  formatExt?: string
 }
 
 export interface Expandable {
