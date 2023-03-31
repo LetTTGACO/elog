@@ -6,7 +6,7 @@ import { getSecretExt } from './utils'
 
 class QiNiuClient {
   config: QiniuConfig
-  uploadToken
+  uploadToken: string
   bucketManager: qiniu.rs.BucketManager
   formUploader: qiniu.form_up.FormUploader
   putExtra: qiniu.form_up.PutExtra

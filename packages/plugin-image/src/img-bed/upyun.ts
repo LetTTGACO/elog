@@ -1,23 +1,41 @@
+import { getSecretExt } from './utils'
 const upyun = require('upyun')
+import { out } from '@elog/shared'
 import { UPYunConfig } from './types'
+
+/**
+ * 又拍云
+ */
 class UPClient {
   config: UPYunConfig
   imgClient: any
   constructor(config: UPYunConfig) {
     this.config = config
+    this.initConfig()
+    this.imgClient = new upyun.Client(new upyun.Service(this.config))
+  }
+
+  /**
+   * 初始化配置
+   */
+  initConfig() {
+    // 判断是否开启拓展点
+    if (this.config.secretExt) {
+      // 如果开了就从拓展点读取
+      this.config = getSecretExt(this.config)
+    } else {
+      // 如果没开拓展点，就从配置文件/环境变量中读取
+      this.config = {
+        ...this.config,
+        user: this.config.user || process.env.UPYUN_SECRET_ID!,
+        password: this.config.password || process.env.UPYUN_SECRET_KEY!,
+      }
+    }
+    // 域名
     if (!this.config.host) {
-      // out.warn(`未指定域名host，将使用测试域名：http://${this.config.bucket}.test.upcdn.net`);
+      out.warning(`未指定域名host，将使用测试域名：http://${this.config.bucket}.test.upcdn.net`)
       this.config.host = `http://${this.config.bucket}.test.upcdn.net`
     }
-    // 如果不指定协议，默认使用http
-    // TODO 检查URL完整性
-    if (!this.config.host.startsWith('http')) {
-      this.config.host = `http://${this.config.bucket}`
-      // out.info(`图床域名：${this.config.host}`);
-    }
-    const user = this.config.user || process.env.UPYUN_SECRET_ID
-    const password = this.config.password || process.env.UPYUN_SECRET_KEY
-    this.imgClient = new upyun.Client(new upyun.Service(this.config.bucket, user, password))
   }
 
   /**
