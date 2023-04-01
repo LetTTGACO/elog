@@ -1,6 +1,7 @@
 // @ts-ignore
 import { getEtag } from './qetag.js'
 import { getFileType, getFileTypeFromBuffer, getFileTypeFromUrl } from './url'
+import { ImageUrl } from '../types'
 
 /**
  * 去除图片链接中多余的参数
@@ -32,22 +33,28 @@ export const getUrlListFromContent = (content: string) => {
       if (res) {
         const url = res[1]
         // 去除#?号
-        return cleanParameter(url)
+        return {
+          original: url,
+          url: cleanParameter(url),
+        }
       }
-      return null
+      return undefined
     })
-    .filter((item) => item) as string[]
+    .filter((item) => item) as ImageUrl[]
   const imageTagURLList = (content.match(/<img.*?(?:>|\/>)/gi) || [])
     .map((item: string) => {
       const res = item.match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
       if (res) {
         const url = res[1]
         // 去除#?号
-        return cleanParameter(url)
+        return {
+          original: url,
+          url: cleanParameter(url),
+        }
       }
-      return null
+      return undefined
     })
-    .filter((item) => item) as string[]
+    .filter((item) => item) as ImageUrl[]
   return markdownURLList.concat(imageTagURLList)
 }
 

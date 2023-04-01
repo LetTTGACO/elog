@@ -1,10 +1,10 @@
-import { Renderer as markdownRenderer, marked } from 'marked'
+import { Renderer as MarkdownRenderer, marked } from 'marked'
 import { stringify } from 'querystring'
 
 /**
  * WIKI 渲染器
  */
-class WikiRenderer extends markdownRenderer {
+class WikiRenderer extends MarkdownRenderer {
   constructor() {
     super()
   }
