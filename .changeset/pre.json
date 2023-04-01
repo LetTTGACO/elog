@@ -1,0 +1,18 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "@elog/cli": "0.3.0",
+    "@elog/core": "0.3.0",
+    "@elog/deploy": "0.3.0",
+    "@elog/plugin-adapter": "0.3.0",
+    "@elog/plugin-image": "0.3.0",
+    "@elog/sdk-confluence": "0.3.0",
+    "@elog/sdk-notion": "0.3.0",
+    "@elog/sdk-yuque": "0.3.0",
+    "@elog/shared": "0.3.0"
+  },
+  "changesets": [
+    "tall-ties-hunt"
+  ]
+}
