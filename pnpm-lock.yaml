@@ -99,23 +99,17 @@ importers:
       '@elog/plugin-adapter': workspace:*
       '@elog/sdk-confluence': workspace:*
       '@elog/shared': workspace:*
-      '@types/lodash': ^4.14.189
       '@types/mkdirp': ^1.0.2
-      '@types/rimraf': ^3.0.2
       filenamify: ^4.3.0
       mkdirp: ^1.0.4
-      urllib: 2.40.0
     dependencies:
       '@elog/plugin-adapter': link:../plugin-adapter
       '@elog/sdk-confluence': link:../sdk-confluence
       '@elog/shared': link:../shared
       filenamify: 4.3.0
       mkdirp: 1.0.4
-      urllib: 2.40.0
     devDependencies:
-      '@types/lodash': 4.14.191
       '@types/mkdirp': 1.0.2
-      '@types/rimraf': 3.0.2
 
   packages/plugin-adapter:
     specifiers:
@@ -237,18 +231,6 @@ importers:
       '@types/debug': 4.1.7
       '@types/lodash': 4.14.191
       '@types/shelljs': 0.8.11
-
-  test/yuque-confluence:
-    specifiers:
-      '@elog/cli': workspace:*
-    dependencies:
-      '@elog/cli': link:../../packages/cli
-
-  test/yuque-default:
-    specifiers:
-      '@elog/cli': workspace:*
-    dependencies:
-      '@elog/cli': link:../../packages/cli
 
 packages:
 

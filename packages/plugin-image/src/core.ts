@@ -4,6 +4,7 @@ import ImgClient from './img-bed'
 import { ImgBedEnum, ImgConfig } from './img-bed/types'
 import axios from 'axios'
 import { out } from '@elog/shared'
+import { ImageSource, ImageUrl } from './types'
 
 class ImageUploader {
   config: ImgConfig
@@ -34,16 +35,19 @@ class ImageUploader {
    * 上传
    * @param urlList
    */
-  async upload(urlList: string[]) {
-    const toUploadURLs = urlList.map(async (url) => {
-      // eslint-disable-next-line no-async-promise-executor
-      return await new Promise(async (resolve): Promise<any> => {
+  async upload(urlList: ImageUrl[]) {
+    const toUploadURLs = urlList.map(async (image) => {
+      return await new Promise<ImageSource | undefined>(async (resolve) => {
         try {
-          const buffer = await this.getPicBufferFromURL(url)
+          const buffer = await this.getPicBufferFromURL(image.url)
+          if (!buffer) {
+            resolve(undefined)
+            return
+          }
           // 生成文件名
           const fileName = await getFileName(buffer)
           // 生成文件名后缀
-          const fileType = getFileType(url, buffer)
+          const fileType = getFileType(image.url, buffer)
           // 获取文件名
           const fullName = `${fileName}.${fileType.type}`
           out.info('处理图片', `生成文件名: ${fullName}`)
@@ -54,8 +58,8 @@ class ImageUploader {
             // 图片已存在
             resolve({
               fileName: fullName,
-              origin: url,
-              newUrl: exist,
+              original: image.original,
+              url: exist,
               upload: false,
             })
           } else {
@@ -63,7 +67,7 @@ class ImageUploader {
             resolve({
               buffer,
               fileName: fullName,
-              origin: url,
+              original: image.original,
               upload: true,
             })
           }
@@ -72,34 +76,34 @@ class ImageUploader {
         }
       })
     })
-    const toUploadImgs = await Promise.all(toUploadURLs).then((imgs) =>
+    const toUploadImgs = (await Promise.all(toUploadURLs).then((imgs) =>
       imgs.filter((img) => img !== undefined),
-    )
-    let output: any[] = []
+    )) as ImageSource[]
+    let output: ImageUrl[] = []
 
-    for (const img of toUploadImgs as any[]) {
+    for (const img of toUploadImgs) {
       let newUrl: string | undefined = ''
       if (img.upload) {
-        newUrl = await this.ctx.uploadImg(img.buffer, img.fileName)
+        newUrl = await this.ctx.uploadImg(img.buffer!, img.fileName)
         if (newUrl) {
           if (this.config.bed === ImgBedEnum.LOCAL) {
             out.access('生成图片', newUrl)
           } else {
             out.access('上传成功', newUrl)
           }
-          output.push({ original: img.origin, newUrl: newUrl })
+          output.push({ original: img.original, url: newUrl })
         }
       } else {
-        output.push({ original: img.origin, newUrl: img.newUrl })
+        output.push({ original: img.original, url: img.url! })
       }
     }
     if (output.length) {
       output
-        .filter((item) => item.newUrl && item.newUrl !== item.origin)
+        .filter((item) => item.url && item.url !== item.original)
         .map((item) => {
           return {
-            original: item.origin,
-            newUrl: item.newUrl,
+            original: item.original,
+            url: item.url,
           }
         })
       return output
@@ -122,8 +126,8 @@ class ImageUploader {
         if (urls?.length) {
           // 替换文章中的图片
           urls.forEach((item) => {
-            out.info('图片替换', `${item.original} => ${item.newUrl}`)
-            articleInfo.body = articleInfo.body.replace(item.original, item.newUrl)
+            out.info('图片替换', `${item.original} => ${item.url}`)
+            articleInfo.body = articleInfo.body.replace(item.original, item.url)
           })
         }
       }
