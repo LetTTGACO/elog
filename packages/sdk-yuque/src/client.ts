@@ -1,6 +1,6 @@
 import asyncPool from 'tiny-async-pool'
 import { out, request, RequestOptions } from '@elog/shared'
-import { getProps, processRaw } from './utils'
+import { getProps, processHtmlRaw, processMarkdownRaw } from './utils'
 import {
   YuqueCatalog,
   YuqueConfig,
@@ -95,6 +95,8 @@ class YuqueClient {
       }
       docInfo.catalog = catalogPath.reverse()
     }
+    // 处理HTML
+    docInfo.body_html = processHtmlRaw(docInfo.body_html)
     return docInfo
   }
 
@@ -128,7 +130,7 @@ class YuqueClient {
       // 解析出properties
       const { body, properties } = getProps(article)
       article.body_original = body
-      const newBody = processRaw(body)
+      const newBody = processMarkdownRaw(body)
       article.properties = properties as YuqueDocProperties
       // 替换body
       article.body = newBody

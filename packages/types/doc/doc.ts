@@ -37,6 +37,8 @@ export interface DocDetail extends BaseDoc {
   body_original: string
   /** 部署到wiki时会存在 */
   body_wiki?: string
+  /** html字符串 */
+  body_html?: string
   /** 文章属性 */
   properties: DocProperties
   /** 语雀文章目录路径， Notion暂不支持 */

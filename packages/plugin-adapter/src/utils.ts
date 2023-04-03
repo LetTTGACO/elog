@@ -8,6 +8,16 @@ const formatMarkdown = (content: string) => {
   return prettier.format(content, { parser: 'markdown' })
 }
 
+/**
+ * 格式化html文件
+ * @param content
+ */
+export const formatHtml = (content: string) => {
+  return prettier.format(content, {
+    parser: 'html',
+  })
+}
+
 // 背景色区块支持
 const colorBlocks: any = {
   ':::tips\n':

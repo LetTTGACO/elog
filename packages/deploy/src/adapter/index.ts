@@ -1,6 +1,11 @@
 import { out } from '@elog/shared'
 import path from 'path'
-import { markdownAdapter, matterMarkdownAdapter, wikiAdapter } from '@elog/plugin-adapter'
+import {
+  markdownAdapter,
+  matterMarkdownAdapter,
+  wikiAdapter,
+  htmlAdapter,
+} from '@elog/plugin-adapter'
 import { AdapterConfig, AdapterFunction } from '../types'
 import { FormatEnum, formatList } from '../const'
 
@@ -43,6 +48,8 @@ export class AdapterClient {
           return matterMarkdownAdapter
         case FormatEnum.WIKI:
           return wikiAdapter
+        case FormatEnum.HTML:
+          return htmlAdapter
         default:
           out.warning(`目前只支持将文档转换为${formatList.toString()}，将默认以markdown形式转换`)
           return markdownAdapter
