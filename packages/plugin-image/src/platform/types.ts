@@ -59,5 +59,5 @@ export interface LocalConfig {
 type ImagePlatformConfig = { [key in ImagePlatformEnum]: any }
 export type ImageConfig = {
   enable: boolean
-  bed: ImagePlatformEnum
+  platform: ImagePlatformEnum
 } & ImagePlatformConfig

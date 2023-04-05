@@ -1,7 +1,7 @@
 const COS = {
   image: {
     enable: true,
-    bed: 'cos',
+    platform: 'cos',
     oss: {
       bucket: '',
       region: '',
@@ -14,7 +14,7 @@ const COS = {
 const Github = {
   image: {
     enable: true,
-    bed: 'github',
+    platform: 'github',
     github: {
       user: '',
       token: '',
@@ -29,7 +29,7 @@ const Github = {
 const OSS = {
   image: {
     enable: true,
-    bed: 'oss',
+    platform: 'oss',
     oss: {
       bucket: '',
       region: '',
@@ -42,7 +42,7 @@ const OSS = {
 const QiNiu = {
   image: {
     enable: true,
-    bed: 'qiniu',
+    platform: 'qiniu',
     qiniu: {
       bucket: '',
       region: '',
@@ -55,7 +55,7 @@ const QiNiu = {
 const UPYun = {
   image: {
     enable: true,
-    bed: 'upyun',
+    platform: 'upyun',
     upyun: {
       bucket: '',
       host: '',
@@ -66,7 +66,7 @@ const UPYun = {
 const Local = {
   image: {
     enable: true,
-    bed: 'local',
+    platform: 'local',
     local: {
       outputDir: '',
       prefixKey: '',

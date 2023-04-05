@@ -10,14 +10,14 @@ const clean = async (config = 'elog.config.json', cache = 'elog.cache.json') => 
         local: { outputDir: docOutputDir },
       },
       image: {
-        bed,
+        platform,
         local: { outputDir: imageOutputDir },
       },
     } = require(configPath)
     cleanCache(cache)
     cleanPost(docOutputDir)
     // 清楚本地图片
-    if (bed === 'local' && imageOutputDir) {
+    if (platform === 'local' && imageOutputDir) {
       cleanImages(imageOutputDir)
     }
   } catch (error) {
