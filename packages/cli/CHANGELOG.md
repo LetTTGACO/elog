@@ -1,5 +1,16 @@
 # @elog/cli
 
+## 0.3.1
+
+### Patch Changes
+
+- 修复图片替换链接的问题
+- 582fdea: 修复图片替换链接的问题
+- Updated dependencies
+- Updated dependencies [582fdea]
+  - @elog/core@0.3.1
+  - @elog/shared@0.3.1
+
 ## 0.3.1-beta.0
 
 ### Patch Changes
