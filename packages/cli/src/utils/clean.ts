@@ -12,10 +12,10 @@ export const cleanPost = (postPath: string) => {
   try {
     const dist = path.join(__cwd, postPath)
     rimraf.sync(dist)
-    out.info('清理成功', dist)
+    out.info('清理文档', dist)
   } catch (error) {
     // @ts-ignore
-    out.err('清理失败', error.message)
+    out.err('清理文档', error.message)
   }
 }
 
@@ -26,10 +26,10 @@ export const cleanCache = (cachePath: string) => {
   try {
     const dist = path.join(__cwd, cachePath)
     fs.unlinkSync(dist)
-    out.info('清理成功', dist)
+    out.info('清理缓存', dist)
   } catch (error) {
     // @ts-ignore
-    out.err('清理失败', error.message)
+    out.err('清理缓存', error.message)
   }
 }
 
@@ -40,9 +40,9 @@ export const cleanImages = (imgsPath: string) => {
   try {
     const dist = path.join(__cwd, imgsPath)
     rimraf.sync(dist)
-    out.info('清理成功', dist)
+    out.info('清理图片', dist)
   } catch (error) {
     // @ts-ignore
-    out.err('清理失败', error.message)
+    out.err('清理图片', error.message)
   }
 }
