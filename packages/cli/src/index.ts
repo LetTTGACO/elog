@@ -26,7 +26,7 @@ export async function run() {
   program
     .version(pkgJson.version)
     .command('sync')
-    .option('-c, --config <string>', 'use config with custom, default is elog.config.json')
+    .option('-c, --config <string>', 'use config with custom, default is elog.config.js')
     .option('-a --cache <string>', 'use cache file name, default is elog.cache.json')
     .option('-e, --env <string>', 'use env with custom, default is .env')
     .description('sync doc')
@@ -36,14 +36,14 @@ export async function run() {
       } catch (error) {
         // @ts-ignore
         out.err('运行失败', error.message)
-        // process.exit(1)
+        process.exit(1)
       }
     })
 
   program
     .version(pkgJson.version)
     .command('clean')
-    .option('-c --config <string>', 'assign config file name, default is elog.config.json')
+    .option('-c --config <string>', 'assign config file name, default is elog.config.js')
     .option('-a --cache <string>', 'assign cache file name, default is elog.cache.json')
     .description('clean cache')
     .action((options) => {
