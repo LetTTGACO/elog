@@ -1,5 +1,18 @@
 # @elog/core
 
+## 0.4.0-beta.1
+
+### Patch Changes
+
+- elog init 逻辑调整
+- Updated dependencies
+  - @elog/deploy@0.4.0-beta.1
+  - @elog/plugin-image@0.4.0-beta.1
+  - @elog/sdk-notion@0.4.0-beta.1
+  - @elog/sdk-yuque@0.4.0-beta.1
+  - @elog/shared@0.4.0-beta.1
+  - @elog/types@0.4.0-beta.1
+
 ## 0.4.0-beta.0
 
 ### Minor Changes

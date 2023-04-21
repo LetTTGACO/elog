@@ -14,6 +14,7 @@
     "@elog/types": "0.3.0"
   },
   "changesets": [
-    "beige-games-juggle"
+    "beige-games-juggle",
+    "cold-queens-applaud"
   ]
 }

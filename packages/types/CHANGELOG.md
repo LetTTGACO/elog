@@ -1,5 +1,11 @@
 # @elog/types
 
+## 0.4.0-beta.1
+
+### Patch Changes
+
+- elog init 逻辑调整
+
 ## 0.4.0-beta.0
 
 ### Minor Changes
