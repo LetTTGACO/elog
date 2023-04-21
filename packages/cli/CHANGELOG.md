@@ -1,5 +1,16 @@
 # @elog/cli
 
+## 0.4.0-beta.2
+
+### Patch Changes
+
+- 1. notion 配置参数变更
+  2. notion 支持自定义筛选和排序
+  3. notion 支持生成目录配置
+- Updated dependencies
+  - @elog/core@0.4.0-beta.2
+  - @elog/shared@0.4.0-beta.2
+
 ## 0.4.0-beta.1
 
 ### Patch Changes
