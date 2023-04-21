@@ -3,7 +3,7 @@ import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints'
 export interface NotionConfig {
   token: string
   /** 数据库id */
-  database_id: string
+  databaseId: string
   /** 状态字段 */
   status: {
     // 字段名称

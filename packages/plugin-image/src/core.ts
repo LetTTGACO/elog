@@ -1,9 +1,9 @@
 import { getFileName, getFileType, getUrlListFromContent } from './utils'
-import ImgClient from './img-bed'
-import { ImageConfig } from './img-bed/types'
+import ImgClient from './platform'
+import { ImageConfig } from './platform/types'
 import { out, request } from '@elog/shared'
 import { DocDetail } from '@elog/types'
-import { ImagePlatformEnum } from './img-bed/const'
+import { ImagePlatformEnum } from './platform/const'
 import { ImageSource, ImageUrl } from './types'
 
 class ImageUploader {
@@ -85,7 +85,7 @@ class ImageUploader {
       if (img.upload) {
         newUrl = await this.ctx.uploadImg(img.buffer!, img.fileName)
         if (newUrl) {
-          if (this.config.bed === ImagePlatformEnum.LOCAL) {
+          if (this.config.platform === ImagePlatformEnum.LOCAL) {
             out.access('生成图片', newUrl)
           } else {
             out.access('上传成功', newUrl)

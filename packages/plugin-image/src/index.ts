@@ -1,5 +1,5 @@
 import ImageUploader from './core'
-import { ImageConfig } from './img-bed/types'
+import { ImageConfig } from './platform/types'
 
 export { ImageConfig }
 

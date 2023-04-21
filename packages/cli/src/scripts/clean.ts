@@ -1,23 +1,21 @@
 import { out } from '@elog/shared'
-import path from 'path'
 import { cleanCache, cleanImages, cleanPost } from '../utils/clean'
+import { getConfig } from '../utils/utils'
 
-const clean = async (config = 'elog.config.json', cache = 'elog.cache.json') => {
+const clean = async (customConfigPath: string, customCachePath: string) => {
   try {
-    const configPath = path.resolve(process.cwd(), `${config}`)
+    // 加载配置文件
+    const { config, cacheFilePath } = getConfig(customConfigPath, customCachePath)
     const {
       deploy: {
         local: { outputDir: docOutputDir },
       },
-      image: {
-        bed,
-        local: { outputDir: imageOutputDir },
-      },
-    } = require(configPath)
-    cleanCache(cache)
+      image: { enable, platform, local: { outputDir: imageOutputDir } } = {},
+    } = config
+    cleanCache(cacheFilePath)
     cleanPost(docOutputDir)
     // 清楚本地图片
-    if (bed === 'local' && imageOutputDir) {
+    if (enable && platform === 'local' && imageOutputDir) {
       cleanImages(imageOutputDir)
     }
   } catch (error) {

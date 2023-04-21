@@ -22,7 +22,7 @@ class NotionClient {
     }
     this.notion = new Client({ auth: this.config.token })
     this.n2m = new NotionToMarkdown({ notionClient: this.notion })
-    // debug(`create client: database_id: ${config.database_id}`)
+    // debug(`create client: databaseId: ${config.databaseId}`)
   }
 
   /**
@@ -30,7 +30,7 @@ class NotionClient {
    */
   async getPageList() {
     let resp = await this.notion.databases.query({
-      database_id: this.config.database_id,
+      database_id: this.config.databaseId,
       filter: {
         or: [
           {

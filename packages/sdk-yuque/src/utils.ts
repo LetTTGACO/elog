@@ -169,6 +169,5 @@ const processHtml = (content: string) => {
  */
 export const processHtmlRaw = (html: string) => {
   // 给语雀的HTML头部加上css文件
-  console.log(html)
   return processHtml(html)
 }

@@ -22,21 +22,21 @@ class ImgBedClient {
 
   constructor(config: ImageConfig) {
     this.config = config
-    this.imageClient = this.getImageBedInstance(this.config.bed)
+    this.imageClient = this.getImageBedInstance(this.config.platform)
   }
 
   /**
    * 获取图床对象的实例
    *
-   * @param {string} imageBed 图床类型
+   * @param {string} platform 图床类型
    * @return {any} 图床实例
    */
-  getImageBedInstance(imageBed: ImagePlatformEnum) {
-    if (!imageBedList.includes(imageBed)) {
+  getImageBedInstance(platform: ImagePlatformEnum) {
+    if (!imageBedList.includes(platform)) {
       out.err('配置错误', `目前只支持${imageBedList.toString()}`)
       process.exit(-1)
     }
-    switch (imageBed) {
+    switch (platform) {
       case ImagePlatformEnum.COS:
         const cosConfig = this.config.cos as CosConfig
         return new CosClient(cosConfig)
