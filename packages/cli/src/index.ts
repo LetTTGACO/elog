@@ -11,8 +11,8 @@ export async function run() {
   program
     .version(pkgJson.version)
     .command('init')
-    .option('--config <string>', 'rename config file,  default is elog.config.json')
-    .option('--env <string>', 'rename env file, default is .elog.env')
+    .option('-c --config <string>', 'rename config file,  default is elog.config.json')
+    .option('-e --env <string>', 'rename env file, default is .elog.env')
     .description('init config')
     .action((options) => {
       try {
@@ -29,7 +29,7 @@ export async function run() {
     .command('sync')
     .option('-c, --config <string>', 'use config with custom, default is elog.config.js')
     .option('-a --cache <string>', 'use cache file name, default is elog.cache.json')
-    .option('-e, --env <string>', 'use env with custom, default is .env')
+    .option('-e, --env <string>', 'use env with custom')
     .description('sync doc')
     .action((options) => {
       try {

@@ -2,9 +2,9 @@ import { Client } from '@notionhq/client'
 import { NotionToMarkdown } from 'notion-to-md'
 import asyncPool from 'tiny-async-pool'
 import { props } from './utils'
-import { NotionConfig, NotionPage } from './types'
+import { NotionConfig, NotionDoc, NotionSort, NotionSortPreset } from './types'
 import { out } from '@elog/shared'
-import { DocDetail } from '@elog/types'
+import { DocDetail, NotionCatalog } from '@elog/types'
 
 /**
  * Notion SDK
@@ -13,6 +13,7 @@ class NotionClient {
   config: NotionConfig
   notion: Client
   n2m: NotionToMarkdown
+  catalog: NotionCatalog[] = []
   constructor(config: NotionConfig) {
     this.config = config
     this.config.token = config.token || process.env.NOTION_TOKEN!
@@ -26,44 +27,105 @@ class NotionClient {
   }
 
   /**
-   * 获取待发布的文章列表
+   * 获取指定文章列表
    */
   async getPageList() {
+    let sorts: any
+    if (typeof this.config.sorts === 'boolean') {
+      if (!this.config.sorts) {
+        // 不排序
+        sorts = undefined
+      } else {
+        // 默认排序
+        sorts = [{ timestamp: 'created_time', direction: 'descending' }]
+      }
+      sorts = [{ timestamp: 'created_time', direction: 'descending' }]
+    } else if (typeof this.config.sorts === 'string') {
+      // 预设值
+      const sortPreset = this.config.sorts as NotionSortPreset
+      switch (sortPreset) {
+        case NotionSortPreset.dateDesc:
+          sorts = [{ property: 'date', direction: 'descending' }]
+          break
+        case NotionSortPreset.dateAsc:
+          sorts = [{ property: 'date', direction: 'ascending' }]
+          break
+        case NotionSortPreset.sortDesc:
+          sorts = [{ property: 'sort', direction: 'descending' }]
+          break
+        case NotionSortPreset.sortAsc:
+          sorts = [{ property: 'sort', direction: 'ascending' }]
+          break
+        case NotionSortPreset.createTimeDesc:
+          sorts = [{ timestamp: 'created_time', direction: 'descending' }]
+          break
+        case NotionSortPreset.createTimeAsc:
+          sorts = [{ timestamp: 'created_time', direction: 'ascending' }]
+          break
+        case NotionSortPreset.updateTimeDesc:
+          sorts = [{ timestamp: 'last_edited_time', direction: 'descending' }]
+          break
+        case NotionSortPreset.updateTimeAsc:
+          sorts = [{ timestamp: 'last_edited_time', direction: 'ascending' }]
+          break
+        default:
+          sorts = [{ timestamp: 'created_time', direction: 'descending' }]
+      }
+    } else {
+      // 自定义排序
+      sorts = this.config.sorts as NotionSort[]
+    }
+
+    let filter: any
+    if (typeof this.config.filter === 'boolean') {
+      if (!this.config.filter) {
+        filter = undefined
+      } else {
+        filter = {
+          property: 'status',
+          select: {
+            equals: '已发布',
+          },
+        }
+      }
+    } else if (!this.config.filter) {
+      filter = {
+        property: 'status',
+        select: {
+          equals: '已发布',
+        },
+      }
+    } else {
+      filter = this.config.filter
+    }
+
     let resp = await this.notion.databases.query({
       database_id: this.config.databaseId,
-      filter: {
-        or: [
-          {
-            property: this.config.status.name,
-            select: {
-              equals: this.config.status.released,
-            },
-          },
-          {
-            property: this.config.status.name,
-            select: {
-              equals: this.config.status.published,
-            },
-          },
-        ],
-      },
+      filter,
+      sorts,
     })
-    return resp.results as NotionPage[]
+    let docs = resp.results as NotionDoc[]
+    docs = docs.map((doc) => {
+      // 转换props
+      doc.properties = props(doc)
+      return doc
+    })
+    this.catalog = docs as unknown as NotionCatalog[]
+    return docs
   }
 
   /**
    * 下载一篇文章
    * @param {*} page
    */
-  async download(page: NotionPage): Promise<DocDetail> {
+  async download(page: NotionDoc): Promise<DocDetail> {
     const blocks = await this.n2m.pageToMarkdown(page.id)
     let body = this.n2m.toMarkdownString(blocks)
-    let properties = props(page)
     const timestamp = new Date(page.last_edited_time).getTime()
     return {
       id: page.id,
       doc_id: page.id,
-      properties,
+      properties: page.properties,
       body,
       body_original: body,
       updated: timestamp,
@@ -75,17 +137,17 @@ class NotionClient {
    * @param cachedPages 已经下载过的pages
    * @param ids 需要下载的doc_id列表
    */
-  async getPageDetailList(cachedPages: NotionPage[], ids: string[]) {
+  async getPageDetailList(cachedPages: NotionDoc[], ids: string[]) {
     // 获取待发布的文章
     let articleList: DocDetail[] = []
-    let pages: NotionPage[] = cachedPages
+    let pages: NotionDoc[] = cachedPages
     if (ids?.length) {
       // 取交集，过滤不需要下载的page
       pages = pages.filter((page) => {
         const exist = ids.indexOf(page.id) > -1
         if (!exist) {
           // @ts-ignore
-          const title = page.properties?.title?.title.map((a: any) => a.plain_text).join('') || ''
+          const title = page.properties.title
           out.access('跳过下载', title)
         }
         return exist
@@ -95,31 +157,14 @@ class NotionClient {
       out.access('跳过', '没有需要下载的文章')
       return articleList
     }
-    const promise = async (page: NotionPage) => {
+    const promise = async (page: NotionDoc) => {
       let article = await this.download(page)
       out.info('下载文档', article.properties.title)
-      await this.published(page)
       articleList.push(article)
     }
     await asyncPool(5, pages, promise)
     out.access('已下载数', String(articleList.length))
     return articleList
-  }
-
-  /**
-   * 修改notion的状态
-   * @param page
-   */
-  async published(page: NotionPage) {
-    let props = page.properties as any
-    // 将待发布改为已发布
-    if (props[this.config.status.name].select.name === this.config.status.released) {
-      props[this.config.status.name].select = { name: this.config.status.published }
-      await this.notion.pages.update({
-        page_id: page.id,
-        properties: props,
-      })
-    }
   }
 }
 

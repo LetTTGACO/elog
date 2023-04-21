@@ -1,5 +1,5 @@
 import { DocStatus, WritePlatform } from './const'
-import { Catalog, DocDetail } from '@elog/types'
+import { YuqueCatalog, NotionCatalog, DocDetail } from '@elog/types'
 import { DeployConfig } from '@elog/deploy'
 import { ImageConfig } from '@elog/plugin-image'
 
@@ -29,7 +29,7 @@ export interface ElogConfig {
 // region 文章相关
 export interface CacheJSON {
   docs: DocDetail[]
-  catalog: Catalog[]
+  catalog: NotionCatalog[] | YuqueCatalog[]
 }
 
 export interface DocStatusMap {

@@ -1,4 +1,4 @@
-import { NotionPage } from './types'
+import { NotionDoc } from './types'
 import moment from 'moment'
 import { DocProperties } from '@elog/types'
 
@@ -34,7 +34,7 @@ export function getPropVal(data: any) {
  * @param {*} page
  * @returns {Object}
  */
-export function props(page: NotionPage): DocProperties {
+export function props(page: NotionDoc): DocProperties {
   let data: any = {}
   if (!Object.keys(page.properties).length) return data
   for (const key in page.properties) {

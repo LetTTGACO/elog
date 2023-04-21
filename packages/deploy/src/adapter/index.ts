@@ -1,10 +1,10 @@
 import { out } from '@elog/shared'
 import path from 'path'
 import {
+  htmlAdapter,
   markdownAdapter,
   matterMarkdownAdapter,
   wikiAdapter,
-  htmlAdapter,
 } from '@elog/plugin-adapter'
 import { AdapterConfig, AdapterFunction } from '../types'
 import { FormatEnum, formatList } from '../const'
@@ -32,7 +32,7 @@ export class AdapterClient {
         // 加载拓展点
         // 如果指定了secret拓展点，那么拓展点返回的账号密码信息，将会覆盖elog-config.json中的image信息
         const formatExtPath = path.resolve(process.cwd(), this.config.formatExt)
-        // 拓展点需要暴露getSecret方法
+        // 拓展点需要暴露format方法
         const { format } = require(formatExtPath)
         return format
       } catch (e: any) {

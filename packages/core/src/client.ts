@@ -171,9 +171,11 @@ class Elog {
     try {
       let catalog: any[] = []
       if (this.config.write.platform === WritePlatform.YUQUE) {
-        // 目前只适配语雀
         const yuqueClient = this.downloaderClient as YuqueClient
         catalog = yuqueClient.ctx.catalog
+      } else if (this.config.write.platform === WritePlatform.NOTION) {
+        const notionClient = this.downloaderClient as NotionClient
+        catalog = notionClient.ctx.catalog
       }
       const cacheJson: CacheJSON = {
         docs: this.cachedArticles,
