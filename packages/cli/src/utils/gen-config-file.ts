@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-const configStr =
+const configJsStr =
   'module.exports = {\n' +
   '  write: {\n' +
   "    platform: 'yuque',\n" +
@@ -94,8 +94,111 @@ const configStr =
   '  },\n' +
   '}\n'
 
-export const genConfig = (configName: string) => {
-  fs.writeFileSync(`${process.cwd()}/${configName}`, configStr, {
+const configJson = JSON.stringify(
+  {
+    write: {
+      platform: 'yuque',
+      yuque: {
+        token: '',
+        baseUrl: '',
+        login: '',
+        repo: '',
+        onlyPublic: false,
+        onlyPublished: false,
+      },
+      notion: {
+        token: '',
+        databaseId: '',
+        status: {
+          name: '',
+          released: '',
+          published: '',
+        },
+      },
+    },
+    deploy: {
+      platform: 'local',
+      local: {
+        outputDir: '',
+        filename: 'title | urlname',
+        format: 'markdown | matter-markdown | wiki | html',
+        catalog: true,
+        formatExt: '', // 可选
+      },
+      confluence: {
+        user: '',
+        password: '',
+        baseUrl: '',
+        spaceKey: '',
+        rootPageId: '', // 可选
+        formatExt: '', // 可选
+      },
+    },
+    image: {
+      enable: true,
+      platform: 'cos',
+      local: {
+        outputDir: '',
+        prefixKey: '',
+      },
+      oss: {
+        secretId: '',
+        secretKey: '',
+        bucket: '',
+        region: '',
+        host: '',
+        prefixKey: '',
+        secretExt: '', // 可选
+      },
+      cos: {
+        secretId: '',
+        secretKey: '',
+        bucket: '',
+        region: '',
+        host: '',
+        prefixKey: '',
+        secretExt: '', // 可选
+      },
+      qiniu: {
+        secretId: '',
+        secretKey: '',
+        bucket: '',
+        region: '',
+        host: '',
+        prefixKey: '',
+        secretExt: '', // 可选
+      },
+      upyun: {
+        user: '',
+        password: '',
+        bucket: '',
+        host: '',
+        prefixKey: '',
+        secretExt: '', // 可选
+      },
+      github: {
+        user: '',
+        token: '',
+        repo: '',
+        branch: '',
+        host: '',
+        prefixKey: '',
+        secretExt: '', // 可选
+      },
+    },
+  },
+  null,
+  2,
+)
+
+export const genConfigFile = (configName: string) => {
+  let str = configJsStr
+  // 判断configName的后缀
+  if (!configName.endsWith('.js')) {
+    // 生成json文件
+    str = configJson
+  }
+  fs.writeFileSync(`${process.cwd()}/${configName}`, str, {
     encoding: 'utf-8',
   })
 }

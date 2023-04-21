@@ -11,11 +11,12 @@ export async function run() {
   program
     .version(pkgJson.version)
     .command('init')
-    .option('-n, --name <string>', 'rename elog.config.json')
+    .option('--config <string>', 'rename config file,  default is elog.config.json')
+    .option('--env <string>', 'rename env file, default is .elog.env')
     .description('init config')
     .action((options) => {
       try {
-        void init(options.name)
+        void init(options.config, options.env)
       } catch (error) {
         // @ts-ignore
         out.err('运行失败', error.message)
