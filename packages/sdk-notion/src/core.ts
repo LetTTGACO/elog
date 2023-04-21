@@ -1,11 +1,11 @@
 import NotionClient from './client'
-import { NotionConfig, NotionPage } from './types'
+import { NotionConfig, NotionDoc } from './types'
 import { BaseDoc } from '@elog/types'
 
 class Notion {
   config: NotionConfig
   ctx: NotionClient
-  pages: NotionPage[] = []
+  pages: NotionDoc[] = []
   constructor(config: any) {
     this.config = config
     this.ctx = new NotionClient(config)

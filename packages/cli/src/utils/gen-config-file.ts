@@ -15,11 +15,8 @@ const configJsStr =
   '    notion: {\n' +
   '      token: process.env.NOTION_TOKEN,\n' +
   '      databaseId: process.env.NOTION_DATABASE_ID,\n' +
-  '      status: {\n' +
-  "        name: 'status',\n" +
-  "        released: '待发布',\n" +
-  "        published: '已发布',\n" +
-  '      },\n' +
+  "      filter: true, // {property: 'status', select: {equals: '已发布'}}\n" +
+  "      sorts: true // [{property: 'date', direction: 'descending'}],\n" +
   '    },\n' +
   '  },\n' +
   '  deploy: {\n' +
@@ -109,11 +106,8 @@ const configJson = JSON.stringify(
       notion: {
         token: '',
         databaseId: '',
-        status: {
-          name: '',
-          released: '',
-          published: '',
-        },
+        filter: true,
+        sorts: true,
       },
     },
     deploy: {

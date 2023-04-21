@@ -17,7 +17,7 @@ export interface DocProperties {
 }
 
 /** 语雀知识库目录 */
-export interface Catalog {
+export interface YuqueCatalog {
   /** 类型：文章/分组 */
   type: 'DOC' | 'TITLE'
   title: string
@@ -27,6 +27,19 @@ export interface Catalog {
   slug: string
   depth: number
   level: number
+}
+
+/** Notion文档目录 */
+export interface NotionCatalog {
+  properties: DocProperties
+  parent: any
+  object: 'page'
+  id: string
+  created_time: string
+  last_edited_time: string
+  archived: boolean
+  url: string
+  [key: string]: any
 }
 
 /** 文章详情 */
@@ -42,5 +55,5 @@ export interface DocDetail extends BaseDoc {
   /** 文章属性 */
   properties: DocProperties
   /** 语雀文章目录路径， Notion暂不支持 */
-  catalog?: Catalog[]
+  catalog?: YuqueCatalog[]
 }
