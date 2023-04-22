@@ -48,7 +48,7 @@
 ## ⚠️ 注意
 Elog 正处于内测阶段，迭代较为频繁，使用时请锁定Elog的版本号，并加入下方交流反馈群，获取最新进展。
 
-## 交流与反馈
+## 🌍 交流与反馈
 <p>微信扫码加入群聊</p>
 <img style="width: 200px; height: 200px" src="https://user-images.githubusercontent.com/37357188/217702971-47dd05ea-e689-4091-b4e7-3ae4559ca215.png">
 
@@ -87,13 +87,15 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和部署�
 - [x] 语雀
 
 **部署平台**
-- [x] Hexo
-- [x] Vitepress
-- [x] HuGo
-- [x] Confluence【内测中】
-> 部署平台目前支持所有类似Hexo的框架：通过向指定目录存放md文档来进行渲染的方式
+- [x]  Hexo
+- [x]  Vitepress
+- [x]  HuGo
+- [x]  Docusaurus
+- [x]  Docz
+- [x]  Confluence
+> 部署平台目前支持所有类似 Hexo 的框架：通过向指定目录存放 markdown 文档来进行渲染的方式
 
-## 图床功能
+## 🌅 图床功能
 和很多在线平台一样，Notion和语雀也同样存在图片防盗链的问题，直接将写作平台的图片链接放到其他站点的话，会加载不出来。
 为了解决这个问题，Elog支持了在生成MD文件之前，将扫描到的图片上传到图床上，并对文档中的图片链接进行替换。
 当前支持的图床有：
@@ -103,16 +105,20 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和部署�
 - [x] 七牛云
 - [x] 又拍云
 
-## 使用案例
-文档正在建设中...
+## ✨ 特性
+- 📝 写作平台支持语雀/Notion
+- 🚀 部署平台支持所有通过渲染本地 Markdown 文档生成静态站点的博客平台
+- 🌅 图床平台支持存放到本地或上传到阿里云/腾讯云/Github/七牛云/又拍云
+- 📦 支持生成Front Matter Markdown/支持代码高亮的HTML/适用于Confluence的wiki
+- ⚙️ 支持自定义文档处理适配器
+- 🛡 图床平台支持通过拓展点注入密钥
 
-## 快速上手
+更多详情见 [ELog 开发计划](https://www.notion.so/Elog-91dd2037c9c847e6bc90b712b124189c)
+
+## 🔨 快速上手
 [Elog 使用文档](https://elog.1874.cool/)
 
-## 特性介绍
-文档正在建设中...
-
-## 最佳实践
-文档正在建设中...
+## 🔗 最佳实践
+- [Elog Docs](https://github.com/LetTTGACO/elog-docs) 多写作平台云端写作 + vitepress 按目录生成路由 + Github Action + COS 持续集成
 
 
