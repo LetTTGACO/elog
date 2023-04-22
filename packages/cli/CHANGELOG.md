@@ -1,5 +1,14 @@
 # @elog/cli
 
+## 0.4.0-beta.3
+
+### Patch Changes
+
+- 取消高亮块处理
+- Updated dependencies
+  - @elog/core@0.4.0-beta.3
+  - @elog/shared@0.4.0-beta.3
+
 ## 0.4.0-beta.2
 
 ### Patch Changes

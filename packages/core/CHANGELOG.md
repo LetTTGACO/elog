@@ -1,5 +1,18 @@
 # @elog/core
 
+## 0.4.0-beta.3
+
+### Patch Changes
+
+- 取消高亮块处理
+- Updated dependencies
+  - @elog/deploy@0.4.0-beta.3
+  - @elog/plugin-image@0.4.0-beta.3
+  - @elog/sdk-notion@0.4.0-beta.3
+  - @elog/sdk-yuque@0.4.0-beta.3
+  - @elog/shared@0.4.0-beta.3
+  - @elog/types@0.4.0-beta.3
+
 ## 0.4.0-beta.2
 
 ### Patch Changes

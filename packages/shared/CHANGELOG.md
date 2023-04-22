@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.4.0-beta.3
+
+### Patch Changes
+
+- 取消高亮块处理
+
 ## 0.4.0-beta.2
 
 ### Patch Changes

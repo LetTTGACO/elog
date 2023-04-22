@@ -1,5 +1,16 @@
 # @elog/deploy
 
+## 0.4.0-beta.3
+
+### Patch Changes
+
+- 取消高亮块处理
+- Updated dependencies
+  - @elog/plugin-adapter@0.4.0-beta.3
+  - @elog/sdk-confluence@0.4.0-beta.3
+  - @elog/shared@0.4.0-beta.3
+  - @elog/types@0.4.0-beta.3
+
 ## 0.4.0-beta.2
 
 ### Patch Changes
