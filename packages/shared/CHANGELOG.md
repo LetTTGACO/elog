@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.4.0-beta.4
+
+### Patch Changes
+
+- 修复语雀公式图和 uml 图片无法下载的问题
+
 ## 0.4.0-beta.3
 
 ### Patch Changes
