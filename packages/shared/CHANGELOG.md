@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.4.0-beta.5
+
+### Patch Changes
+
+- 修图图片下载问题
+
 ## 0.4.0-beta.4
 
 ### Patch Changes

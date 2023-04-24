@@ -1,5 +1,16 @@
 # @elog/deploy
 
+## 0.4.0-beta.5
+
+### Patch Changes
+
+- 修图图片下载问题
+- Updated dependencies
+  - @elog/plugin-adapter@0.4.0-beta.5
+  - @elog/sdk-confluence@0.4.0-beta.5
+  - @elog/shared@0.4.0-beta.5
+  - @elog/types@0.4.0-beta.5
+
 ## 0.4.0-beta.4
 
 ### Patch Changes
