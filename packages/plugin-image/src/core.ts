@@ -38,7 +38,7 @@ class ImageUploader {
     const toUploadURLs = urlList.map(async (image) => {
       return await new Promise<ImageSource | undefined>(async (resolve) => {
         try {
-          const buffer = await this.getPicBufferFromURL(image.url)
+          const buffer = await this.getPicBufferFromURL(image.original)
           if (!buffer) {
             resolve(undefined)
             return
@@ -125,7 +125,7 @@ class ImageUploader {
         if (urls?.length) {
           // 替换文章中的图片
           urls.forEach((item) => {
-            out.info('图片替换', `${item.original} => ${item.url}`)
+            out.info('图片替换', `${item.url}`)
             articleInfo.body = articleInfo.body.replace(item.original, item.url)
           })
         }
