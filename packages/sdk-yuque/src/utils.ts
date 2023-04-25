@@ -62,9 +62,9 @@ export const getProps = (page: DocUnite): GetProps => {
       properties,
     }
   } catch (e: any) {
+    out.warning(e.message)
     out.warning('front-matter解析失败，将返回预定义属性')
     out.warning('预定义属性：https://elog.1874.cool/notion/raqyleng501h23p1#预定义属性')
-    out.warning(e.message)
     return {
       body,
       properties,
