@@ -208,3 +208,8 @@ export interface YuqueDocProperties {
 }
 
 export type DocUnite = DocDetail & YuqueDocDetail
+
+export interface GetProps {
+  body: string
+  properties: YuqueDocProperties
+}
