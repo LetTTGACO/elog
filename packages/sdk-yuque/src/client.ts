@@ -127,9 +127,9 @@ class YuqueClient {
     const promise = async (doc: YuqueDoc) => {
       out.info('下载文档', doc.title)
       let article = await this.getDocDetail(doc.slug)
+      article.body_original = article.body
       // 解析出properties
       const { body, properties } = getProps(article)
-      article.body_original = body
       const newBody = processMarkdownRaw(body)
       article.properties = properties as YuqueDocProperties
       // 替换body
