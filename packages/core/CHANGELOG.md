@@ -1,5 +1,18 @@
 # @elog/core
 
+## 0.4.0-beta.6
+
+### Patch Changes
+
+- 1.增加错误日志输出 2.增加 property 长度检测提醒
+- Updated dependencies
+  - @elog/deploy@0.4.0-beta.6
+  - @elog/plugin-image@0.4.0-beta.6
+  - @elog/sdk-notion@0.4.0-beta.6
+  - @elog/sdk-yuque@0.4.0-beta.6
+  - @elog/shared@0.4.0-beta.6
+  - @elog/types@0.4.0-beta.6
+
 ## 0.4.0-beta.5
 
 ### Patch Changes
