@@ -62,9 +62,9 @@ export const getProps = (page: DocUnite): GetProps => {
       properties,
     }
   } catch (e: any) {
+    out.warning(e.message)
     out.warning('front-matter解析失败，将返回预定义属性')
     out.warning('预定义属性：https://elog.1874.cool/notion/raqyleng501h23p1#预定义属性')
-    out.warning(e.message)
     return {
       body,
       properties,
@@ -133,7 +133,7 @@ export function processMarkdownRaw(raw: string) {
   const hiddenContent = /<div style="display:none">[\s\S]*?<\/div>/gi
   raw = raw.replace(nul, '').replace(nul1, '').replace(hiddenContent, '').replace(emptyAnchor, '')
   // 处理markdown
-  // raw = processMarkdown(raw)
+  raw = processMarkdown(raw)
   const multiBr = /(<br>[\s\n]){2}/gi
   const multiBrEnd = /(<br \/>[\n]?){2}/gi
   const brBug = /<br \/>/g
