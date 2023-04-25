@@ -1,5 +1,18 @@
 # @elog/core
 
+## 0.4.0-beta.7
+
+### Patch Changes
+
+- 修复 markdown 处理问题
+- Updated dependencies
+  - @elog/deploy@0.4.0-beta.7
+  - @elog/plugin-image@0.4.0-beta.7
+  - @elog/sdk-notion@0.4.0-beta.7
+  - @elog/sdk-yuque@0.4.0-beta.7
+  - @elog/shared@0.4.0-beta.7
+  - @elog/types@0.4.0-beta.7
+
 ## 0.4.0-beta.6
 
 ### Patch Changes

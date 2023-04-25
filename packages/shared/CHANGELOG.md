@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.4.0-beta.7
+
+### Patch Changes
+
+- 修复 markdown 处理问题
+
 ## 0.4.0-beta.6
 
 ### Patch Changes

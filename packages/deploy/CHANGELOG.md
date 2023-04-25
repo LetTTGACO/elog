@@ -1,5 +1,16 @@
 # @elog/deploy
 
+## 0.4.0-beta.7
+
+### Patch Changes
+
+- 修复 markdown 处理问题
+- Updated dependencies
+  - @elog/plugin-adapter@0.4.0-beta.7
+  - @elog/sdk-confluence@0.4.0-beta.7
+  - @elog/shared@0.4.0-beta.7
+  - @elog/types@0.4.0-beta.7
+
 ## 0.4.0-beta.6
 
 ### Patch Changes
