@@ -133,7 +133,7 @@ export function processMarkdownRaw(raw: string) {
   const hiddenContent = /<div style="display:none">[\s\S]*?<\/div>/gi
   raw = raw.replace(nul, '').replace(nul1, '').replace(hiddenContent, '').replace(emptyAnchor, '')
   // 处理markdown
-  // raw = processMarkdown(raw)
+  raw = processMarkdown(raw)
   const multiBr = /(<br>[\s\n]){2}/gi
   const multiBrEnd = /(<br \/>[\n]?){2}/gi
   const brBug = /<br \/>/g
