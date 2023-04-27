@@ -1,6 +1,6 @@
 import { NotionDoc } from './types'
 import moment from 'moment'
-import { DocProperties, NotionDocCatalog } from '@elog/types'
+import { DocProperties, DocCatalog } from '@elog/types'
 import { out } from '@elog/shared'
 
 /**
@@ -122,7 +122,7 @@ export function formatDate(date: Date | string) {
 //   }
 // }
 
-export function genCatalog(page: NotionDoc, property: string): NotionDocCatalog[] | undefined {
+export function genCatalog(page: NotionDoc, property: string): DocCatalog[] | undefined {
   const catalog = page.properties[property]
   if (!catalog) {
     out.warning(`${page.properties.title} ${property} 属性缺失或没有值`)
@@ -137,14 +137,12 @@ export function genCatalog(page: NotionDoc, property: string): NotionDocCatalog[
     ]
   } else if (Array.isArray(catalog)) {
     // 多选
-    return catalog
-      .map((item) => {
-        return {
-          title: item,
-          doc_id: page.id,
-        }
-      })
-      .reverse()
+    return catalog.map((item) => {
+      return {
+        title: item,
+        doc_id: page.id,
+      }
+    })
   } else {
     // 没有值
     out.warning(
