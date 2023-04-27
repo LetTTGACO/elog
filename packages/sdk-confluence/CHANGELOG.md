@@ -1,5 +1,14 @@
 # @elog/sdk-confluence
 
+## 0.4.0-beta.8
+
+### Patch Changes
+
+- 优化缓存文件体积
+- Updated dependencies
+  - @elog/shared@0.4.0-beta.8
+  - @elog/types@0.4.0-beta.8
+
 ## 0.4.0-beta.7
 
 ### Patch Changes

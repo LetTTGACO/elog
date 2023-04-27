@@ -1,5 +1,18 @@
 # @elog/core
 
+## 0.4.0-beta.8
+
+### Patch Changes
+
+- 优化缓存文件体积
+- Updated dependencies
+  - @elog/deploy@0.4.0-beta.8
+  - @elog/plugin-image@0.4.0-beta.8
+  - @elog/sdk-notion@0.4.0-beta.8
+  - @elog/sdk-yuque@0.4.0-beta.8
+  - @elog/shared@0.4.0-beta.8
+  - @elog/types@0.4.0-beta.8
+
 ## 0.4.0-beta.7
 
 ### Patch Changes
