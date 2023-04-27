@@ -17,12 +17,13 @@ const sync = async (customConfigPath?: string, customCachePath?: string, envPath
   }
   // 加载配置文件
   const { config: userConfig, cacheFilePath } = getConfig(customConfigPath, customCachePath)
-  const elogConfig: ElogConfig = {
+  const elogConfig = {
+    ...userConfig,
     extension: {
       cachePath: cacheFilePath,
+      ...userConfig.extension,
     },
-    ...userConfig,
-  }
+  } as ElogConfig
   const elog = new Elog(elogConfig)
   await elog.deploy()
 }
