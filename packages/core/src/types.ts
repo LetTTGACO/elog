@@ -12,6 +12,13 @@ type WriteConfig = {
   [key: string]: any
 } & WritePlatformConfig
 
+interface ExtConfig {
+  /** 缓存路径 */
+  cachePath: string
+  /** 是否缓存所有属性 */
+  isFullCache?: boolean
+}
+
 /**
  * Elog 配置
  */
@@ -22,8 +29,8 @@ export interface ElogConfig {
   deploy: DeployConfig
   /** 图片转CDN配置 */
   image?: ImageConfig
-  /** 缓存路径 */
-  cachePath: string
+  /** 拓展配置 */
+  extension: ExtConfig
 }
 
 // region 文章相关
