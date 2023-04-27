@@ -29,7 +29,13 @@ export interface YuqueCatalog {
   level: number
 }
 
-/** Notion文档目录 */
+/** 语雀文档目录 */
+export interface YuqueDocCatalog {
+  title: string
+  doc_id: string
+}
+
+/** Notion目录 */
 export interface NotionCatalog {
   properties: DocProperties
   parent: any
@@ -40,6 +46,12 @@ export interface NotionCatalog {
   archived: boolean
   url: string
   [key: string]: any
+}
+
+/** Notion文档目录 */
+export interface NotionDocCatalog {
+  title: string
+  doc_id: string
 }
 
 /** 文章详情 */
@@ -54,6 +66,6 @@ export interface DocDetail extends BaseDoc {
   body_html?: string
   /** 文章属性 */
   properties: DocProperties
-  /** 语雀文章目录路径， Notion暂不支持 */
-  catalog?: YuqueCatalog[]
+  /** 文章目录路径 */
+  catalog?: YuqueDocCatalog[] | NotionDocCatalog[]
 }
