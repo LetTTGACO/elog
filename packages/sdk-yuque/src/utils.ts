@@ -198,5 +198,10 @@ const processHtml = (content: string) => {
  */
 export const processHtmlRaw = (html: string) => {
   // 给语雀的HTML头部加上css文件
-  return processHtml(html)
+  try {
+    return processHtml(html)
+  } catch (e) {
+    out.warning('HTML解析失败，将返回原始HTML')
+    return html
+  }
 }

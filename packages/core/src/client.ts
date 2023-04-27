@@ -53,7 +53,7 @@ class Elog {
    */
   initIncrementalUpdate(config: ElogConfig) {
     try {
-      const cacheJson: CacheJSON = require(path.join(process.cwd(), config.cachePath))
+      const cacheJson: CacheJSON = require(path.join(process.cwd(), config.extension.cachePath))
       const { docs } = cacheJson
       // 获取缓存文章
       this.cachedArticles = docs || []
@@ -177,11 +177,29 @@ class Elog {
         const notionClient = this.downloaderClient as NotionClient
         catalog = notionClient.ctx.catalog
       }
+
+      let cacheDocs: DocDetail[] = this.cachedArticles.map((item) => {
+        // 只缓存重要属性
+        return {
+          id: item.id,
+          doc_id: item.doc_id,
+          title: item.doc_id,
+          updated: item.updated,
+          body_original: item.body_original,
+          properties: item.properties,
+          catalog: item.catalog,
+          body: '',
+        }
+      })
+      if (this.config.extension?.isFullCache) {
+        // 缓存全部属性
+        cacheDocs = this.cachedArticles
+      }
       const cacheJson: CacheJSON = {
-        docs: this.cachedArticles,
+        docs: cacheDocs,
         catalog,
       }
-      fs.writeFileSync(this.config.cachePath, JSON.stringify(cacheJson, null, 2), {
+      fs.writeFileSync(this.config.extension.cachePath, JSON.stringify(cacheJson, null, 2), {
         encoding: 'utf8',
       })
     } catch (e: any) {

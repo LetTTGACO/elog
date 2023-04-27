@@ -1,4 +1,4 @@
-import Elog from '@elog/core'
+import Elog, { ElogConfig } from '@elog/core'
 import path from 'path'
 import * as dotenv from 'dotenv'
 import { out } from '@elog/shared'
@@ -16,9 +16,14 @@ const sync = async (customConfigPath?: string, customCachePath?: string, envPath
     out.info('环境变量', `未指定env文件，将从系统环境变量中读取`)
   }
   // 加载配置文件
-  const { config, cacheFilePath } = getConfig(customConfigPath, customCachePath)
-  config.cachePath = cacheFilePath
-  const elog = new Elog(config)
+  const { config: userConfig, cacheFilePath } = getConfig(customConfigPath, customCachePath)
+  const elogConfig: ElogConfig = {
+    extension: {
+      cachePath: cacheFilePath,
+    },
+    ...userConfig,
+  }
+  const elog = new Elog(elogConfig)
   await elog.deploy()
 }
 
