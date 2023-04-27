@@ -1,5 +1,5 @@
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints'
-import { DocProperties, NotionCatalog } from '@elog/types'
+import { DocProperties, DocCatalog } from '@elog/types'
 import { NotionSortDirectionEnum, NotionSortPresetEnum } from './const'
 
 export interface NotionSort {
@@ -23,5 +23,5 @@ export interface NotionConfig {
 
 export interface NotionDoc extends PageObjectResponse {
   properties: DocProperties
-  catalog: NotionCatalog[]
+  catalog: DocCatalog[]
 }

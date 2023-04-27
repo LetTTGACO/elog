@@ -2,7 +2,6 @@ import asyncPool from 'tiny-async-pool'
 import { out, request, RequestOptions } from '@elog/shared'
 import { getProps, processHtmlRaw, processMarkdownRaw } from './utils'
 import {
-  YuqueCatalog,
   YuqueConfig,
   YuQueResponse,
   DocUnite,
@@ -10,7 +9,7 @@ import {
   YuqueDocDetail,
   YuqueDocProperties,
 } from './types'
-import { DocDetail } from '@elog/types'
+import { DocDetail, YuqueCatalog, DocCatalog } from '@elog/types'
 
 /** 默认语雀API 路径 */
 const DEFAULT_API_URL = 'https://www.yuque.com/api/v2'
@@ -91,7 +90,11 @@ class YuqueClient {
       for (let i = 0; i < find.depth - 1; i++) {
         const current = this.catalog.find((item) => item.uuid === parentId)!
         parentId = current.parent_uuid
-        catalogPath.push(current)
+        const catalog: DocCatalog = {
+          title: current.title,
+          doc_id: yuqueDoc.slug,
+        }
+        catalogPath.push(catalog)
       }
       docInfo.catalog = catalogPath.reverse()
     }

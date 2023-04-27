@@ -4,7 +4,7 @@ import asyncPool from 'tiny-async-pool'
 import { genCatalog, props } from './utils'
 import { NotionConfig, NotionDoc, NotionSort } from './types'
 import { out } from '@elog/shared'
-import { DocDetail, NotionCatalog, NotionDocCatalog } from '@elog/types'
+import { DocDetail, NotionCatalog, DocCatalog } from '@elog/types'
 import { NotionSortDirectionEnum, NotionSortPresetEnum } from './const'
 
 /**
@@ -136,7 +136,7 @@ class NotionClient {
     const blocks = await this.n2m.pageToMarkdown(page.id)
     let body = this.n2m.toMarkdownString(blocks)
     const timestamp = new Date(page.last_edited_time).getTime()
-    let catalog: NotionDocCatalog[] | undefined
+    let catalog: DocCatalog[] | undefined
     if (this.config.catalog?.enable) {
       // 生成目录
       catalog = genCatalog(page, this.config.catalog.property)

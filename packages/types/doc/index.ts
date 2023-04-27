@@ -30,7 +30,7 @@ export interface YuqueCatalog {
 }
 
 /** 语雀文档目录 */
-export interface YuqueDocCatalog {
+export interface DocCatalog {
   title: string
   doc_id: string
 }
@@ -48,12 +48,6 @@ export interface NotionCatalog {
   [key: string]: any
 }
 
-/** Notion文档目录 */
-export interface NotionDocCatalog {
-  title: string
-  doc_id: string
-}
-
 /** 文章详情 */
 export interface DocDetail extends BaseDoc {
   /** 实际部署时的文档字符串 */
@@ -67,5 +61,5 @@ export interface DocDetail extends BaseDoc {
   /** 文章属性 */
   properties: DocProperties
   /** 文章目录路径 */
-  catalog?: YuqueDocCatalog[] | NotionDocCatalog[]
+  catalog?: DocCatalog[]
 }

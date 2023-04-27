@@ -126,23 +126,6 @@ export interface YuqueDocDetail {
   word_count: number
 }
 
-/**
- * // NOTE 官方文档说不稳定
- * 目录详情
- */
-export interface YuqueCatalog {
-  /** 类型：文章/分组 */
-  type: 'DOC' | 'TITLE'
-  /** 名称 */
-  title: string
-  uuid: string
-  child_uuid: string
-  parent_uuid: string
-  slug: string
-  depth: number
-  level: number
-}
-
 /** 语雀文档（不带详情）列表返回 */
 export interface YuqueDoc {
   cover: null | string
