@@ -125,7 +125,7 @@ export function formatDate(date: Date | string) {
 export function genCatalog(page: NotionDoc, property: string): DocCatalog[] | undefined {
   const catalog = page.properties[property]
   if (!catalog) {
-    out.warning(`${page.properties.title} ${property} 属性缺失或没有值`)
+    out.warning(`${page.properties.title} ${property} 属性缺失`)
     return undefined
   } else if (typeof catalog === 'string') {
     // 单选
