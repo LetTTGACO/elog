@@ -32,7 +32,7 @@ export const getConfig = (customConfigPath?: string, customCachePath?: string) =
 
   const configFilePath = path.join(rootPath, configFile)
 
-  const config: Omit<ElogConfig, 'extension'> = require(configFilePath)
+  const config: Partial<ElogConfig> = require(configFilePath)
 
   return {
     config,
