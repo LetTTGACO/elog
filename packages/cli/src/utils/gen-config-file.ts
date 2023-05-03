@@ -16,7 +16,11 @@ const configJsStr =
   '      token: process.env.NOTION_TOKEN,\n' +
   '      databaseId: process.env.NOTION_DATABASE_ID,\n' +
   "      filter: true, // {property: 'status', select: {equals: '已发布'}}\n" +
-  "      sorts: true // [{property: 'date', direction: 'descending'}],\n" +
+  "      sorts: true, // [{timestamp: 'created_time', direction: 'descending'}],\n" +
+  '      catalog: {\n' +
+  '        enable: false,\n' +
+  '        property: "catalog"\n' +
+  '      }\n' +
   '    },\n' +
   '  },\n' +
   '  deploy: {\n' +
@@ -108,6 +112,10 @@ const configJson = JSON.stringify(
         databaseId: '',
         filter: true,
         sorts: true,
+        catalog: {
+          enable: false,
+          property: 'catalog',
+        },
       },
     },
     deploy: {
