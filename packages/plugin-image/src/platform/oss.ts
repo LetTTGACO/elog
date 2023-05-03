@@ -6,17 +6,18 @@ import { getSecretExt } from './utils'
 
 class OssClient {
   config: OssConfig
-  imgClient: OSS
+  imgClient?: OSS
 
   constructor(config: OssConfig) {
     this.config = config
-    this.imgClient = this.initOss()
+    // 尝试初始化OSS实例
+    void this.init()
   }
 
   /**
    * 初始化配置和OSS实例
    */
-  initOss() {
+  async init() {
     // 处理prefixKey配置
     if (this.config.prefixKey?.endsWith('/')) {
       this.config.prefixKey = this.config.prefixKey.slice(0, -1)
@@ -24,7 +25,7 @@ class OssClient {
     // 判断是否开启拓展点
     if (this.config.secretExt) {
       // 如果开了就从拓展点读取
-      this.config = getSecretExt(this.config)
+      this.config = await getSecretExt(this.config)
     } else {
       // 如果没开拓展点，就从配置文件/环境变量中读取
       this.config = {
@@ -33,7 +34,7 @@ class OssClient {
         secretKey: this.config.secretKey || process.env.OSS_SECRET_KEY!,
       }
     }
-    return new OSS(this.config)
+    this.imgClient = new OSS(this.config)
   }
 
   /**
@@ -41,8 +42,11 @@ class OssClient {
    * @param fileName
    */
   async hasImage(fileName: string): Promise<string | undefined> {
+    if (!this.imgClient) {
+      await this.init()
+    }
     try {
-      await this.imgClient.head(`${this.config.prefixKey}/${fileName}`)
+      await this.imgClient!.head(`${this.config.prefixKey}/${fileName}`)
       if (this.config.host) {
         // TODO 处理host的http完整性
         return `https://${this.config.host}/${this.config.prefixKey}/${fileName}`
@@ -60,13 +64,16 @@ class OssClient {
    * @param fileName
    */
   async uploadImg(imgBuffer: Buffer, fileName: string): Promise<string | undefined> {
+    if (!this.imgClient) {
+      await this.init()
+    }
     try {
-      const res = await this.imgClient.put(`${this.config.prefixKey}/${fileName}`, imgBuffer)
+      const res = await this.imgClient!.put(`${this.config.prefixKey}/${fileName}`, imgBuffer)
       if (this.config.host) {
         // TODO 处理host的http完整性
         return `https://${this.config.host}/${this.config.prefixKey}/${fileName}`
       }
-      return res.url
+      return res!.url
     } catch (e: any) {
       out.warning('跳过上传', `上传图片失败，请检查: ${e.message}`)
       // TODO DEBUG 模式下输出

@@ -1,10 +1,11 @@
 import { Client } from '@notionhq/client'
 import { NotionToMarkdown } from 'notion-to-md'
 import asyncPool from 'tiny-async-pool'
-import { props } from './utils'
-import { NotionConfig, NotionDoc, NotionSort, NotionSortPreset } from './types'
+import { genCatalog, props } from './utils'
+import { NotionConfig, NotionDoc, NotionSort } from './types'
 import { out } from '@elog/shared'
-import { DocDetail, NotionCatalog } from '@elog/types'
+import { DocDetail, NotionCatalog, DocCatalog } from '@elog/types'
+import { NotionSortDirectionEnum, NotionSortPresetEnum } from './const'
 
 /**
  * Notion SDK
@@ -23,7 +24,20 @@ class NotionClient {
     }
     this.notion = new Client({ auth: this.config.token })
     this.n2m = new NotionToMarkdown({ notionClient: this.notion })
-    // debug(`create client: databaseId: ${config.databaseId}`)
+    this.initCatalogConfig()
+  }
+
+  /**
+   * 初始化目录配置
+   */
+  initCatalogConfig() {
+    if (this.config.catalog?.enable) {
+      // 检查分类字段是否存在
+      if (!this.config.catalog.property) {
+        this.config.catalog.property = 'catalog'
+        out.warning('未设置分类字段，默认按照 catalog 字段分类，请检查Notion数据库是否存在该属性')
+      }
+    }
   }
 
   /**
@@ -37,39 +51,39 @@ class NotionClient {
         sorts = undefined
       } else {
         // 默认排序
-        sorts = [{ timestamp: 'created_time', direction: 'descending' }]
+        sorts = [{ timestamp: 'created_time', direction: NotionSortDirectionEnum.descending }]
       }
-      sorts = [{ timestamp: 'created_time', direction: 'descending' }]
+      sorts = [{ timestamp: 'created_time', direction: NotionSortDirectionEnum.descending }]
     } else if (typeof this.config.sorts === 'string') {
       // 预设值
-      const sortPreset = this.config.sorts as NotionSortPreset
+      const sortPreset = this.config.sorts as NotionSortPresetEnum
       switch (sortPreset) {
-        case NotionSortPreset.dateDesc:
-          sorts = [{ property: 'date', direction: 'descending' }]
+        case NotionSortPresetEnum.dateDesc:
+          sorts = [{ property: 'date', direction: NotionSortDirectionEnum.descending }]
           break
-        case NotionSortPreset.dateAsc:
-          sorts = [{ property: 'date', direction: 'ascending' }]
+        case NotionSortPresetEnum.dateAsc:
+          sorts = [{ property: 'date', direction: NotionSortDirectionEnum.ascending }]
           break
-        case NotionSortPreset.sortDesc:
-          sorts = [{ property: 'sort', direction: 'descending' }]
+        case NotionSortPresetEnum.sortDesc:
+          sorts = [{ property: 'sort', direction: NotionSortDirectionEnum.descending }]
           break
-        case NotionSortPreset.sortAsc:
-          sorts = [{ property: 'sort', direction: 'ascending' }]
+        case NotionSortPresetEnum.sortAsc:
+          sorts = [{ property: 'sort', direction: NotionSortDirectionEnum.ascending }]
           break
-        case NotionSortPreset.createTimeDesc:
-          sorts = [{ timestamp: 'created_time', direction: 'descending' }]
+        case NotionSortPresetEnum.createTimeDesc:
+          sorts = [{ timestamp: 'created_time', direction: NotionSortDirectionEnum.descending }]
           break
-        case NotionSortPreset.createTimeAsc:
-          sorts = [{ timestamp: 'created_time', direction: 'ascending' }]
+        case NotionSortPresetEnum.createTimeAsc:
+          sorts = [{ timestamp: 'created_time', direction: NotionSortDirectionEnum.ascending }]
           break
-        case NotionSortPreset.updateTimeDesc:
-          sorts = [{ timestamp: 'last_edited_time', direction: 'descending' }]
+        case NotionSortPresetEnum.updateTimeDesc:
+          sorts = [{ timestamp: 'last_edited_time', direction: NotionSortDirectionEnum.descending }]
           break
-        case NotionSortPreset.updateTimeAsc:
-          sorts = [{ timestamp: 'last_edited_time', direction: 'ascending' }]
+        case NotionSortPresetEnum.updateTimeAsc:
+          sorts = [{ timestamp: 'last_edited_time', direction: NotionSortDirectionEnum.ascending }]
           break
         default:
-          sorts = [{ timestamp: 'created_time', direction: 'descending' }]
+          sorts = [{ timestamp: 'created_time', direction: NotionSortDirectionEnum.descending }]
       }
     } else {
       // 自定义排序
@@ -122,6 +136,11 @@ class NotionClient {
     const blocks = await this.n2m.pageToMarkdown(page.id)
     let body = this.n2m.toMarkdownString(blocks)
     const timestamp = new Date(page.last_edited_time).getTime()
+    let catalog: DocCatalog[] | undefined
+    if (this.config.catalog?.enable) {
+      // 生成目录
+      catalog = genCatalog(page, this.config.catalog.property)
+    }
     return {
       id: page.id,
       doc_id: page.id,
@@ -129,6 +148,7 @@ class NotionClient {
       body,
       body_original: body,
       updated: timestamp,
+      catalog,
     }
   }
 

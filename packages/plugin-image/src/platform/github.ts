@@ -5,13 +5,16 @@ import { getSecretExt } from './utils'
 // Github图床
 class GithubClient {
   config: GithubConfig
+  /** 是否初始化结束 */
+  isInit?: boolean
 
   constructor(config: GithubConfig) {
     this.config = config
-    this.init()
+    // 尝试初始化Github配置
+    void this.init()
   }
 
-  init() {
+  async init() {
     if (!this.config.host) {
       out.info('未指定加速域名，将使用默认域名：https://raw.githubusercontent.com')
     } else if (this.config.host?.includes('cdn.jsdelivr.net')) {
@@ -21,7 +24,7 @@ class GithubClient {
     // 判断是否开启拓展点
     if (this.config.secretExt) {
       // 如果开了就从拓展点读取
-      this.config = getSecretExt(this.config)
+      this.config = await getSecretExt(this.config)
     } else {
       // 如果没开拓展点，就从配置文件/环境变量中读取
       this.config = {
@@ -29,6 +32,7 @@ class GithubClient {
         token: this.config.token || process.env.GITHUB_TOKEN!,
       }
     }
+    this.isInit = true
   }
 
   async _fetch(
@@ -36,6 +40,9 @@ class GithubClient {
     options: RequestOptions,
     base64File?: string,
   ): Promise<string | undefined> {
+    if (!this.isInit) {
+      await this.init()
+    }
     const path = `https://api.github.com/repos/${this.config.user}/${this.config.repo}/contents/${this.config.prefixKey}/${fileName}`
     const data = base64File && {
       message: 'Upload by elog',

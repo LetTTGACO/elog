@@ -53,7 +53,7 @@ class DeployLocal {
           // 生成文件夹
           out.info('生成文档', `${fileName}.md`)
         } else {
-          out.warning('目录缺失', `${fileName}缺失目录信息，所有文档将生成在指定目录`)
+          out.warning('目录缺失', `${fileName}缺失目录信息，将生成在指定目录`)
           // 不存在则直接生成
           fileName = this.checkFileName(fileName, fileName, post.doc_id)
           postPath = path.join(outputDir, `${fileName}.md`)
