@@ -17,10 +17,7 @@ const configJsStr =
   '      databaseId: process.env.NOTION_DATABASE_ID,\n' +
   "      filter: true, // {property: 'status', select: {equals: '已发布'}}\n" +
   "      sorts: true, // [{timestamp: 'created_time', direction: 'descending'}],\n" +
-  '      catalog: {\n' +
-  '        enable: false,\n' +
-  '        property: "catalog"\n' +
-  '      }\n' +
+  '      catalog: false\n' +
   '    },\n' +
   '  },\n' +
   '  deploy: {\n' +

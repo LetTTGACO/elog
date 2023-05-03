@@ -37,6 +37,7 @@ class NotionClient {
         this.config.catalog = { enable: false }
       } else {
         // 启用目录
+        out.info('开启分类', '默认按照 catalog 字段分类，请检查Notion数据库是否存在该属性')
         this.config.catalog = { enable: true, property: 'catalog' }
       }
     } else if (typeof this.config.catalog === 'object') {
