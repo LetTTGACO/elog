@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.4.0-beta.10
+
+### Patch Changes
+
+- 1.调整 elog 初始化配置 2.调整 notion 配置项逻辑
+
 ## 0.4.0-beta.9
 
 ### Patch Changes
