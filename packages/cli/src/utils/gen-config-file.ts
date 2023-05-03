@@ -124,7 +124,7 @@ const configJson = JSON.stringify(
         outputDir: '',
         filename: 'title | urlname',
         format: 'markdown | matter-markdown | wiki | html',
-        catalog: true,
+        catalog: false,
         formatExt: '', // 可选
       },
       confluence: {
