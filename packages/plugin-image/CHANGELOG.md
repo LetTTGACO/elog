@@ -1,5 +1,14 @@
 # @elog/plugin-image
 
+## 0.4.0-beta.9
+
+### Patch Changes
+
+- 1.下线同步转异步逻辑和依赖包@kaciras/deasync，走正常初始化逻辑 2.初始化增加字段，适配 Notion 按目录下载
+- Updated dependencies
+  - @elog/shared@0.4.0-beta.9
+  - @elog/types@0.4.0-beta.9
+
 ## 0.4.0-beta.8
 
 ### Patch Changes
