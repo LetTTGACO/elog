@@ -9,7 +9,7 @@ export interface NotionSort {
 
 export interface NotionCatalogConfig {
   enable: boolean
-  property: string
+  property?: string
 }
 
 export interface NotionConfig {
@@ -18,7 +18,7 @@ export interface NotionConfig {
   databaseId: string
   filter?: any | boolean
   sorts?: boolean | NotionSortPresetEnum | NotionSort[]
-  catalog?: NotionCatalogConfig
+  catalog?: boolean | NotionCatalogConfig
 }
 
 export interface NotionDoc extends PageObjectResponse {

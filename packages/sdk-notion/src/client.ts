@@ -2,7 +2,7 @@ import { Client } from '@notionhq/client'
 import { NotionToMarkdown } from 'notion-to-md'
 import asyncPool from 'tiny-async-pool'
 import { genCatalog, props } from './utils'
-import { NotionConfig, NotionDoc, NotionSort } from './types'
+import { NotionCatalogConfig, NotionConfig, NotionDoc, NotionSort } from './types'
 import { out } from '@elog/shared'
 import { DocDetail, NotionCatalog, DocCatalog } from '@elog/types'
 import { NotionSortDirectionEnum, NotionSortPresetEnum } from './const'
@@ -31,11 +31,22 @@ class NotionClient {
    * 初始化目录配置
    */
   initCatalogConfig() {
-    if (this.config.catalog?.enable) {
-      // 检查分类字段是否存在
-      if (!this.config.catalog.property) {
-        this.config.catalog.property = 'catalog'
-        out.warning('未设置分类字段，默认按照 catalog 字段分类，请检查Notion数据库是否存在该属性')
+    if (typeof this.config.catalog === 'boolean') {
+      if (!this.config.catalog) {
+        // 不启用目录
+        this.config.catalog = { enable: false }
+      } else {
+        // 启用目录
+        out.info('开启分类', '默认按照 catalog 字段分类，请检查Notion数据库是否存在该属性')
+        this.config.catalog = { enable: true, property: 'catalog' }
+      }
+    } else if (typeof this.config.catalog === 'object') {
+      if (this.config.catalog.enable) {
+        // 检查分类字段是否存在
+        if (!this.config.catalog.property) {
+          this.config.catalog.property = 'catalog'
+          out.warning('未设置分类字段，默认按照 catalog 字段分类，请检查Notion数据库是否存在该属性')
+        }
       }
     }
   }
@@ -137,9 +148,10 @@ class NotionClient {
     let body = this.n2m.toMarkdownString(blocks)
     const timestamp = new Date(page.last_edited_time).getTime()
     let catalog: DocCatalog[] | undefined
-    if (this.config.catalog?.enable) {
+    const catalogConfig = this.config.catalog as NotionCatalogConfig
+    if (catalogConfig?.enable) {
       // 生成目录
-      catalog = genCatalog(page, this.config.catalog.property)
+      catalog = genCatalog(page, catalogConfig.property!)
     }
     return {
       id: page.id,
