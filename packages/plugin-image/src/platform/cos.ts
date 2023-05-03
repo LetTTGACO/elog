@@ -8,20 +8,21 @@ import { getSecretExt } from './utils'
  */
 class CosClient {
   config: CosConfig
-  imgClient: COS
+  imgClient?: COS
   constructor(config: CosConfig) {
     this.config = config
-    this.imgClient = this.initCos()
+    // 尝试初始化COS实例
+    void this.initCos()
   }
 
   /**
    * 初始化配置和COS实例
    */
-  initCos() {
+  async initCos() {
     // 判断是否开启拓展点
     if (this.config.secretExt) {
       // 如果开了就从拓展点读取
-      this.config = getSecretExt(this.config)
+      this.config = await getSecretExt(this.config)
     } else {
       // 如果没开拓展点，就从配置文件/环境变量中读取
       this.config = {
@@ -30,7 +31,7 @@ class CosClient {
         secretKey: this.config.secretKey || process.env.COS_SECRET_KEY!,
       }
     }
-    return new COS(this.config)
+    this.imgClient = new COS(this.config)
   }
 
   /**
@@ -38,8 +39,11 @@ class CosClient {
    * @param fileName
    */
   async hasImage(fileName: string): Promise<string | undefined> {
+    if (!this.imgClient) {
+      await this.initCos()
+    }
     try {
-      await this.imgClient.headObject({
+      await this.imgClient!.headObject({
         Bucket: this.config.bucket, // 存储桶名字（必须）
         Region: this.config.region, // 存储桶所在地域，必须字段
         Key: `${this.config.prefixKey}/${fileName}`, //  文件名  必须
@@ -59,8 +63,11 @@ class CosClient {
    * @param fileName
    */
   async uploadImg(imgBuffer: Buffer, fileName: string): Promise<string | undefined> {
+    if (!this.imgClient) {
+      await this.initCos()
+    }
     try {
-      const res = await this.imgClient.putObject({
+      const res = await this.imgClient!.putObject({
         Bucket: this.config.bucket, // 存储桶名字（必须）
         Region: this.config.region, // 存储桶所在地域，必须字段
         Key: `${this.config.prefixKey}/${fileName}`, //  文件名  必须
