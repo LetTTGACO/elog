@@ -1,0 +1,28 @@
+{
+  "name": "@elog/sdk-flowus",
+  "version": "0.4.0",
+  "description": "elog的FlowUs SDK，从FlowUs下载文档",
+  "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/sdk-confluence#readme",
+  "author": "1874 <me@mail.1874.cool>",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LetTTGACO/elog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LetTTGACO/elog/issues"
+  },
+  "scripts": {
+    "build": "father build"
+  },
+  "dependencies": {
+    "@elog/shared": "workspace:*",
+    "@elog/types": "workspace:*"
+  }
+}

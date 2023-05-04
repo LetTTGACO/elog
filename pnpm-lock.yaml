@@ -175,6 +175,14 @@ importers:
       '@elog/shared': link:../shared
       '@elog/types': link:../types
 
+  packages/sdk-flowus:
+    specifiers:
+      '@elog/shared': workspace:*
+      '@elog/types': workspace:*
+    dependencies:
+      '@elog/shared': link:../shared
+      '@elog/types': link:../types
+
   packages/sdk-notion:
     specifiers:
       '@elog/shared': workspace:*
