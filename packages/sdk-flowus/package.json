@@ -2,7 +2,7 @@
   "name": "@elog/sdk-flowus",
   "version": "0.4.0",
   "description": "elog的FlowUs SDK，从FlowUs下载文档",
-  "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/sdk-confluence#readme",
+  "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/sdk-flowus#readme",
   "author": "1874 <me@mail.1874.cool>",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -23,6 +23,13 @@
   },
   "dependencies": {
     "@elog/shared": "workspace:*",
-    "@elog/types": "workspace:*"
+    "@flowusx/flowus-client": "^0.0.0",
+    "@flowusx/flowus-to-md": "^0.0.0",
+    "moment": "^2.29.4",
+    "tiny-async-pool": "^1.3.0"
+  },
+  "devDependencies": {
+    "@elog/types": "workspace:*",
+    "@flowusx/flowus-types": "^0.0.0"
   }
 }

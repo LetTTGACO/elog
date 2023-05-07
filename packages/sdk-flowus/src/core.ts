@@ -1,14 +1,15 @@
-import NotionClient from './client'
-import { NotionConfig, NotionDoc } from './types'
+import { FlowUsConfig, FlowUsDoc } from './types'
+import FlowUsClient from './client'
 import { BaseDoc } from '@elog/types'
 
-class Notion {
-  config: NotionConfig
-  ctx: NotionClient
-  pages: NotionDoc[] = []
-  constructor(config: NotionConfig) {
+class FlowUs {
+  config: FlowUsConfig
+  ctx: FlowUsClient
+  pages: FlowUsDoc[] = []
+
+  constructor(config: FlowUsConfig) {
     this.config = config
-    this.ctx = new NotionClient(config)
+    this.ctx = new FlowUsClient(config)
   }
 
   /**
@@ -18,13 +19,11 @@ class Notion {
     const pages = await this.ctx.getPageList()
     this.pages = pages
     return pages.map((page) => {
-      // 最后更新时间
-      const timestamp = new Date(page.last_edited_time).getTime()
       return {
         // 暂时只需要返回这些属性
         id: page.id,
         doc_id: page.id,
-        updated: timestamp,
+        updated: page.updated,
       }
     })
   }
@@ -38,4 +37,4 @@ class Notion {
   }
 }
 
-export default Notion
+export default FlowUs
