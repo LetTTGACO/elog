@@ -2,9 +2,15 @@ import { Client } from '@notionhq/client'
 import { NotionToMarkdown } from 'notion-to-md'
 import asyncPool from 'tiny-async-pool'
 import { genCatalog, props } from './utils'
-import { NotionCatalogConfig, NotionConfig, NotionDoc, NotionSort } from './types'
+import {
+  NotionCatalogConfig,
+  NotionConfig,
+  NotionDoc,
+  NotionQueryParams,
+  NotionSort,
+} from './types'
 import { out } from '@elog/shared'
-import { DocDetail, NotionCatalog, DocCatalog } from '@elog/types'
+import { DocDetail, DocCatalog, NotionCatalog } from '@elog/types'
 import { NotionSortDirectionEnum, NotionSortPresetEnum } from './const'
 
 /**
@@ -15,6 +21,8 @@ class NotionClient {
   notion: Client
   n2m: NotionToMarkdown
   catalog: NotionCatalog[] = []
+  requestQueryParams: NotionQueryParams
+  docList: NotionDoc[] = []
   constructor(config: NotionConfig) {
     this.config = config
     this.config.token = config.token || process.env.NOTION_TOKEN!
@@ -25,6 +33,7 @@ class NotionClient {
     this.notion = new Client({ auth: this.config.token })
     this.n2m = new NotionToMarkdown({ notionClient: this.notion })
     this.initCatalogConfig()
+    this.requestQueryParams = this.initRequestQueryParams()
   }
 
   /**
@@ -52,9 +61,9 @@ class NotionClient {
   }
 
   /**
-   * 获取指定文章列表
+   * 初始化请求参数
    */
-  async getPageList() {
+  initRequestQueryParams() {
     let sorts: any
     if (typeof this.config.sorts === 'boolean') {
       if (!this.config.sorts) {
@@ -123,11 +132,19 @@ class NotionClient {
     } else {
       filter = this.config.filter
     }
-
-    let resp = await this.notion.databases.query({
+    return {
       database_id: this.config.databaseId,
       filter,
       sorts,
+    }
+  }
+
+  /**
+   * 获取指定文章列表
+   */
+  async getPageList() {
+    let resp = await this.notion.databases.query({
+      ...this.requestQueryParams,
     })
     let docs = resp.results as NotionDoc[]
     docs = docs.map((doc) => {
@@ -135,8 +152,17 @@ class NotionClient {
       doc.properties = props(doc)
       return doc
     })
-    this.catalog = docs as unknown as NotionCatalog[]
-    return docs
+    this.catalog.push(...docs)
+    this.docList.push(...docs)
+    // 分页查询
+    if (resp.has_more && resp.next_cursor) {
+      this.requestQueryParams = {
+        ...this.requestQueryParams,
+        start_cursor: resp.next_cursor,
+      }
+      await this.getPageList()
+    }
+    return this.docList
   }
 
   /**
