@@ -127,6 +127,8 @@ class YuqueClient {
       out.access('跳过', '没有需要下载的文章')
       return articleList
     }
+    out.info('待下载数', String(docs.length))
+    out.info('开始下载文档...')
     const promise = async (doc: YuqueDoc) => {
       out.info('下载文档', doc.title)
       let article = await this.getDocDetail(doc.slug)
@@ -141,7 +143,7 @@ class YuqueClient {
       articleList.push(article)
     }
     await asyncPool(5, docs, promise)
-    out.access('待更新数', String(articleList.length))
+    out.access('已下载数', String(articleList.length))
     return articleList
   }
 }

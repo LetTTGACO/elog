@@ -1,5 +1,14 @@
 # @elog/sdk-notion
 
+## 0.4.1
+
+### Patch Changes
+
+- 修复 Notion 数据分页问题
+- Updated dependencies
+  - @elog/shared@0.4.1
+  - @elog/types@0.4.1
+
 ## 0.4.0
 
 ### Minor Changes
