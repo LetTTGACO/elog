@@ -1,10 +1,29 @@
+import { FlowUsSortPresetEnum } from './const'
+import { DocProperties } from '@elog/types'
+
 export interface FlowUsCatalogConfig {
   enable: boolean
   property?: string
 }
 
+export interface FlowUsFilterItem {
+  property: string
+  value: string
+}
+
+export interface FlowUsSortItem {
+  property: string
+  direction: string
+  isDate?: boolean
+}
+
+export type FlowUsFilter = boolean | FlowUsFilterItem | FlowUsFilterItem[]
+export type FlowUsSort = boolean | FlowUsSortPresetEnum | FlowUsSortItem | FlowUsSortItem[]
+
 export interface FlowUsConfig {
-  pageId: string
+  tablePageId: string
+  filter?: FlowUsFilter
+  sort?: FlowUsSort
   catalog?: boolean | FlowUsCatalogConfig
 }
 
@@ -13,4 +32,12 @@ export interface FlowUsDoc {
   doc_id: string
   title: string
   updated: number
+  properties: DocProperties
+  createdAt: number
+  updatedAt: number
+}
+
+export interface FlowUsFilterAndSortParams {
+  filter?: FlowUsFilterItem | FlowUsFilterItem[]
+  sort?: FlowUsSortItem
 }

@@ -1,6 +1,4 @@
 import FlowUs from './core'
-import { FlowUsConfig } from './types'
-
-export { FlowUsConfig }
+export * from './types'
 
 export default FlowUs

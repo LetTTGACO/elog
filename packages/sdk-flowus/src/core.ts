@@ -1,6 +1,7 @@
 import { FlowUsConfig, FlowUsDoc } from './types'
 import FlowUsClient from './client'
 import { BaseDoc } from '@elog/types'
+import { out } from '@elog/shared'
 
 class FlowUs {
   config: FlowUsConfig
@@ -16,8 +17,10 @@ class FlowUs {
    * 获取文章列表（不含详情）
    */
   async getDocList(): Promise<BaseDoc[]> {
+    out.info('正在获取文档列表，请稍等...')
     const pages = await this.ctx.getPageList()
     this.pages = pages
+    out.info('文档总数', String(this.pages.length))
     return pages.map((page) => {
       return {
         // 暂时只需要返回这些属性
