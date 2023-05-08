@@ -180,6 +180,9 @@ class Elog {
       } else if (this.config.write.platform === WritePlatform.NOTION) {
         const notionClient = this.downloaderClient as NotionClient
         catalog = notionClient.ctx.catalog
+      } else if (this.config.write.platform === WritePlatform.FLOWUS) {
+        const flowusClient = this.downloaderClient as FlowUsClient
+        catalog = flowusClient.ctx.catalog
       }
 
       let cacheDocs: DocDetail[] = this.cachedArticles.map((item) => {
