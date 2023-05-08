@@ -1,6 +1,7 @@
 import NotionClient from './client'
 import { NotionConfig, NotionDoc } from './types'
 import { BaseDoc } from '@elog/types'
+import { out } from '@elog/shared'
 
 class Notion {
   config: NotionConfig
@@ -15,8 +16,10 @@ class Notion {
    * 获取文章列表（不含详情）
    */
   async getDocList(): Promise<BaseDoc[]> {
+    out.info('正在获取文档列表，请稍等...')
     const pages = await this.ctx.getPageList()
     this.pages = pages
+    out.info('文档总数', String(this.pages.length))
     return pages.map((page) => {
       // 最后更新时间
       const timestamp = new Date(page.last_edited_time).getTime()

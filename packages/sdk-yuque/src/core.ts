@@ -1,6 +1,7 @@
 import type { YuqueConfig, YuqueDoc } from './types'
 import YuqueClient from './client'
 import { BaseDoc } from '@elog/types'
+import { out } from '@elog/shared'
 
 /**
  * Yuque SDK
@@ -21,6 +22,7 @@ class Yuque {
    * @return {Promise<DocDetail[]>} return docs
    */
   async getDocList(): Promise<BaseDoc[]> {
+    out.info('正在获取文档列表，请稍等...')
     let pages = await this.ctx.getDocList()
     // 过滤未发布和公开的文章
     pages = pages
@@ -31,6 +33,7 @@ class Yuque {
         return this.config.onlyPublished ? !!page.status : true
       })
     this.pages = pages
+    out.info('文档总数', String(this.pages.length))
     return pages.map((page) => {
       const timestamp = new Date(page.updated_at).getTime()
       return {

@@ -156,6 +156,7 @@ class NotionClient {
     this.docList.push(...docs)
     // 分页查询
     if (resp.has_more && resp.next_cursor) {
+      // 有更多数据
       this.requestQueryParams = {
         ...this.requestQueryParams,
         start_cursor: resp.next_cursor,
@@ -215,6 +216,8 @@ class NotionClient {
       out.access('跳过', '没有需要下载的文章')
       return articleList
     }
+    out.info('待下载数', String(pages.length))
+    out.info('开始下载文档...')
     const promise = async (page: NotionDoc) => {
       let article = await this.download(page)
       out.info('下载文档', article.properties.title)

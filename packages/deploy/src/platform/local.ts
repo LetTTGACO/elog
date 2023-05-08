@@ -83,7 +83,7 @@ class DeployLocal {
     let newName: string
     if (this.cacheFileNames.includes(fileName)) {
       const newFileName = `${originName}_${doc_id}`
-      out.warning('文档重复', `${originName}.md文档重复，将为自动重命名为${newFileName}.md`)
+      out.warning('文档重复', `${originName}.md文档已存在，将为自动重命名为${newFileName}.md`)
       newName = newFileName
     } else {
       newName = originName
