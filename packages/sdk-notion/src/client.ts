@@ -73,7 +73,6 @@ class NotionClient {
         // 默认排序
         sorts = [{ timestamp: 'created_time', direction: NotionSortDirectionEnum.descending }]
       }
-      sorts = [{ timestamp: 'created_time', direction: NotionSortDirectionEnum.descending }]
     } else if (typeof this.config.sorts === 'string') {
       // 预设值
       const sortPreset = this.config.sorts as NotionSortPresetEnum
@@ -123,12 +122,7 @@ class NotionClient {
         }
       }
     } else if (!this.config.filter) {
-      filter = {
-        property: 'status',
-        select: {
-          equals: '已发布',
-        },
-      }
+      filter = undefined
     } else {
       filter = this.config.filter
     }
