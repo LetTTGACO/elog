@@ -26,12 +26,13 @@
     "@elog/plugin-image": "workspace:*",
     "@elog/sdk-notion": "workspace:*",
     "@elog/sdk-yuque": "workspace:*",
-    "@elog/shared": "workspace:*",
-    "@elog/types": "workspace:*"
+    "@elog/sdk-flowus": "workspace:*",
+    "@elog/shared": "workspace:*"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.189",
     "@types/mkdirp": "^1.0.2",
-    "@types/rimraf": "^3.0.2"
+    "@types/rimraf": "^3.0.2",
+    "@elog/types": "workspace:*"
   }
 }

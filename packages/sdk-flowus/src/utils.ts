@@ -1,7 +1,7 @@
 import { out } from '@elog/shared'
 import { DocCatalog, DocProperties } from '@elog/types'
 import { Blocks } from '@flowusx/flowus-types'
-import * as moment from 'moment'
+import moment from 'moment'
 
 export function formatDate(date: Date | string | number) {
   return moment(date).format('YYYY-MM-DD HH:mm:ss')
@@ -40,7 +40,7 @@ export function getPropVal(type: string, val: any) {
     //   // 更新时间直接在外面取值
     //   return ''
     case 'date':
-      return formatDate(val.startDate + ' ' + val.startTime)
+      return val.startDate.replace('/', '-') + ' ' + val.startTime
     case 'multi_select':
       return val.text.split(',')
     case 'person':

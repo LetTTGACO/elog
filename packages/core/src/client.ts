@@ -1,6 +1,7 @@
 // write
 import YuqueClient, { YuqueConfig } from '@elog/sdk-yuque'
 import NotionClient, { NotionConfig } from '@elog/sdk-notion'
+import FlowUsClient, { FlowUsConfig } from '@elog/sdk-flowus'
 // deploy
 import DeployClient, { DeployConfig } from '@elog/deploy'
 // imageClient
@@ -73,6 +74,9 @@ class Elog {
     } else if (config.write.platform === WritePlatform.NOTION) {
       let notionConfig = config.write.notion as NotionConfig
       this.downloaderClient = new NotionClient(notionConfig)
+    } else if (config.write.platform === WritePlatform.FLOWUS) {
+      let notionConfig = config.write.flowus as FlowUsConfig
+      this.downloaderClient = new FlowUsClient(notionConfig)
     }
   }
 

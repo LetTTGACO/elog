@@ -25,18 +25,20 @@ class FlowUsClient {
 
   async getPageList(): Promise<FlowUsDoc[]> {
     const pageBlocks = await this.flowus.getDataTableData(this.config.pageId)
-    const docs = Object.keys(pageBlocks.blocks)
-      .map((item) => {
-        return pageBlocks.blocks[item]
-      })
-      .map((item) => {
-        return {
-          id: item.uuid,
-          doc_id: item.uuid,
-          title: item.title,
-          updated: item.updatedAt,
-        }
-      })
+    const blocks = pageBlocks.blocks
+    const blocksKeys = Object.keys(blocks)
+    const firstKey = blocksKeys[0]
+    const firstValue = blocks[firstKey]
+    const pageIds = firstValue.subNodes
+    const docs = pageIds.map((pageId) => {
+      const page = blocks[pageId]
+      return {
+        id: page.uuid,
+        doc_id: page.uuid,
+        title: page.title,
+        updated: page.updatedAt,
+      }
+    })
     this.catalog = docs
     return docs
   }
