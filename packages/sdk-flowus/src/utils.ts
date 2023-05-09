@@ -5,6 +5,10 @@ import moment from 'moment'
 import { FlowUsDoc, FlowUsFilterItem, FlowUsSortItem } from './types'
 import { FlowUsSortDirectionEnum } from './const'
 
+/**
+ * 格式化时间
+ * @param date
+ */
 export function formatDate(date: Date | string | number) {
   return moment(date).format('YYYY-MM-DD HH:mm:ss')
 }
@@ -13,9 +17,8 @@ export function formatDate(date: Date | string | number) {
  * 获取元数据Val
  * @param type
  * @param val
- * @param pageTitle
  */
-export function getPropVal(type: string, val: any, pageTitle: string) {
+export function getPropVal(type: string, val: any) {
   if (!val) return ''
   switch (type) {
     case 'text':
@@ -27,12 +30,13 @@ export function getPropVal(type: string, val: any, pageTitle: string) {
       return val.text
     case 'file':
       // 暂不支持
-      out.warning(`【${pageTitle}】存在暂不支持的属性类型:【文件媒体】, 建议将其上传到图床后使用`)
-      return val.url
+      // out.warning(`【${pageTitle}】存在暂不支持的属性类型:【文件媒体】, 建议将其上传到图床后使用`)
+      return ''
+    // return val.url
     case 'checkbox':
       return !!val.text
     case 'formula':
-      out.warning(`【${pageTitle}】存在暂不支持的属性类型:【公式】`)
+      // out.warning(`【${pageTitle}】存在暂不支持的属性类型:【公式】`)
       return ''
     // case 'created_at':
     //   // 创建时间直接在外面取值
@@ -45,8 +49,9 @@ export function getPropVal(type: string, val: any, pageTitle: string) {
     case 'multi_select':
       return val.text.split(',')
     case 'person':
-      out.warning(`【${pageTitle}】存在暂不支持的属性类型:【人员】`)
-      return val.uuid
+      // out.warning(`【${pageTitle}】存在暂不支持的属性类型:【人员】`)
+      // return val.uuid
+      return ''
     default:
       return val.text || ''
   }
@@ -72,7 +77,7 @@ export function props(pageBlock: Block, tableBlock: Block): DocProperties {
     // 判断类型，进行不同类型的取值
     properties[propName] = pageProperties[propId]
       .map((value) => {
-        return getPropVal(propType, value, pageBlock.title) as string
+        return getPropVal(propType, value) as string
       })
       .join(',')
     properties.urlname = pageBlock.uuid
@@ -138,7 +143,6 @@ export function sortDocs(docs: FlowUsDoc[], sorts?: FlowUsSortItem) {
       if (!aSortValue || !bSortValue) {
         return 0
       }
-      // TODO 把能排序的排前面
       // 判断是不是数字
       if (Number.isNaN(Number(aSortValue)) || Number.isNaN(Number(bSortValue))) {
         // 如果判断字符串是不是时间
@@ -147,8 +151,8 @@ export function sortDocs(docs: FlowUsDoc[], sorts?: FlowUsSortItem) {
           aSortValue = moment(aSortValue).valueOf()
           bSortValue = moment(bSortValue).valueOf()
         } else {
-          // 都不是则不排序
-          return 0
+          // 都不是则排后面
+          return -1
         }
       } else {
         aSortValue = Number(aSortValue)
@@ -169,10 +173,14 @@ export function sortDocs(docs: FlowUsDoc[], sorts?: FlowUsSortItem) {
       // 不排序
       return 0
     }
-    // TODO 出错catch
   })
 }
 
+/**
+ * 文档过滤
+ * @param docs
+ * @param filter
+ */
 export function filterDocs(docs: FlowUsDoc[], filter?: FlowUsFilterItem | FlowUsFilterItem[]) {
   return docs.filter((page) => {
     const pageProperties = page.properties
@@ -187,6 +195,5 @@ export function filterDocs(docs: FlowUsDoc[], filter?: FlowUsFilterItem | FlowUs
     }
     // 不过滤
     return true
-    // TODO 出错catch
   })
 }
