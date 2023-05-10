@@ -1,5 +1,16 @@
 # @elog/deploy
 
+## 0.4.2-beta.0
+
+### Patch Changes
+
+- 文档 front matter 生成失败时跳过
+- Updated dependencies
+  - @elog/plugin-adapter@0.4.2-beta.0
+  - @elog/sdk-confluence@0.4.2-beta.0
+  - @elog/shared@0.4.2-beta.0
+  - @elog/types@0.4.2-beta.0
+
 ## 0.4.1
 
 ### Patch Changes

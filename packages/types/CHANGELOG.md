@@ -1,5 +1,11 @@
 # @elog/types
 
+## 0.4.2-beta.0
+
+### Patch Changes
+
+- 文档 front matter 生成失败时跳过
+
 ## 0.4.1
 
 ### Patch Changes
