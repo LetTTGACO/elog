@@ -17,8 +17,7 @@ export async function run() {
     .action((options) => {
       try {
         void init(options.config, options.env)
-      } catch (error) {
-        // @ts-ignore
+      } catch (error: any) {
         out.err('运行失败', error.message)
         process.exit(1)
       }
@@ -30,12 +29,12 @@ export async function run() {
     .option('-c, --config <string>', 'use config with custom, default is elog.config.js')
     .option('-a --cache <string>', 'use cache file name, default is elog.cache.json')
     .option('-e, --env <string>', 'use env with custom')
+    .option('--debug', `show debug logs`)
     .description('sync doc')
     .action((options) => {
       try {
         void sync(options.config, options.cache, options.env)
-      } catch (error) {
-        // @ts-ignore
+      } catch (error: any) {
         out.err('运行失败', error.message)
         process.exit(1)
       }
@@ -50,8 +49,7 @@ export async function run() {
     .action((options) => {
       try {
         void clean(options.config, options.cache)
-      } catch (error) {
-        // @ts-ignore
+      } catch (error: any) {
         out.err('运行失败', error.message)
         process.exit(1)
       }
