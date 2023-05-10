@@ -24,6 +24,7 @@ export interface NotionConfig {
 export interface NotionDoc extends PageObjectResponse {
   properties: DocProperties
   catalog: DocCatalog[]
+  _index?: number
 }
 
 export interface NotionQueryParams {

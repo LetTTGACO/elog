@@ -60,7 +60,7 @@ class Elog {
       // 获取缓存文章
       this.cachedArticles = docs || []
     } catch (error) {
-      out.info('全量更新', '未获取到缓存，将全量更新文档')
+      out.access('全量更新', '未获取到缓存，将全量更新文档')
     }
   }
 
@@ -248,7 +248,7 @@ class Elog {
     this.writeArticleCache()
     // 部署文章
     await this.deployArticles()
-    out.access('任务结束', '🎉更新成功🎉')
+    out.info('任务结束', '🎉更新成功🎉')
   }
 }
 

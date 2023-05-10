@@ -15,8 +15,8 @@ const enum PackageManager {
 const upgrade = async () => {
   const newVersion = await latestVersion(pkgJson.name)
   const currentVersion = pkgJson.version
-  out.info('当前版本', currentVersion)
-  out.info('最新版本', newVersion)
+  out.access('当前版本', currentVersion)
+  out.access('最新版本', newVersion)
   if (gt(newVersion, currentVersion)) {
     inquirer
       .prompt([
@@ -30,7 +30,7 @@ const upgrade = async () => {
       .then((answers) => {
         const confirmed = answers.confirmed
         if (!confirmed) {
-          out.info('取消更新')
+          out.access('取消更新')
           process.exit(0)
         } else {
           inquirer
@@ -67,7 +67,7 @@ const upgrade = async () => {
         }
       })
   } else {
-    out.info('提示', `当前已是最新版本: ${currentVersion}`)
+    out.access('提示', `当前已是最新版本: ${currentVersion}`)
     process.exit(0)
   }
 }

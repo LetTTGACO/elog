@@ -28,10 +28,10 @@ class ImageUploader {
           referer: process.env.REFERER_URL,
         },
       })
-      out.access('下载成功', `图片下载成功: ${url}`)
+      out.info('下载成功', url)
       return res.data
     } catch (e: any) {
-      out.warning('下载失败', `图片下载失败: ${url}，错误信息：${e.message}`)
+      out.warning('下载失败', `${url}，错误信息：${e.message}`)
     }
   }
 
@@ -58,7 +58,7 @@ class ImageUploader {
           // 检查图床是否存在该文件
           let exist = await this.ctx.hasImage(fullName)
           if (exist) {
-            out.access('忽略上传', exist)
+            out.info('忽略上传', exist)
             // 图片已存在
             resolve({
               fileName: fullName,
@@ -91,9 +91,9 @@ class ImageUploader {
         newUrl = await this.ctx.uploadImg(img.buffer!, img.fileName)
         if (newUrl) {
           if (this.config.platform === ImagePlatformEnum.LOCAL) {
-            out.access('生成图片', newUrl)
+            out.info('生成图片', newUrl)
           } else {
-            out.access('上传成功', newUrl)
+            out.info('上传成功', newUrl)
           }
           output.push({ original: img.original, url: newUrl })
         }

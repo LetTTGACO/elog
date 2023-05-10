@@ -6,7 +6,7 @@ interface SecretExt {
 }
 
 export const getSecretExt = async <T>(config: T & SecretExt) => {
-  out.warning('注意', '正在使用密钥拓展点，请遵循密钥拓展点注入规范')
+  out.access('注意', '正在使用密钥拓展点，请遵循密钥拓展点注入规范')
   try {
     // 如果指定了secret拓展点，那么拓展点返回的账号密码信息，将会覆盖elog-config.json中的image信息
     const secretExtPath = path.resolve(process.cwd(), config.secretExt!)

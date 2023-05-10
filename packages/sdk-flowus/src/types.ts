@@ -35,6 +35,7 @@ export interface FlowUsDoc {
   properties: DocProperties
   createdAt: number
   updatedAt: number
+  _index?: number
 }
 
 export interface FlowUsFilterAndSortParams {

@@ -46,7 +46,7 @@ class NotionClient {
         this.config.catalog = { enable: false }
       } else {
         // 启用目录
-        out.info('开启分类', '默认按照 catalog 字段分类，请检查Notion数据库是否存在该属性')
+        out.access('开启分类', '默认按照 catalog 字段分类，请检查Notion数据库是否存在该属性')
         this.config.catalog = { enable: true, property: 'catalog' }
       }
     } else if (typeof this.config.catalog === 'object') {
@@ -165,6 +165,7 @@ class NotionClient {
    * @param {*} page
    */
   async download(page: NotionDoc): Promise<DocDetail> {
+    // TODO 下载失败提示
     const blocks = await this.n2m.pageToMarkdown(page.id)
     let body = this.n2m.toMarkdownString(blocks)
     const timestamp = new Date(page.last_edited_time).getTime()
@@ -201,24 +202,25 @@ class NotionClient {
         if (!exist) {
           // @ts-ignore
           const title = page.properties.title
-          out.access('跳过下载', title)
+          out.info('跳过下载', title)
         }
         return exist
       })
     }
     if (!pages?.length) {
-      out.access('跳过', '没有需要下载的文章')
+      out.info('跳过', '没有需要下载的文章')
       return articleList
     }
     out.info('待下载数', String(pages.length))
     out.info('开始下载文档...')
+    pages = pages.map((item, index) => ({ ...item, _index: index + 1 } as NotionDoc))
     const promise = async (page: NotionDoc) => {
+      out.info(`下载文档 ${page._index}/${pages.length}   `, page.properties.title)
       let article = await this.download(page)
-      out.info('下载文档', article.properties.title)
       articleList.push(article)
     }
     await asyncPool(5, pages, promise)
-    out.access('已下载数', String(articleList.length))
+    out.info('已下载数', String(articleList.length))
     return articleList
   }
 }
