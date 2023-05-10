@@ -165,8 +165,10 @@ class NotionClient {
    * @param {*} page
    */
   async download(page: NotionDoc): Promise<DocDetail> {
-    // TODO 下载失败提示
     const blocks = await this.n2m.pageToMarkdown(page.id)
+    if (!blocks.length) {
+      out.warning(`${page.properties.title} 文档下载超时或无内容 `)
+    }
     let body = this.n2m.toMarkdownString(blocks)
     const timestamp = new Date(page.last_edited_time).getTime()
     let catalog: DocCatalog[] | undefined

@@ -167,8 +167,13 @@ class FlowUsClient {
   }
 
   async download(page: FlowUsDoc): Promise<DocDetail> {
-    const pageBlocks = await this.flowus.getPageBlocks(page.id)
-    const body = this.f2m.toMarkdownString(pageBlocks)
+    let body = ''
+    try {
+      const pageBlocks = await this.flowus.getPageBlocks(page.id)
+      body = this.f2m.toMarkdownString(pageBlocks)
+    } catch (e: any) {
+      out.warning(`${page.title} 下载出错: ${e.message}`)
+    }
     const doc = {
       id: page.id,
       properties: page.properties,

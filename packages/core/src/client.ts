@@ -241,14 +241,14 @@ class Elog {
     await this.fetchArticles()
     if (!this.needUpdate) {
       // 结束进程
-      out.warning('任务结束', '没有需要更新的文章')
+      out.access('任务结束', '没有需要更新的文档')
       return
     }
     // 写入文章缓存
     this.writeArticleCache()
     // 部署文章
     await this.deployArticles()
-    out.info('任务结束', '🎉更新成功🎉')
+    out.access('任务结束', '🎉更新成功🎉')
   }
 }
 
