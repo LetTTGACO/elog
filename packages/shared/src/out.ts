@@ -2,6 +2,7 @@ import * as shell from 'shelljs'
 import chalk, { Chalk } from 'chalk'
 import { chunk } from 'lodash'
 import { LogLevel, __columns } from './const'
+import * as process from 'process'
 
 /**
  * 辅助输出过程日志
@@ -17,6 +18,7 @@ export function println(level: LogLevel, head: string, content?: string) {
     [LogLevel.INFO]: chalk.green,
     [LogLevel.WARNING]: chalk.yellow,
     [LogLevel.ERROR]: chalk.red,
+    [LogLevel.DEBUG]: chalk.magenta,
   }
 
   const MIN_HEAD_LENGTH = 10
@@ -59,6 +61,9 @@ const out = {
   },
   err(head: string, content?: string) {
     println(LogLevel.ERROR, head, content)
+  },
+  debug(head: string, content?: string) {
+    process.env.DEBUG && println(LogLevel.DEBUG, head, content)
   },
 }
 

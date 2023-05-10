@@ -17,8 +17,9 @@ export function formatDate(date: Date | string | number) {
  * 获取元数据Val
  * @param type
  * @param val
+ * @param pageTitle
  */
-export function getPropVal(type: string, val: any) {
+export function getPropVal(type: string, val: any, pageTitle: string) {
   if (!val) return ''
   switch (type) {
     case 'text':
@@ -30,13 +31,13 @@ export function getPropVal(type: string, val: any) {
       return val.text
     case 'file':
       // 暂不支持
-      // out.warning(`【${pageTitle}】存在暂不支持的属性类型:【文件媒体】, 建议将其上传到图床后使用`)
+      out.debug(`【${pageTitle}】存在暂不支持的属性类型:【文件媒体】, 建议将其上传到图床后使用`)
       return ''
     // return val.url
     case 'checkbox':
       return !!val.text
     case 'formula':
-      // out.warning(`【${pageTitle}】存在暂不支持的属性类型:【公式】`)
+      out.debug(`【${pageTitle}】存在暂不支持的属性类型:【公式】`)
       return ''
     // case 'created_at':
     //   // 创建时间直接在外面取值
@@ -49,7 +50,7 @@ export function getPropVal(type: string, val: any) {
     case 'multi_select':
       return val.text.split(',')
     case 'person':
-      // out.warning(`【${pageTitle}】存在暂不支持的属性类型:【人员】`)
+      out.debug(`【${pageTitle}】存在暂不支持的属性类型:【人员】`)
       // return val.uuid
       return ''
     default:
@@ -77,7 +78,7 @@ export function props(pageBlock: Block, tableBlock: Block): DocProperties {
     // 判断类型，进行不同类型的取值
     properties[propName] = pageProperties[propId]
       .map((value) => {
-        return getPropVal(propType, value) as string
+        return getPropVal(propType, value, pageBlock.title) as string
       })
       .join(',')
     properties.urlname = pageBlock.uuid

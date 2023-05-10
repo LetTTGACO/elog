@@ -48,13 +48,11 @@ class OssClient {
     try {
       await this.imgClient!.head(`${this.config.prefixKey}/${fileName}`)
       if (this.config.host) {
-        // TODO 处理host的http完整性
         return `https://${this.config.host}/${this.config.prefixKey}/${fileName}`
       }
       return `https://${this.config.bucket}.${this.config.region}.aliyuncs.com/${this.config.prefixKey}/${fileName}`
     } catch (e: any) {
-      // out.warn(`检查图片信息时出错: ${transformRes(e)}`)
-      // TODO DEBUG 模式下输出
+      out.debug(`图床检查出错: ${e.message}`)
     }
   }
 
@@ -70,13 +68,11 @@ class OssClient {
     try {
       const res = await this.imgClient!.put(`${this.config.prefixKey}/${fileName}`, imgBuffer)
       if (this.config.host) {
-        // TODO 处理host的http完整性
         return `https://${this.config.host}/${this.config.prefixKey}/${fileName}`
       }
       return res!.url
     } catch (e: any) {
       out.warning('跳过上传', `上传图片失败，请检查: ${e.message}`)
-      // TODO DEBUG 模式下输出
     }
   }
 }

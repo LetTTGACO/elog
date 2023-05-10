@@ -15,6 +15,7 @@ import { WritePlatform, DocStatus } from './const'
 import { out } from '@elog/shared'
 import * as fs from 'fs'
 import * as path from 'path'
+import * as process from 'process'
 
 /**
  * 处理器
@@ -75,8 +76,8 @@ class Elog {
       let notionConfig = config.write.notion as NotionConfig
       this.downloaderClient = new NotionClient(notionConfig)
     } else if (config.write.platform === WritePlatform.FLOWUS) {
-      let notionConfig = config.write.flowus as FlowUsConfig
-      this.downloaderClient = new FlowUsClient(notionConfig)
+      let flowusConfig = config.write.flowus as FlowUsConfig
+      this.downloaderClient = new FlowUsClient(flowusConfig)
     }
   }
 
@@ -95,6 +96,12 @@ class Elog {
    */
   initImgCdn(config: ElogConfig) {
     if (config.image?.enable) {
+      if (config.write.platform === WritePlatform.FLOWUS) {
+        // FlowUs对图片的下载有referer限制
+        // 所以需要在下载图片的时候加上referer=https://flowus.cn/
+        // 这里使用过环境变量的方式添加
+        process.env.REFERER_URL = 'https://flowus.cn/'
+      }
       this.imageClient = new ImageClient(config.image)
     }
   }

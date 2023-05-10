@@ -1,4 +1,10 @@
 #! /usr/bin/env node
+
+const debugIndex = process.argv.findIndex((arg) => /^(--debug)$/.test(arg))
+if (debugIndex > 0) {
+  process.env.DEBUG = 'true'
+}
+
 require('./../dist/index.js')
   .run()
   .catch((e) => {

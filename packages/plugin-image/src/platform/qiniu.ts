@@ -67,13 +67,14 @@ class QiNiuClient {
         `${this.config.prefixKey}/${fileName}`,
         (err, _respBody, respInfo) => {
           if (err) {
-            // out.warn(`检查图片信息时出错: ${transformRes(err)}`)
+            out.debug(`检查图片信息时出错: ${err.message}`)
             resolve(undefined)
           } else {
             if (respInfo.statusCode === 200) {
               resolve(`${this.config.host}/${this.config.prefixKey}/${fileName}`)
             } else {
-              // TODO DEBUG 模式下输出
+              out.debug('检查图片信息时出错')
+              out.debug(JSON.stringify(respInfo))
               resolve(undefined)
             }
           }
@@ -99,13 +100,12 @@ class QiNiuClient {
         this.putExtra!,
         (respErr, _respBody, respInfo) => {
           if (respErr) {
-            // out.warn(`上传图片失败，请检查: ${transformRes(respErr)}`)
-            resolve(undefined)
+            out.debug(`上传图片失败: ${respErr.message}`)
           } else if (respInfo.statusCode === 200) {
             resolve(`${this.config.host}/${this.config.prefixKey}/${fileName}`)
           } else {
-            // TODO DEBUG 模式下输出
-            // out.warn(`上传图片失败，请检查: ${transformRes(respInfo)}`)
+            out.debug('上传图片失败')
+            out.debug(JSON.stringify(respInfo))
             resolve(undefined)
           }
         },

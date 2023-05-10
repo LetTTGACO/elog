@@ -5,6 +5,7 @@ import { out, request } from '@elog/shared'
 import { DocDetail } from '@elog/types'
 import { ImagePlatformEnum } from './platform/const'
 import { ImageSource, ImageUrl } from './types'
+import * as process from 'process'
 
 class ImageUploader {
   config: ImageConfig
@@ -22,6 +23,10 @@ class ImageUploader {
     try {
       const res = await request<Buffer>(url, {
         dataType: 'arraybuffer',
+        headers: {
+          // NOTE FlowUs图片下载有限制，需要referer为https://flowus.cn/
+          referer: process.env.REFERER_URL,
+        },
       })
       out.access('下载成功', `图片下载成功: ${url}`)
       return res.data
