@@ -4,8 +4,9 @@
   "description": "elog的语雀SDK，从语雀写作平台获取文章",
   "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-sdk-yuque#readme",
   "author": "1874 <me@mail.1874.cool>",
-  "main": "dist/cjs/index.js",
+  "main": "dist/index.js",
   "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
   "license": "MIT",
   "publishConfig": {
     "access": "public",
@@ -19,7 +20,7 @@
     "url": "https://github.com/LetTTGACO/elog/issues"
   },
   "scripts": {
-    "build": "father build"
+    "build": "tsup --legacy-output"
   },
   "dependencies": {
     "@elog/shared": "workspace:*",
