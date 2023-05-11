@@ -19,14 +19,13 @@
     "url": "https://github.com/LetTTGACO/elog/issues"
   },
   "scripts": {
-    "build": "father build",
-    "test": "ts-node ./__test__/test-notion-sdk.ts"
+    "build": "father build"
   },
   "dependencies": {
     "@elog/shared": "workspace:*",
     "@elog/types": "workspace:*",
     "@notionhq/client": "^2.2.2",
-    "notion-to-md": "^2.5.5",
+    "notion-to-md": "~2.5.5",
     "tiny-async-pool": "^1.3.0",
     "moment": "^2.29.4"
   },
