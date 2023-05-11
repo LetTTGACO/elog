@@ -1,5 +1,16 @@
 # @elog/plugin-image
 
+## 0.4.2
+
+### Patch Changes
+
+- 锁定 notion-to-md 版本号
+- a6d7495: 文档 front matter 生成失败时跳过
+- Updated dependencies
+- Updated dependencies [a6d7495]
+  - @elog/shared@0.4.2
+  - @elog/types@0.4.2
+
 ## 0.4.2-beta.0
 
 ### Patch Changes
