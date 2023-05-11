@@ -1,5 +1,7 @@
-import { ElogConfig } from '@elog/core'
 import { run } from './run'
 import { defineConfig } from './utils/config'
 
-export { run, defineConfig, ElogConfig }
+// cli api
+export { run, defineConfig }
+// core api
+export * from '@elog/core'

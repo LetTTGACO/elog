@@ -1,5 +1,5 @@
 import Deploy from './client'
-import { DeployConfig } from './types'
-export { DeployConfig }
-
+export * from './types'
+export * from '@elog/plugin-adapter'
+export * from '@elog/sdk-confluence'
 export default Deploy

@@ -1,12 +1,12 @@
-import { LocalConfig } from './types'
+import { ImgLocalConfig } from './types'
 import * as fs from 'fs'
 import path from 'path'
 import mkdirp from 'mkdirp'
 import { out } from '@elog/shared'
 
 class CosClient {
-  config: LocalConfig
-  constructor(config: LocalConfig) {
+  config: ImgLocalConfig
+  constructor(config: ImgLocalConfig) {
     this.config = config
   }
 

@@ -7,6 +7,4 @@ export default defineConfig({
   dts: {
     only: true,
   },
-  // 每次打包先删除dist
-  clean: true,
 })

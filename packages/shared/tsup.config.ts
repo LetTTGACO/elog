@@ -16,7 +16,4 @@ export default defineConfig({
 
   // sourcemap
   sourcemap: true,
-
-  // 每次打包先删除dist
-  clean: true,
 })

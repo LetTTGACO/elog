@@ -26,7 +26,7 @@
     "node": ">=14"
   },
   "scripts": {
-    "build": "tsup --legacy-output"
+    "build": "rimraf dist & tsup --legacy-output"
   },
   "dependencies": {
     "@elog/core": "workspace:*",

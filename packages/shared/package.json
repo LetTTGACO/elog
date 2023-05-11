@@ -20,7 +20,7 @@
     "url": "https://github.com/LetTTGACO/elog/issues"
   },
   "scripts": {
-    "build": "tsup --legacy-output"
+    "build": "rimraf dist & tsup --legacy-output"
   },
   "dependencies": {
     "chalk": "^4.1.2",
