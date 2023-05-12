@@ -1,5 +1,11 @@
 # @elog/types
 
+## 0.4.3-beta.0
+
+### Patch Changes
+
+- 修复 Front Matter 中字符超长问题
+
 ## 0.4.2
 
 ### Patch Changes

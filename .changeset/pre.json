@@ -1,0 +1,19 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "@elog/cli": "0.4.2",
+    "@elog/core": "0.4.2",
+    "@elog/deploy": "0.4.2",
+    "@elog/plugin-adapter": "0.4.2",
+    "@elog/plugin-image": "0.4.2",
+    "@elog/sdk-confluence": "0.4.2",
+    "@elog/sdk-notion": "0.4.2",
+    "@elog/sdk-yuque": "0.4.2",
+    "@elog/shared": "0.4.2",
+    "@elog/types": "0.4.2"
+  },
+  "changesets": [
+    "wet-beans-attack"
+  ]
+}
