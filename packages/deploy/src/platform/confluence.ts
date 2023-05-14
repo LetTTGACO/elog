@@ -77,6 +77,7 @@ class DeployConfluence {
         }
       }
     }
+    out.access('任务结束', '🎉更新成功🎉')
   }
 }
 

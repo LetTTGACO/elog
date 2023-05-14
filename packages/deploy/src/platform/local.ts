@@ -39,6 +39,11 @@ class DeployLocal {
     for (const post of articleList) {
       let formatBody = this.adapter(post)
       let fileName = filenamify(post.properties[filename])
+      if (!fileName) {
+        // 没有文件名的文档
+        out.warning(`存在未命名文档，将自动重命名为【未命名文档_${post.doc_id}】`)
+        fileName = `未命名文档_${post.doc_id}`
+      }
       let postPath: string
       if (this.config.catalog) {
         // 开启按目录生成
@@ -71,6 +76,7 @@ class DeployLocal {
         encoding: 'utf8',
       })
     }
+    out.access('任务结束', '🎉更新成功🎉')
   }
 
   /**

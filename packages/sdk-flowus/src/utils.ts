@@ -35,7 +35,7 @@ export function getPropVal(type: string, val: any, pageTitle: string) {
       return ''
     // return val.url
     case 'checkbox':
-      return !!val.text
+      return val.text === 'YES'
     case 'formula':
       out.debug(`【${pageTitle}】存在暂不支持的属性类型:【公式】`)
       return ''
@@ -67,6 +67,10 @@ export function getPropVal(type: string, val: any, pageTitle: string) {
 export function props(pageBlock: Block, tableBlock: Block): DocProperties {
   // 获取properties
   let properties: any = {}
+  properties.urlname = pageBlock.uuid
+  properties.title = pageBlock.title
+  properties.updated = formatDate(pageBlock.updatedAt)
+  properties.date = formatDate(pageBlock.createdAt)
   const pageProperties = pageBlock.data.collectionProperties
   if (!pageProperties) return properties
   const propIds = Object.keys(pageProperties)
@@ -76,19 +80,9 @@ export function props(pageBlock: Block, tableBlock: Block): DocProperties {
     const propName = propConfig.name
     const propType = propConfig.type
     // 判断类型，进行不同类型的取值
-    properties[propName] = pageProperties[propId]
-      .map((value) => {
-        return getPropVal(propType, value, pageBlock.title) as string
-      })
-      .join(',')
-    properties.urlname = pageBlock.uuid
-    if (!properties.date) {
-      properties.date = formatDate(pageBlock.createdAt)
-    }
-    if (!properties.updated) {
-      properties.updated = formatDate(pageBlock.updatedAt)
-    }
-    properties.title = pageBlock.title
+    properties[propName] = pageProperties[propId].map((value) => {
+      return getPropVal(propType, value, pageBlock.title) as string
+    })[0]
   })
   return properties
 }

@@ -248,7 +248,6 @@ class Elog {
     this.writeArticleCache()
     // 部署文章
     await this.deployArticles()
-    out.access('任务结束', '🎉更新成功🎉')
   }
 }
 
