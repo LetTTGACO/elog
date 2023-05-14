@@ -11,23 +11,6 @@ import rehypeStringify from 'rehype-stringify'
 import { out } from '@elog/shared'
 
 /**
- * 检查front-matter的长度
- * @param page
- * @param properties
- */
-const checkFrontMatter = (page: DocUnite, properties: Record<string, string>) => {
-  Object.values(properties).forEach((value: string, index) => {
-    const key = Object.keys(properties)[index]
-    if (value?.length > 78) {
-      out.warning(
-        `警告！${page.title}文档中${key}属性值长度超过78个字符，在front-matter模式下可能会导致博客平台解析失败`,
-      )
-      out.warning('详情：https://github.com/nodeca/js-yaml/blob/HEAD/test/units/snippet.js#L43-L44')
-    }
-  })
-}
-
-/**
  * 生成元数据
  */
 export const getProps = (page: DocUnite): GetProps => {
@@ -51,7 +34,6 @@ export const getProps = (page: DocUnite): GetProps => {
     const result = frontMatter(body)
     body = result.body
     let attributes = <Record<string, string>>result.attributes
-    checkFrontMatter(page, attributes)
     properties = {
       ...properties,
       ...attributes,

@@ -1,5 +1,25 @@
 # @elog/plugin-image
 
+## 0.4.3
+
+### Patch Changes
+
+- 修复 Front Matter 中字符超长问题
+- dc21449: 修复 Front Matter 中字符超长问题
+- Updated dependencies
+- Updated dependencies [dc21449]
+  - @elog/shared@0.4.3
+  - @elog/types@0.4.3
+
+## 0.4.3-beta.0
+
+### Patch Changes
+
+- 修复 Front Matter 中字符超长问题
+- Updated dependencies
+  - @elog/shared@0.4.3-beta.0
+  - @elog/types@0.4.3-beta.0
+
 ## 0.4.2
 
 ### Patch Changes

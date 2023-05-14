@@ -1,5 +1,33 @@
 # @elog/core
 
+## 0.4.3
+
+### Patch Changes
+
+- 修复 Front Matter 中字符超长问题
+- dc21449: 修复 Front Matter 中字符超长问题
+- Updated dependencies
+- Updated dependencies [dc21449]
+  - @elog/deploy@0.4.3
+  - @elog/plugin-image@0.4.3
+  - @elog/sdk-notion@0.4.3
+  - @elog/sdk-yuque@0.4.3
+  - @elog/shared@0.4.3
+  - @elog/types@0.4.3
+
+## 0.4.3-beta.0
+
+### Patch Changes
+
+- 修复 Front Matter 中字符超长问题
+- Updated dependencies
+  - @elog/deploy@0.4.3-beta.0
+  - @elog/plugin-image@0.4.3-beta.0
+  - @elog/sdk-notion@0.4.3-beta.0
+  - @elog/sdk-yuque@0.4.3-beta.0
+  - @elog/shared@0.4.3-beta.0
+  - @elog/types@0.4.3-beta.0
+
 ## 0.4.2
 
 ### Patch Changes

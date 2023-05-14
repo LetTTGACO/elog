@@ -15,9 +15,10 @@ export function matterMarkdownAdapter(post: DocDetail) {
     const properties = post.properties
     const props: DocProperties = {
       ...properties,
-      title: properties.title.replace(/"/g, ''), // 临时去掉标题中的引号，至少保证文章页面是正常可访问的
+      title: properties?.title?.replace(/"/g, ''), // 临时去掉标题中的引号，至少保证文章页面是正常可访问的
     }
-    body = matter.stringify(body, props)
+    // @ts-ignore js-yaml lineWidth长度为无限
+    body = matter.stringify(body, props, { lineWidth: -1 })
   } catch (e: any) {
     out.err(e.message)
     out.warning(`【${post.properties.title}】Front matter 生成失败，请检查文档属性`)
