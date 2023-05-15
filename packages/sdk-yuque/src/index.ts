@@ -1,4 +1,4 @@
-export type { YuqueConfig } from './types'
+export * from './types'
 
 import Yuque from './core'
 

@@ -5,7 +5,12 @@ node_modules
 packages/**/package-lock.json
 .env
 .env*
+*.env*
 .DS_Store
 **/__test__/**
 /test/**
 link.sh
+.run
+.npmrc
+pnpm-lock.yaml
+elog.config.js

@@ -6,8 +6,8 @@ import { out } from '@elog/shared'
  */
 export const runCmdSync = (command: string) => {
   const cwd = process.cwd()
-  out.access('目录', cwd)
-  out.access('执行', command)
+  out.info('目录', cwd)
+  out.info('执行', command)
   const output = execSync(command)
-  out.access('输出', output.toString().trim())
+  out.info('输出', output.toString().trim())
 }

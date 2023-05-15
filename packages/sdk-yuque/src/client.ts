@@ -118,7 +118,7 @@ class YuqueClient {
       docs = docs.filter((doc) => {
         const exist = ids.indexOf(doc.slug) > -1
         if (!exist) {
-          out.access('跳过下载', doc.title)
+          out.info('跳过下载', doc.title)
         }
         return exist
       })
@@ -127,8 +127,11 @@ class YuqueClient {
       out.access('跳过', '没有需要下载的文章')
       return articleList
     }
+    out.info('待下载数', String(docs.length))
+    out.info('开始下载文档...')
+    docs = docs.map((item, index) => ({ ...item, _index: index + 1 } as YuqueDoc))
     const promise = async (doc: YuqueDoc) => {
-      out.info('下载文档', doc.title)
+      out.info(`下载文档 ${doc._index}/${docs.length}   `, doc.title)
       let article = await this.getDocDetail(doc.slug)
       article.body_original = article.body
       // 解析出properties
@@ -141,7 +144,7 @@ class YuqueClient {
       articleList.push(article)
     }
     await asyncPool(5, docs, promise)
-    out.access('待更新数', String(articleList.length))
+    out.info('已下载数', String(articleList.length))
     return articleList
   }
 }

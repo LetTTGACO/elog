@@ -48,7 +48,7 @@ export interface GithubConfig extends ImgBaseConfig {
   branch?: string
 }
 
-export interface LocalConfig {
+export interface ImgLocalConfig {
   outputDir: string
   prefixKey: string
 }

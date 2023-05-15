@@ -2,9 +2,15 @@ import { Client } from '@notionhq/client'
 import { NotionToMarkdown } from 'notion-to-md'
 import asyncPool from 'tiny-async-pool'
 import { genCatalog, props } from './utils'
-import { NotionCatalogConfig, NotionConfig, NotionDoc, NotionSort } from './types'
+import {
+  NotionCatalogConfig,
+  NotionConfig,
+  NotionDoc,
+  NotionQueryParams,
+  NotionSort,
+} from './types'
 import { out } from '@elog/shared'
-import { DocDetail, NotionCatalog, DocCatalog } from '@elog/types'
+import { DocDetail, DocCatalog, NotionCatalog } from '@elog/types'
 import { NotionSortDirectionEnum, NotionSortPresetEnum } from './const'
 
 /**
@@ -15,6 +21,8 @@ class NotionClient {
   notion: Client
   n2m: NotionToMarkdown
   catalog: NotionCatalog[] = []
+  requestQueryParams: NotionQueryParams
+  docList: NotionDoc[] = []
   constructor(config: NotionConfig) {
     this.config = config
     this.config.token = config.token || process.env.NOTION_TOKEN!
@@ -25,6 +33,7 @@ class NotionClient {
     this.notion = new Client({ auth: this.config.token })
     this.n2m = new NotionToMarkdown({ notionClient: this.notion })
     this.initCatalogConfig()
+    this.requestQueryParams = this.initRequestQueryParams()
   }
 
   /**
@@ -37,7 +46,7 @@ class NotionClient {
         this.config.catalog = { enable: false }
       } else {
         // 启用目录
-        out.info('开启分类', '默认按照 catalog 字段分类，请检查Notion数据库是否存在该属性')
+        out.access('开启分类', '默认按照 catalog 字段分类，请检查Notion数据库是否存在该属性')
         this.config.catalog = { enable: true, property: 'catalog' }
       }
     } else if (typeof this.config.catalog === 'object') {
@@ -52,9 +61,9 @@ class NotionClient {
   }
 
   /**
-   * 获取指定文章列表
+   * 初始化请求参数
    */
-  async getPageList() {
+  initRequestQueryParams() {
     let sorts: any
     if (typeof this.config.sorts === 'boolean') {
       if (!this.config.sorts) {
@@ -64,7 +73,6 @@ class NotionClient {
         // 默认排序
         sorts = [{ timestamp: 'created_time', direction: NotionSortDirectionEnum.descending }]
       }
-      sorts = [{ timestamp: 'created_time', direction: NotionSortDirectionEnum.descending }]
     } else if (typeof this.config.sorts === 'string') {
       // 预设值
       const sortPreset = this.config.sorts as NotionSortPresetEnum
@@ -114,20 +122,23 @@ class NotionClient {
         }
       }
     } else if (!this.config.filter) {
-      filter = {
-        property: 'status',
-        select: {
-          equals: '已发布',
-        },
-      }
+      filter = undefined
     } else {
       filter = this.config.filter
     }
-
-    let resp = await this.notion.databases.query({
+    return {
       database_id: this.config.databaseId,
       filter,
       sorts,
+    }
+  }
+
+  /**
+   * 获取指定文章列表
+   */
+  async getPageList() {
+    let resp = await this.notion.databases.query({
+      ...this.requestQueryParams,
     })
     let docs = resp.results as NotionDoc[]
     docs = docs.map((doc) => {
@@ -135,8 +146,18 @@ class NotionClient {
       doc.properties = props(doc)
       return doc
     })
-    this.catalog = docs as unknown as NotionCatalog[]
-    return docs
+    this.catalog.push(...docs)
+    this.docList.push(...docs)
+    // 分页查询
+    if (resp.has_more && resp.next_cursor) {
+      // 有更多数据
+      this.requestQueryParams = {
+        ...this.requestQueryParams,
+        start_cursor: resp.next_cursor,
+      }
+      await this.getPageList()
+    }
+    return this.docList
   }
 
   /**
@@ -145,6 +166,9 @@ class NotionClient {
    */
   async download(page: NotionDoc): Promise<DocDetail> {
     const blocks = await this.n2m.pageToMarkdown(page.id)
+    if (!blocks.length) {
+      out.warning(`${page.properties.title} 文档下载超时或无内容 `)
+    }
     let body = this.n2m.toMarkdownString(blocks)
     const timestamp = new Date(page.last_edited_time).getTime()
     let catalog: DocCatalog[] | undefined
@@ -180,22 +204,25 @@ class NotionClient {
         if (!exist) {
           // @ts-ignore
           const title = page.properties.title
-          out.access('跳过下载', title)
+          out.info('跳过下载', title)
         }
         return exist
       })
     }
     if (!pages?.length) {
-      out.access('跳过', '没有需要下载的文章')
+      out.info('跳过', '没有需要下载的文章')
       return articleList
     }
+    out.info('待下载数', String(pages.length))
+    out.info('开始下载文档...')
+    pages = pages.map((item, index) => ({ ...item, _index: index + 1 } as NotionDoc))
     const promise = async (page: NotionDoc) => {
+      out.info(`下载文档 ${page._index}/${pages.length}   `, page.properties.title)
       let article = await this.download(page)
-      out.info('下载文档', article.properties.title)
       articleList.push(article)
     }
     await asyncPool(5, pages, promise)
-    out.access('已下载数', String(articleList.length))
+    out.info('已下载数', String(articleList.length))
     return articleList
   }
 }

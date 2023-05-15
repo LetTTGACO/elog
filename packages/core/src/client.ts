@@ -1,6 +1,7 @@
 // write
 import YuqueClient, { YuqueConfig } from '@elog/sdk-yuque'
 import NotionClient, { NotionConfig } from '@elog/sdk-notion'
+import FlowUsClient, { FlowUsConfig } from '@elog/sdk-flowus'
 // deploy
 import DeployClient, { DeployConfig } from '@elog/deploy'
 // imageClient
@@ -14,6 +15,7 @@ import { WritePlatform, DocStatus } from './const'
 import { out } from '@elog/shared'
 import * as fs from 'fs'
 import * as path from 'path'
+import * as process from 'process'
 
 /**
  * 处理器
@@ -58,7 +60,7 @@ class Elog {
       // 获取缓存文章
       this.cachedArticles = docs || []
     } catch (error) {
-      out.info('全量更新', '未获取到缓存，将全量更新文档')
+      out.access('全量更新', '未获取到缓存，将全量更新文档')
     }
   }
 
@@ -73,6 +75,9 @@ class Elog {
     } else if (config.write.platform === WritePlatform.NOTION) {
       let notionConfig = config.write.notion as NotionConfig
       this.downloaderClient = new NotionClient(notionConfig)
+    } else if (config.write.platform === WritePlatform.FLOWUS) {
+      let flowusConfig = config.write.flowus as FlowUsConfig
+      this.downloaderClient = new FlowUsClient(flowusConfig)
     }
   }
 
@@ -91,6 +96,12 @@ class Elog {
    */
   initImgCdn(config: ElogConfig) {
     if (config.image?.enable) {
+      if (config.write.platform === WritePlatform.FLOWUS) {
+        // FlowUs对图片的下载有referer限制
+        // 所以需要在下载图片的时候加上referer=https://flowus.cn/
+        // 这里使用过环境变量的方式添加
+        process.env.REFERER_URL = 'https://flowus.cn/'
+      }
       this.imageClient = new ImageClient(config.image)
     }
   }
@@ -176,6 +187,9 @@ class Elog {
       } else if (this.config.write.platform === WritePlatform.NOTION) {
         const notionClient = this.downloaderClient as NotionClient
         catalog = notionClient.ctx.catalog
+      } else if (this.config.write.platform === WritePlatform.FLOWUS) {
+        const flowusClient = this.downloaderClient as FlowUsClient
+        catalog = flowusClient.ctx.catalog
       }
 
       let cacheDocs: DocDetail[] = this.cachedArticles.map((item) => {
@@ -227,14 +241,13 @@ class Elog {
     await this.fetchArticles()
     if (!this.needUpdate) {
       // 结束进程
-      out.warning('任务结束', '没有需要更新的文章')
+      out.access('任务结束', '没有需要更新的文档')
       return
     }
     // 写入文章缓存
     this.writeArticleCache()
     // 部署文章
     await this.deployArticles()
-    out.access('任务结束', '🎉更新成功🎉')
   }
 }
 

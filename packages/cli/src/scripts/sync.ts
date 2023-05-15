@@ -9,11 +9,11 @@ const sync = async (customConfigPath?: string, customCachePath?: string, envPath
   if (envPath) {
     // 本地模式
     envPath = path.resolve(process.cwd(), envPath)
-    out.info('环境变量', `已指定读取env文件为：${envPath}`)
+    out.access('环境变量', `已指定读取env文件为：${envPath}`)
     dotenv.config({ override: true, path: envPath })
   } else {
     // 生产模式
-    out.info('环境变量', `未指定env文件，将从系统环境变量中读取`)
+    out.access('环境变量', `未指定env文件，将从系统环境变量中读取`)
   }
   // 加载配置文件
   const { config: userConfig, cacheFilePath } = getConfig(customConfigPath, customCachePath)

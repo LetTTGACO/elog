@@ -180,6 +180,7 @@ export interface YuqueDoc {
   first_published_at: Date
   /** 字数 */
   word_count: number
+  _index?: number
 }
 
 export interface YuqueDocProperties {

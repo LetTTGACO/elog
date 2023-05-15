@@ -1,6 +1,6 @@
 import ImageUploader from './core'
-import { ImageConfig } from './platform/types'
 
-export { ImageConfig }
+export * from './platform/types'
+export * from './types'
 
 export default ImageUploader

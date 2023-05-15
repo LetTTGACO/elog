@@ -52,8 +52,8 @@ class CosClient {
         return `https://${this.config.host}/${this.config.prefixKey}/${fileName}`
       }
       return `https://${this.config.bucket}.cos.${this.config.region}.myqcloud.com/${this.config.prefixKey}/${fileName}`
-    } catch (e) {
-      // TODO DEBUG 模式下输出
+    } catch (e: any) {
+      out.debug(`图床检查出错: ${e.message}`)
     }
   }
 
@@ -75,13 +75,11 @@ class CosClient {
         Body: imgBuffer, // 上传文件对象
       })
       if (this.config.host) {
-        // TODO 处理host的http完整性
         return `https://${this.config.host}/${this.config.prefixKey}/${fileName}`
       }
       return `https://${res.Location}`
     } catch (e: any) {
       out.warning('跳过上传', `上传图片失败，请检查: ${e.message}`)
-      // TODO DEBUG 模式下输出
     }
   }
 }

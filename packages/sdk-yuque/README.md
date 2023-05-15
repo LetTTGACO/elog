@@ -31,24 +31,10 @@
   <a href="https://github.com/LetTTGACO/elog">
     <img src="https://img.shields.io/github/issues-closed/LetTTGACO/elog" alt="GitHub closed issues">
   </a>
-
-[//]: # (  <a href="https://github.com/LetTTGACO/elog">)
-
-[//]: # (    <img src="https://img.shields.io/github/commits-since/LetTTGACO/elog/latest/next" alt="GitHub commits since latest release &#40;by date&#41;">)
-
-[//]: # (  </a>)
-
-[//]: # (  <a href="https://github.com/NervJS/taro">)
-
-[//]: # (    <img src="https://img.shields.io/github/release-date/LetTTGACO/elog" alt="GitHub Release Date">)
-
-[//]: # (  </a>)
 </div>
 
-## ⚠️ 注意
-Elog 正处于内测阶段，迭代较为频繁，使用时请锁定Elog的版本号，并加入下方交流反馈群，获取最新进展。
-
 ## 🌍 交流与反馈
+<p>如果遇到问题，请加入下方交流群进行反馈，获取最新进展。</p>
 <p>微信扫码加入群聊</p>
 <img style="width: 200px; height: 200px" src="https://user-images.githubusercontent.com/37357188/217702971-47dd05ea-e689-4091-b4e7-3ae4559ca215.png">
 

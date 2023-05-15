@@ -31,18 +31,6 @@
   <a href="https://github.com/LetTTGACO/elog">
     <img src="https://img.shields.io/github/issues-closed/LetTTGACO/elog" alt="GitHub closed issues">
   </a>
-
-[//]: # (  <a href="https://github.com/LetTTGACO/elog">)
-
-[//]: # (    <img src="https://img.shields.io/github/commits-since/LetTTGACO/elog/latest/next" alt="GitHub commits since latest release &#40;by date&#41;">)
-
-[//]: # (  </a>)
-
-[//]: # (  <a href="https://github.com/NervJS/taro">)
-
-[//]: # (    <img src="https://img.shields.io/github/release-date/LetTTGACO/elog" alt="GitHub Release Date">)
-
-[//]: # (  </a>)
 </div>
 
 ## 🌍 交流与反馈

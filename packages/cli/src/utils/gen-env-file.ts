@@ -10,6 +10,9 @@ const envStr =
   'NOTION_TOKEN=\n' +
   'NOTION_DATABASE_ID=\n' +
   '\n' +
+  '#FlowUs\n' +
+  'FLOWUS_TABLE_PAGE_ID=\n' +
+  '\n' +
   '# Confluence\n' +
   'CONFLUENCE_BASE_URL=\n' +
   'CONFLUENCE_USER=\n' +

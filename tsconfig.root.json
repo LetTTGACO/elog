@@ -1,15 +1,8 @@
 {
-  "include": [
-    "src",
-    "types",
-    "__tests__"
-  ],
   "compilerOptions": {
-    "target": "es5",
-    "module": "esnext",
-    "lib": [
-      "esnext"
-    ],
+    "incremental": true,
+    "target": "ES2015",
+    "module": "ESNext",
     "importHelpers": true,
     "declaration": true,
     "sourceMap": true,
@@ -18,14 +11,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "moduleResolution": "node",
-    "baseUrl": "./",
-    "paths": {
-      "*": [
-        "src/*",
-        "node_modules/*"
-      ]
-    },
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "tsBuildInfoFile": "dist/.tsbuildinfo"
   }
 }

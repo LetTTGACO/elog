@@ -33,7 +33,7 @@ class UPClient {
     }
     // 域名
     if (!this.config.host) {
-      out.warning(`未指定域名host，将使用测试域名：http://${this.config.bucket}.test.upcdn.net`)
+      out.access(`未指定域名host，将使用测试域名：http://${this.config.bucket}.test.upcdn.net`)
       this.config.host = `http://${this.config.bucket}.test.upcdn.net`
     }
     this.imgClient = new upyun.Client(new upyun.Service(this.config))
@@ -54,9 +54,8 @@ class UPClient {
       } else {
         return undefined
       }
-    } catch (e) {
-      // out.warn(`上传图片失败，请检查: ${e}`)
-      // TODO DEBUG 模式下输出
+    } catch (e: any) {
+      out.debug(`上传图片失败，请检查: ${e.message}`)
       return undefined
     }
   }
@@ -77,11 +76,8 @@ class UPClient {
       } else {
         return undefined
       }
-      // out.warn('上传图片失败，请检查又拍云配置')
-      // TODO DEBUG 模式下输出
-    } catch (e) {
-      // out.warn(`上传图片失败，请检查: ${e}`)
-      // TODO DEBUG 模式下输出
+    } catch (e: any) {
+      out.debug(`上传图片失败，请检查: ${e.message}`)
       return undefined
     }
   }

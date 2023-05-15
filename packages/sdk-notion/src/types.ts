@@ -24,4 +24,14 @@ export interface NotionConfig {
 export interface NotionDoc extends PageObjectResponse {
   properties: DocProperties
   catalog: DocCatalog[]
+  _index?: number
+}
+
+export interface NotionQueryParams {
+  database_id: string
+  filter?: any
+  sorts?: any
+  start_cursor?: string
+  page_size?: number
+  archived?: boolean
 }

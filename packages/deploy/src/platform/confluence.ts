@@ -20,7 +20,7 @@ class DeployConfluence {
   }
 
   async deploy(articleList: DocDetail[]) {
-    out.access('正在部署到Confluence...')
+    out.info('正在部署到Confluence...')
     // 重新排序articleList，按照层级更新文章
     // 先更新第一级，再更新第二级...
     const sortArticleList = articleList.sort((a, b) => {
@@ -77,6 +77,7 @@ class DeployConfluence {
         }
       }
     }
+    out.access('任务结束', '🎉更新成功🎉')
   }
 }
 

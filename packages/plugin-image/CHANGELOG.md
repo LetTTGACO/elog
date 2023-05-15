@@ -1,5 +1,54 @@
 # @elog/plugin-image
 
+## 0.4.3
+
+### Patch Changes
+
+- 修复 Front Matter 中字符超长问题
+- dc21449: 修复 Front Matter 中字符超长问题
+- Updated dependencies
+- Updated dependencies [dc21449]
+  - @elog/shared@0.4.3
+  - @elog/types@0.4.3
+
+## 0.4.3-beta.0
+
+### Patch Changes
+
+- 修复 Front Matter 中字符超长问题
+- Updated dependencies
+  - @elog/shared@0.4.3-beta.0
+  - @elog/types@0.4.3-beta.0
+
+## 0.4.2
+
+### Patch Changes
+
+- 锁定 notion-to-md 版本号
+- a6d7495: 文档 front matter 生成失败时跳过
+- Updated dependencies
+- Updated dependencies [a6d7495]
+  - @elog/shared@0.4.2
+  - @elog/types@0.4.2
+
+## 0.4.2-beta.0
+
+### Patch Changes
+
+- 文档 front matter 生成失败时跳过
+- Updated dependencies
+  - @elog/shared@0.4.2-beta.0
+  - @elog/types@0.4.2-beta.0
+
+## 0.4.1
+
+### Patch Changes
+
+- 修复 Notion 数据分页问题
+- Updated dependencies
+  - @elog/shared@0.4.1
+  - @elog/types@0.4.1
+
 ## 0.4.0
 
 ### Minor Changes

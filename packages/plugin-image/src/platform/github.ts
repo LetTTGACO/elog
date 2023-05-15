@@ -16,7 +16,7 @@ class GithubClient {
 
   async init() {
     if (!this.config.host) {
-      out.info('未指定加速域名，将使用默认域名：https://raw.githubusercontent.com')
+      out.access('未指定加速域名，将使用默认域名：https://raw.githubusercontent.com')
     } else if (this.config.host?.includes('cdn.jsdelivr.net')) {
       // 如果指定了加速域名
       this.config.host = 'https://cdn.jsdelivr.net'

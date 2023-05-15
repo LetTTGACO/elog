@@ -12,7 +12,7 @@ import {
   OssConfig,
   QiniuConfig,
   UPYunConfig,
-  LocalConfig,
+  ImgLocalConfig,
 } from './types'
 import { imageBedList, ImagePlatformEnum } from './const'
 
@@ -53,7 +53,7 @@ class ImgBedClient {
         const githubConfig = this.config.github as GithubConfig
         return new GithubClient(githubConfig)
       default:
-        const defaultConfig = this.config.local as LocalConfig
+        const defaultConfig = this.config.local as ImgLocalConfig
         return new LocalClient(defaultConfig)
     }
   }

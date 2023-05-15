@@ -7,9 +7,7 @@ const clean = async (customConfigPath: string, customCachePath: string) => {
     // 加载配置文件
     const { config, cacheFilePath } = getConfig(customConfigPath, customCachePath)
     const {
-      deploy: {
-        local: { outputDir: docOutputDir },
-      },
+      deploy: { local: { outputDir: docOutputDir } } = {},
       image: { enable, platform, local: { outputDir: imageOutputDir } } = {},
     } = config
     cleanCache(cacheFilePath)
@@ -18,9 +16,8 @@ const clean = async (customConfigPath: string, customCachePath: string) => {
     if (enable && platform === 'local' && imageOutputDir) {
       cleanImages(imageOutputDir)
     }
-  } catch (error) {
-    // @ts-ignore
-    out.err('清理失败', error.message)
+  } catch (error: any) {
+    out.err(`清理失败, ${error.message}`)
   }
 }
 

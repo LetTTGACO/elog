@@ -63,65 +63,6 @@ export function formatDate(date: Date | string) {
   return moment(date).format('YYYY-MM-DD HH:mm:ss')
 }
 
-/**
- * 生成单层目录信息
- * @param page
- * @param property 分类字段
- */
-// export function genSingleCatalog(page: NotionDoc, property: string): NotionCatalog[] | undefined {
-//   // 单目录
-//   const catalog = page.properties[property]
-//   if (catalog) {
-//     if (typeof catalog !== 'string') {
-//       out.warning(
-//         `${page.properties.title}文档的${property}属性应为Select（单选）类型，请检查字段是否符合规则`,
-//       )
-//       return undefined
-//     }
-//     return [
-//       {
-//         ...page,
-//         title: catalog,
-//         doc_id: page.id,
-//       },
-//     ]
-//   }
-//   return undefined
-// }
-
-/**
- * 生成多层目录信息
- */
-// export function genMultiCatalog(page: NotionDoc, property: string): NotionCatalog[] | undefined {
-//   try {
-//     const catalogProps = Object.keys(page.properties)
-//       .filter((item) => {
-//         return item.includes(property)
-//       })
-//       .sort((a, b) => {
-//         // split后取最后一个数字
-//         return Number(b.split('-').pop()) - Number(a.split('-').pop())
-//       })
-//       .filter((item) => {
-//         return !!page.properties[item]
-//       })
-//     if (!catalogProps.length) {
-//       return undefined
-//     }
-//     return catalogProps.map((item) => {
-//       return {
-//         ...page,
-//         title: page.properties[item],
-//         doc_id: page.id,
-//       }
-//     }) as NotionCatalog[]
-//   } catch (e: any) {
-//     out.warning(`${page.properties.title} 文档分类信息提取失败，请检查字段是否符合规则`)
-//     out.warning(e.message)
-//     return undefined
-//   }
-// }
-
 export function genCatalog(page: NotionDoc, property: string): DocCatalog[] | undefined {
   const catalog = page.properties[property]
   if (!catalog) {
