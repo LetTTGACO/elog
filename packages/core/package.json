@@ -12,6 +12,11 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
+  "files": [
+    'dist',
+    'src',
+
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LetTTGACO/elog.git"
