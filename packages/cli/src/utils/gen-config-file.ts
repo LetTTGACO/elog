@@ -17,15 +17,21 @@ const configJsStr =
   '      databaseId: process.env.NOTION_DATABASE_ID,\n' +
   "      filter: true, // {property: 'status', select: {equals: '已发布'}}\n" +
   "      sorts: true, // [{timestamp: 'created_time', direction: 'descending'}],\n" +
-  '      catalog: false\n' +
+  '      catalog: false,\n' +
+  '    },\n' +
+  '    flowus: {\n' +
+  '      pageId: process.env.FLOWUS_PAGE_ID,\n' +
+  "      filter: true, // {property: 'status',value: '已发布'}\n" +
+  "      sort: true, // { property: 'createdAt', direction: FlowUsSortDirectionEnum.descending }\n" +
+  '      catalog: false,\n' +
   '    },\n' +
   '  },\n' +
   '  deploy: {\n' +
   "    platform: 'local',\n" +
   '    local: {\n' +
-  "      outputDir: '',\n" +
-  "      filename: '',\n" +
-  "      format: '',\n" +
+  "      outputDir: './docs',\n" +
+  "      filename: 'title',\n" +
+  "      format: 'markdown',\n" +
   '      catalog: false,\n' +
   "      formatExt: '',\n" +
   '    },\n' +
@@ -42,8 +48,8 @@ const configJsStr =
   '    enable: false,\n' +
   "    platform: 'local',\n" +
   '    local: {\n' +
-  "      outputDir: '',\n" +
-  "      prefixKey: '',\n" +
+  "      outputDir: './docs/images',\n" +
+  "      prefixKey: '/images',\n" +
   '    },\n' +
   '    oss: {\n' +
   '      secretId: process.env.OSS_SECRET_ID,\n' +

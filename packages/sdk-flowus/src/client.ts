@@ -16,9 +16,9 @@ class FlowUsClient {
 
   constructor(config: FlowUsConfig) {
     this.config = config
-    this.config.tablePageId = config.tablePageId || process.env.FLOWUS_PAGE_ID!
+    this.config.tablePageId = config.tablePageId || process.env.FLOWUS_TABLE_PAGE_ID!
     if (!this.config.tablePageId) {
-      out.err('缺少参数', '缺少 Page ID')
+      out.err('缺少参数', '缺少 Table Page ID')
       process.exit(-1)
     }
     this.flowus = new FlowUsApi()
