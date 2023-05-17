@@ -1,6 +1,6 @@
 import { DocDetail } from '@elog/types'
 
-export interface BaseYuqueConfig {
+export interface YuqueConfig {
   /**
    * yuque token, https://www.yuque.com/settings/tokens
    */
@@ -9,14 +9,8 @@ export interface BaseYuqueConfig {
   baseUrl?: string
   login: string
   repo: string
-}
-export interface YuqueConfig extends BaseYuqueConfig {
   onlyPublic?: boolean
   onlyPublished?: boolean
-}
-
-export interface YuqueUploaderConfig extends BaseYuqueConfig {
-  catalog?: boolean
 }
 
 export type YuQueResponse<T> = {
