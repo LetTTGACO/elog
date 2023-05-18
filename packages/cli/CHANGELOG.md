@@ -1,5 +1,14 @@
 # @elog/cli
 
+## 0.4.4-beta.0
+
+### Patch Changes
+
+- 支持修改文档属性
+- Updated dependencies
+  - @elog/core@0.4.4-beta.0
+  - @elog/shared@0.4.4-beta.0
+
 ## 0.4.3
 
 ### Patch Changes

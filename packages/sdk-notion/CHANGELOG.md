@@ -1,5 +1,14 @@
 # @elog/sdk-notion
 
+## 0.4.4-beta.0
+
+### Patch Changes
+
+- 支持修改文档属性
+- Updated dependencies
+  - @elog/shared@0.4.4-beta.0
+  - @elog/types@0.4.4-beta.0
+
 ## 0.4.3
 
 ### Patch Changes
