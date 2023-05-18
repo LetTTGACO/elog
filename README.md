@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Elog</h1>
-  <p>开放式跨端博客解决方案，随意组合写作平台（语雀/Notion）和部署平台（Hexo/Vitepress/HuGo）</p>
+  <p>开放式跨端博客解决方案，随意组合写作平台（语雀/Notion/FlowUs）和部署平台（Hexo/Vitepress/HuGo）等</p>
   <a href="http://makeapullrequest.com">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome">
   </a>
@@ -52,11 +52,11 @@
 可惜目前好用的编辑器大都都不是博客平台自己提供的，而是一些第三方编辑器，代表产品：
 - Notion：出色的数据库设计，灵活度非常高
 - FlowUs：仿Notion的国内文档产品，用了下还不错，就是AI有点智障
-- ~~语雀：阿里出品，笔者觉得很不错的一款在线编辑器，涵盖日常个人、工作所需要的各种场景，够用~~ 退坑了
+- 语雀：阿里出品，笔者之前觉得很不错的一款在线编辑器，涵盖日常个人、工作所需要的各种场景，够用
 - Typora：一款出色的本地编辑器，支持实时预览和流程书写，可惜新版本收费了
 > 语雀最近限制了【互联网公开】的权限，需要会员才能使用，所以对于一些想直接把语雀当成博客站点的用户变得不太友好。~~好在API目前还不受限制，可以稳定使用~~
 > 
-> GG 语雀API需要超级会员才能用，这下语雀基本用不了了，6
+> GG 语雀API需要超级会员才能用，不过之前生成过的还能用
 
 而博客平台一般分为两类，一种是轻量化的，只负责渲染文档不提供编辑器，代表产品：
 - Hexo
@@ -96,7 +96,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和部署�
 - [x] 又拍云
 
 ## ✨ 特性
-- 📝 写作平台支持语雀/Notion
+- 📝 写作平台支持语雀/Notion/FlowUs
 - 🚀 部署平台支持所有通过渲染本地 Markdown 文档生成静态站点的博客平台
 - 🌅 图床平台支持存放到本地或上传到阿里云/腾讯云/Github/七牛云/又拍云
 - 📦 支持生成Front Matter Markdown/支持代码高亮的HTML/适用于Confluence的wiki
@@ -109,6 +109,6 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和部署�
 [Elog 使用文档](https://elog.1874.cool/)
 
 ## 🔗 最佳实践
-- [Elog Docs](https://github.com/LetTTGACO/elog-docs) 多写作平台云端写作 + vitepress 按目录生成路由 + Github Action + COS 持续集成
+- [Elog Docs](https://github.com/LetTTGACO/elog-docs) 多写作平台云端写作 + vitepress 按目录生成路由 + GitHub Action + GitHub Pages 持续集成
 
 
