@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.5.0-beta.1
+
+### Patch Changes
+
+- 修复 elog init 模版
+
 ## 0.5.0-beta.0
 
 ### Minor Changes

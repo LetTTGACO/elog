@@ -1,5 +1,19 @@
 # @elog/core
 
+## 0.5.0-beta.1
+
+### Patch Changes
+
+- 修复 elog init 模版
+- Updated dependencies
+  - @elog/deploy@0.5.0-beta.1
+  - @elog/plugin-image@0.5.0-beta.1
+  - @elog/sdk-flowus@0.5.0-beta.1
+  - @elog/sdk-notion@0.5.0-beta.1
+  - @elog/sdk-yuque@0.5.0-beta.1
+  - @elog/shared@0.5.0-beta.1
+  - @elog/types@0.5.0-beta.1
+
 ## 0.5.0-beta.0
 
 ### Minor Changes

@@ -15,6 +15,7 @@
     "@elog/types": "0.4.3"
   },
   "changesets": [
-    "fresh-goats-nail"
+    "fresh-goats-nail",
+    "gentle-icons-talk"
   ]
 }
