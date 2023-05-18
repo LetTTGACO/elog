@@ -20,7 +20,7 @@ const configJsStr =
   '      catalog: false,\n' +
   '    },\n' +
   '    flowus: {\n' +
-  '      pageId: process.env.FLOWUS_PAGE_ID,\n' +
+  '      tablePageId: process.env.FLOWUS_TABLE_PAGE_ID,\n' +
   "      filter: true, // {property: 'status',value: '已发布'}\n" +
   "      sort: true, // { property: 'createdAt', direction: FlowUsSortDirectionEnum.descending }\n" +
   '      catalog: false,\n' +
