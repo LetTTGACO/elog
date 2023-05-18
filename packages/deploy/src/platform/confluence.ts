@@ -39,7 +39,12 @@ class DeployConfluence {
     // 根据目录上传到wiki上
     for (const articleInfo of sortArticleList) {
       // 将markdown转wiki
-      articleInfo.body_wiki = this.adapter(articleInfo)
+      const formatBody = this.adapter(articleInfo)
+      if (typeof formatBody === 'object') {
+        articleInfo.body_wiki = formatBody.body
+      } else {
+        articleInfo.body_wiki = formatBody
+      }
       // 是否存在
       const cacheWikiPage = rootPageMap[articleInfo.properties.title]
       if (cacheWikiPage) {

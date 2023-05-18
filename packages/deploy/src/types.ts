@@ -26,4 +26,4 @@ export interface AdapterConfig {
   formatExt?: string
 }
 
-export type AdapterFunction = (doc: DocDetail) => string
+export type AdapterFunction = (doc: DocDetail) => string | DocDetail

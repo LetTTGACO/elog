@@ -36,15 +36,19 @@ class DeployLocal {
     }
     const outputDir = path.join(process.cwd(), this.config.outputDir)
 
-    for (const post of articleList) {
+    for (let post of articleList) {
       let formatBody = this.adapter(post)
       let fileName = filenamify(post.properties[filename])
+      if (typeof formatBody === 'object') {
+        // 如果返回的是对象，那么就把自定义文档处理器的内容当作文档
+        post = formatBody
+        formatBody = post.body
+      }
       let postPath: string
       if (this.config.catalog) {
         // 开启按目录生成
         if (Array.isArray(post.catalog)) {
           // 是否存在目录
-          // NOTE 目前只有语雀返回了这个目录信息
           const tocPath = post.catalog.map((item) => item.title).join('/')
           fileName = this.checkFileName(fileName + tocPath, fileName, post.doc_id)
           const outdir = path.join(outputDir, tocPath)
