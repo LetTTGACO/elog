@@ -3,10 +3,16 @@ import path from 'path'
 import { cacheFileNames, configFileNames } from '../const'
 import { out } from '@elog/shared'
 import { ElogConfig } from '@elog/core'
-const pkgJsonPath = path.resolve(__dirname, '../../..', 'package.json')
 
 export const getPkgJSON = () => {
-  const pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8'))
+  let pkgJson = { version: '1.0.0' }
+  try {
+    const pkgJsonPathCjs = path.resolve(__dirname, '../', 'package.json')
+    pkgJson = JSON.parse(fs.readFileSync(pkgJsonPathCjs, 'utf8'))
+  } catch (e) {
+    const pkgJsonPathMjs = path.resolve(__dirname, '../../', 'package.json')
+    pkgJson = JSON.parse(fs.readFileSync(pkgJsonPathMjs, 'utf8'))
+  }
   return {
     pkgJson,
   }
