@@ -5,7 +5,7 @@ import { out } from '@elog/shared'
 import { ElogConfig } from '@elog/core'
 
 export const getPkgJSON = () => {
-  let pkgJson = {}
+  let pkgJson = { version: '1.0.0' }
   try {
     const pkgJsonPathCjs = path.resolve(__dirname, '../', 'package.json')
     pkgJson = JSON.parse(fs.readFileSync(pkgJsonPathCjs, 'utf8'))
