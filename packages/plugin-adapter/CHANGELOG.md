@@ -1,5 +1,14 @@
 # @elog/plugin-adapter
 
+## 0.5.0-beta.2
+
+### Patch Changes
+
+- 修复 pagkage.json 找不到的问题
+- Updated dependencies
+  - @elog/shared@0.5.0-beta.2
+  - @elog/types@0.5.0-beta.2
+
 ## 0.5.0-beta.1
 
 ### Patch Changes
