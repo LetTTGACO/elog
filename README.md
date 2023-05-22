@@ -111,4 +111,8 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和部署�
 ## 🔗 最佳实践
 - [Elog Docs](https://github.com/LetTTGACO/elog-docs) 多写作平台云端写作 + vitepress 按目录生成路由 + GitHub Action + GitHub Pages 持续集成
 
-
+## 感谢
+感谢以下用户贡献了很多bugs和建议
+- [CC康纳百川](https://github.com/CCKNBC) 
+- [Steven Shum](https://github.com/shenweiyan)
+- [北门清燕](https://github.com/bmqy)
