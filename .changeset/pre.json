@@ -14,6 +14,7 @@
     "@elog/types": "0.4.3"
   },
   "changesets": [
+    "curvy-dingos-exercise",
     "nervous-vans-explode"
   ]
 }

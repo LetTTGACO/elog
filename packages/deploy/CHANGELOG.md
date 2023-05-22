@@ -1,5 +1,16 @@
 # @elog/deploy
 
+## 0.4.4-beta.1
+
+### Patch Changes
+
+- 临时去掉处理 md 表格的相关逻辑
+- Updated dependencies
+  - @elog/plugin-adapter@0.4.4-beta.1
+  - @elog/sdk-confluence@0.4.4-beta.1
+  - @elog/shared@0.4.4-beta.1
+  - @elog/types@0.4.4-beta.1
+
 ## 0.4.4-beta.0
 
 ### Patch Changes

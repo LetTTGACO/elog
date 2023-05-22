@@ -1,5 +1,11 @@
 # @elog/types
 
+## 0.4.4-beta.1
+
+### Patch Changes
+
+- 临时去掉处理 md 表格的相关逻辑
+
 ## 0.4.4-beta.0
 
 ### Patch Changes
