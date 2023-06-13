@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.5.0-beta.3
+
+### Patch Changes
+
+- 去除 remark 库及相关依赖
+
 ## 0.5.0-beta.2
 
 ### Patch Changes
