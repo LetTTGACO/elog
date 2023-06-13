@@ -1,5 +1,13 @@
 # @elog/shared
 
+## 0.4.4
+
+### Patch Changes
+
+- f087107: 临时去掉处理 md 表格的相关逻辑
+- ea16d27: 支持修改文档属性
+- 去除 remark 相关逻辑及依赖
+
 ## 0.4.4-beta.1
 
 ### Patch Changes

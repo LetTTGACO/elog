@@ -1,5 +1,22 @@
 # @elog/core
 
+## 0.4.4
+
+### Patch Changes
+
+- f087107: 临时去掉处理 md 表格的相关逻辑
+- ea16d27: 支持修改文档属性
+- 去除 remark 相关逻辑及依赖
+- Updated dependencies [f087107]
+- Updated dependencies [ea16d27]
+- Updated dependencies
+  - @elog/deploy@0.4.4
+  - @elog/plugin-image@0.4.4
+  - @elog/sdk-notion@0.4.4
+  - @elog/sdk-yuque@0.4.4
+  - @elog/shared@0.4.4
+  - @elog/types@0.4.4
+
 ## 0.4.4-beta.1
 
 ### Patch Changes
