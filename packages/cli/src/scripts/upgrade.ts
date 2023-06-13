@@ -3,8 +3,6 @@ import inquirer from 'inquirer'
 import { gt } from 'semver'
 import { out } from '@elog/shared'
 import { runCmdSync } from '../utils/run'
-import { getPkgJSON } from '../utils/utils'
-const { pkgJson } = getPkgJSON()
 
 const enum PackageManager {
   NPM = 'npm',
@@ -12,9 +10,9 @@ const enum PackageManager {
   YARN = 'yarn',
 }
 
-const upgrade = async () => {
-  const newVersion = await latestVersion(pkgJson.name)
-  const currentVersion = pkgJson.version
+const upgrade = async ({ version, name }: { version: string; name: string }) => {
+  const newVersion = await latestVersion(name)
+  const currentVersion = version
   out.access('当前版本', currentVersion)
   out.access('最新版本', newVersion)
   if (gt(newVersion, currentVersion)) {
@@ -59,9 +57,9 @@ const upgrade = async () => {
             .then((answers) => {
               const { cli } = answers
               if (cli === PackageManager.YARN) {
-                runCmdSync(`yarn global add ${pkgJson.name}@${newVersion}`)
+                runCmdSync(`yarn global add ${name}@${newVersion}`)
               } else {
-                runCmdSync(`${cli} install ${pkgJson.name}@${newVersion} -g`)
+                runCmdSync(`${cli} install ${name}@${newVersion} -g`)
               }
             })
         }

@@ -33,8 +33,12 @@
   </a>
 </div>
 
+## ⚠️ 注意
+Elog 目前仍处于 beta 阶段。你已经可以用它来构建你的站点，但是它的配置和 API 还不够稳定，很可能会在 Minor 版本中发生 Breaking Changes 。
+
+因此，使用时请锁定版本号，并在每次更新 beta 版本之后，请一定要仔细阅读[更新日志](https://github.com/LetTTGACO/elog/releases)。如果遇到问题，请加入下方交流群进行反馈，获取最新进展。
+
 ## 🌍 交流与反馈
-<p>如果遇到问题，请加入下方交流群进行反馈，获取最新进展。</p>
 <p>微信扫码加入群聊</p>
 <img style="width: 200px; height: 200px" src="https://user-images.githubusercontent.com/37357188/217702971-47dd05ea-e689-4091-b4e7-3ae4559ca215.png">
 

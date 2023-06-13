@@ -1,3 +1,5 @@
+import { createRequire } from 'node:module'
+const require = createRequire(import.meta.url)
 import { out } from '@elog/shared'
 import path from 'path'
 

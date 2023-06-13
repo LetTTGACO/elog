@@ -1,6 +1,6 @@
-import * as shell from 'shelljs'
+import shell from 'shelljs'
 import chalk, { Chalk } from 'chalk'
-import { chunk } from 'lodash'
+import { chunk } from 'lodash-es'
 import { LogLevel, __columns } from './const'
 import * as process from 'process'
 

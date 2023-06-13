@@ -1,4 +1,4 @@
-import { HttpClientResponse, request as req, RequestOptions } from 'urllib'
+import { HttpClientResponse, RequestOptions, request as req } from 'urllib'
 
 /**
  * 网络请求封装
@@ -9,6 +9,8 @@ export const request = async <T>(
   url: string,
   reqOpts?: RequestOptions,
 ): Promise<HttpClientResponse<T>> => {
+  // 超时时间 60s
+  const timeout = Number(process.env.REQUEST_TIMEOUT) || 60000
   const opts: RequestOptions = {
     contentType: 'json',
     dataType: 'json',
@@ -16,13 +18,8 @@ export const request = async <T>(
       'User-Agent': 'Elog',
       ...reqOpts?.headers,
     },
-    gzip: true,
-    // proxy
-    rejectUnauthorized: !process.env.http_proxy,
-    enableProxy: !!process.env.http_proxy,
-    proxy: process.env.http_proxy,
-    // 超时时间 60s
-    timeout: 60000,
+    compressed: true,
+    timeout,
     ...reqOpts,
   }
   return req(url, opts)

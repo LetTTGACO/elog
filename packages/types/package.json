@@ -6,6 +6,7 @@
   "author": "1874 <me@mail.1874.cool>",
   "types": "dist/index.d.ts",
   "license": "MIT",
+  "type": "module",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
@@ -18,6 +19,6 @@
     "url": "https://github.com/LetTTGACO/elog/issues"
   },
   "scripts": {
-    "build": "rimraf dist && tsup --legacy-output"
+    "build": "rimraf dist && tsup"
   }
 }

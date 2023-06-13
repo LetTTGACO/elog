@@ -5,8 +5,8 @@
   "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-cli#readme",
   "author": "1874 <me@mail.1874.cool>",
   "main": "dist/index.js",
-  "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
+  "type": "module",
   "license": "MIT",
   "publishConfig": {
     "access": "public",
@@ -26,7 +26,7 @@
     "node": ">=14"
   },
   "scripts": {
-    "build": "rimraf dist && tsup --legacy-output"
+    "build": "rimraf dist && tsup"
   },
   "dependencies": {
     "@elog/core": "workspace:*",

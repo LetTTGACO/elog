@@ -1,6 +1,6 @@
 import frontMatter from 'front-matter'
 import moment from 'moment'
-import unified from 'unified'
+import { unified } from 'unified'
 import { DocUnite, GetProps } from './types'
 import rehypeParse from 'rehype-parse'
 import rehypeStringify from 'rehype-stringify'
@@ -68,9 +68,6 @@ export function processMarkdownRaw(raw: string) {
   const emptyAnchor = /<a name=\".*?\"><\/a>/g
   const hiddenContent = /<div style="display:none">[\s\S]*?<\/div>/gi
   raw = raw.replace(nul, '').replace(nul1, '').replace(hiddenContent, '').replace(emptyAnchor, '')
-  // 处理markdown
-  // 不处理，没啥影响
-  // raw = processMarkdown(raw)
   const multiBr = /(<br>[\s\n]){2}/gi
   const multiBrEnd = /(<br \/>[\n]?){2}/gi
   const brBug = /<br \/>/g
@@ -126,7 +123,7 @@ const processHtml = (content: string) => {
     .use(rehypeStringify)
     // 开始同步执行解析
     .processSync(content)
-  return processValue.contents as string
+  return processValue.value as string
 }
 
 /**

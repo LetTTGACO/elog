@@ -1,3 +1,5 @@
+import { createRequire } from 'node:module'
+const require = createRequire(import.meta.url)
 // 计算文件的eTag，参数为buffer或者readableStream或者文件路径
 export function getEtag(buffer, callback) {
   // 判断传入的参数是buffer还是stream还是filepath

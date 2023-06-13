@@ -22,7 +22,7 @@ class ImageUploader {
   async getPicBufferFromURL(url: string) {
     try {
       const res = await request<Buffer>(url, {
-        dataType: 'arraybuffer',
+        dataType: 'buffer',
         headers: {
           // NOTE FlowUs图片下载有限制，需要referer为https://flowus.cn/
           referer: process.env.REFERER_URL,

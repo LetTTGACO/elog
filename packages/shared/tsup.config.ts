@@ -5,7 +5,7 @@ export default defineConfig({
   entry: ['src/index.ts'],
 
   // 打包类型  支持以下几种 'cjs' | 'esm' | 'iife'
-  format: ['cjs', 'esm'],
+  format: 'esm',
   platform: 'node',
 
   // 生成类型文件 xxx.d.ts
