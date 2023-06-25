@@ -25,7 +25,7 @@
     "node": ">=14"
   },
   "scripts": {
-    "build": "father build"
+    "build": "rimraf dist && father build"
   },
   "dependencies": {
     "@elog/core": "workspace:*",

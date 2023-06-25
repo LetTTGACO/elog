@@ -19,7 +19,7 @@
     "url": "https://github.com/LetTTGACO/elog/issues"
   },
   "scripts": {
-    "build": "father build"
+    "build": "rimraf dist && father build"
   },
   "dependencies": {
     "chalk": "^4.1.2",
