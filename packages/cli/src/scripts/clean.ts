@@ -7,13 +7,15 @@ const clean = async (customConfigPath: string, customCachePath: string) => {
     // 加载配置文件
     const { config, cacheFilePath } = getConfig(customConfigPath, customCachePath)
     const {
-      deploy: { local: { outputDir: docOutputDir } } = {},
-      image: { enable, platform, local: { outputDir: imageOutputDir } } = {},
+      deploy: { platform: deployPlatform, local: { outputDir: docOutputDir } } = {},
+      image: { enable, platform: imagePlatform, local: { outputDir: imageOutputDir } } = {},
     } = config
     cleanCache(cacheFilePath)
-    cleanPost(docOutputDir)
+    if (deployPlatform === 'local' && docOutputDir) {
+      cleanPost(docOutputDir)
+    }
     // 清楚本地图片
-    if (enable && platform === 'local' && imageOutputDir) {
+    if (enable && imagePlatform === 'local' && imageOutputDir) {
       cleanImages(imageOutputDir)
     }
   } catch (error: any) {
