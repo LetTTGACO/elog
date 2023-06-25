@@ -7,9 +7,7 @@ const clean = async (customConfigPath: string, customCachePath: string) => {
     // 加载配置文件
     const { config, cacheFilePath } = getConfig(customConfigPath, customCachePath)
     const {
-      deploy: {
-        local: { outputDir: docOutputDir },
-      },
+      deploy: { local: { outputDir: docOutputDir } } = {},
       image: { enable, platform, local: { outputDir: imageOutputDir } } = {},
     } = config
     cleanCache(cacheFilePath)
