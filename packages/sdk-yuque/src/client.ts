@@ -1,6 +1,6 @@
 import asyncPool from 'tiny-async-pool'
 import { out, request, RequestOptions } from '@elog/shared'
-import { getProps, processHtmlRaw, processMarkdownRaw } from './utils'
+import { getProps, processHtmlRaw, processMarkdownRaw, processWordWrap } from './utils'
 import {
   YuqueConfig,
   YuQueResponse,
@@ -8,8 +8,10 @@ import {
   YuqueDoc,
   YuqueDocDetail,
   YuqueDocProperties,
+  FormatExtFunction,
 } from './types'
 import { DocDetail, YuqueCatalog, DocCatalog } from '@elog/types'
+import { FormatExt } from './format-ext'
 
 /** 默认语雀API 路径 */
 const DEFAULT_API_URL = 'https://www.yuque.com/api/v2'
@@ -18,6 +20,7 @@ class YuqueClient {
   config: YuqueConfig
   namespace: string
   catalog: YuqueCatalog[] = []
+  formatExtCtx: FormatExtFunction
 
   constructor(config: YuqueConfig) {
     this.config = config
@@ -27,6 +30,12 @@ class YuqueClient {
       process.exit(-1)
     }
     this.namespace = `${config.login}/${config.repo}`
+    if (config.formatExt) {
+      const formatExt = new FormatExt(config.formatExt)
+      this.formatExtCtx = formatExt.getFormatExt()
+    } else {
+      this.formatExtCtx = processWordWrap
+    }
   }
 
   /**
@@ -136,7 +145,10 @@ class YuqueClient {
       article.body_original = article.body
       // 解析出properties
       const { body, properties } = getProps(article)
-      const newBody = processMarkdownRaw(body)
+      // 处理语雀字符串
+      let newBody = processMarkdownRaw(body)
+      // 处理换行/自定义处理
+      newBody = this.formatExtCtx({ ...article, body: newBody })
       article.properties = properties as YuqueDocProperties
       // 替换body
       article.body = newBody
