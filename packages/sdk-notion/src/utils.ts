@@ -38,8 +38,17 @@ export function getPropVal(data: any) {
 export function props(page: NotionDoc): DocProperties {
   let data: any = {}
   if (!Object.keys(page.properties).length) return data
+  let titleKey = ''
   for (const key in page.properties) {
+    if (page.properties[key]?.type === 'title') {
+      titleKey = key
+    }
     data[key] = getPropVal(page.properties[key])
+  }
+  // 单独处理title
+  if (!data.title) {
+    const titleVal = page.properties[titleKey].title
+    data.title = titleVal.map((a: any) => a.plain_text).join('')
   }
   // 单独处理urlname
   if (!data.urlname) {
