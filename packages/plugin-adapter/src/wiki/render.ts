@@ -48,12 +48,14 @@ class WikiRenderer extends MarkdownRenderer {
   list(body: string, ordered: boolean) {
     const arr = body.trim().split('\n').filter(Boolean)
     const type = ordered ? '#' : '*'
-    return arr
-      .map((line) => {
-        const isSub = line.startsWith(type)
-        return '\n' + type + (isSub ? '' : ' ') + line
-      })
-      .join('')
+    return (
+      arr
+        .map((line) => {
+          const isSub = line.startsWith(type)
+          return '\n' + type + (isSub ? '' : ' ') + line
+        })
+        .join('') + '\n\n'
+    )
   }
   listitem(body: string) {
     return body + '\n'
