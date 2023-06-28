@@ -51,7 +51,7 @@ class WikiRenderer extends MarkdownRenderer {
     return arr
       .map((line) => {
         const isSub = line.startsWith(type)
-        return '\n' + type + isSub ? '' : ' ' + line
+        return '\n' + type + (isSub ? '' : ' ') + line
       })
       .join('')
   }
