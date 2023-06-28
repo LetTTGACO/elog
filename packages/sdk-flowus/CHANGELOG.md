@@ -1,5 +1,13 @@
 # @elog/sdk-flowus
 
+## 0.5.0-beta.4
+
+### Patch Changes
+
+- 1.修复 md2confluence 时无序/有序缩紧列表的问题 2.notion title 表格属性不存在时，取默认
+- Updated dependencies
+  - @elog/shared@0.5.0-beta.4
+
 ## 0.5.0-beta.3
 
 ### Patch Changes
