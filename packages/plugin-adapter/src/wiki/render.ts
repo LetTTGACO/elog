@@ -2,6 +2,19 @@ import { Renderer as MarkdownRenderer, marked } from 'marked'
 import { stringify } from 'querystring'
 
 /**
+ * confluence wiki 语言映射
+ */
+const langMap: any = {
+  javascript: 'js',
+  typescript: 'js',
+  java: 'java',
+  shell: 'bash',
+  html: 'html',
+  xml: 'xml',
+  yaml: 'yml',
+}
+
+/**
  * WIKI 渲染器
  */
 class WikiRenderer extends MarkdownRenderer {
@@ -81,6 +94,7 @@ class WikiRenderer extends MarkdownRenderer {
   code(code: string, lang: string) {
     if (lang) {
       lang = lang.toLowerCase()
+      lang = langMap[lang] || 'none'
     }
     let config = {
       language: lang,
