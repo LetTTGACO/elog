@@ -68,14 +68,29 @@ export function processMarkdownRaw(raw: string) {
   const emptyAnchor = /<a name=\".*?\"><\/a>/g
   const hiddenContent = /<div style="display:none">[\s\S]*?<\/div>/gi
   raw = raw.replace(nul, '').replace(nul1, '').replace(hiddenContent, '').replace(emptyAnchor, '')
-  // 处理markdown
-  // 不处理，没啥影响
-  // raw = processMarkdown(raw)
+  return raw
+}
+
+/**
+ * 处理换行
+ * @param doc
+ */
+export function processWordWrap(doc: { body: string }) {
+  let { body: raw } = doc
   const multiBr = /(<br>[\s\n]){2}/gi
   const multiBrEnd = /(<br \/>[\n]?){2}/gi
   const brBug = /<br \/>/g
   // 删除语雀特有的锚点
   raw = raw.replace(multiBr, '<br>').replace(multiBrEnd, '<br />\n').replace(brBug, '\n')
+  return raw
+}
+
+/**
+ * 不处理
+ * @param doc
+ */
+export function noProcess(doc: { body: string }) {
+  let { body: raw } = doc
   return raw
 }
 

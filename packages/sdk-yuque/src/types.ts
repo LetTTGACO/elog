@@ -1,5 +1,8 @@
 import { DocDetail } from '@elog/types'
 
+export type FormatExtConfig = ((doc: DocDetail) => string) | string | boolean
+export type FormatExtFunction = (doc: DocDetail) => string
+
 export interface YuqueConfig {
   /**
    * yuque token, https://www.yuque.com/settings/tokens
@@ -11,6 +14,8 @@ export interface YuqueConfig {
   repo: string
   onlyPublic?: boolean
   onlyPublished?: boolean
+  /** 自定义处理器 */
+  formatExt?: FormatExtConfig
 }
 
 export type YuQueResponse<T> = {
