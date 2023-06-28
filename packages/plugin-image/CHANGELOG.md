@@ -1,5 +1,14 @@
 # @elog/plugin-image
 
+## 0.5.0-beta.5
+
+### Patch Changes
+
+- 1.修复 md2confluence 时无序/有序缩紧列表的问题
+- Updated dependencies
+  - @elog/shared@0.5.0-beta.5
+  - @elog/types@0.5.0-beta.5
+
 ## 0.5.0-beta.4
 
 ### Patch Changes
