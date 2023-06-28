@@ -1,5 +1,19 @@
 # @elog/core
 
+## 0.5.0-beta.7
+
+### Patch Changes
+
+- confluence wiki 语言映射
+- Updated dependencies
+  - @elog/deploy@0.5.0-beta.7
+  - @elog/plugin-image@0.5.0-beta.7
+  - @elog/sdk-flowus@0.5.0-beta.7
+  - @elog/sdk-notion@0.5.0-beta.7
+  - @elog/sdk-yuque@0.5.0-beta.7
+  - @elog/shared@0.5.0-beta.7
+  - @elog/types@0.5.0-beta.7
+
 ## 0.5.0-beta.6
 
 ### Patch Changes

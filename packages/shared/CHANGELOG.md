@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.5.0-beta.7
+
+### Patch Changes
+
+- confluence wiki 语言映射
+
 ## 0.5.0-beta.6
 
 ### Patch Changes
