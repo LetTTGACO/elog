@@ -84,35 +84,30 @@ class FlowUsClient {
           sort = {
             property: 'createdAt',
             direction: FlowUsSortDirectionEnum.descending,
-            isDate: true,
           }
           break
         case FlowUsSortPresetEnum.createTimeAsc:
           sort = {
             property: 'createdAt',
             direction: FlowUsSortDirectionEnum.ascending,
-            isDate: true,
           }
           break
         case FlowUsSortPresetEnum.updateTimeDesc:
           sort = {
             property: 'updatedAt',
             direction: FlowUsSortDirectionEnum.descending,
-            isDate: true,
           }
           break
         case FlowUsSortPresetEnum.updateTimeAsc:
           sort = {
             property: 'updatedAt',
             direction: FlowUsSortDirectionEnum.ascending,
-            isDate: true,
           }
           break
         default:
           sort = {
             property: 'createdAt',
             direction: FlowUsSortDirectionEnum.descending,
-            isDate: true,
           }
       }
     }

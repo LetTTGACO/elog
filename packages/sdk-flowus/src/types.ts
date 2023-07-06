@@ -14,11 +14,10 @@ export interface FlowUsFilterItem {
 export interface FlowUsSortItem {
   property: string
   direction: string
-  isDate?: boolean
 }
 
 export type FlowUsFilter = boolean | FlowUsFilterItem | FlowUsFilterItem[]
-export type FlowUsSort = boolean | FlowUsSortPresetEnum | FlowUsSortItem | FlowUsSortItem[]
+export type FlowUsSort = boolean | FlowUsSortPresetEnum | FlowUsSortItem
 
 export interface FlowUsConfig {
   tablePageId: string
