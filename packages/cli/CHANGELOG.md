@@ -1,5 +1,14 @@
 # @elog/cli
 
+## 0.5.0-beta.9
+
+### Patch Changes
+
+- 升级 flowus-sdk 版本
+- Updated dependencies
+  - @elog/core@0.5.0-beta.9
+  - @elog/shared@0.5.0-beta.9
+
 ## 0.5.0-beta.8
 
 ### Patch Changes
