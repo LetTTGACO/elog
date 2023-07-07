@@ -1,5 +1,14 @@
 # @elog/cli
 
+## 0.5.0-beta.8
+
+### Patch Changes
+
+- fix: 优化 flowus 的 front-matter 的处理
+- Updated dependencies
+  - @elog/core@0.5.0-beta.8
+  - @elog/shared@0.5.0-beta.8
+
 ## 0.5.0-beta.7
 
 ### Patch Changes
