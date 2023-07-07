@@ -59,6 +59,23 @@ export function getPropVal(type: string, val: any, pageTitle: string) {
 }
 
 /**
+ * 判断是否是多维数组
+ * @param arr
+ */
+const isMultiArray = (arr: any[]) => {
+  if (Array.isArray(arr)) {
+    // 判断是否是数组
+    for (let i = 0; i < arr.length; i++) {
+      if (Array.isArray(arr[i])) {
+        // 判断数组元素是否也是数组
+        return true // 是多维数组，返回true
+      }
+    }
+  }
+  return false // 不是多维数组，返回false
+}
+
+/**
  * 生成元数据
  * @returns {Object}
  * @param pageBlock
@@ -77,12 +94,26 @@ export function props(pageBlock: Block, tableBlock: Block): DocProperties {
   if (!propIds.length) return properties
   propIds.forEach((propId) => {
     const propConfig = tableBlock.data.schema[propId]
+    if (!propConfig) return
     const propName = propConfig.name
     const propType = propConfig.type
     // 判断类型，进行不同类型的取值
-    properties[propName] = pageProperties[propId].map((value) => {
-      return getPropVal(propType, value, pageBlock.title) as string
-    })[0]
+    const propValList = pageProperties[propId].map((value) => {
+      return getPropVal(propType, value, pageBlock.title) as string | string[]
+    })
+    if (!propValList.length) return
+    // 判断propValList是否是多维数组
+    const isMulti = isMultiArray(propValList)
+    let propVal: string | string[]
+    // 如果propValList是多维数组，则join('')
+    if (!isMulti) {
+      propVal = propValList.join('')
+    } else {
+      // 如果propValList是二维数组，则flat()
+      propVal = propValList.flat().filter(Boolean)
+    }
+    if (!propVal?.length) return
+    properties[propName] = propVal
   })
   return properties
 }
