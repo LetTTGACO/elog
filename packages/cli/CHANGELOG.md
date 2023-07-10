@@ -1,5 +1,14 @@
 # @elog/cli
 
+## 0.4.5
+
+### Patch Changes
+
+- 放开 request 的超时时间，支持配置 REQUEST_TIMEOUT 环境变量来自定义超时时间
+- Updated dependencies
+  - @elog/core@0.4.5
+  - @elog/shared@0.4.5
+
 ## 0.4.4
 
 ### Patch Changes
