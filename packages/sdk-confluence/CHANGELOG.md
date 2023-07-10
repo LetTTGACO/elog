@@ -1,5 +1,14 @@
 # @elog/sdk-confluence
 
+## 0.5.0-beta.10
+
+### Patch Changes
+
+- 优化 request 的超时时间
+- Updated dependencies
+  - @elog/shared@0.5.0-beta.10
+  - @elog/types@0.5.0-beta.10
+
 ## 0.5.0-beta.9
 
 ### Patch Changes
