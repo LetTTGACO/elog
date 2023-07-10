@@ -22,7 +22,7 @@ export const request = async <T>(
     enableProxy: !!process.env.http_proxy,
     proxy: process.env.http_proxy,
     // 超时时间 60s
-    timeout: 60000,
+    timeout: Number(process.env?.REQUEST_TIMEOUT || 60000) || 60000,
     ...reqOpts,
   }
   return req(url, opts)
