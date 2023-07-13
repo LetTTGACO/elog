@@ -1,4 +1,5 @@
 import { HttpClientResponse, request as req, RequestOptions } from 'urllib'
+import out from './out'
 
 /**
  * 网络请求封装
@@ -25,5 +26,6 @@ export const request = async <T>(
     timeout: Number(process.env?.REQUEST_TIMEOUT || 60000) || 60000,
     ...reqOpts,
   }
+  out.debug('API请求', JSON.stringify(opts))
   return req(url, opts)
 }
