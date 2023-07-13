@@ -26,12 +26,12 @@
     "@elog/shared": "workspace:*",
     "moment": "^2.29.4",
     "tiny-async-pool": "^1.3.0",
-    "@flowusx/flowus-client": "^0.0.1-beta.4",
-    "@flowusx/flowus-to-md": "^0.0.1-beta.4"
+    "@flowusx/flowus-client": "^0.0.1",
+    "@flowusx/flowus-to-md": "^0.0.1"
   },
   "devDependencies": {
     "@elog/types": "workspace:*",
-    "@flowusx/flowus-types": "^0.0.1-beta.4",
+    "@flowusx/flowus-types": "^0.0.1",
     "@types/tiny-async-pool": "^1.0.1"
   }
 }
