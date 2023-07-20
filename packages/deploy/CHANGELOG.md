@@ -1,5 +1,16 @@
 # @elog/deploy
 
+## 0.6.0-beta.3
+
+### Patch Changes
+
+- elog init 适配语雀帐号密码方式
+- Updated dependencies
+  - @elog/plugin-adapter@0.6.0-beta.3
+  - @elog/sdk-confluence@0.6.0-beta.3
+  - @elog/shared@0.6.0-beta.3
+  - @elog/types@0.6.0-beta.3
+
 ## 0.6.0-beta.2
 
 ### Patch Changes

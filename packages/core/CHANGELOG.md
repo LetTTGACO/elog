@@ -1,5 +1,19 @@
 # @elog/core
 
+## 0.6.0-beta.3
+
+### Patch Changes
+
+- elog init 适配语雀帐号密码方式
+- Updated dependencies
+  - @elog/deploy@0.6.0-beta.3
+  - @elog/plugin-image@0.6.0-beta.3
+  - @elog/sdk-flowus@0.6.0-beta.3
+  - @elog/sdk-notion@0.6.0-beta.3
+  - @elog/sdk-yuque@0.6.0-beta.3
+  - @elog/shared@0.6.0-beta.3
+  - @elog/types@0.6.0-beta.3
+
 ## 0.6.0-beta.2
 
 ### Patch Changes

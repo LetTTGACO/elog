@@ -1,6 +1,6 @@
 {
   "name": "@elog/plugin-image",
-  "version": "0.6.0-beta.2",
+  "version": "0.6.0-beta.3",
   "description": "elog的图片处理插件，将文章中的图片上传到cdn，用来解决图片防盗链的问题",
   "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-plugin-image#readme",
   "author": "1874 <me@mail.1874.cool>",

@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.6.0-beta.3
+
+### Patch Changes
+
+- elog init 适配语雀帐号密码方式
+
 ## 0.6.0-beta.2
 
 ### Patch Changes
