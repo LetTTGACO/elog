@@ -1,5 +1,16 @@
 # @elog/sdk-flowus
 
+## 0.6.0-beta.0
+
+### Minor Changes
+
+- elog sync 支持强制同步
+
+### Patch Changes
+
+- Updated dependencies
+  - @elog/shared@0.6.0-beta.0
+
 ## 0.5.0
 
 ### Minor Changes

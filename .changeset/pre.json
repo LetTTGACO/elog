@@ -1,0 +1,20 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "@elog/cli": "0.5.0",
+    "@elog/core": "0.5.0",
+    "@elog/deploy": "0.5.0",
+    "@elog/plugin-adapter": "0.5.0",
+    "@elog/plugin-image": "0.5.0",
+    "@elog/sdk-confluence": "0.5.0",
+    "@elog/sdk-flowus": "0.5.0",
+    "@elog/sdk-notion": "0.5.0",
+    "@elog/sdk-yuque": "0.5.0",
+    "@elog/shared": "0.5.0",
+    "@elog/types": "0.5.0"
+  },
+  "changesets": [
+    "kind-carrots-yawn"
+  ]
+}

@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.6.0-beta.0
+
+### Minor Changes
+
+- elog sync 支持强制同步
+
 ## 0.5.0
 
 ### Minor Changes
