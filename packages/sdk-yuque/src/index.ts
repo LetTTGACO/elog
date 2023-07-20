@@ -1,5 +1,9 @@
 export * from './types'
 
-import Yuque from './core'
+export { YuqueWithPwdConfig, YuqueLogin } from './pwd/types'
+export { YuqueWithTokenConfig } from './token/types'
 
-export default Yuque
+import YuqueWithToken from './token/core'
+import YuqueWithPwd from './pwd/core'
+
+export { YuqueWithToken, YuqueWithPwd }

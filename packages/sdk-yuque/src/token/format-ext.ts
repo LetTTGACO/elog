@@ -1,7 +1,8 @@
-import { FormatExtConfig, FormatExtFunction } from './types'
+import { FormatExtFunction } from '../types'
 import { out } from '@elog/shared'
 import path from 'path'
-import { noProcess, processWordWrap } from './utils'
+import { noProcess, processWordWrap } from '../utils'
+import { FormatExtConfig } from './types'
 
 /**
  * 自定义处理器

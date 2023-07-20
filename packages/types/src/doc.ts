@@ -24,8 +24,13 @@ export interface YuqueCatalog {
   uuid: string
   child_uuid: string
   parent_uuid: string
+  /** 官方token模式存在 */
   slug: string
+  /** 客户端api模式下存在 */
+  url: string
+  /** 官方token模式存在 */
   depth: number
+  /** depth - 1 */
   level: number
 }
 

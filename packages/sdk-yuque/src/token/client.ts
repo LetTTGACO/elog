@@ -1,28 +1,28 @@
 import asyncPool from 'tiny-async-pool'
 import { out, request, RequestOptions } from '@elog/shared'
-import { getProps, processHtmlRaw, processMarkdownRaw, processWordWrap } from './utils'
+import { getProps, processHtmlRaw, processMarkdownRaw, processWordWrap } from '../utils'
 import {
-  YuqueConfig,
   YuQueResponse,
   DocUnite,
   YuqueDoc,
   YuqueDocDetail,
   YuqueDocProperties,
   FormatExtFunction,
-} from './types'
+} from '../types'
 import { DocDetail, YuqueCatalog, DocCatalog } from '@elog/types'
 import { FormatExt } from './format-ext'
+import { YuqueWithTokenConfig } from './types'
 
 /** 默认语雀API 路径 */
 const DEFAULT_API_URL = 'https://www.yuque.com/api/v2'
 
 class YuqueClient {
-  config: YuqueConfig
+  config: YuqueWithTokenConfig
   namespace: string
   catalog: YuqueCatalog[] = []
   formatExtCtx: FormatExtFunction
 
-  constructor(config: YuqueConfig) {
+  constructor(config: YuqueWithTokenConfig) {
     this.config = config
     this.config.token = config.token || process.env.YUQUE_TOKEN!
     if (!this.config.token) {
