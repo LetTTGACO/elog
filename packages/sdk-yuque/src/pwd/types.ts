@@ -1,7 +1,7 @@
 export interface YuqueWithPwdConfig {
   username: string
   password: string
-  baseUrl?: string
+  host?: string
   login: string
   repo: string
   linebreak?: boolean

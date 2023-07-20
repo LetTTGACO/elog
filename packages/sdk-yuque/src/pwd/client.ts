@@ -10,7 +10,7 @@ import { YuqueWithPwdConfig, YuqueLogin } from './types'
 import mkdirp from 'mkdirp'
 
 /** 默认语雀API 路径 */
-const DEFAULT_API_URL = 'https://www.yuque.com'
+const DEFAULT_HOST = 'https://www.yuque.com'
 
 class YuqueClient {
   config: YuqueWithPwdConfig
@@ -29,7 +29,7 @@ class YuqueClient {
       process.exit(-1)
     }
     this.namespace = `${this.config.login}/${this.config.repo}`
-    this.baseUrl = this.config.baseUrl || DEFAULT_API_URL
+    this.baseUrl = this.config.host || DEFAULT_HOST
     if (this.baseUrl.endsWith('/')) {
       // 删除最后一个斜杠
       this.baseUrl = this.baseUrl.slice(0, -1)
