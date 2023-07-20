@@ -11,6 +11,7 @@ export enum DocStatus {
  */
 export enum WritePlatform {
   YUQUE = 'yuque',
+  YUQUE_WITH_PWD = 'yuque_pwd',
   NOTION = 'notion',
   FLOWUS = 'flowus',
 }

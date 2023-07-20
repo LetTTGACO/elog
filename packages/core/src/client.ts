@@ -1,5 +1,10 @@
 // write
-import YuqueClient, { YuqueConfig } from '@elog/sdk-yuque'
+import {
+  YuqueWithToken,
+  YuqueWithTokenConfig,
+  YuqueWithPwd,
+  YuqueWithPwdConfig,
+} from '@elog/sdk-yuque'
 import NotionClient, { NotionConfig } from '@elog/sdk-notion'
 import FlowUsClient, { FlowUsConfig } from '@elog/sdk-flowus'
 // deploy
@@ -15,7 +20,6 @@ import { WritePlatform, DocStatus } from './const'
 import { out } from '@elog/shared'
 import * as fs from 'fs'
 import * as path from 'path'
-import * as process from 'process'
 
 /**
  * 处理器
@@ -49,6 +53,10 @@ class Elog {
     this.initDeployPlatform(config)
     // 初始化图片转CDN
     this.initImgCdn(config)
+    process.on('uncaughtException', (res) => {
+      // @ts-ignore
+      out.err(res)
+    })
   }
 
   /**
@@ -75,8 +83,11 @@ class Elog {
    */
   initWritingPlatform(config: ElogConfig) {
     if (config.write.platform === WritePlatform.YUQUE) {
-      let yuqueConfig = config.write.yuque as YuqueConfig
-      this.downloaderClient = new YuqueClient(yuqueConfig)
+      let yuqueConfig = config.write.yuque as YuqueWithTokenConfig
+      this.downloaderClient = new YuqueWithToken(yuqueConfig)
+    } else if (config.write.platform === WritePlatform.YUQUE_WITH_PWD) {
+      let yuqueConfig = config.write.yuque_pwd as YuqueWithPwdConfig
+      this.downloaderClient = new YuqueWithPwd(yuqueConfig)
     } else if (config.write.platform === WritePlatform.NOTION) {
       let notionConfig = config.write.notion as NotionConfig
       this.downloaderClient = new NotionClient(notionConfig)
@@ -115,6 +126,9 @@ class Elog {
    * 下载文章详情列表
    */
   async fetchArticles() {
+    if (this.config.write.platform === WritePlatform.YUQUE_WITH_PWD) {
+      await this.downloaderClient.login()
+    }
     let articleList = (await this.downloaderClient.getDocList()) as BaseDoc[]
     if (!articleList?.length) {
       this.needUpdate = false
@@ -193,8 +207,11 @@ class Elog {
   writeArticleCache() {
     try {
       let catalog: any[] = []
-      if (this.config.write.platform === WritePlatform.YUQUE) {
-        const yuqueClient = this.downloaderClient as YuqueClient
+      if (
+        this.config.write.platform === WritePlatform.YUQUE ||
+        this.config.write.platform === WritePlatform.YUQUE_WITH_PWD
+      ) {
+        const yuqueClient = this.downloaderClient
         catalog = yuqueClient.ctx.catalog
       } else if (this.config.write.platform === WritePlatform.NOTION) {
         const notionClient = this.downloaderClient as NotionClient

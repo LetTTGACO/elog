@@ -1,20 +1,32 @@
-import type { YuqueConfig, YuqueDoc } from './types'
+import type { YuqueDoc } from '../types'
 import YuqueClient from './client'
 import { BaseDoc } from '@elog/types'
 import { out } from '@elog/shared'
+import { YuqueWithPwdConfig } from './types'
+import { getLocalCookies } from '../utils'
 
 /**
  * Yuque SDK
  * @class
  */
-class Yuque {
-  config: YuqueConfig
+class YuqueWithPwd {
+  config: YuqueWithPwdConfig
   ctx: YuqueClient
   pages: YuqueDoc[] = []
 
-  constructor(options: YuqueConfig) {
+  constructor(options: YuqueWithPwdConfig) {
     this.config = options
     this.ctx = new YuqueClient(this.config)
+  }
+
+  /**
+   * 登陆语雀
+   */
+  async login() {
+    const cookie = getLocalCookies()
+    if (!cookie || cookie?.expired + 86400000 <= Date.now()) {
+      await this.ctx.login()
+    }
   }
 
   /**
@@ -23,15 +35,7 @@ class Yuque {
    */
   async getDocList(): Promise<BaseDoc[]> {
     out.info('正在获取文档列表，请稍等...')
-    let pages = await this.ctx.getDocList()
-    // 过滤未发布和公开的文章
-    pages = pages
-      .filter((page) => {
-        return this.config.onlyPublic ? !!page.public : true
-      })
-      .filter((page) => {
-        return this.config.onlyPublished ? !!page.status : true
-      })
+    const pages = await this.ctx.getDocList()
     this.pages = pages
     out.info('文档总数', String(this.pages.length))
     return pages.map((page) => {
@@ -54,4 +58,4 @@ class Yuque {
   }
 }
 
-export default Yuque
+export default YuqueWithPwd

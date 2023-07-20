@@ -5,28 +5,37 @@ import { DocUnite, GetProps } from './types'
 import rehypeParse from 'rehype-parse'
 import rehypeStringify from 'rehype-stringify'
 import { out } from '@elog/shared'
+import { YuQuePwdPublicKey } from './const'
+import JSEncrypt from 'jsencrypt-node'
+import fs from 'fs'
+import path from 'path'
 
 /**
  * 生成元数据
  */
-export const getProps = (page: DocUnite): GetProps => {
+export const getProps = (page: DocUnite, isPwd?: boolean): GetProps => {
   let { body } = page
+  console.log('getProps-body', body)
   let properties = {
     // 注入title
     title: page.title,
     // urlname
     urlname: page.slug,
-    // 作者
-    author: page.book.user.name,
     // 创建时间
     date: formatDate(page.created_at),
     // 更新时间
     updated: formatDate(page.updated_at),
+  } as any
+  // 作者
+  if (page.book?.user?.name) {
+    properties.author = page.book.user.name
   }
   try {
-    // front matter信息的<br/>换成 \n
-    const regex = /^---[\s|\S]+?---/i
-    body = body.replace(regex, (a) => a.replace(/(<br \/>|<br>|<br\/>)/gi, '\n'))
+    if (!isPwd) {
+      // front matter信息的<br/>换成 \n
+      const regex = /^---[\s|\S]+?---/i
+      body = body.replace(regex, (a) => a.replace(/(<br \/>|<br>|<br\/>)/gi, '\n'))
+    }
     const result = frontMatter(body)
     body = result.body
     let attributes = <Record<string, string>>result.attributes
@@ -155,5 +164,38 @@ export const processHtmlRaw = (html: string) => {
   } catch (e) {
     out.warning('HTML解析失败，将返回原始HTML')
     return html
+  }
+}
+
+/**
+ * 加密
+ * @param password
+ * @returns
+ */
+export const encrypt = (password: string) => {
+  const encryptor = new JSEncrypt()
+  encryptor.setPublicKey(YuQuePwdPublicKey)
+  const time = Date.now()
+  const symbol = time + ':' + password
+  return encryptor.encrypt(symbol)
+}
+
+/**
+ * 获取本地存储的cookie
+ */
+export const getLocalCookies = () => {
+  try {
+    const cookie = fs.readFileSync(path.join(process.cwd(), '/.yuque/cookies.json'), 'utf-8')
+    if (cookie) {
+      return JSON.parse(cookie) as {
+        expired: number
+        cookie: string
+      }
+    } else {
+      return undefined
+    }
+  } catch (error) {
+    // out.err('本地cookie获取失败')
+    return undefined
   }
 }
