@@ -49,7 +49,6 @@ class DeployLocal {
         // 开启按目录生成
         if (Array.isArray(post.catalog)) {
           // 是否存在目录
-          // NOTE 目前只有语雀返回了这个目录信息
           const tocPath = post.catalog.map((item) => item.title).join('/')
           fileName = this.checkFileName(fileName + tocPath, fileName, post.doc_id)
           const outdir = path.join(outputDir, tocPath)
@@ -75,8 +74,12 @@ class DeployLocal {
       fs.writeFileSync(postPath, formatBody, {
         encoding: 'utf8',
       })
+      // 真正的文件名
+      post.realName = fileName
+      // 删除outputDir之后的postPath
+      post.relativePath = postPath.replace(outputDir, '')
     }
-    out.access('任务结束', '🎉更新成功🎉')
+    return articleList
   }
 
   /**

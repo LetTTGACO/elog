@@ -10,6 +10,7 @@ export const request = async <T>(
   url: string,
   reqOpts?: RequestOptions,
 ): Promise<HttpClientResponse<T>> => {
+  console.log('timeout', Number(process.env?.REQUEST_TIMEOUT || 60000))
   const opts: RequestOptions = {
     contentType: 'json',
     dataType: 'json',

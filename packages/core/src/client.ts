@@ -3,7 +3,7 @@ import YuqueClient, { YuqueConfig } from '@elog/sdk-yuque'
 import NotionClient, { NotionConfig } from '@elog/sdk-notion'
 import FlowUsClient, { FlowUsConfig } from '@elog/sdk-flowus'
 // deploy
-import DeployClient, { DeployConfig } from '@elog/deploy'
+import DeployClient, { DeployConfig, DeployPlatformEnum } from '@elog/deploy'
 // imageClient
 import ImageClient from '@elog/plugin-image'
 // types
@@ -35,6 +35,8 @@ class Elog {
   needUpdate = false
   /** 待更新的文章列表 */
   needUpdateArticles: DocDetail[] = []
+  /** 废弃文档 */
+  wasteArticles: DocDetail[] = []
 
   constructor(config: ElogConfig) {
     // 初始化配置
@@ -61,6 +63,9 @@ class Elog {
       this.cachedArticles = docs || []
     } catch (error) {
       out.access('全量更新', '未获取到缓存，将全量更新文档')
+    }
+    if (this.config.extension?.isForced) {
+      out.warning('注意', '已开启强制同步，将按照当前配置找出需要删除的文档并删除')
     }
   }
 
@@ -116,9 +121,16 @@ class Elog {
       return
     }
     // 过滤掉被删除的文章
-    this.cachedArticles = this.cachedArticles.filter(
-      (cache) => articleList.findIndex((item) => item.doc_id === cache.doc_id) !== -1,
-    )
+    this.cachedArticles = this.cachedArticles.filter((cache) => {
+      const isExist = articleList.findIndex((item) => item.doc_id === cache.doc_id) !== -1
+      if (!isExist && this.config.extension?.isForced) {
+        // 记录被删除/改名的文档
+        // NOTE 不一定准确，部分平台在下载时存在过滤，有可能会造成误删除
+        this.wasteArticles.push(cache)
+        out.warning(`${cache.properties.title} 文档已被删除，将在同步结束后处理`)
+      }
+      return isExist
+    })
     let ids: string[] = []
     let idMap: DocStatusMap = {}
     for (const article of articleList) {
@@ -203,6 +215,8 @@ class Elog {
           properties: item.properties,
           catalog: item.catalog,
           body: '',
+          realName: item.realName,
+          relativePath: item.relativePath,
         }
       })
       if (this.config.extension?.isFullCache) {
@@ -232,7 +246,38 @@ class Elog {
    * 部署文章
    */
   async deployArticles() {
-    await this.deployClient.deploy(this.needUpdateArticles)
+    return this.deployClient.deploy(this.needUpdateArticles)
+  }
+
+  /**
+   * 强制同步
+   * 仅适用于想让线上和本地文档保持强一致
+   * 例如：线上文档改名/删除后，本地旧文档也想要同步删除
+   */
+  syncForced() {
+    if (
+      this.wasteArticles?.length &&
+      this.cachedArticles?.length &&
+      this.config.deploy.platform === DeployPlatformEnum.LOCAL
+    ) {
+      out.warning('文档强制同步中...')
+      // 本地文档路径
+      const outputDir = path.join(process.cwd(), this.config.deploy.local.outputDir)
+      // 将本地文档路径下的文档根据废弃文档列表进行删除
+      for (const wasteArticle of this.wasteArticles) {
+        let deleteItem = wasteArticle
+        if (!deleteItem.relativePath || !deleteItem.realName) {
+          continue
+        }
+        const docPath = path.join(outputDir, deleteItem.relativePath)
+        if (fs.existsSync(docPath)) {
+          fs.unlinkSync(docPath)
+          out.info('删除文档', `${wasteArticle.realName}.md`)
+        }
+      }
+      return true
+    }
+    return false
   }
 
   // 下载文档 => 增量更新文章到缓存 json 文件
@@ -240,14 +285,34 @@ class Elog {
     // 下载文档
     await this.fetchArticles()
     if (!this.needUpdate) {
+      const isNeedSyncForce = this.syncForced()
+      this.writeArticleCache()
       // 结束进程
-      out.access('任务结束', '没有需要更新的文档')
+      if (isNeedSyncForce) {
+        out.access('任务结束', '🎉更新成功🎉')
+      } else {
+        out.access('任务结束', '没有需要更新的文档')
+      }
       return
     }
+    // 部署文章
+    const realArticles: DocDetail[] = await this.deployArticles()
+    if (realArticles.length) {
+      // 将this.cachedArticles中的文章替换成realArticles中的文章
+      this.cachedArticles = this.cachedArticles.map((item) => {
+        const realArticle = realArticles.find((realItem) => realItem.doc_id === item.doc_id)
+        if (realArticle) {
+          return realArticle
+        }
+        return item
+      })
+    }
+    // 删除本地不存在的文章
+    // NOTE 线上文档和线下文档保持一致
+    this.syncForced()
     // 写入文章缓存
     this.writeArticleCache()
-    // 部署文章
-    await this.deployArticles()
+    out.access('任务结束', '🎉更新成功🎉')
   }
 }
 

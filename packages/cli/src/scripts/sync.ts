@@ -4,7 +4,21 @@ import * as dotenv from 'dotenv'
 import { out } from '@elog/shared'
 import { getConfig } from '../utils/utils'
 
-const sync = async (customConfigPath?: string, customCachePath?: string, envPath?: string) => {
+/**
+ * 同步
+ * @param customConfigPath
+ * @param customCachePath
+ * @param envPath
+ * @param isFullCache 缓存所有
+ * @param isForced 强制同步
+ */
+const sync = async (
+  customConfigPath?: string,
+  customCachePath?: string,
+  envPath?: string,
+  isFullCache?: boolean,
+  isForced?: boolean,
+) => {
   // 加载环境变量
   if (envPath) {
     // 本地模式
@@ -21,6 +35,8 @@ const sync = async (customConfigPath?: string, customCachePath?: string, envPath
     ...userConfig,
     extension: {
       cachePath: cacheFilePath,
+      isFullCache: !!isFullCache,
+      isForced: !!isForced,
       ...userConfig.extension,
     },
   } as ElogConfig

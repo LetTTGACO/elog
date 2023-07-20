@@ -29,11 +29,12 @@ export async function run() {
     .option('-c, --config <string>', 'use config with custom, default is elog.config.js')
     .option('-a --cache <string>', 'use cache file name, default is elog.cache.json')
     .option('-e, --env <string>', 'use env with custom')
-    .option('--debug', `show debug logs`)
+    .option('--full-cache', 'cache doc with full info')
+    .option('--force', 'sync doc forced')
     .description('sync doc')
     .action((options) => {
       try {
-        void sync(options.config, options.cache, options.env)
+        void sync(options.config, options.cache, options.env, options.fullCache, options.force)
       } catch (error: any) {
         out.err('运行失败', error.message)
         process.exit(1)

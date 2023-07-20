@@ -62,4 +62,6 @@ export interface DocDetail extends BaseDoc {
   properties: DocProperties
   /** 文章目录路径 */
   catalog?: DocCatalog[]
+  realName?: string
+  relativePath?: string
 }

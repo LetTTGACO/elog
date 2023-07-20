@@ -33,7 +33,7 @@ class Deploy {
    * @param articleList
    */
   async deploy(articleList: DocDetail[]) {
-    this.deployClient.deploy(articleList)
+    return this.deployClient.deploy(articleList)
   }
 }
 
