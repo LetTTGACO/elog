@@ -15,7 +15,6 @@ import path from 'path'
  */
 export const getProps = (page: DocUnite, isPwd?: boolean): GetProps => {
   let { body } = page
-  console.log('getProps-body', body)
   let properties = {
     // 注入title
     title: page.title,
