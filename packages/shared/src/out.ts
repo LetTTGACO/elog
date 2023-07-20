@@ -13,6 +13,12 @@ import * as process from 'process'
  * @param {string} [content]
  */
 export function println(level: LogLevel, head: string, content?: string) {
+  if (!head) {
+    if (!content) {
+      return
+    }
+    head = content
+  }
   const color: Record<LogLevel, Chalk> = {
     [LogLevel.ACCESS]: chalk.blue,
     [LogLevel.INFO]: chalk.green,
