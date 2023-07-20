@@ -1,5 +1,19 @@
 # @elog/core
 
+## 0.6.0-beta.1
+
+### Patch Changes
+
+- 增加通过账号密码的方式同步语雀文档
+- Updated dependencies
+  - @elog/deploy@0.6.0-beta.1
+  - @elog/plugin-image@0.6.0-beta.1
+  - @elog/sdk-flowus@0.6.0-beta.1
+  - @elog/sdk-notion@0.6.0-beta.1
+  - @elog/sdk-yuque@0.6.0-beta.1
+  - @elog/shared@0.6.0-beta.1
+  - @elog/types@0.6.0-beta.1
+
 ## 0.6.0-beta.0
 
 ### Minor Changes
