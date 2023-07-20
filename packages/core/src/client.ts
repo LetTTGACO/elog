@@ -82,7 +82,7 @@ class Elog {
       let yuqueConfig = config.write.yuque as YuqueWithTokenConfig
       this.downloaderClient = new YuqueWithToken(yuqueConfig)
     } else if (config.write.platform === WritePlatform.YUQUE_WITH_PWD) {
-      let yuqueConfig = config.write.yuque_pwd as YuqueWithPwdConfig
+      let yuqueConfig = config.write['yuque-pwd'] as YuqueWithPwdConfig
       this.downloaderClient = new YuqueWithPwd(yuqueConfig)
     } else if (config.write.platform === WritePlatform.NOTION) {
       let notionConfig = config.write.notion as NotionConfig
