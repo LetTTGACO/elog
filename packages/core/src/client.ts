@@ -53,10 +53,6 @@ class Elog {
     this.initDeployPlatform(config)
     // 初始化图片转CDN
     this.initImgCdn(config)
-    process.on('uncaughtException', (res) => {
-      // @ts-ignore
-      out.err(res)
-    })
   }
 
   /**

@@ -195,7 +195,6 @@ export const getLocalCookies = () => {
       return undefined
     }
   } catch (error) {
-    // out.err('本地cookie获取失败')
     return undefined
   }
 }

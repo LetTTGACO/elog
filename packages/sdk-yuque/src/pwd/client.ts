@@ -5,7 +5,7 @@ import { YuQueResponse, YuqueDoc, YuqueDocProperties } from '../types'
 import { DocDetail, YuqueCatalog, DocCatalog } from '@elog/types'
 import path from 'path'
 import fs from 'fs'
-import jsdom, { JSDOM } from 'jsdom'
+import { JSDOM } from 'jsdom'
 import { YuqueWithPwdConfig, YuqueLogin } from './types'
 import mkdirp from 'mkdirp'
 
@@ -15,6 +15,7 @@ const DEFAULT_API_URL = 'https://www.yuque.com'
 class YuqueClient {
   config: YuqueWithPwdConfig
   namespace: string
+  baseUrl: string
   bookId: string = ''
   docList: YuqueDoc[] = []
   catalog: YuqueCatalog[] = []
@@ -28,32 +29,33 @@ class YuqueClient {
       process.exit(-1)
     }
     this.namespace = `${this.config.login}/${this.config.repo}`
+    this.baseUrl = this.config.baseUrl || DEFAULT_API_URL
+    if (this.baseUrl.endsWith('/')) {
+      // 删除最后一个斜杠
+      this.baseUrl = this.baseUrl.slice(0, -1)
+    }
   }
 
   /**
    * 登陆
    */
   async login() {
-    out.info('开始登陆语雀...')
     const loginInfo = {
       login: this.config.username,
       password: encrypt(this.config.password),
       loginType: 'password',
     }
-    let baseUrl = this.config.baseUrl || DEFAULT_API_URL
-    if (baseUrl.endsWith('/')) {
-      // 删除最后一个斜杠
-      baseUrl = baseUrl.slice(0, -1)
-    }
-    const res = await request<YuQueResponse<YuqueLogin>>(`${baseUrl}/api/accounts/login`, {
+
+    const res = await request<YuQueResponse<YuqueLogin>>(`${this.baseUrl}/api/accounts/login`, {
       method: 'post',
       data: loginInfo,
       headers: {
-        Referer: baseUrl + '/login?goto=https%3A%2F%2Fwww.yuque.com%2Fdashboard',
-        origin: baseUrl,
+        Referer: this.baseUrl + '/login?goto=https%3A%2F%2Fwww.yuque.com%2Fdashboard',
+        origin: this.baseUrl,
       },
     })
     if (res.status !== 200) {
+      out.err('语雀登陆失败')
       // @ts-ignore
       out.err(res)
       process.exit(-1)
@@ -69,8 +71,7 @@ class YuqueClient {
       // 保存到本地
       fs.writeFileSync(path.join(outDir, 'cookies.json'), cookieContent)
     }
-    // @ts-ignore
-    out.info('语雀登陆成功', res.data.data.user)
+    out.info('语雀登陆成功')
   }
 
   /**
@@ -82,15 +83,10 @@ class YuqueClient {
   async request<T>(api: string, reqOpts: RequestOptions, custom?: boolean): Promise<T> {
     const cookie = getLocalCookies()?.cookie
     if (!cookie) {
-      out.err('缺少cookie')
+      out.err('缺少本地cookie文件')
       process.exit(-1)
     }
-    let baseUrl = this.config.baseUrl || DEFAULT_API_URL
-    if (baseUrl.endsWith('/')) {
-      // 删除最后一个斜杠
-      baseUrl = baseUrl.slice(0, -1)
-    }
-    const url = `${baseUrl}/${api}`
+    const url = `${this.baseUrl}/${api}`
     const opts: RequestOptions = {
       headers: {
         cookie,
@@ -102,9 +98,6 @@ class YuqueClient {
       return res.data
     }
     const res = await request<YuQueResponse<T>>(url, opts)
-    if (res.status !== 200) {
-      out.warning(JSON.stringify(res))
-    }
     return res.data.data
   }
 
@@ -112,22 +105,14 @@ class YuqueClient {
    * 获取目录
    */
   async getToc() {
-    console.log('this.namespace', this.namespace)
-    const html = await this.request<string>(
-      this.namespace,
-      {
-        method: 'GET',
-        dataType: 'text',
-      },
-      true,
-    )
-    const virtualConsole = new jsdom.VirtualConsole()
-    const window = new JSDOM(`${html}`, { runScripts: 'dangerously', virtualConsole }).window
-    virtualConsole.on('error', () => {
-      // don't do anything
-      out.warning('获取目录失败')
-    })
-    const { book } = window.appData || {}
+    const url = `${this.baseUrl}/${this.namespace}`
+    const dom = await JSDOM.fromURL(url, { runScripts: 'dangerously' })
+    const { book } = dom?.window?.appData || {}
+    dom.window.close()
+    if (!book) {
+      out.warning('爬取语雀目录失败，请稍后重试')
+      process.exit(-1)
+    }
     this.bookId = book.id
     return book?.toc || []
   }
@@ -164,11 +149,6 @@ class YuqueClient {
       },
       true,
     )
-    console.log('getDocDetail-body', yuqueDocString)
-    if (!yuqueDocString) {
-      out.err('获取文章详情失败')
-      process.exit(-1)
-    }
     const doc = this.docList.find((item) => item.slug === slug)!
     const docInfo = {
       body: yuqueDocString,
