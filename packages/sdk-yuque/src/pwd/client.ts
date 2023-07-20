@@ -152,16 +152,15 @@ class YuqueClient {
     const doc = this.docList.find((item) => item.slug === slug)!
     const docInfo = {
       body: yuqueDocString,
-      doc_id: '',
+      doc_id: slug,
       catalog: [] as any[],
       ...doc,
     } as any
-    docInfo.doc_id = slug
-    const find = this.catalog.find((item) => item.slug === slug)
+    const find = this.catalog.find((item) => item.url === slug)
     if (find) {
       let catalogPath = []
       let parentId = find.parent_uuid
-      for (let i = 0; i < find.depth - 1; i++) {
+      for (let i = 0; i < find.level; i++) {
         const current = this.catalog.find((item) => item.uuid === parentId)!
         parentId = current.parent_uuid
         const catalog: DocCatalog = {

@@ -25,6 +25,7 @@ export interface YuqueCatalog {
   child_uuid: string
   parent_uuid: string
   slug: string
+  url: string
   depth: number
   level: number
 }
