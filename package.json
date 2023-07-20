@@ -29,7 +29,9 @@
     "postinstall": "husky install",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "pnpm build && pnpm changeset publish"
+    "release": "pnpm build && pnpm changeset publish",
+    "beta": "pnpm changeset pre enter beta",
+    "beta:exit": "pnpm changeset pre exit"
   },
   "lint-staged": {
     "*.ts": [
