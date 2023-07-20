@@ -1,5 +1,16 @@
 # @elog/deploy
 
+## 0.6.0-beta.2
+
+### Patch Changes
+
+- 支持通过帐号密码的方式同步语雀文档
+- Updated dependencies
+  - @elog/plugin-adapter@0.6.0-beta.2
+  - @elog/sdk-confluence@0.6.0-beta.2
+  - @elog/shared@0.6.0-beta.2
+  - @elog/types@0.6.0-beta.2
+
 ## 0.6.0-beta.1
 
 ### Patch Changes
