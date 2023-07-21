@@ -7,8 +7,6 @@ import rehypeStringify from 'rehype-stringify'
 import { out } from '@elog/shared'
 import { YuQuePwdPublicKey } from './const'
 import JSEncrypt from 'jsencrypt-node'
-import fs from 'fs'
-import path from 'path'
 
 /**
  * 生成元数据
@@ -177,23 +175,4 @@ export const encrypt = (password: string) => {
   const time = Date.now()
   const symbol = time + ':' + password
   return encryptor.encrypt(symbol)
-}
-
-/**
- * 获取本地存储的cookie
- */
-export const getLocalCookies = () => {
-  try {
-    const cookie = fs.readFileSync(path.join(process.cwd(), '/.yuque/cookies.json'), 'utf-8')
-    if (cookie) {
-      return JSON.parse(cookie) as {
-        expired: number
-        cookie: string
-      }
-    } else {
-      return undefined
-    }
-  } catch (error) {
-    return undefined
-  }
 }

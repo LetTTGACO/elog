@@ -77,6 +77,8 @@ class YuqueClient {
    * 获取文章列表(不带详情)
    */
   async getDocList() {
+    // 获取目录信息
+    this.catalog = await this.getToc()
     return this.request<YuqueDoc[]>(`repos/${this.namespace}/docs`, {
       method: 'GET',
     })
@@ -118,8 +120,6 @@ class YuqueClient {
    * @param ids
    */
   async getDocDetailList(cachedDocs: YuqueDoc[], ids: string[]) {
-    // 获取目录信息
-    this.catalog = await this.getToc()
     let articleList: DocDetail[] = []
     let docs = cachedDocs
     if (ids.length) {

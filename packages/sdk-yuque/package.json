@@ -33,12 +33,10 @@
     "unified": "^9.2.2",
     "urllib": "2.40.0",
     "jsencrypt-node": "^1.0.4",
-    "jsdom": "^21.1.1",
-    "mkdirp": "^1.0.4"
+    "jsdom": "^21.1.1"
   },
   "devDependencies": {
     "@types/tiny-async-pool": "^1.0.1",
-    "@types/jsdom": "^21.1.1",
-    "@types/mkdirp": "^1.0.2"
+    "@types/jsdom": "^21.1.1"
   }
 }
