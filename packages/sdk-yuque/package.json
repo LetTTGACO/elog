@@ -1,6 +1,6 @@
 {
   "name": "@elog/sdk-yuque",
-  "version": "0.6.0-beta.3",
+  "version": "0.6.0-beta.4",
   "description": "elog的语雀SDK，从语雀写作平台获取文章",
   "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-sdk-yuque#readme",
   "author": "1874 <me@mail.1874.cool>",
@@ -33,12 +33,10 @@
     "unified": "^9.2.2",
     "urllib": "2.40.0",
     "jsencrypt-node": "^1.0.4",
-    "jsdom": "^21.1.1",
-    "mkdirp": "^1.0.4"
+    "jsdom": "^21.1.1"
   },
   "devDependencies": {
     "@types/tiny-async-pool": "^1.0.1",
-    "@types/jsdom": "^21.1.1",
-    "@types/mkdirp": "^1.0.2"
+    "@types/jsdom": "^21.1.1"
   }
 }

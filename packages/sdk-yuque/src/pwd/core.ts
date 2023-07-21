@@ -3,7 +3,6 @@ import YuqueClient from './client'
 import { BaseDoc } from '@elog/types'
 import { out } from '@elog/shared'
 import { YuqueWithPwdConfig } from './types'
-import { getLocalCookies } from '../utils'
 
 /**
  * Yuque SDK
@@ -23,10 +22,7 @@ class YuqueWithPwd {
    * 登陆语雀
    */
   async login() {
-    const cookie = getLocalCookies()
-    if (!cookie || cookie?.expired + 86400000 <= Date.now()) {
-      await this.ctx.login()
-    }
+    await this.ctx.login()
   }
 
   /**

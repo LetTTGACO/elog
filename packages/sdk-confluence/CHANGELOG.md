@@ -1,5 +1,15 @@
 # @elog/sdk-confluence
 
+## 0.6.0-beta.4
+
+### Patch Changes
+
+- 1.fix(yuque-sdk): 修复目录信息丢失的问题
+  2.feat(yuque-sdk): 优化语雀 cookie 存储问题,登录成功后保存 cookie 到内存,不再保存到本地
+- Updated dependencies
+  - @elog/shared@0.6.0-beta.4
+  - @elog/types@0.6.0-beta.4
+
 ## 0.6.0-beta.3
 
 ### Patch Changes

@@ -1,13 +1,10 @@
 import asyncPool from 'tiny-async-pool'
 import { out, request, RequestOptions } from '@elog/shared'
-import { encrypt, getLocalCookies, getProps } from '../utils'
+import { encrypt, getProps } from '../utils'
 import { YuQueResponse, YuqueDoc, YuqueDocProperties } from '../types'
 import { DocDetail, YuqueCatalog, DocCatalog } from '@elog/types'
-import path from 'path'
-import fs from 'fs'
 import { JSDOM } from 'jsdom'
-import { YuqueWithPwdConfig, YuqueLogin } from './types'
-import mkdirp from 'mkdirp'
+import { YuqueWithPwdConfig, YuqueLogin, YuqueLoginCookie } from './types'
 
 /** 默认语雀API 路径 */
 const DEFAULT_HOST = 'https://www.yuque.com'
@@ -19,6 +16,7 @@ class YuqueClient {
   bookId: string = ''
   docList: YuqueDoc[] = []
   catalog: YuqueCatalog[] = []
+  cookie: YuqueLoginCookie | undefined
 
   constructor(config: YuqueWithPwdConfig) {
     this.config = config
@@ -62,14 +60,10 @@ class YuqueClient {
     }
     if (res.headers['set-cookie']) {
       // 保存cookie
-      const cookieContent = JSON.stringify({
+      this.cookie = {
         time: Date.now(),
-        cookie: res.headers['set-cookie'],
-      })
-      const outDir = path.join(process.cwd(), '/.yuque')
-      mkdirp.sync(outDir)
-      // 保存到本地
-      fs.writeFileSync(path.join(outDir, 'cookies.json'), cookieContent)
+        data: res.headers['set-cookie'] as string,
+      }
     }
     out.info('语雀登陆成功')
   }
@@ -81,17 +75,16 @@ class YuqueClient {
    * @param custom
    */
   async request<T>(api: string, reqOpts: RequestOptions, custom?: boolean): Promise<T> {
-    const cookie = getLocalCookies()?.cookie
-    if (!cookie) {
-      out.err('缺少本地cookie文件')
-      process.exit(-1)
-    }
     const url = `${this.baseUrl}/${api}`
     const opts: RequestOptions = {
       headers: {
-        cookie,
+        cookie: this.cookie?.data,
       },
       ...reqOpts,
+    }
+    if (!opts.headers?.cookie) {
+      out.err('未登录语雀!')
+      process.exit(-1)
     }
     if (custom) {
       const res = await request<T>(url, opts)

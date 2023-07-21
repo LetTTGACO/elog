@@ -17,3 +17,8 @@ export interface YuqueLogin {
     description: string
   }
 }
+
+export interface YuqueLoginCookie {
+  data: string
+  time: number
+}
