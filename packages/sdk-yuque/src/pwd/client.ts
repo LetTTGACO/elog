@@ -203,8 +203,8 @@ class YuqueClient {
       const { body, properties } = getProps(article, true)
       // 处理换行/自定义处理
       article.properties = properties as YuqueDocProperties
-      // 替换body
       article.body = body
+      article.body_original = body
       article.updated = new Date(article.updated_at).getTime()
       articleList.push(article)
     }
