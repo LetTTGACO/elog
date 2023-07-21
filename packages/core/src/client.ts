@@ -135,7 +135,6 @@ class Elog {
       const isExist = articleList.findIndex((item) => item.doc_id === cache.doc_id) !== -1
       if (!isExist && this.config.extension?.isForced) {
         // 记录被删除/改名的文档
-        // NOTE 不一定准确，部分平台在下载时存在过滤，有可能会造成误删除
         this.wasteArticles.push(cache)
         out.warning(`${cache.properties.title} 文档已被删除，将在同步结束后处理`)
       }
@@ -321,7 +320,6 @@ class Elog {
       })
     }
     // 删除本地不存在的文章
-    // NOTE 线上文档和线下文档保持一致
     this.syncForced()
     // 写入文章缓存
     this.writeArticleCache()
