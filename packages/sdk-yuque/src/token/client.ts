@@ -59,7 +59,8 @@ class YuqueClient {
     }
     const res = await request<YuQueResponse<T>>(url, opts)
     if (res.status !== 200) {
-      out.warning(JSON.stringify(res))
+      // @ts-ignore
+      out.err(res)
     }
     return res.data.data
   }
