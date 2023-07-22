@@ -1,5 +1,19 @@
 # @elog/core
 
+## 0.6.0-beta.8
+
+### Patch Changes
+
+- wordpress 增加代码高亮
+- Updated dependencies
+  - @elog/deploy@0.6.0-beta.8
+  - @elog/plugin-image@0.6.0-beta.8
+  - @elog/sdk-flowus@0.6.0-beta.8
+  - @elog/sdk-notion@0.6.0-beta.8
+  - @elog/sdk-yuque@0.6.0-beta.8
+  - @elog/shared@0.6.0-beta.8
+  - @elog/types@0.6.0-beta.8
+
 ## 0.6.0-beta.7
 
 ### Patch Changes

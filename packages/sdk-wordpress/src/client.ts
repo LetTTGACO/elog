@@ -35,8 +35,44 @@ class WordPressClient {
   /**
    * 获取文章列表
    */
-  async getPostList(): Promise<WordPressPost[]> {
-    return this.wpClient.posts()
+  async getPostList(pageSize = 100, page = 1): Promise<WordPressPost[]> {
+    return this.wpClient.posts().perPage(pageSize).page(page)
+  }
+
+  /**
+   * 获取所有文章
+   * @param page
+   * @param allPosts
+   */
+  async getAllPosts(page = 1, allPosts: WordPressPost[] = []): Promise<WordPressPost[]> {
+    return this.wpClient
+      .posts()
+      .perPage(100)
+      .page(page)
+      .then((posts) => {
+        // 将当前页面的文章合并到所有文章数组中
+        allPosts = allPosts.concat(posts)
+
+        if (posts.length === 100) {
+          // 继续获取下一页
+          return this.getAllPosts(page + 1, allPosts)
+        } else {
+          // 已获取到最后一页或没有文章
+          return allPosts
+        }
+      })
+      .catch((err) => {
+        if (
+          err.code === 'rest_post_invalid_page_number' &&
+          err.message === '请求的页码大于总页数。'
+        ) {
+          // 请求页码超过总页数，直接返回所有文章
+          return allPosts
+        } else {
+          out.err('获取文章列表失败', err.message)
+          out.debug(err)
+        }
+      })
   }
 
   /**
