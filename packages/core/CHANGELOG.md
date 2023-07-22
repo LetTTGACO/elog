@@ -1,5 +1,19 @@
 # @elog/core
 
+## 0.6.0-beta.7
+
+### Patch Changes
+
+- 1.分类/标签创建失败时不影响运行 2.优化 debug 输出
+- Updated dependencies
+  - @elog/deploy@0.6.0-beta.7
+  - @elog/plugin-image@0.6.0-beta.7
+  - @elog/sdk-flowus@0.6.0-beta.7
+  - @elog/sdk-notion@0.6.0-beta.7
+  - @elog/sdk-yuque@0.6.0-beta.7
+  - @elog/shared@0.6.0-beta.7
+  - @elog/types@0.6.0-beta.7
+
 ## 0.6.0-beta.6
 
 ### Patch Changes
