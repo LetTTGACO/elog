@@ -27,8 +27,6 @@
     "@elog/types": "workspace:*",
     "ali-oss": "^6.17.1",
     "cos-nodejs-sdk-v5": "^2.11.16",
-    "image-size": "^1.0.2",
-    "mime-types": "^2.1.35",
     "mkdirp": "^1.0.4",
     "qiniu": "^7.8.0",
     "upyun": "^3.4.6"
