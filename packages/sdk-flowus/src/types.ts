@@ -24,6 +24,8 @@ export interface FlowUsConfig {
   filter?: FlowUsFilter
   sort?: FlowUsSort
   catalog?: boolean | FlowUsCatalogConfig
+  /** 下载并发数 */
+  limit?: number
 }
 
 export interface FlowUsDoc {

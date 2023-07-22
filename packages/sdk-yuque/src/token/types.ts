@@ -14,4 +14,6 @@ export interface YuqueWithTokenConfig {
   onlyPublished?: boolean
   /** 自定义处理器 */
   formatExt?: FormatExtConfig
+  /** 下载并发数 */
+  limit?: number
 }

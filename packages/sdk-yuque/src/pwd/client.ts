@@ -208,7 +208,7 @@ class YuqueClient {
       article.updated = new Date(article.updated_at).getTime()
       articleList.push(article)
     }
-    await asyncPool(5, docs, promise)
+    await asyncPool(this.config.limit || 3, docs, promise)
     out.info('已下载数', String(articleList.length))
     return articleList
   }

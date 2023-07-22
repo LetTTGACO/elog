@@ -5,6 +5,8 @@ export interface YuqueWithPwdConfig {
   login: string
   repo: string
   linebreak?: boolean
+  /** 下载并发数 */
+  limit?: number
 }
 
 export interface YuqueLogin {

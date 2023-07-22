@@ -216,7 +216,7 @@ class FlowUsClient {
       let article = await this.download(page)
       articleList.push(article)
     }
-    await asyncPool(5, pages, promise)
+    await asyncPool(this.config.limit || 3, pages, promise)
     out.info('已下载数', String(articleList.length))
     return articleList
   }

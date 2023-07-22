@@ -19,6 +19,8 @@ export interface NotionConfig {
   filter?: any | boolean
   sorts?: boolean | NotionSortPresetEnum | NotionSort[]
   catalog?: boolean | NotionCatalogConfig
+  /** 下载文档并发数 */
+  limit?: number
 }
 
 export interface NotionDoc extends PageObjectResponse {
