@@ -88,16 +88,26 @@ class DeployWordPress {
       for (const tag of noRepValues.tags) {
         const wpTag = wpTags.find((t) => t.name === tag)
         if (!wpTag) {
-          const newTag = await this.ctx.createTag({ name: tag })
-          wpTags.push(newTag)
+          try {
+            const newTag = await this.ctx.createTag({ name: tag })
+            wpTags.push(newTag)
+          } catch (e: any) {
+            out.warning(`创建 ${tag} 标签失败: ${e.message}`)
+            out.debug(e)
+          }
         }
       }
       for (const category of noRepValues.categories) {
         const wpCategory = wpCategories.find((t) => t.name === category)
         if (!wpCategory) {
           // 如果没有找到，就在wp创建一个
-          const newCategory = await this.ctx.createCategory({ name: category })
-          wpCategories.push(newCategory)
+          try {
+            const newCategory = await this.ctx.createCategory({ name: category })
+            wpCategories.push(newCategory)
+          } catch (e: any) {
+            out.warning(`创建 ${category} 分类失败: ${e.message}`)
+            out.debug(e)
+          }
         }
       }
 
@@ -132,11 +142,14 @@ class DeployWordPress {
           const categories = Array.isArray(postCategories)
             ? postCategories
             : postCategories.split(',')
-          // 从wpCategories中找到对应的categoryId
-          post.categories = categories.map((category) => {
-            const wpCategory = wpCategories.find((t) => t.name === category)!
-            return wpCategory?.id
-          })
+          // 从wpCategories中用reduce找到对应的categoryIds
+          post.categories = categories.reduce((acc: number[], cur) => {
+            const wpCategory = wpCategories.find((t) => t.name === cur)
+            if (wpCategory) {
+              acc.push(wpCategory.id)
+            }
+            return acc
+          }, [])
         }
         if (articleInfo.properties[coverKey]) {
           const picUrl = articleInfo.properties[coverKey]
@@ -173,6 +186,7 @@ class DeployWordPress {
       return undefined
     } catch (error: any) {
       out.err('部署到 WordPress 失败: ', error.message)
+      out.debug(error)
       process.exit(-1)
     }
   }

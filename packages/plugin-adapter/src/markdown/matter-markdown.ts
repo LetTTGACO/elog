@@ -20,8 +20,8 @@ export function matterMarkdownAdapter(post: DocDetail) {
     // @ts-ignore js-yaml lineWidth长度为无限
     body = matter.stringify(body, props, { lineWidth: -1 })
   } catch (e: any) {
-    out.err(e.message)
-    out.warning(`【${post.properties.title}】Front matter 生成失败，请检查文档属性`)
+    out.warning(`【${post.properties.title}】Front matter 生成失败，请检查文档属性`, e.message)
+    out.debug(e)
   }
   return formatRaw(body)
 }

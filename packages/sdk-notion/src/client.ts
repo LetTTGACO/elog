@@ -202,7 +202,6 @@ class NotionClient {
       pages = pages.filter((page) => {
         const exist = ids.indexOf(page.id) > -1
         if (!exist) {
-          // @ts-ignore
           const title = page.properties.title
           out.info('跳过下载', title)
         }

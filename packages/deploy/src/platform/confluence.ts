@@ -73,6 +73,7 @@ class DeployConfluence {
             )
           } else {
             out.err('跳过部署', e.message)
+            out.debug(e)
           }
         }
       }

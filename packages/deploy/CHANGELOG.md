@@ -1,5 +1,17 @@
 # @elog/deploy
 
+## 0.6.0-beta.7
+
+### Patch Changes
+
+- 1.分类/标签创建失败时不影响运行 2.优化 debug 输出
+- Updated dependencies
+  - @elog/plugin-adapter@0.6.0-beta.7
+  - @elog/sdk-confluence@0.6.0-beta.7
+  - @elog/sdk-wordpress@0.6.0-beta.7
+  - @elog/shared@0.6.0-beta.7
+  - @elog/types@0.6.0-beta.7
+
 ## 0.6.0-beta.6
 
 ### Patch Changes

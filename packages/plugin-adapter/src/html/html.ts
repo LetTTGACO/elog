@@ -7,6 +7,6 @@ export function htmlAdapter(post: DocDetail) {
   if (body_html) {
     return formatHtml(body_html)
   } else {
-    return marked(body, { mangle: false })
+    return marked(body, { mangle: false, headerIds: false })
   }
 }
