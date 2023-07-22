@@ -1,5 +1,19 @@
 # @elog/core
 
+## 0.6.0-beta.9
+
+### Patch Changes
+
+- 文档下载并发调整为 3，且增加并发数配置，可手动调整下载并发
+- Updated dependencies
+  - @elog/deploy@0.6.0-beta.9
+  - @elog/plugin-image@0.6.0-beta.9
+  - @elog/sdk-flowus@0.6.0-beta.9
+  - @elog/sdk-notion@0.6.0-beta.9
+  - @elog/sdk-yuque@0.6.0-beta.9
+  - @elog/shared@0.6.0-beta.9
+  - @elog/types@0.6.0-beta.9
+
 ## 0.6.0-beta.8
 
 ### Patch Changes
