@@ -1,5 +1,17 @@
 # @elog/deploy
 
+## 0.6.1
+
+### Patch Changes
+
+- 1.解决标签/分类/媒体的问题问题 2.删除 visible 字段
+- Updated dependencies
+  - @elog/sdk-wordpress@0.6.1
+  - @elog/plugin-adapter@0.6.1
+  - @elog/sdk-confluence@0.6.1
+  - @elog/shared@0.6.1
+  - @elog/types@0.6.1
+
 ## 0.6.0
 
 ### Minor Changes
