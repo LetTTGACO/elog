@@ -1,0 +1,21 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "@elog/cli": "0.6.0",
+    "@elog/core": "0.6.0",
+    "@elog/deploy": "0.6.0",
+    "@elog/plugin-adapter": "0.6.0",
+    "@elog/plugin-image": "0.6.0",
+    "@elog/sdk-confluence": "0.6.0",
+    "@elog/sdk-flowus": "0.6.0",
+    "@elog/sdk-notion": "0.6.0",
+    "@elog/sdk-wordpress": "0.6.0",
+    "@elog/sdk-yuque": "0.6.0",
+    "@elog/shared": "0.6.0",
+    "@elog/types": "0.6.0"
+  },
+  "changesets": [
+    "itchy-ears-battle"
+  ]
+}

@@ -1,5 +1,17 @@
 # @elog/sdk-yuque
 
+## 0.7.0-beta.0
+
+### Minor Changes
+
+- 1.不在通过图片 Buffer 生成唯一 ID，直接通过图片 URL 生成唯一 ID，提升二次同步速度
+
+### Patch Changes
+
+- Updated dependencies
+  - @elog/shared@0.7.0-beta.0
+  - @elog/types@0.7.0-beta.0
+
 ## 0.6.0
 
 ### Minor Changes
