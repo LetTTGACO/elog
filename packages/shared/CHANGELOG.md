@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.7.0-beta.2
+
+### Patch Changes
+
+- 1.去除 crypto 依赖，改用 node 内置 crypto 2.修复 elog clean 可能报错的问题
+
 ## 0.7.0-beta.1
 
 ### Patch Changes
