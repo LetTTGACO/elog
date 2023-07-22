@@ -40,7 +40,7 @@ export class FormatExt {
       } catch (e: any) {
         out.err(e.message)
         out.err('文档处理拓展点加载失败，请检查！')
-        process.exit(1)
+        process.exit(-1)
       }
     } else if (typeof this.formatExt === 'function') {
       return this.formatExt

@@ -4,6 +4,7 @@
 export enum DeployPlatformEnum {
   LOCAL = 'local',
   CONFLUENCE = 'confluence',
+  WORDPRESS = 'wordpress',
 }
 
 /**

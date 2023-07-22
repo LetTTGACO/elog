@@ -19,7 +19,7 @@ class ConfluenceClient {
       process.exit(-1)
     }
     this.config.user = config.user || process.env.CONFLUENCE_USER!
-    this.config.password = config.password || process.env.CONFLUENCE_PWD!
+    this.config.password = config.password || process.env.CONFLUENCE_PASSWORD!
     if (!this.config.user || !this.config.password) {
       out.err('缺少参数', '缺少Confluence账号或密码')
       process.exit(-1)

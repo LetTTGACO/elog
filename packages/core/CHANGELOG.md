@@ -1,5 +1,19 @@
 # @elog/core
 
+## 0.6.0-beta.5
+
+### Patch Changes
+
+- 1.新增同步文档到 WordPress 站点
+- Updated dependencies
+  - @elog/deploy@0.6.0-beta.5
+  - @elog/plugin-image@0.6.0-beta.5
+  - @elog/sdk-flowus@0.6.0-beta.5
+  - @elog/sdk-notion@0.6.0-beta.5
+  - @elog/sdk-yuque@0.6.0-beta.5
+  - @elog/shared@0.6.0-beta.5
+  - @elog/types@0.6.0-beta.5
+
 ## 0.6.0-beta.4
 
 ### Patch Changes
