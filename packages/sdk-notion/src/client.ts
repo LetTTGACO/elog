@@ -214,7 +214,7 @@ class NotionClient {
       return articleList
     }
     out.info('待下载数', String(pages.length))
-    out.info('开始下载文档...')
+    out.access('开始下载文档...')
     pages = pages.map((item, index) => ({ ...item, _index: index + 1 } as NotionDoc))
     const promise = async (page: NotionDoc) => {
       out.info(`下载文档 ${page._index}/${pages.length}   `, page.properties.title)

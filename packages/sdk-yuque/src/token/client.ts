@@ -138,7 +138,7 @@ class YuqueClient {
       return articleList
     }
     out.info('待下载数', String(docs.length))
-    out.info('开始下载文档...')
+    out.access('开始下载文档...')
     docs = docs.map((item, index) => ({ ...item, _index: index + 1 } as YuqueDoc))
     const promise = async (doc: YuqueDoc) => {
       out.info(`下载文档 ${doc._index}/${docs.length}   `, doc.title)

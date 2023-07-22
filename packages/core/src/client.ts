@@ -28,9 +28,9 @@ class Elog {
   /** 配置文件 */
   config: ElogConfig
   /** 下载器 */
-  downloaderClient: any
+  downloaderClient: YuqueWithToken | YuqueWithPwd | NotionClient | FlowUsClient
   /** 部署器 */
-  deployClient: any
+  deployClient: DeployClient
   /** 图片转CDN转换器 */
   imageClient: any
   /** 缓存文章 */
@@ -48,9 +48,9 @@ class Elog {
     // 初始化增量配置
     this.initIncrementalUpdate(config)
     // 初始化写作平台
-    this.initWritingPlatform(config)
+    this.downloaderClient = this.initWritingPlatform(config)
     // 初始化部署平台
-    this.initDeployPlatform(config)
+    this.deployClient = this.initDeployPlatform(config)
     // 初始化图片转CDN
     this.initImgCdn(config)
   }
@@ -80,16 +80,19 @@ class Elog {
   initWritingPlatform(config: ElogConfig) {
     if (config.write.platform === WritePlatform.YUQUE) {
       let yuqueConfig = config.write.yuque as YuqueWithTokenConfig
-      this.downloaderClient = new YuqueWithToken(yuqueConfig)
+      return new YuqueWithToken(yuqueConfig)
     } else if (config.write.platform === WritePlatform.YUQUE_WITH_PWD) {
       let yuqueConfig = config.write['yuque-pwd'] as YuqueWithPwdConfig
-      this.downloaderClient = new YuqueWithPwd(yuqueConfig)
+      return new YuqueWithPwd(yuqueConfig)
     } else if (config.write.platform === WritePlatform.NOTION) {
       let notionConfig = config.write.notion as NotionConfig
-      this.downloaderClient = new NotionClient(notionConfig)
+      return new NotionClient(notionConfig)
     } else if (config.write.platform === WritePlatform.FLOWUS) {
       let flowusConfig = config.write.flowus as FlowUsConfig
-      this.downloaderClient = new FlowUsClient(flowusConfig)
+      return new FlowUsClient(flowusConfig)
+    } else {
+      out.err('错误', '未知的写作平台')
+      process.exit(0)
     }
   }
 
@@ -99,7 +102,7 @@ class Elog {
    */
   initDeployPlatform(config: ElogConfig) {
     const deployOptions = config.deploy as DeployConfig
-    this.deployClient = new DeployClient(deployOptions)
+    return new DeployClient(deployOptions)
   }
 
   /**
@@ -123,7 +126,8 @@ class Elog {
    */
   async fetchArticles() {
     if (this.config.write.platform === WritePlatform.YUQUE_WITH_PWD) {
-      await this.downloaderClient.login()
+      const client = this.downloaderClient as YuqueWithPwd
+      await client.login()
     }
     let articleList = (await this.downloaderClient.getDocList()) as BaseDoc[]
     if (!articleList?.length) {
@@ -301,15 +305,15 @@ class Elog {
       this.writeArticleCache()
       // 结束进程
       if (isNeedSyncForce) {
-        out.access('任务结束', '🎉更新成功🎉')
+        out.access('任务结束', '🎉 同步成功！ 🎉')
       } else {
-        out.access('任务结束', '没有需要更新的文档')
+        out.access('任务结束', '没有需要同步的文档')
       }
       return
     }
     // 部署文章
-    const realArticles: DocDetail[] = await this.deployArticles()
-    if (realArticles.length) {
+    const realArticles = await this.deployArticles()
+    if (realArticles?.length) {
       // 将this.cachedArticles中的文章替换成realArticles中的文章
       this.cachedArticles = this.cachedArticles.map((item) => {
         const realArticle = realArticles.find((realItem) => realItem.doc_id === item.doc_id)
@@ -323,7 +327,7 @@ class Elog {
     this.syncForced()
     // 写入文章缓存
     this.writeArticleCache()
-    out.access('任务结束', '🎉更新成功🎉')
+    out.access('任务结束', '🎉 同步成功！ 🎉')
   }
 }
 

@@ -14,7 +14,7 @@ const configJsStr =
   '    },\n' +
   "    'yuque-pwd': {\n" +
   '      username: process.env.YUQUE_USERNAME,\n' +
-  '      password: process.env.YUQUE_PWD,\n' +
+  '      password: process.env.YUQUE_PASSWORD,\n' +
   "      host: '',\n" +
   '      login: process.env.YUQUE_LOGIN,\n' +
   '      repo: process.env.YUQUE_REPO,\n' +
@@ -45,11 +45,25 @@ const configJsStr =
   '    },\n' +
   '    confluence: {\n' +
   '      user: process.env.CONFLUENCE_USER,\n' +
-  '      password: process.env.CONFLUENCE_PASSWORD,\n' +
-  '      baseUrl: process.env.CONFLUENCE_BASE_URL,\n' +
+  '      password: process.env.WORDPRESS_PASSWORD,\n' +
+  '      endpoint: process.env.WORDPRESS_ENDPOINT,\n' +
   '      spaceKey: process.env.CONFLUENCE_SPACE_KEY,\n' +
   '      rootPageId: process.env.CONFLUENCE_ROOT_PAGE_ID, // 可选\n' +
   "      formatExt: '', // 可选\n" +
+  '    },\n' +
+  '    wordpress: {\n' +
+  '      username: process.env.WORDPRESS_USERNAME,\n' +
+  '      password: process.env.WORDPRESS_PASSWORD,\n' +
+  '      endpoint: process.env.WORDPRESS_ENDPOINT,\n' +
+  '      keyMap: {\n' +
+  "        tags: 'tags',\n" +
+  "        categories: 'categories',\n" +
+  "        slug: 'slug',\n" +
+  "        status: 'status',\n" +
+  "        cover: 'cover',\n" +
+  "        description: 'description',\n" +
+  '      },\n' +
+  "      formatExt: ''\n" +
   '    },\n' +
   '  },\n' +
   '  image: {\n' +

@@ -27,3 +27,7 @@ export interface AdapterConfig {
 }
 
 export type AdapterFunction = (doc: DocDetail) => string
+
+export interface DocMap<T> {
+  [key: string]: T
+}
