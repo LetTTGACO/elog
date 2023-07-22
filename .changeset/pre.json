@@ -16,7 +16,6 @@
     "@elog/sdk-wordpress": "0.5.0"
   },
   "changesets": [
-    "angry-lions-remain",
     "angry-paws-mix",
     "big-pumas-appear",
     "chilly-trees-scream",
