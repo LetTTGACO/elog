@@ -1,4 +1,10 @@
-import { out } from '@elog/shared'
+import {
+  cleanParameter,
+  generateUniqueId,
+  getFileTypeFromUrl,
+  getPicBufferFromURL,
+  out,
+} from '@elog/shared'
 import WordPressClient, {
   CreateWordPressPost,
   UpdateWordPressPost,
@@ -9,13 +15,7 @@ import { DocDetail } from '@elog/types'
 import { AdapterClient } from '../adapter'
 import { AdapterFunction, DocMap } from '../types'
 import { FormatEnum } from '../const'
-import {
-  getFileName,
-  getFileTypeFromUrl,
-  getNoRepValues,
-  getPicBufferFromURL,
-  removeEmptyProperties,
-} from '../utils/common'
+import { getNoRepValues, removeEmptyProperties } from '../utils/common'
 
 class DeployWordPress {
   config: WordPressConfig
@@ -40,7 +40,6 @@ class DeployWordPress {
       let tagsKey = 'tags'
       let categoriesKey = 'categories'
       let urlnameKey = 'urlname'
-      let visibleKey = 'visible'
       let coverKey = 'cover'
       let descriptionKey = 'description'
       // 获取keyMap
@@ -48,7 +47,6 @@ class DeployWordPress {
         tagsKey = this.config.keyMap.tags || tagsKey
         categoriesKey = this.config.keyMap.categories || categoriesKey
         urlnameKey = this.config.keyMap.urlname || urlnameKey
-        visibleKey = this.config.keyMap.visible || visibleKey
         coverKey = this.config.keyMap.cover || coverKey
         descriptionKey = this.config.keyMap.description || descriptionKey
       }
@@ -124,7 +122,7 @@ class DeployWordPress {
         const post: UpdateWordPressPost | CreateWordPressPost = {
           title: articleInfo.properties.title,
           content: articleInfo.body_html,
-          status: articleInfo.properties[visibleKey] || 'publish',
+          status: 'publish',
           slug: articleInfo.properties[urlnameKey] || articleInfo.properties.title,
           excerpt: articleInfo.properties[descriptionKey],
         }
@@ -153,10 +151,10 @@ class DeployWordPress {
         }
         if (articleInfo.properties[coverKey]) {
           const picUrl = articleInfo.properties[coverKey]
-          const pic = await getPicBufferFromURL(picUrl)
+          const url = cleanParameter(picUrl)
+          const uuid = generateUniqueId(url)
           const fileType = getFileTypeFromUrl(picUrl)?.type
-          if (pic && fileType) {
-            const uuid = await getFileName(pic)
+          if (fileType) {
             const filename = `${uuid}.${fileType}`
             out.info('处理图片', `生成文件名: ${filename}`)
             // 检查是否已经存在图片
@@ -165,6 +163,10 @@ class DeployWordPress {
               out.info('忽略上传', `图片已存在: ${cacheMedia.guid.rendered}`)
               post.featured_media = cacheMedia.id
             } else {
+              const pic = await getPicBufferFromURL(picUrl)
+              if (!pic) {
+                continue
+              }
               // 上传特色图片
               const media = await this.ctx.uploadMedia(pic, filename)
               out.info('上传成功', media.guid.rendered)

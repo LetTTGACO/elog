@@ -1,11 +1,15 @@
-import { getFileName, getFileType, getUrlListFromContent } from './utils'
 import ImgClient from './platform'
 import { ImageConfig } from './platform/types'
-import { out, request } from '@elog/shared'
+import {
+  generateUniqueId,
+  getFileType,
+  getPicBufferFromURL,
+  getUrlListFromContent,
+  out,
+} from '@elog/shared'
 import { DocDetail } from '@elog/types'
 import { ImagePlatformEnum } from './platform/const'
 import { ImageSource, ImageUrl } from './types'
-import * as process from 'process'
 
 class ImageUploader {
   config: ImageConfig
@@ -17,26 +21,6 @@ class ImageUploader {
   }
 
   /**
-   * 获取图片buffer
-   */
-  async getPicBufferFromURL(url: string) {
-    try {
-      const res = await request<Buffer>(url, {
-        dataType: 'arraybuffer',
-        headers: {
-          // NOTE FlowUs图片下载有限制，需要referer为https://flowus.cn/
-          referer: process.env.REFERER_URL,
-        },
-      })
-      out.info('下载成功', url)
-      return res.data
-    } catch (e: any) {
-      out.warning(`下载失败: ${url}，${e.message}`)
-      out.debug(e)
-    }
-  }
-
-  /**
    * 上传
    * @param urlList
    */
@@ -44,16 +28,16 @@ class ImageUploader {
     const toUploadURLs = urlList.map(async (image) => {
       return await new Promise<ImageSource | undefined>(async (resolve) => {
         try {
-          const buffer = await this.getPicBufferFromURL(image.original)
-          if (!buffer) {
+          // 生成文件名
+          const fileName = generateUniqueId(image.url)
+          // 生成文件名后缀
+          const fileType = getFileType(image.url)
+          if (!fileType) {
+            out.warning(`获取图片类型失败，跳过：${image.url}`)
             resolve(undefined)
             return
           }
-          // 生成文件名
-          const fileName = await getFileName(buffer)
-          // 生成文件名后缀
-          const fileType = getFileType(image.url, buffer)
-          // 获取文件名
+          // 完整文件名
           const fullName = `${fileName}.${fileType.type}`
           out.info('处理图片', `生成文件名: ${fullName}`)
           // 检查图床是否存在该文件
@@ -68,6 +52,11 @@ class ImageUploader {
               upload: false,
             })
           } else {
+            const buffer = await getPicBufferFromURL(image.original)
+            if (!buffer) {
+              resolve(undefined)
+              return
+            }
             // 上传图片
             resolve({
               buffer,
