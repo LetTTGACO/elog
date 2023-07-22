@@ -28,7 +28,7 @@ class DeployWordPress {
     this.config = config
     this.ctx = new WordPressClient(config)
     this.adapterClient = new AdapterClient({
-      format: FormatEnum.MARKDOWN,
+      format: FormatEnum.HTML,
       formatExt: config.formatExt,
     })
     this.adapter = this.adapterClient.getAdapter()
@@ -39,16 +39,16 @@ class DeployWordPress {
       out.access('正在部署到 WordPress...')
       let tagsKey = 'tags'
       let categoriesKey = 'categories'
-      let slugKey = 'slug'
-      let statusKey = 'status'
+      let urlnameKey = 'urlname'
+      let visibleKey = 'visible'
       let coverKey = 'cover'
       let descriptionKey = 'description'
       // 获取keyMap
       if (this.config.keyMap && Object.keys(this.config.keyMap)) {
         tagsKey = this.config.keyMap.tags || tagsKey
         categoriesKey = this.config.keyMap.categories || categoriesKey
-        slugKey = this.config.keyMap.slug || slugKey
-        statusKey = this.config.keyMap.status || statusKey
+        urlnameKey = this.config.keyMap.urlname || urlnameKey
+        visibleKey = this.config.keyMap.status || visibleKey
         coverKey = this.config.keyMap.cover || coverKey
         descriptionKey = this.config.keyMap.description || descriptionKey
       }
@@ -110,12 +110,12 @@ class DeployWordPress {
           continue
         }
         // 自定义处理md文档
-        articleInfo.body = this.adapter(articleInfo)
+        articleInfo.body_html = this.adapter(articleInfo)
         const post: UpdateWordPressPost | CreateWordPressPost = {
           title: articleInfo.properties.title,
-          content: articleInfo.body,
-          status: articleInfo.properties[statusKey] || 'publish',
-          slug: articleInfo.properties[slugKey] || articleInfo.properties.title,
+          content: articleInfo.body_html,
+          status: articleInfo.properties[visibleKey] || 'publish',
+          slug: articleInfo.properties[urlnameKey] || articleInfo.properties.title,
           excerpt: articleInfo.properties[descriptionKey],
         }
         const postTags = articleInfo.properties[tagsKey] as string | string[]
