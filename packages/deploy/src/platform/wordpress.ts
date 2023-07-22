@@ -40,7 +40,6 @@ class DeployWordPress {
       let tagsKey = 'tags'
       let categoriesKey = 'categories'
       let urlnameKey = 'urlname'
-      let visibleKey = 'visible'
       let coverKey = 'cover'
       let descriptionKey = 'description'
       // 获取keyMap
@@ -48,7 +47,6 @@ class DeployWordPress {
         tagsKey = this.config.keyMap.tags || tagsKey
         categoriesKey = this.config.keyMap.categories || categoriesKey
         urlnameKey = this.config.keyMap.urlname || urlnameKey
-        visibleKey = this.config.keyMap.visible || visibleKey
         coverKey = this.config.keyMap.cover || coverKey
         descriptionKey = this.config.keyMap.description || descriptionKey
       }
@@ -124,7 +122,7 @@ class DeployWordPress {
         const post: UpdateWordPressPost | CreateWordPressPost = {
           title: articleInfo.properties.title,
           content: articleInfo.body_html,
-          status: articleInfo.properties[visibleKey] || 'publish',
+          status: 'publish',
           slug: articleInfo.properties[urlnameKey] || articleInfo.properties.title,
           excerpt: articleInfo.properties[descriptionKey],
         }
