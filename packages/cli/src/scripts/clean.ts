@@ -7,9 +7,14 @@ const clean = async (customConfigPath: string, customCachePath: string) => {
     // 加载配置文件
     const { config, cacheFilePath } = getConfig(customConfigPath, customCachePath)
     const {
-      deploy: { platform: deployPlatform, local: { outputDir: docOutputDir } } = {},
-      image: { enable, platform: imagePlatform, local: { outputDir: imageOutputDir } } = {},
+      deploy: { platform: deployPlatform, local: { outputDir: docOutputDir } = {} as any } = {},
+      image: {
+        enable,
+        platform: imagePlatform,
+        local: { outputDir: imageOutputDir } = {} as any,
+      } = {},
     } = config
+
     cleanCache(cacheFilePath)
     if (deployPlatform === 'local' && docOutputDir) {
       cleanPost(docOutputDir)
