@@ -19,6 +19,14 @@
 - Updated dependencies
   - @elog/shared@0.7.0-beta.0
 
+## 0.6.1
+
+### Patch Changes
+
+- 1.解决标签/分类/媒体的问题问题 2.删除 visible 字段
+- Updated dependencies
+  - @elog/shared@0.6.1
+
 ## 0.6.0
 
 ### Minor Changes

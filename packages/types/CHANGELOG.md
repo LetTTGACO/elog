@@ -12,6 +12,12 @@
 
 - 1.不在通过图片 Buffer 生成唯一 ID，直接通过图片 URL 生成唯一 ID，提升二次同步速度
 
+## 0.6.1
+
+### Patch Changes
+
+- 1.解决标签/分类/媒体的问题问题 2.删除 visible 字段
+
 ## 0.6.0
 
 ### Minor Changes
