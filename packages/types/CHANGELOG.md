@@ -1,5 +1,11 @@
 # @elog/types
 
+## 0.6.0-beta.8
+
+### Patch Changes
+
+- wordpress 增加代码高亮
+
 ## 0.6.0-beta.7
 
 ### Patch Changes

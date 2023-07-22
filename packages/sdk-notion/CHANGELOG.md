@@ -1,5 +1,14 @@
 # @elog/sdk-notion
 
+## 0.6.0-beta.8
+
+### Patch Changes
+
+- wordpress 增加代码高亮
+- Updated dependencies
+  - @elog/shared@0.6.0-beta.8
+  - @elog/types@0.6.0-beta.8
+
 ## 0.6.0-beta.7
 
 ### Patch Changes
