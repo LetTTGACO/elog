@@ -77,11 +77,11 @@ class DeployWordPress {
         }
       }
       // 获取wp标签
-      const wpTags = await this.ctx.getTags()
+      const wpTags = await this.ctx.getAllTags()
       // 获取wp分类
-      const wpCategories = await this.ctx.getCategories()
+      const wpCategories = await this.ctx.getAllCategories()
       // 获取wp媒体
-      const wpMedias = await this.ctx.getMedia()
+      const wpMedias = await this.ctx.getAllMedia()
       const noRepValues = getNoRepValues(sortArticleList, tagsKey, categoriesKey)
       for (const tag of noRepValues.tags) {
         const wpTag = wpTags.find((t) => t.name === tag)
