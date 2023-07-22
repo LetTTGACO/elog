@@ -5,7 +5,7 @@ export interface WordPressConfig {
   keyMap?: {
     tags?: string
     categories?: string
-    slug?: string
+    urlname?: string
     status?: string
     cover?: string
     description?: string
