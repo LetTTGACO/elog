@@ -110,8 +110,10 @@ class DeployWordPress {
       }
 
       let publishedPostMap: DocMap<WordPressPost> = {}
+      const total = sortArticleList.length
       // 根据目录上传到wp上
-      for (const articleInfo of sortArticleList) {
+      for (let index = 0; index < sortArticleList.length; index++) {
+        const articleInfo = sortArticleList[index]
         // 重复文档跳过同步
         if (publishedPostMap[articleInfo.properties.title]) {
           out.warning('跳过更新', `存在重复文档：${articleInfo.properties.title}`)
@@ -178,13 +180,13 @@ class DeployWordPress {
         const cachePage = postMap[articleInfo.properties.title]
         if (cachePage) {
           await this.ctx.updatePost(cachePage.id, removeEmptyProperties(post))
-          out.info('更新成功', articleInfo.properties.title)
+          out.info(`更新成功 ${index}/${total}`, articleInfo.properties.title)
         } else {
           const newPost = await this.ctx.createPost(
             removeEmptyProperties(post) as CreateWordPressPost,
           )
           postMap[newPost.title.rendered] = newPost
-          out.info('新增成功', articleInfo.properties.title)
+          out.info(`新增成功 ${index}/${total}`, articleInfo.properties.title)
         }
         publishedPostMap[articleInfo.properties.title] = cachePage
       }
