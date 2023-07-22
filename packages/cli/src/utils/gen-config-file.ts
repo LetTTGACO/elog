@@ -58,8 +58,6 @@ const configJsStr =
   '      keyMap: {\n' +
   "        tags: 'tags',\n" +
   "        categories: 'categories',\n" +
-  "        slug: 'slug',\n" +
-  "        status: 'status',\n" +
   "        cover: 'cover',\n" +
   "        description: 'description',\n" +
   '      },\n' +

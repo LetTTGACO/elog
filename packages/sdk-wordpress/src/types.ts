@@ -6,7 +6,7 @@ export interface WordPressConfig {
     tags?: string
     categories?: string
     urlname?: string
-    status?: string
+    visible?: string
     cover?: string
     description?: string
   }
