@@ -11,7 +11,7 @@ export async function run() {
   program
     .version(pkgJson.version)
     .command('init')
-    .option('-c --config <string>', 'rename config file,  default is elog.config.json')
+    .option('-c --config <string>', 'rename config file,  default is elog.config.js')
     .option('-e --env <string>', 'rename env file, default is .elog.env')
     .description('init config')
     .action((options) => {

@@ -5,7 +5,7 @@ const envStr =
   'YUQUE_TOKEN=\n' +
   '# 语雀（帐号密码方式）\n' +
   'YUQUE_USERNAME=\n' +
-  'YUQUE_PWD=\n' +
+  'YUQUE_PASSWORD=\n' +
   'YUQUE_LOGIN=\n' +
   'YUQUE_REPO=\n' +
   '\n' +
@@ -22,6 +22,11 @@ const envStr =
   'CONFLUENCE_PASSWORD=\n' +
   'CONFLUENCE_SPACE_KEY=\n' +
   'CONFLUENCE_ROOT_PAGE_ID=\n' +
+  '\n' +
+  '# WordPress\n' +
+  'WORDPRESS_USERNAME=\n' +
+  'WORDPRESS_PASSWORD=\n' +
+  'WORDPRESS_ENDPOINT=\n' +
   '\n' +
   '# 腾讯云\n' +
   'COS_SECRET_ID=\n' +

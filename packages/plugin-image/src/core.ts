@@ -31,7 +31,8 @@ class ImageUploader {
       out.info('下载成功', url)
       return res.data
     } catch (e: any) {
-      out.warning('下载失败', `${url}，错误信息：${e.message}`)
+      out.warning('下载失败', `${url}`)
+      out.warning(e.message)
     }
   }
 
@@ -58,7 +59,7 @@ class ImageUploader {
           // 检查图床是否存在该文件
           let exist = await this.ctx.hasImage(fullName)
           if (exist) {
-            out.info('忽略上传', exist)
+            out.info('忽略上传', `图片已存在: ${exist}`)
             // 图片已存在
             resolve({
               fileName: fullName,

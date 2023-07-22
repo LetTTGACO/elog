@@ -77,6 +77,7 @@ class DeployConfluence {
         }
       }
     }
+    return undefined
   }
 }
 

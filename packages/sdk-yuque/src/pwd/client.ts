@@ -91,6 +91,10 @@ class YuqueClient {
       return res.data
     }
     const res = await request<YuQueResponse<T>>(url, opts)
+    if (res.status !== 200) {
+      // @ts-ignore
+      out.err(res)
+    }
     return res.data.data
   }
 
@@ -190,7 +194,7 @@ class YuqueClient {
       return articleList
     }
     out.info('待下载数', String(docs.length))
-    out.info('开始下载文档...')
+    out.access('开始下载文档...')
     docs = docs.map((item, index) => ({ ...item, _index: index + 1 } as YuqueDoc))
     const promise = async (doc: YuqueDoc) => {
       out.info(`下载文档 ${doc._index}/${docs.length}   `, doc.title)
@@ -199,8 +203,8 @@ class YuqueClient {
       const { body, properties } = getProps(article, true)
       // 处理换行/自定义处理
       article.properties = properties as YuqueDocProperties
-      // 替换body
       article.body = body
+      article.body_original = body
       article.updated = new Date(article.updated_at).getTime()
       articleList.push(article)
     }
