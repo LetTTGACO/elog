@@ -48,7 +48,7 @@ class DeployWordPress {
         tagsKey = this.config.keyMap.tags || tagsKey
         categoriesKey = this.config.keyMap.categories || categoriesKey
         urlnameKey = this.config.keyMap.urlname || urlnameKey
-        visibleKey = this.config.keyMap.status || visibleKey
+        visibleKey = this.config.keyMap.visible || visibleKey
         coverKey = this.config.keyMap.cover || coverKey
         descriptionKey = this.config.keyMap.description || descriptionKey
       }
