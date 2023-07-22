@@ -16,6 +16,7 @@
     "@elog/types": "0.6.0"
   },
   "changesets": [
+    "early-dogs-jump",
     "itchy-ears-battle",
     "spicy-ducks-enjoy"
   ]
