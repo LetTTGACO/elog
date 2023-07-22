@@ -168,6 +168,7 @@ class FlowUsClient {
       body = this.f2m.toMarkdownString(pageBlocks)
     } catch (e: any) {
       out.warning(`${page.title} 下载出错: ${e.message}`)
+      out.debug(e)
     }
     const doc = {
       id: page.id,

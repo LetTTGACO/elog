@@ -38,9 +38,9 @@ class CosClient {
       }
       // 计算root和output的相对路径
       return prefixKey + fileName
-    } catch (e) {
-      // @ts-ignore
+    } catch (e: any) {
       out.err('写入错误', e.message)
+      out.debug(e)
     }
   }
 }

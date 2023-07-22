@@ -247,7 +247,8 @@ class Elog {
         encoding: 'utf8',
       })
     } catch (e: any) {
-      out.warning('缓存失败', `写入缓存信息失败，请检查${e.message}`)
+      out.warning('缓存失败', `写入缓存信息失败，请检查，${e.message}`)
+      out.debug(e)
     }
   }
 

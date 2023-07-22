@@ -52,8 +52,8 @@ export const getPicBufferFromURL = async (url: string) => {
     out.info('下载成功', url)
     return res.data
   } catch (e: any) {
-    out.warning('下载失败', url)
-    out.warning(e.message)
+    out.warning(`下载失败: ${url}，${e.message}`)
+    out.debug(e)
   }
 }
 
@@ -69,7 +69,7 @@ export const removeEmptyProperties = (obj: AnyObject): AnyObject => {
   const filteredObj: AnyObject = {}
 
   Object.entries(obj).forEach(([key, value]) => {
-    if (value !== null && value !== undefined && value !== '') {
+    if (value !== null && value !== undefined && value !== '' && value.length !== 0) {
       filteredObj[key] = value
     }
   })
