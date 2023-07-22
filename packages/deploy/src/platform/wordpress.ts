@@ -61,7 +61,7 @@ class DeployWordPress {
         return a.catalog.length - b.catalog.length
       })
       // 获取文章列表
-      const postList = await this.ctx.getPostList()
+      const postList = await this.ctx.getAllPosts()
       let postMap: DocMap<WordPressPost> = {}
       // List转Map
       postList.forEach((item) => {
@@ -178,7 +178,10 @@ class DeployWordPress {
           await this.ctx.updatePost(cachePage.id, removeEmptyProperties(post))
           out.info('更新成功', articleInfo.properties.title)
         } else {
-          await this.ctx.createPost(removeEmptyProperties(post) as CreateWordPressPost)
+          const newPost = await this.ctx.createPost(
+            removeEmptyProperties(post) as CreateWordPressPost,
+          )
+          postMap[newPost.title.rendered] = newPost
           out.info('新增成功', articleInfo.properties.title)
         }
         publishedPostMap[articleInfo.properties.title] = cachePage
