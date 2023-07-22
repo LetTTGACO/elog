@@ -80,7 +80,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和部署�
 - [x]  Docusaurus
 - [x]  Docz
 - [x]  Confluence
-- [x]  WordPress（内测中）
+- [x]  WordPress
 > 部署平台目前支持所有类似 Hexo 的框架：通过向指定目录存放 markdown 文档来进行渲染的方式
 
 ## 🌅 图床功能
