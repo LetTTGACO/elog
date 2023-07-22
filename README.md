@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Elog</h1>
-  <p>开放式跨端博客解决方案，随意组合写作平台（语雀/Notion/FlowUs）和部署平台（Hexo/Vitepress/HuGo）等</p>
+  <p>开放式跨端博客解决方案，随意组合写作平台（语雀/Notion/FlowUs）和部署平台（Hexo/Vitepress/Confluence/WordPress）等</p>
   <a href="http://makeapullrequest.com">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome">
   </a>
@@ -71,7 +71,7 @@ Elog就是为了解决这个问题而诞生的。
 Elog将这些平台揉合在一起，你可以随意组合写作平台和部署平台，目前支持：
 - [x] Notion
 - [x] 语雀
-- [x] FlowUs(内测中)
+- [x] FlowUs
 
 **部署平台**
 - [x]  Hexo
@@ -80,6 +80,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和部署�
 - [x]  Docusaurus
 - [x]  Docz
 - [x]  Confluence
+- [x]  WordPress（内测中）
 > 部署平台目前支持所有类似 Hexo 的框架：通过向指定目录存放 markdown 文档来进行渲染的方式
 
 ## 🌅 图床功能
@@ -95,6 +96,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和部署�
 ## ✨ 特性
 - 📝 写作平台支持语雀/Notion/FlowUs
 - 🚀 部署平台支持所有通过渲染本地 Markdown 文档生成静态站点的博客平台
+- 🚀 部署平台支持Confluence/WordPress站点
 - 🌅 图床平台支持存放到本地或上传到阿里云/腾讯云/Github/七牛云/又拍云
 - 📦 支持生成Front Matter Markdown/支持代码高亮的HTML/适用于Confluence的wiki
 - ⚙️ 支持自定义文档处理适配器
