@@ -1,6 +1,6 @@
 {
   "name": "@elog/sdk-flowus",
-  "version": "0.6.0-beta.5",
+  "version": "0.6.0-beta.6",
   "description": "elog的FlowUs SDK，从FlowUs下载文档",
   "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/sdk-flowus#readme",
   "author": "1874 <me@mail.1874.cool>",
