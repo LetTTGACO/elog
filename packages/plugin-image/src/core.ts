@@ -31,8 +31,8 @@ class ImageUploader {
       out.info('下载成功', url)
       return res.data
     } catch (e: any) {
-      out.warning('下载失败', `${url}`)
-      out.warning(e.message)
+      out.warning(`下载失败: ${url}，${e.message}`)
+      out.debug(e)
     }
   }
 

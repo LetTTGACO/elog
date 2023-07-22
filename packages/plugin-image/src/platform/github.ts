@@ -69,13 +69,13 @@ class GithubClient {
           return result.data.content.download_url as string
         }
       }
-    } catch (e) {
+    } catch (e: any) {
       if (base64File) {
-        // @ts-ignore
         out.warning('请求失败', e.message)
+        out.debug(e)
       } else {
-        // @ts-ignore
         out.warning('NOT FOUND', e.message)
+        out.debug(e)
       }
     }
   }

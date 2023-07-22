@@ -36,8 +36,8 @@ export class AdapterClient {
         const { format } = require(formatExtPath)
         return format
       } catch (e: any) {
-        out.err(e.message)
-        out.err('文档处理拓展点加载失败，请检查！')
+        out.err('文档处理拓展点加载失败，请检查！', e.message)
+        out.debug(e.message)
         process.exit(1)
       }
     } else {

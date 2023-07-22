@@ -38,8 +38,8 @@ export class FormatExt {
         const { format } = require(formatExtPath)
         return format
       } catch (e: any) {
-        out.err(e.message)
-        out.err('文档处理拓展点加载失败，请检查！')
+        out.err('文档处理拓展点加载失败，请检查！', e.message)
+        out.debug(e)
         process.exit(-1)
       }
     } else if (typeof this.formatExt === 'function') {
