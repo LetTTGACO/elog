@@ -109,6 +109,10 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和部署�
 
 ## 🔗 最佳实践
 - [Elog Docs](https://github.com/LetTTGACO/elog-docs) 多写作平台云端写作 + vitepress 按目录生成路由 + GitHub Action + GitHub Pages 持续集成
+- [jasonma0012.github.io](https://github.com/JasonMa0012/jasonma0012.github.io) 语雀 + hexo + GitHub Action + GitHub Pages 持续集成
+- [Knowledge-Garden](https://github.com/shenweiyan/Knowledge-Garden) 语雀 + mkdocs + GitHub Action 持续集成
+- [blog-butterfly](https://github.com/ccknbc-actions/blog-butterfly) 语雀 + hexo + GitHub Action + GitHub Pages 持续集成
+- [hexo.bmqy.net](https://github.com/bmqy/hexo.bmqy.net) notion + hexo + GitHub Action 持续集成
 
 ## 感谢
 感谢以下用户贡献了很多bugs和建议
