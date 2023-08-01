@@ -116,6 +116,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和部署�
 - [Steven Shum](https://github.com/shenweiyan)
 - [北门清燕](https://github.com/bmqy)
 - [觉·白](https://github.com/vannvan)
+- [JasonMa](https://github.com/JasonMa0012)
 
 感谢下列项目提供了灵感
 - [yuque-tools](https://github.com/vannvan/yuque-tools)
