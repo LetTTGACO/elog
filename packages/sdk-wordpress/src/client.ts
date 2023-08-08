@@ -62,10 +62,7 @@ class WordPressClient {
         }
       })
       .catch((err) => {
-        if (
-          err.code === 'rest_post_invalid_page_number' &&
-          err.message === '请求的页码大于总页数。'
-        ) {
+        if (err.code === 'rest_post_invalid_page_number') {
           // 请求页码超过总页数，直接返回所有文章
           return allPosts
         } else {
@@ -104,6 +101,33 @@ class WordPressClient {
   }
 
   /**
+   * 获取全部标签
+   */
+  async getAllTags(page = 1, allTags: WordPressTag[] = []): Promise<WordPressTag[]> {
+    return this.wpClient
+      .tags()
+      .perPage(100)
+      .page(page)
+      .then((tags) => {
+        if (tags.length === 0) return allTags
+        // 将当前页面的标签合并到所有标签数组中
+        allTags = allTags.concat(tags)
+
+        if (tags.length === 100) {
+          // 继续获取下一页
+          return this.getAllTags(page + 1, allTags)
+        } else {
+          // 已获取到最后一页或没有标签
+          return allTags
+        }
+      })
+      .catch((err) => {
+        out.err('获取标签列表失败', err.message)
+        out.debug(err)
+      })
+  }
+
+  /**
    * 新增标签
    */
   async createTag(tag: { name: string }): Promise<WordPressTag> {
@@ -115,6 +139,36 @@ class WordPressClient {
    */
   async getCategories(): Promise<WordPressCategory[]> {
     return this.wpClient.categories()
+  }
+
+  /**
+   * 获取全部分类
+   */
+  async getAllCategories(
+    page = 1,
+    allCategories: WordPressCategory[] = [],
+  ): Promise<WordPressCategory[]> {
+    return this.wpClient
+      .categories()
+      .perPage(100)
+      .page(page)
+      .then((categories) => {
+        if (categories.length === 0) return allCategories
+        // 将当前页面的分类合并到所有分类数组中
+        allCategories = allCategories.concat(categories)
+
+        if (categories.length === 100) {
+          // 继续获取下一页
+          return this.getAllCategories(page + 1, allCategories)
+        } else {
+          // 已获取到最后一页或没有分类
+          return allCategories
+        }
+      })
+      .catch((err) => {
+        out.err('获取分类列表失败', err.message)
+        out.debug(err)
+      })
   }
 
   /**
@@ -131,6 +185,37 @@ class WordPressClient {
    */
   async getMedia(): Promise<WordPressMedia[]> {
     return this.wpClient.media()
+  }
+
+  /**
+   * 获取全部媒体库
+   */
+  async getAllMedia(page = 1, allMedia: WordPressMedia[] = []): Promise<WordPressMedia[]> {
+    return this.wpClient
+      .media()
+      .perPage(100)
+      .page(page)
+      .then((medias) => {
+        // 将当前页面的文章合并到所有媒体数组中
+        allMedia = allMedia.concat(medias)
+
+        if (medias.length === 100) {
+          // 继续获取下一页
+          return this.getAllMedia(page + 1, allMedia)
+        } else {
+          // 已获取到最后一页或没有媒体
+          return allMedia
+        }
+      })
+      .catch((err) => {
+        if (err.code === 'rest_post_invalid_page_number') {
+          // 请求页码超过总页数，直接返回所有媒体
+          return allMedia
+        } else {
+          out.err('获取图片列表失败', err.message)
+          out.debug(err)
+        }
+      })
   }
 
   /**

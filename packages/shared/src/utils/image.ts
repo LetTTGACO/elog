@@ -1,10 +1,10 @@
 import imgSize from 'image-size'
-import crypto from 'crypto'
 import { ImageUrl } from '../types'
 // @ts-ignore
 import { getEtag } from './qetag.js'
 import { request } from '../request'
 import out from '../out'
+import { createHash } from 'node:crypto'
 
 /**
  * 通过图片url获取文件type, 不含"."
@@ -121,7 +121,7 @@ export const getUrlListFromContent = (content: string) => {
  * @param url
  */
 export const generateUniqueId = (url: string) => {
-  return crypto.createHash('md5').update(url).digest('hex')
+  return createHash('md5').update(url).digest('hex')
 }
 
 /**
