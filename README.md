@@ -116,7 +116,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 - [blog-butterfly](https://github.com/ccknbc-actions/blog-butterfly) 语雀 + hexo + GitHub Action 抓取文章 + Webify/GitHub/Vercel/GitLab/Gitee/Netlify/BitBucket/CloudFlare 部署  👉  [CC的部落格](https://blog.ccknbc.cc/about/)
 - [hexo.bmqy.net](https://github.com/bmqy/hexo.bmqy.net) notion + hexo + GitHub Action 持续集成  👉  [北门清燕](https://www.bmqy.net/)
 
-## 感谢
+## 🌹 感谢
 感谢以下用户贡献了很多bugs和建议
 - [CC康纳百川](https://github.com/CCKNBC) 
 - [Steven Shum](https://github.com/shenweiyan)
