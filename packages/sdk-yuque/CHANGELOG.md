@@ -620,7 +620,7 @@
 
 ### Minor Changes
 
-- 新增对 confluence 部署平台的支持
+- 新增对 confluence 博客平台的支持
 
 ### Patch Changes
 

@@ -1,8 +1,8 @@
 {
   "name": "elog",
   "version": "1.0.0",
-  "description": "一个多写作平台多部署平台的博客生成工具",
-  "homepage": "https://github.com/LetTTGACO/eblog#readme",
+  "description": "开放式跨端博客解决方案，随意组合写作平台（语雀/Notion/FlowUs）和博客平台（Hexo/Vitepress/Confluence/WordPress）等",
+  "homepage": "https://github.com/LetTTGACO/elog#readme",
   "author": "1874 <me@mail.1874.cool>",
   "main": "index.js",
   "license": "MIT",
@@ -17,7 +17,7 @@
     "flowus"
   ],
   "bugs": {
-    "url": "https://github.com/LetTTGACO/eblog/issues"
+    "url": "https://github.com/LetTTGACO/elog/issues"
   },
   "repository": {
     "type": "git",
