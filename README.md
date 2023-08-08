@@ -108,7 +108,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和部署�
 [Elog 使用文档](https://elog.1874.cool/)
 
 ## 🔗 最佳实践
-- [elog-docs](https://github.com/LetTTGACO/elog-docs) 多写作平台云端写作 + vitepress 按目录生成路由 + GitHub Action + GitHub Pages 持续集成  👉  [Elog Docs](https://elog.1874.cool/)
+- [elog-docs](https://github.com/LetTTGACO/elog-docs) 多写作平台云端写作 + vitepress + GitHub Action + GitHub Pages 持续集成  👉  [Elog Docs](https://elog.1874.cool/)
 - [jasonma0012.github.io](https://github.com/JasonMa0012/jasonma0012.github.io) 语雀 + hexo + GitHub Action 抓取文章 + Vercel 部署  👉  [Elysium](https://elysium.jason-ma.com/)
 - [Knowledge-Garden](https://github.com/shenweiyan/Knowledge-Garden) 语雀 + mkdocs + GitHub Action 持续集成  👉  [生信知识花园](https://doc.weiyan.cc/)
 - [blog-butterfly](https://github.com/ccknbc-actions/blog-butterfly) 语雀 + hexo + GitHub Action 抓取文章 + Webify/GitHub/Vercel/GitLab/Gitee/Netlify/BitBucket/CloudFlare 部署  👉  [CC的部落格](https://blog.ccknbc.cc/about/)
