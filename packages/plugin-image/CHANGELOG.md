@@ -1,5 +1,23 @@
 # @elog/plugin-image
 
+## 0.7.0
+
+### Minor Changes
+
+- 6cd3013: 1.不在通过图片 Buffer 生成唯一 ID，直接通过图片 URL 生成唯一 ID，提升二次同步速度
+- 1.不再通过图片 Buffer 生成唯一 ID，直接通过图片 URL 生成唯一 ID，大幅提升二次同步速度 2.修复 elog clean 可能报错的问题
+
+### Patch Changes
+
+- f3f9c3b: 1.不在通过图片 Buffer 生成唯一 ID，直接通过图片 URL 生成唯一 ID，提升二次同步速度
+- 6127171: 1.去除 crypto 依赖，改用 node 内置 crypto 2.修复 elog clean 可能报错的问题
+- Updated dependencies [6cd3013]
+- Updated dependencies
+- Updated dependencies [f3f9c3b]
+- Updated dependencies [6127171]
+  - @elog/shared@0.7.0
+  - @elog/types@0.7.0
+
 ## 0.7.0-beta.2
 
 ### Patch Changes
