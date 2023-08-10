@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.7.1-beta.0
+
+### Patch Changes
+
+- 1.修复爬取目录时鉴权问题
+
 ## 0.7.0
 
 ### Minor Changes

@@ -1,6 +1,6 @@
 {
   "name": "@elog/sdk-notion",
-  "version": "0.7.0",
+  "version": "0.7.1-beta.0",
   "description": "elog的Notion SDK，从Notion写作平台获取文章",
   "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-sdk-notion#readme",
   "author": "1874 <me@mail.1874.cool>",

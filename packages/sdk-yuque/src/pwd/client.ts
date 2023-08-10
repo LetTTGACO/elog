@@ -102,16 +102,21 @@ class YuqueClient {
    * 获取目录
    */
   async getToc() {
-    const url = `${this.baseUrl}/${this.namespace}`
-    const dom = await JSDOM.fromURL(url, { runScripts: 'dangerously' })
-    const { book } = dom?.window?.appData || {}
-    dom.window.close()
-    if (!book) {
-      out.warning('爬取语雀目录失败，请稍后重试')
+    try {
+      const res = await this.request(this.namespace, { method: 'get', dataType: 'text' }, true)
+      const dom = new JSDOM(`${res}`, { runScripts: 'dangerously' })
+      const { book } = dom?.window?.appData || {}
+      dom.window.close()
+      if (!book) {
+        out.warning('爬取语雀目录失败，请稍后重试')
+        process.exit(-1)
+      }
+      this.bookId = book.id
+      return book?.toc || []
+    } catch (e: any) {
+      out.warning('爬取语雀目录失败，请稍后重试', e.message)
       process.exit(-1)
     }
-    this.bookId = book.id
-    return book?.toc || []
   }
 
   /**
