@@ -1,5 +1,19 @@
 # @elog/deploy
 
+## 0.7.1
+
+### Patch Changes
+
+- 修复爬取语雀目录时鉴权问题
+- 64fe962: 1.修复爬取目录时鉴权问题
+- Updated dependencies
+- Updated dependencies [64fe962]
+  - @elog/plugin-adapter@0.7.1
+  - @elog/sdk-confluence@0.7.1
+  - @elog/sdk-wordpress@0.7.1
+  - @elog/shared@0.7.1
+  - @elog/types@0.7.1
+
 ## 0.7.1-beta.0
 
 ### Patch Changes

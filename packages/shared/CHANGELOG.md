@@ -1,5 +1,12 @@
 # @elog/shared
 
+## 0.7.1
+
+### Patch Changes
+
+- 修复爬取语雀目录时鉴权问题
+- 64fe962: 1.修复爬取目录时鉴权问题
+
 ## 0.7.1-beta.0
 
 ### Patch Changes
