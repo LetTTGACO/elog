@@ -3,7 +3,7 @@ import { out, request, RequestOptions } from '@elog/shared'
 import { encrypt, getProps } from '../utils'
 import { YuQueResponse, YuqueDoc, YuqueDocProperties } from '../types'
 import { DocDetail, YuqueCatalog, DocCatalog } from '@elog/types'
-import { JSDOM, VirtualConsole } from 'jsdom'
+import { JSDOM } from 'jsdom'
 import { YuqueWithPwdConfig, YuqueLogin, YuqueLoginCookie } from './types'
 
 /** 默认语雀API 路径 */
@@ -103,12 +103,8 @@ class YuqueClient {
    */
   async getToc() {
     try {
-      const res = await this.request(this.namespace, { method: 'get' })
-      const virtualConsole = new VirtualConsole()
-      const dom = new JSDOM(`${res}`, { runScripts: 'dangerously', virtualConsole })
-      virtualConsole.on('error', () => {
-        // don't do anything
-      })
+      const res = await this.request(this.namespace, { method: 'get', dataType: 'text' }, true)
+      const dom = new JSDOM(`${res}`, { runScripts: 'dangerously' })
       const { book } = dom?.window?.appData || {}
       dom.window.close()
       if (!book) {
