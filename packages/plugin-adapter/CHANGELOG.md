@@ -1,5 +1,14 @@
 # @elog/plugin-adapter
 
+## 0.7.1-beta.0
+
+### Patch Changes
+
+- 1.修复爬取目录时鉴权问题
+- Updated dependencies
+  - @elog/shared@0.7.1-beta.0
+  - @elog/types@0.7.1-beta.0
+
 ## 0.7.0
 
 ### Minor Changes
