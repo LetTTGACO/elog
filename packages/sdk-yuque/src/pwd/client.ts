@@ -3,7 +3,7 @@ import { out, request, RequestOptions } from '@elog/shared'
 import { encrypt, getProps } from '../utils'
 import { YuQueResponse, YuqueDoc, YuqueDocProperties } from '../types'
 import { DocDetail, YuqueCatalog, DocCatalog } from '@elog/types'
-import { JSDOM } from 'jsdom'
+import { JSDOM, VirtualConsole } from 'jsdom'
 import { YuqueWithPwdConfig, YuqueLogin, YuqueLoginCookie } from './types'
 
 /** 默认语雀API 路径 */
@@ -102,16 +102,25 @@ class YuqueClient {
    * 获取目录
    */
   async getToc() {
-    const url = `${this.baseUrl}/${this.namespace}`
-    const dom = await JSDOM.fromURL(url, { runScripts: 'dangerously' })
-    const { book } = dom?.window?.appData || {}
-    dom.window.close()
-    if (!book) {
-      out.warning('爬取语雀目录失败，请稍后重试')
+    try {
+      const res = await this.request(this.namespace, { method: 'get' })
+      const virtualConsole = new VirtualConsole()
+      const dom = new JSDOM(`${res}`, { runScripts: 'dangerously', virtualConsole })
+      virtualConsole.on('error', () => {
+        // don't do anything
+      })
+      const { book } = dom?.window?.appData || {}
+      dom.window.close()
+      if (!book) {
+        out.warning('爬取语雀目录失败，请稍后重试')
+        process.exit(-1)
+      }
+      this.bookId = book.id
+      return book?.toc || []
+    } catch (e: any) {
+      out.warning('爬取语雀目录失败，请稍后重试', e.message)
       process.exit(-1)
     }
-    this.bookId = book.id
-    return book?.toc || []
   }
 
   /**
