@@ -1,5 +1,14 @@
 # @elog/cli
 
+## 0.7.2-beta.0
+
+### Patch Changes
+
+- 优化图片下载问题
+- Updated dependencies
+  - @elog/core@0.7.2-beta.0
+  - @elog/shared@0.7.2-beta.0
+
 ## 0.7.1
 
 ### Patch Changes

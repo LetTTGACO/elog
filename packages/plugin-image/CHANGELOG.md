@@ -1,5 +1,14 @@
 # @elog/plugin-image
 
+## 0.7.2-beta.0
+
+### Patch Changes
+
+- 优化图片下载问题
+- Updated dependencies
+  - @elog/shared@0.7.2-beta.0
+  - @elog/types@0.7.2-beta.0
+
 ## 0.7.1
 
 ### Patch Changes
