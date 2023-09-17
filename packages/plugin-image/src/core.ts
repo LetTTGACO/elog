@@ -7,7 +7,7 @@ import {
   getUrlListFromContent,
   out,
 } from '@elog/shared'
-import { DocDetail } from '@elog/types'
+import { DocDetail, ImageFail } from '@elog/types'
 import { ImagePlatformEnum } from './platform/const'
 import { ImageSource, ImageUrl } from './types'
 
@@ -23,8 +23,9 @@ class ImageUploader {
   /**
    * 上传
    * @param urlList
+   * @param failBack
    */
-  async upload(urlList: ImageUrl[]) {
+  async upload(urlList: ImageUrl[], failBack?: (image: ImageUrl) => void) {
     const toUploadURLs = urlList.map(async (image) => {
       return await new Promise<ImageSource | undefined>(async (resolve) => {
         try {
@@ -54,6 +55,7 @@ class ImageUploader {
           } else {
             const buffer = await getPicBufferFromURL(image.original)
             if (!buffer) {
+              failBack?.(image)
               resolve(undefined)
               return
             }
@@ -116,7 +118,9 @@ class ImageUploader {
       const urlList = getUrlListFromContent(articleInfo.body)
       if (urlList.length) {
         // 上传图片
-        const urls = await this.upload(urlList)
+        const urls = await this.upload(urlList, () => {
+          articleInfo.needUpdate = ImageFail
+        })
         if (urls?.length) {
           // 替换文章中的图片
           urls.forEach((item) => {

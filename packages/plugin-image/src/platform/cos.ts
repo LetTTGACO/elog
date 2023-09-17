@@ -80,7 +80,7 @@ class CosClient {
       return `https://${res.Location}`
     } catch (e: any) {
       out.warning('跳过上传', `上传图片失败，请检查: ${e.message}`)
-      e.debug(e)
+      out.debug(e)
     }
   }
 }

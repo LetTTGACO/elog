@@ -13,7 +13,7 @@ import DeployClient, { DeployConfig, DeployPlatformEnum } from '@elog/deploy'
 import ImageClient from '@elog/plugin-image'
 // types
 import { ElogConfig, CacheJSON, DocStatusMap } from './types'
-import { BaseDoc, DocDetail } from '@elog/types'
+import { BaseDoc, DocDetail, ImageFail } from '@elog/types'
 // const
 import { WritePlatform, DocStatus } from './const'
 // utils
@@ -162,7 +162,16 @@ class Elog {
       } else {
         // 不是新增的则判断是否文章更新了
         const cacheArticle = this.cachedArticles[cacheIndex]
-        const cacheAvailable = article.updated === cacheArticle.updated
+        const cacheAvailable =
+          article.updated === cacheArticle.updated || cacheArticle.needUpdate === ImageFail
+
+        if (cacheArticle.needUpdate === ImageFail) {
+          out.info(
+            `上次同步时${
+              cacheArticle.properties.title || '文章'
+            }存在图片下载失败，本次将尝试重新同步`,
+          )
+        }
         if (!cacheAvailable) {
           // 如果文章更新了则加入需要下载的ids列表, 没有更新则不需要下载
           ids.push(article.doc_id)
@@ -195,7 +204,7 @@ class Elog {
         this.cachedArticles.push(docDetail)
       } else {
         // 更新文档
-        this.cachedArticles[index!] = docDetail
+        this.cachedArticles[index as number] = docDetail
       }
     }
   }

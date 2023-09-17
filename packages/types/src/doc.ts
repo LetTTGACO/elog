@@ -53,6 +53,9 @@ export interface NotionCatalog {
   [key: string]: any
 }
 
+export const ImageFail = 0b0001
+export const DocFail = 0b0010
+
 /** 文章详情 */
 export interface DocDetail extends BaseDoc {
   /** 实际部署时的文档字符串 */
@@ -69,4 +72,6 @@ export interface DocDetail extends BaseDoc {
   catalog?: DocCatalog[]
   realName?: string
   relativePath?: string
+  /** 文章同步出现异常 */
+  needUpdate?: number
 }
