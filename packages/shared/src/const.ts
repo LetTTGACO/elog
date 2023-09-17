@@ -9,3 +9,6 @@ export enum LogLevel {
   ERROR,
   DEBUG,
 }
+
+export const ImageFail = 0b0001
+export const DocFail = 0b0010

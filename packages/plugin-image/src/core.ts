@@ -5,9 +5,10 @@ import {
   getFileType,
   getPicBufferFromURL,
   getUrlListFromContent,
+  ImageFail,
   out,
 } from '@elog/shared'
-import { DocDetail, ImageFail } from '@elog/types'
+import { DocDetail } from '@elog/types'
 import { ImagePlatformEnum } from './platform/const'
 import { ImageSource, ImageUrl } from './types'
 

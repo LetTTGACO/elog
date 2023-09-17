@@ -4,3 +4,5 @@ import { HttpClientResponse, RequestOptions } from 'urllib'
 
 export * from './utils/image'
 export { out, request, RequestOptions, HttpClientResponse }
+
+export { ImageFail, DocFail } from './const'

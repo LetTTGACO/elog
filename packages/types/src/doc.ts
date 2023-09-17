@@ -53,9 +53,6 @@ export interface NotionCatalog {
   [key: string]: any
 }
 
-export const ImageFail = 0b0001
-export const DocFail = 0b0010
-
 /** 文章详情 */
 export interface DocDetail extends BaseDoc {
   /** 实际部署时的文档字符串 */
