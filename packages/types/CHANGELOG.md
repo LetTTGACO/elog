@@ -1,5 +1,12 @@
 # @elog/types
 
+## 0.7.2
+
+### Patch Changes
+
+- db2936f: 优化图片下载问题
+- 优化图片下载问题
+
 ## 0.7.2-beta.0
 
 ### Patch Changes

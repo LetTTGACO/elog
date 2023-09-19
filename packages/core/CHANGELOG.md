@@ -1,5 +1,21 @@
 # @elog/core
 
+## 0.7.2
+
+### Patch Changes
+
+- db2936f: 优化图片下载问题
+- 优化图片下载问题
+- Updated dependencies [db2936f]
+- Updated dependencies
+  - @elog/deploy@0.7.2
+  - @elog/plugin-image@0.7.2
+  - @elog/sdk-flowus@0.7.2
+  - @elog/sdk-notion@0.7.2
+  - @elog/sdk-yuque@0.7.2
+  - @elog/shared@0.7.2
+  - @elog/types@0.7.2
+
 ## 0.7.2-beta.0
 
 ### Patch Changes
