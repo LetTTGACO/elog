@@ -1,5 +1,14 @@
 # @elog/sdk-wordpress
 
+## 0.7.3-beta.1
+
+### Patch Changes
+
+- 1.修复 prefix 前缀路径 2.修复图床传参问题 3.优化 debug 输出
+- Updated dependencies
+  - @elog/shared@0.7.3-beta.1
+  - @elog/types@0.7.3-beta.1
+
 ## 0.7.3-beta.0
 
 ### Patch Changes
