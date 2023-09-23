@@ -1,5 +1,17 @@
 # @elog/deploy
 
+## 0.7.3-beta.0
+
+### Patch Changes
+
+- 修复 github 图床和 os 上传问题
+- Updated dependencies
+  - @elog/plugin-adapter@0.7.3-beta.0
+  - @elog/sdk-confluence@0.7.3-beta.0
+  - @elog/sdk-wordpress@0.7.3-beta.0
+  - @elog/shared@0.7.3-beta.0
+  - @elog/types@0.7.3-beta.0
+
 ## 0.7.2
 
 ### Patch Changes

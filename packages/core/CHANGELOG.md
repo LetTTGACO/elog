@@ -1,5 +1,19 @@
 # @elog/core
 
+## 0.7.3-beta.0
+
+### Patch Changes
+
+- 修复 github 图床和 os 上传问题
+- Updated dependencies
+  - @elog/deploy@0.7.3-beta.0
+  - @elog/plugin-image@0.7.3-beta.0
+  - @elog/sdk-flowus@0.7.3-beta.0
+  - @elog/sdk-notion@0.7.3-beta.0
+  - @elog/sdk-yuque@0.7.3-beta.0
+  - @elog/shared@0.7.3-beta.0
+  - @elog/types@0.7.3-beta.0
+
 ## 0.7.2
 
 ### Patch Changes
