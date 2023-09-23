@@ -2,7 +2,7 @@
 import * as qiniu from 'qiniu'
 import { QiniuConfig } from './types'
 import { out } from '@elog/shared'
-import { getSecretExt } from './utils'
+import { formattedPrefix, getSecretExt } from './utils'
 
 class QiNiuClient {
   config: QiniuConfig
@@ -35,8 +35,12 @@ class QiNiuClient {
         secretKey: this.config.secretKey || process.env.QINIU_SECRET_KEY!,
       }
     }
+    if (!this.config.secretId || !this.config.secretKey) {
+      out.err('缺少七牛云密钥信息')
+      process.exit(-1)
+    }
     // 处理prefixKey
-    this.config.prefixKey = this.config.prefixKey || '/'
+    this.config.prefixKey = formattedPrefix(this.config.prefixKey)
     if (!this.config.host) {
       out.err('使用七牛云时，需要指定域名host')
       process.exit(-1)
@@ -44,8 +48,10 @@ class QiNiuClient {
     const mac = new qiniu.auth.digest.Mac(this.config.secretId, this.config.secretKey)
     const putPolicy = new qiniu.rs.PutPolicy({ scope: this.config.bucket }) // 配置
     this.uploadToken = putPolicy.uploadToken(mac) // 获取上传凭证
-    // @ts-ignore
-    const qiniuConfig = new qiniu.conf.Config({ zone: this.config.region })
+    const qiniuConfig = new qiniu.conf.Config({
+      zone: qiniu.zone[this.config.region as keyof typeof qiniu.zone],
+    })
+
     // 空间对应的机房
     this.formUploader = new qiniu.form_up.FormUploader(qiniuConfig)
     this.bucketManager = new qiniu.rs.BucketManager(mac, qiniuConfig)

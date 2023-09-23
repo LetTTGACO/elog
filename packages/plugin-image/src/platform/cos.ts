@@ -31,6 +31,10 @@ class CosClient {
         secretKey: this.config.secretKey || process.env.COS_SECRET_KEY!,
       }
     }
+    if (!this.config.secretId || !this.config.secretKey) {
+      out.err('缺少腾讯云COS密钥信息')
+      process.exit(-1)
+    }
     // 处理prefixKey
     this.config.prefixKey = formattedPrefix(this.config.prefixKey)
     this.imgClient = new COS(this.config)

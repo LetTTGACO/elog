@@ -2,7 +2,7 @@
 import OSS from 'ali-oss'
 import { OssConfig } from './types'
 import { out } from '@elog/shared'
-import { getSecretExt } from './utils'
+import { formattedPrefix, getSecretExt } from './utils'
 
 class OssClient {
   config: OssConfig
@@ -34,7 +34,12 @@ class OssClient {
         accessKeySecret: this.config.secretKey || process.env.OSS_SECRET_KEY!,
       }
     }
-    this.config.prefixKey = this.config.prefixKey || '/'
+    if (!this.config.accessKeyId || !this.config.accessKeySecret) {
+      out.err('缺少阿里云OSS密钥信息')
+      process.exit(-1)
+    }
+    // 处理prefixKey
+    this.config.prefixKey = formattedPrefix(this.config.prefixKey)
     this.imgClient = new OSS(this.config)
   }
 

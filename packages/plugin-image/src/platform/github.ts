@@ -32,6 +32,10 @@ class GithubClient {
         token: this.config.token || process.env.GITHUB_TOKEN!,
       }
     }
+    if (!this.config.token || !this.config.user || !this.config.repo) {
+      out.err('缺少Github 配置信息')
+      process.exit(-1)
+    }
     // 处理prefixKey
     this.config.prefixKey = formattedPrefix(this.config.prefixKey)
     this.isInit = true

@@ -13,18 +13,27 @@ import * as process from 'process'
  * @param {string} [content]
  */
 export function println(level: LogLevel, head: string, content?: string) {
-  if (!head) {
-    if (!content) {
-      return
-    }
-    head = content
-  }
   const color: Record<LogLevel, Chalk> = {
     [LogLevel.ACCESS]: chalk.blue,
     [LogLevel.INFO]: chalk.green,
     [LogLevel.WARNING]: chalk.yellow,
     [LogLevel.ERROR]: chalk.red,
     [LogLevel.DEBUG]: chalk.magenta,
+  }
+  if (typeof head === 'object' && !content) {
+    try {
+      head = JSON.stringify(head)
+    } catch (e) {
+      console.log(head)
+      return
+    }
+    shell.echo(color[level](head))
+  }
+  if (!head) {
+    if (!content) {
+      return
+    }
+    head = content
   }
 
   const MIN_HEAD_LENGTH = 10
