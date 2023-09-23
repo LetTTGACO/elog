@@ -46,7 +46,7 @@ class GithubClient {
     const path = `https://api.github.com/repos/${this.config.user}/${this.config.repo}/contents/${this.config.prefixKey}/${fileName}`
     const data = base64File && {
       message: 'Upload by elog',
-      branch: this.config.branch,
+      branch: this.config.branch || 'master',
       content: base64File,
     }
     const method = options.method
@@ -54,7 +54,7 @@ class GithubClient {
       const result = await request<any>(path, {
         data,
         headers: {
-          Authorization: `token ${this.config.token}`,
+          Authorization: `Bearer ${this.config.token}`,
         },
         method,
       })
