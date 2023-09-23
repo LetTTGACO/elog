@@ -30,8 +30,8 @@ class OssClient {
       // 如果没开拓展点，就从配置文件/环境变量中读取
       this.config = {
         ...this.config,
-        secretId: this.config.secretId || process.env.OSS_SECRET_ID!,
-        secretKey: this.config.secretKey || process.env.OSS_SECRET_KEY!,
+        accessKeyId: this.config.secretId || process.env.OSS_SECRET_ID!,
+        accessKeySecret: this.config.secretKey || process.env.OSS_SECRET_KEY!,
       }
     }
     this.imgClient = new OSS(this.config)
