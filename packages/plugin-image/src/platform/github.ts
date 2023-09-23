@@ -43,7 +43,9 @@ class GithubClient {
     if (!this.isInit) {
       await this.init()
     }
-    const path = `https://api.github.com/repos/${this.config.user}/${this.config.repo}/contents/${this.config.prefixKey}/${fileName}`
+    const path = `https://api.github.com/repos/${this.config.user}/${this.config.repo}/contents/${
+      this.config.prefixKey ? `${this.config.prefixKey}/` : ''
+    }${fileName}`
     const data = base64File && {
       message: 'Upload by elog',
       branch: this.config.branch || 'master',
@@ -62,10 +64,9 @@ class GithubClient {
         out.warning('图片上传失败', '由于github并发问题，图片上传失败')
       } else if (result.status === 200 || result.status === 201) {
         if (this.config.host) {
-          if (this.config.prefixKey) {
-            return `${this.config.host}/gh/${this.config.user}/${this.config.repo}/${this.config.prefixKey}/${fileName}`
-          }
-          return `${this.config.host}/gh/${this.config.user}/${this.config.repo}/${fileName}`
+          return `${this.config.host}/gh/${this.config.user}/${this.config.repo}/${
+            this.config.prefixKey ? `${this.config.prefixKey}/` : ''
+          }${fileName}`
         } else if (method === 'GET') {
           return result.data.download_url as string
         } else {
