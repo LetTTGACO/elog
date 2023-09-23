@@ -31,6 +31,7 @@ export async function run() {
     .option('-e, --env <string>', 'use env with custom')
     .option('--full-cache', 'cache doc with full info')
     .option('--force', 'sync doc forced')
+    .option('--debug', 'enable debug')
     .description('sync doc')
     .action((options) => {
       try {

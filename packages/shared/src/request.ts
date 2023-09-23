@@ -26,6 +26,7 @@ export const request = async <T>(
     timeout: Number(process.env?.REQUEST_TIMEOUT || 60000) || 60000,
     ...reqOpts,
   }
-  out.debug(`API请求URL: ${url}，请求参数: ${JSON.stringify(opts)}`)
+  out.debug(`API请求URL: ${url}`)
+  out.debug(`API请求参数: ${JSON.stringify(opts)}`)
   return req(url, opts)
 }

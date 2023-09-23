@@ -1,4 +1,4 @@
-import { getSecretExt } from './utils'
+import { formattedPrefix, getSecretExt } from './utils'
 const upyun = require('upyun')
 import { out } from '@elog/shared'
 import { UPYunConfig } from './types'
@@ -31,12 +31,20 @@ class UPClient {
         password: this.config.password || process.env.UPYUN_SECRET_KEY!,
       }
     }
+    if (!this.config.user || !this.config.password || !this.config.bucket) {
+      out.err('缺少又拍云配置信息')
+      process.exit(-1)
+    }
+    // 处理prefixKey
+    this.config.prefixKey = formattedPrefix(this.config.prefixKey)
     // 域名
     if (!this.config.host) {
       out.access(`未指定域名host，将使用测试域名：http://${this.config.bucket}.test.upcdn.net`)
       this.config.host = `http://${this.config.bucket}.test.upcdn.net`
     }
-    this.imgClient = new upyun.Client(new upyun.Service(this.config))
+    this.imgClient = new upyun.Client(
+      new upyun.Service(this.config.bucket, this.config.user, this.config.password),
+    )
   }
 
   /**
@@ -48,14 +56,14 @@ class UPClient {
       await this.init()
     }
     try {
-      const res = await this.imgClient.headFile(`${this.config.prefixKey}/${fileName}`)
+      const res = await this.imgClient.headFile(`${this.config.prefixKey}${fileName}`)
       if (res) {
-        return `${this.config.host}/${this.config.prefixKey}/${fileName}`
+        return `${this.config.host}/${this.config.prefixKey}${fileName}`
       } else {
         return undefined
       }
     } catch (e: any) {
-      out.debug(`上传图片失败，请检查: ${e.message}`)
+      out.debug(`图片不存在: ${e.message}`)
       return undefined
     }
   }
@@ -70,14 +78,15 @@ class UPClient {
       await this.init()
     }
     try {
-      const res = await this.imgClient.putFile(`${this.config.prefixKey}/${fileName}`, imgBuffer)
+      const res = await this.imgClient.putFile(`${this.config.prefixKey}${fileName}`, imgBuffer)
       if (res) {
-        return `${this.config.host}/${this.config.prefixKey}/${fileName}`
+        return `${this.config.host}/${this.config.prefixKey}${fileName}`
       } else {
         return undefined
       }
     } catch (e: any) {
-      out.debug(`上传图片失败，请检查: ${e.message}`)
+      out.warning(`上传图片失败，请检查: ${e.message}`)
+      out.debug(e)
       return undefined
     }
   }

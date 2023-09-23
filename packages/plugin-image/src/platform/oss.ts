@@ -2,7 +2,7 @@
 import OSS from 'ali-oss'
 import { OssConfig } from './types'
 import { out } from '@elog/shared'
-import { getSecretExt } from './utils'
+import { formattedPrefix, getSecretExt } from './utils'
 
 class OssClient {
   config: OssConfig
@@ -34,6 +34,12 @@ class OssClient {
         accessKeySecret: this.config.secretKey || process.env.OSS_SECRET_KEY!,
       }
     }
+    if (!this.config.accessKeyId || !this.config.accessKeySecret) {
+      out.err('缺少阿里云OSS密钥信息')
+      process.exit(-1)
+    }
+    // 处理prefixKey
+    this.config.prefixKey = formattedPrefix(this.config.prefixKey)
     this.imgClient = new OSS(this.config)
   }
 
@@ -46,11 +52,11 @@ class OssClient {
       await this.init()
     }
     try {
-      await this.imgClient!.head(`${this.config.prefixKey}/${fileName}`)
+      await this.imgClient!.head(`${this.config.prefixKey}${fileName}`)
       if (this.config.host) {
-        return `https://${this.config.host}/${this.config.prefixKey}/${fileName}`
+        return `https://${this.config.host}/${this.config.prefixKey}${fileName}`
       }
-      return `https://${this.config.bucket}.${this.config.region}.aliyuncs.com/${this.config.prefixKey}/${fileName}`
+      return `https://${this.config.bucket}.${this.config.region}.aliyuncs.com/${this.config.prefixKey}${fileName}`
     } catch (e: any) {
       out.debug(`图床检查出错: ${e.message}`)
     }
@@ -66,9 +72,9 @@ class OssClient {
       await this.init()
     }
     try {
-      const res = await this.imgClient!.put(`${this.config.prefixKey}/${fileName}`, imgBuffer)
+      const res = await this.imgClient!.put(`${this.config.prefixKey}${fileName}`, imgBuffer)
       if (this.config.host) {
-        return `https://${this.config.host}/${this.config.prefixKey}/${fileName}`
+        return `https://${this.config.host}/${this.config.prefixKey}${fileName}`
       }
       return res!.url
     } catch (e: any) {

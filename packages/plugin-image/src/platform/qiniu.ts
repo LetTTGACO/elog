@@ -2,7 +2,7 @@
 import * as qiniu from 'qiniu'
 import { QiniuConfig } from './types'
 import { out } from '@elog/shared'
-import { getSecretExt } from './utils'
+import { formattedPrefix, getSecretExt } from './utils'
 
 class QiNiuClient {
   config: QiniuConfig
@@ -35,6 +35,12 @@ class QiNiuClient {
         secretKey: this.config.secretKey || process.env.QINIU_SECRET_KEY!,
       }
     }
+    if (!this.config.secretId || !this.config.secretKey) {
+      out.err('缺少七牛云密钥信息')
+      process.exit(-1)
+    }
+    // 处理prefixKey
+    this.config.prefixKey = formattedPrefix(this.config.prefixKey)
     if (!this.config.host) {
       out.err('使用七牛云时，需要指定域名host')
       process.exit(-1)
@@ -42,8 +48,10 @@ class QiNiuClient {
     const mac = new qiniu.auth.digest.Mac(this.config.secretId, this.config.secretKey)
     const putPolicy = new qiniu.rs.PutPolicy({ scope: this.config.bucket }) // 配置
     this.uploadToken = putPolicy.uploadToken(mac) // 获取上传凭证
-    // @ts-ignore
-    const qiniuConfig = new qiniu.conf.Config({ zone: this.config.region })
+    const qiniuConfig = new qiniu.conf.Config({
+      zone: qiniu.zone[this.config.region as keyof typeof qiniu.zone],
+    })
+
     // 空间对应的机房
     this.formUploader = new qiniu.form_up.FormUploader(qiniuConfig)
     this.bucketManager = new qiniu.rs.BucketManager(mac, qiniuConfig)
@@ -64,14 +72,14 @@ class QiNiuClient {
     return await new Promise<string | undefined>((resolve) => {
       this.bucketManager?.stat(
         this.config.bucket,
-        `${this.config.prefixKey}/${fileName}`,
+        `${this.config.prefixKey}${fileName}`,
         (err, _respBody, respInfo) => {
           if (err) {
             out.debug(`检查图片信息时出错: ${err.message}`)
             resolve(undefined)
           } else {
             if (respInfo.statusCode === 200) {
-              resolve(`${this.config.host}/${this.config.prefixKey}/${fileName}`)
+              resolve(`${this.config.host}/${this.config.prefixKey}${fileName}`)
             } else {
               out.debug('检查图片信息时出错')
               out.debug(JSON.stringify(respInfo))
@@ -95,14 +103,14 @@ class QiNiuClient {
     return await new Promise<string | undefined>((resolve) => {
       this.formUploader?.put(
         this.uploadToken!,
-        `${this.config.prefixKey}/${fileName}`,
+        `${this.config.prefixKey}${fileName}`,
         imgBuffer,
         this.putExtra!,
         (respErr, _respBody, respInfo) => {
           if (respErr) {
             out.debug(`上传图片失败: ${respErr.message}`)
           } else if (respInfo.statusCode === 200) {
-            resolve(`${this.config.host}/${this.config.prefixKey}/${fileName}`)
+            resolve(`${this.config.host}/${this.config.prefixKey}${fileName}`)
           } else {
             out.debug('上传图片失败')
             out.debug(JSON.stringify(respInfo))
