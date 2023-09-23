@@ -48,9 +48,9 @@ class UPClient {
       await this.init()
     }
     try {
-      const res = await this.imgClient.headFile(`${this.config.prefixKey}/${fileName}`)
+      const res = await this.imgClient.headFile(`${this.config.prefixKey}${fileName}`)
       if (res) {
-        return `${this.config.host}/${this.config.prefixKey}/${fileName}`
+        return `${this.config.host}/${this.config.prefixKey}${fileName}`
       } else {
         return undefined
       }
@@ -70,9 +70,9 @@ class UPClient {
       await this.init()
     }
     try {
-      const res = await this.imgClient.putFile(`${this.config.prefixKey}/${fileName}`, imgBuffer)
+      const res = await this.imgClient.putFile(`${this.config.prefixKey}${fileName}`, imgBuffer)
       if (res) {
-        return `${this.config.host}/${this.config.prefixKey}/${fileName}`
+        return `${this.config.host}/${this.config.prefixKey}${fileName}`
       } else {
         return undefined
       }

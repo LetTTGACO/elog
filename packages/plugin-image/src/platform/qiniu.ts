@@ -35,6 +35,8 @@ class QiNiuClient {
         secretKey: this.config.secretKey || process.env.QINIU_SECRET_KEY!,
       }
     }
+    // 处理prefixKey
+    this.config.prefixKey = this.config.prefixKey || '/'
     if (!this.config.host) {
       out.err('使用七牛云时，需要指定域名host')
       process.exit(-1)
@@ -64,14 +66,14 @@ class QiNiuClient {
     return await new Promise<string | undefined>((resolve) => {
       this.bucketManager?.stat(
         this.config.bucket,
-        `${this.config.prefixKey}/${fileName}`,
+        `${this.config.prefixKey}${fileName}`,
         (err, _respBody, respInfo) => {
           if (err) {
             out.debug(`检查图片信息时出错: ${err.message}`)
             resolve(undefined)
           } else {
             if (respInfo.statusCode === 200) {
-              resolve(`${this.config.host}/${this.config.prefixKey}/${fileName}`)
+              resolve(`${this.config.host}/${this.config.prefixKey}${fileName}`)
             } else {
               out.debug('检查图片信息时出错')
               out.debug(JSON.stringify(respInfo))
@@ -95,14 +97,14 @@ class QiNiuClient {
     return await new Promise<string | undefined>((resolve) => {
       this.formUploader?.put(
         this.uploadToken!,
-        `${this.config.prefixKey}/${fileName}`,
+        `${this.config.prefixKey}${fileName}`,
         imgBuffer,
         this.putExtra!,
         (respErr, _respBody, respInfo) => {
           if (respErr) {
             out.debug(`上传图片失败: ${respErr.message}`)
           } else if (respInfo.statusCode === 200) {
-            resolve(`${this.config.host}/${this.config.prefixKey}/${fileName}`)
+            resolve(`${this.config.host}/${this.config.prefixKey}${fileName}`)
           } else {
             out.debug('上传图片失败')
             out.debug(JSON.stringify(respInfo))

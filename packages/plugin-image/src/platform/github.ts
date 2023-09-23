@@ -1,6 +1,6 @@
 import { GithubConfig } from './types'
 import { out, request, RequestOptions } from '@elog/shared'
-import { getSecretExt } from './utils'
+import { formattedPrefix, getSecretExt } from './utils'
 
 // Github图床
 class GithubClient {
@@ -32,6 +32,8 @@ class GithubClient {
         token: this.config.token || process.env.GITHUB_TOKEN!,
       }
     }
+    // 处理prefixKey
+    this.config.prefixKey = formattedPrefix(this.config.prefixKey)
     this.isInit = true
   }
 
@@ -43,9 +45,7 @@ class GithubClient {
     if (!this.isInit) {
       await this.init()
     }
-    const path = `https://api.github.com/repos/${this.config.user}/${this.config.repo}/contents/${
-      this.config.prefixKey ? `${this.config.prefixKey}/` : ''
-    }${fileName}`
+    const path = `https://api.github.com/repos/${this.config.user}/${this.config.repo}/contents/${this.config.prefixKey}${fileName}`
     const data = base64File && {
       message: 'Upload by elog',
       branch: this.config.branch || 'master',
@@ -64,9 +64,7 @@ class GithubClient {
         out.warning('图片上传失败', '由于github并发问题，图片上传失败')
       } else if (result.status === 200 || result.status === 201) {
         if (this.config.host) {
-          return `${this.config.host}/gh/${this.config.user}/${this.config.repo}/${
-            this.config.prefixKey ? `${this.config.prefixKey}/` : ''
-          }${fileName}`
+          return `${this.config.host}/gh/${this.config.user}/${this.config.repo}/${this.config.prefixKey}${fileName}`
         } else if (method === 'GET') {
           return result.data.download_url as string
         } else {

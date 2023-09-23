@@ -1,7 +1,7 @@
 import COS from 'cos-nodejs-sdk-v5'
 import { CosConfig } from './types'
 import { out } from '@elog/shared'
-import { getSecretExt } from './utils'
+import { formattedPrefix, getSecretExt } from './utils'
 
 /**
  * 腾讯云COS
@@ -31,6 +31,8 @@ class CosClient {
         secretKey: this.config.secretKey || process.env.COS_SECRET_KEY!,
       }
     }
+    // 处理prefixKey
+    this.config.prefixKey = formattedPrefix(this.config.prefixKey)
     this.imgClient = new COS(this.config)
   }
 
@@ -46,12 +48,12 @@ class CosClient {
       await this.imgClient!.headObject({
         Bucket: this.config.bucket, // 存储桶名字（必须）
         Region: this.config.region, // 存储桶所在地域，必须字段
-        Key: `${this.config.prefixKey}/${fileName}`, //  文件名  必须
+        Key: `${this.config.prefixKey}${fileName}`, //  文件名  必须
       })
       if (this.config.host) {
-        return `https://${this.config.host}/${this.config.prefixKey}/${fileName}`
+        return `https://${this.config.host}/${this.config.prefixKey}${fileName}`
       }
-      return `https://${this.config.bucket}.cos.${this.config.region}.myqcloud.com/${this.config.prefixKey}/${fileName}`
+      return `https://${this.config.bucket}.cos.${this.config.region}.myqcloud.com/${this.config.prefixKey}${fileName}`
     } catch (e: any) {
       out.debug(`图床检查出错: ${e.message}`)
     }
@@ -75,7 +77,7 @@ class CosClient {
         Body: imgBuffer, // 上传文件对象
       })
       if (this.config.host) {
-        return `https://${this.config.host}/${this.config.prefixKey}/${fileName}`
+        return `https://${this.config.host}/${this.config.prefixKey}${fileName}`
       }
       return `https://${res.Location}`
     } catch (e: any) {
