@@ -1,5 +1,56 @@
 # @elog/sdk-wordpress
 
+## 0.7.3
+
+### Patch Changes
+
+- 1c2ee30: 1.修复 prefix 前缀路径 2.修复图床传参问题 3.优化 debug 输出
+- 16ede90: 修复 github 图床和 os 上传问题
+- 1.修复 prefix 前缀路径 2.修复图床上传问题 3.优化 debug 输出
+- Updated dependencies [1c2ee30]
+- Updated dependencies [16ede90]
+- Updated dependencies
+  - @elog/shared@0.7.3
+  - @elog/types@0.7.3
+
+## 0.7.3-beta.1
+
+### Patch Changes
+
+- 1.修复 prefix 前缀路径 2.修复图床传参问题 3.优化 debug 输出
+- Updated dependencies
+  - @elog/shared@0.7.3-beta.1
+  - @elog/types@0.7.3-beta.1
+
+## 0.7.3-beta.0
+
+### Patch Changes
+
+- 修复 github 图床和 os 上传问题
+- Updated dependencies
+  - @elog/shared@0.7.3-beta.0
+  - @elog/types@0.7.3-beta.0
+
+## 0.7.2
+
+### Patch Changes
+
+- db2936f: 优化图片下载问题
+- 优化图片下载问题
+- Updated dependencies [db2936f]
+- Updated dependencies
+  - @elog/shared@0.7.2
+  - @elog/types@0.7.2
+
+## 0.7.2-beta.0
+
+### Patch Changes
+
+- 优化图片下载问题
+- Updated dependencies
+  - @elog/shared@0.7.2-beta.0
+  - @elog/types@0.7.2-beta.0
+
 ## 0.7.1
 
 ### Patch Changes

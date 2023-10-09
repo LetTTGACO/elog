@@ -1,5 +1,38 @@
 # @elog/shared
 
+## 0.7.3
+
+### Patch Changes
+
+- 1c2ee30: 1.修复 prefix 前缀路径 2.修复图床传参问题 3.优化 debug 输出
+- 16ede90: 修复 github 图床和 os 上传问题
+- 1.修复 prefix 前缀路径 2.修复图床上传问题 3.优化 debug 输出
+
+## 0.7.3-beta.1
+
+### Patch Changes
+
+- 1.修复 prefix 前缀路径 2.修复图床传参问题 3.优化 debug 输出
+
+## 0.7.3-beta.0
+
+### Patch Changes
+
+- 修复 github 图床和 os 上传问题
+
+## 0.7.2
+
+### Patch Changes
+
+- db2936f: 优化图片下载问题
+- 优化图片下载问题
+
+## 0.7.2-beta.0
+
+### Patch Changes
+
+- 优化图片下载问题
+
 ## 0.7.1
 
 ### Patch Changes
