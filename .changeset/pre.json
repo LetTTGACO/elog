@@ -17,6 +17,7 @@
     "@elog/types": "0.7.3"
   },
   "changesets": [
+    "chatty-days-care",
     "dry-wasps-shave"
   ]
 }

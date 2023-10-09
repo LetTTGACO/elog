@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.8.0-beta.1
+
+### Patch Changes
+
+- 修复飞书标题生成缺失
+
 ## 0.8.0-beta.0
 
 ### Minor Changes
