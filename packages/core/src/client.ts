@@ -7,6 +7,7 @@ import {
 } from '@elog/sdk-yuque'
 import NotionClient, { NotionConfig } from '@elog/sdk-notion'
 import FlowUsClient, { FlowUsConfig } from '@elog/sdk-flowus'
+import FeiShuClient, { FeiShuConfig } from '@elog/sdk-feishu'
 // deploy
 import DeployClient, { DeployConfig, DeployPlatformEnum } from '@elog/deploy'
 // imageClient
@@ -28,7 +29,7 @@ class Elog {
   /** 配置文件 */
   config: ElogConfig
   /** 下载器 */
-  downloaderClient: YuqueWithToken | YuqueWithPwd | NotionClient | FlowUsClient
+  downloaderClient: YuqueWithToken | YuqueWithPwd | NotionClient | FlowUsClient | FeiShuClient
   /** 部署器 */
   deployClient: DeployClient
   /** 图片转CDN转换器 */
@@ -90,6 +91,9 @@ class Elog {
     } else if (config.write.platform === WritePlatform.FLOWUS) {
       let flowusConfig = config.write.flowus as FlowUsConfig
       return new FlowUsClient(flowusConfig)
+    } else if (config.write.platform === WritePlatform.FEISHU) {
+      let feiShuConfig = config.write.feishu as FeiShuConfig
+      return new FeiShuClient(feiShuConfig)
     } else {
       out.err('错误', '未知的写作平台')
       process.exit(0)
@@ -189,6 +193,7 @@ class Elog {
     let docDetailList = (await this.downloaderClient.getDocDetailList(ids)) as DocDetail[]
     // 处理文章的图片
     if (this.config.image?.enable) {
+      out.access('开始处理图片...')
       docDetailList = await this.processImage(docDetailList)
     }
     // 缓存需要更新的文档
@@ -207,7 +212,7 @@ class Elog {
   }
 
   /**
-   * 写入语雀的文章缓存 json 文件
+   * 写入缓存 json 文件
    */
   writeArticleCache() {
     try {
@@ -224,6 +229,9 @@ class Elog {
       } else if (this.config.write.platform === WritePlatform.FLOWUS) {
         const flowusClient = this.downloaderClient as FlowUsClient
         catalog = flowusClient.ctx.catalog
+      } else if (this.config.write.platform === WritePlatform.FEISHU) {
+        const feiShuClient = this.downloaderClient as FeiShuClient
+        catalog = feiShuClient.ctx.catalog
       }
 
       let cacheDocs: DocDetail[] = this.cachedArticles.map((item) => {
@@ -231,7 +239,6 @@ class Elog {
         return {
           id: item.id,
           doc_id: item.doc_id,
-          title: item.doc_id,
           updated: item.updated,
           body_original: item.body_original,
           properties: item.properties,
@@ -263,7 +270,14 @@ class Elog {
    * 处理文章图片
    */
   async processImage(docDetailList: DocDetail[]) {
-    return await this.imageClient.replaceImages(docDetailList)
+    if (this.config.write.platform === WritePlatform.FEISHU) {
+      // 飞书的图片资源需要单独处理
+      return this.imageClient.replaceImagesFromFeiShu(
+        docDetailList,
+        (this.downloaderClient as FeiShuClient).ctx.feishu,
+      )
+    }
+    return this.imageClient.replaceImages(docDetailList)
   }
 
   /**

@@ -23,14 +23,19 @@ const configJsStr =
   '    notion: {\n' +
   '      token: process.env.NOTION_TOKEN,\n' +
   '      databaseId: process.env.NOTION_DATABASE_ID,\n' +
-  "      filter: true, // {property: 'status', select: {equals: '已发布'}}\n" +
-  "      sorts: true, // [{timestamp: 'created_time', direction: 'descending'}],\n" +
+  "      filter: false, // {property: 'status', select: {equals: '已发布'}}\n" +
+  "      sorts: false, // [{timestamp: 'created_time', direction: 'descending'}],\n" +
   '      catalog: false,\n' +
+  '    },\n' +
+  '    feishu: {\n' +
+  '      folderToken: process.env.FEISHU_FOLDER_TOKEN,\n' +
+  '      appId: process.env.FEISHU_APP_ID,\n' +
+  '      appSecret: process.env.FEISHU_APP_SECRET,\n' +
   '    },\n' +
   '    flowus: {\n' +
   '      tablePageId: process.env.FLOWUS_TABLE_PAGE_ID,\n' +
-  "      filter: true, // {property: 'status',value: '已发布'}\n" +
-  "      sort: true, // { property: 'createdAt', direction: 'descending' }\n" +
+  "      filter: false, // {property: 'status',value: '已发布'}\n" +
+  "      sort: false, // { property: 'createdAt', direction: 'descending' }\n" +
   '      catalog: false,\n' +
   '    },\n' +
   '  },\n' +

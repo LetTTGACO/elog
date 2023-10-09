@@ -14,4 +14,5 @@ export enum WritePlatform {
   YUQUE_WITH_PWD = 'yuque-pwd',
   NOTION = 'notion',
   FLOWUS = 'flowus',
+  FEISHU = 'feishu',
 }
