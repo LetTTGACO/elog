@@ -1,5 +1,23 @@
 # @elog/core
 
+## 0.8.0-beta.0
+
+### Minor Changes
+
+- 写作平台支持飞书云文档
+
+### Patch Changes
+
+- Updated dependencies
+  - @elog/deploy@0.8.0-beta.0
+  - @elog/plugin-image@0.8.0-beta.0
+  - @elog/sdk-feishu@0.8.0-beta.0
+  - @elog/sdk-flowus@0.8.0-beta.0
+  - @elog/sdk-notion@0.8.0-beta.0
+  - @elog/sdk-yuque@0.8.0-beta.0
+  - @elog/shared@0.8.0-beta.0
+  - @elog/types@0.8.0-beta.0
+
 ## 0.7.3
 
 ### Patch Changes
