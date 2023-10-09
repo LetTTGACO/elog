@@ -23,8 +23,8 @@ const configJsStr =
   '    notion: {\n' +
   '      token: process.env.NOTION_TOKEN,\n' +
   '      databaseId: process.env.NOTION_DATABASE_ID,\n' +
-  "      filter: true, // {property: 'status', select: {equals: '已发布'}}\n" +
-  "      sorts: true, // [{timestamp: 'created_time', direction: 'descending'}],\n" +
+  "      filter: false, // {property: 'status', select: {equals: '已发布'}}\n" +
+  "      sorts: false, // [{timestamp: 'created_time', direction: 'descending'}],\n" +
   '      catalog: false,\n' +
   '    },\n' +
   '    feishu: {\n' +
@@ -34,8 +34,8 @@ const configJsStr =
   '    },\n' +
   '    flowus: {\n' +
   '      tablePageId: process.env.FLOWUS_TABLE_PAGE_ID,\n' +
-  "      filter: true, // {property: 'status',value: '已发布'}\n" +
-  "      sort: true, // { property: 'createdAt', direction: 'descending' }\n" +
+  "      filter: false, // {property: 'status',value: '已发布'}\n" +
+  "      sort: false, // { property: 'createdAt', direction: 'descending' }\n" +
   '      catalog: false,\n' +
   '    },\n' +
   '  },\n' +
