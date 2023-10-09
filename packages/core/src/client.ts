@@ -193,6 +193,7 @@ class Elog {
     let docDetailList = (await this.downloaderClient.getDocDetailList(ids)) as DocDetail[]
     // 处理文章的图片
     if (this.config.image?.enable) {
+      out.access('开始处理图片...')
       docDetailList = await this.processImage(docDetailList)
     }
     // 缓存需要更新的文档
@@ -211,7 +212,7 @@ class Elog {
   }
 
   /**
-   * 写入语雀的文章缓存 json 文件
+   * 写入缓存 json 文件
    */
   writeArticleCache() {
     try {
@@ -270,7 +271,14 @@ class Elog {
    * 处理文章图片
    */
   async processImage(docDetailList: DocDetail[]) {
-    return await this.imageClient.replaceImages(docDetailList)
+    if (this.config.write.platform === WritePlatform.FEISHU) {
+      // 飞书的图片资源需要单独处理
+      return this.imageClient.replaceImagesFromFeiShu(
+        docDetailList,
+        (this.downloaderClient as FeiShuClient).ctx.feishu,
+      )
+    }
+    return this.imageClient.replaceImages(docDetailList)
   }
 
   /**

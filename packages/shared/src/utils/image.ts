@@ -20,11 +20,16 @@ export const getFileTypeFromUrl = (url: string) => {
   let filename = ''
   let filetype = ''
   if (imgName) {
-    filename = imgName.split('.')[0]
-    filetype = imgName.split('.')[1].split('?')[0].split('#')[0]
-    return {
-      name: filename,
-      type: filetype,
+    const imgL = imgName.split('.')
+    if (imgL.length > 1) {
+      filename = imgName.split('.')[0]
+      filetype = imgName.split('.')[1].split('?')[0].split('#')[0]
+      return {
+        name: filename,
+        type: filetype,
+      }
+    } else {
+      out.warning(`获取文件名失败: ${url}，跳过上传，请检查`)
     }
   } else {
     out.warning(`获取文件名失败: ${url}，跳过上传，请检查`)
