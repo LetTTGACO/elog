@@ -9,5 +9,6 @@ cnpm sync @elog/sdk-flowus
 cnpm sync @elog/sdk-notion
 cnpm sync @elog/sdk-yuque
 cnpm sync @elog/sdk-wordpress
+cnpm sync @elog/sdk-feishu
 cnpm sync @elog/shared
 cnpm sync @elog/types
