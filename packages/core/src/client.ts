@@ -239,7 +239,6 @@ class Elog {
         return {
           id: item.id,
           doc_id: item.doc_id,
-          title: item.doc_id,
           updated: item.updated,
           body_original: item.body_original,
           properties: item.properties,
