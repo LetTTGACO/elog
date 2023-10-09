@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Elog</h1>
-  <p>开放式跨端博客解决方案，随意组合写作平台（语雀/Notion/FlowUs）和博客平台（Hexo/Vitepress/Confluence/WordPress）等</p>
+  <p>开放式跨端博客解决方案，随意组合写作平台（语雀/飞书/Notion/FlowUs）和博客平台（Hexo/Vitepress/Confluence/WordPress）等</p>
   <a href="http://makeapullrequest.com">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome">
   </a>
@@ -69,10 +69,12 @@
 Elog就是为了解决这个问题而诞生的。 
 
 Elog将这些平台揉合在一起，你可以随意组合写作平台和博客平台，目前支持：
+
 **写作平台**
 - [x] Notion
 - [x] 语雀
 - [x] FlowUs
+- [x] 飞书云文档
 
 **博客平台**
 - [x]  Hexo
@@ -88,6 +90,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 和很多在线平台一样，Notion和语雀也同样存在图片防盗链的问题，直接将写作平台的图片链接放到其他站点的话，会加载不出来。
 为了解决这个问题，Elog支持了在生成MD文件之前，将扫描到的图片上传到图床上，并对文档中的图片链接进行替换。
 当前支持的图床有：
+- [x] 本地
 - [x] 腾讯云COS
 - [x] 阿里云OSS
 - [x] Github图床
@@ -95,7 +98,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 - [x] 又拍云
 
 ## ✨ 特性
-- 📝 写作平台支持语雀/Notion/FlowUs
+- 📝 写作平台支持语雀/Notion/FlowUs/飞书云文档
 - 🚀 博客平台支持所有通过渲染本地 Markdown 文档生成静态站点的博客平台
 - 🚀 博客平台支持Confluence/WordPress站点
 - 🌅 图床平台支持存放到本地或上传到阿里云/腾讯云/Github/七牛云/又拍云
@@ -114,8 +117,9 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 - [Knowledge-Garden](https://github.com/shenweiyan/Knowledge-Garden) 语雀 + mkdocs + GitHub Action 持续集成  👉  [生信知识花园](https://doc.weiyan.cc/)
 - [blog-butterfly](https://github.com/ccknbc-actions/blog-butterfly) 语雀 + hexo + GitHub Action 抓取文章 + Webify/GitHub/Vercel/GitLab/Gitee/Netlify/BitBucket/CloudFlare 部署  👉  [CC的部落格](https://blog.ccknbc.cc/about/)
 - [hexo.bmqy.net](https://github.com/bmqy/hexo.bmqy.net) notion + hexo + GitHub Action 持续集成  👉  [北门清燕](https://www.bmqy.net/)
+- [www](https://github.com/ql-isaac/www) 语雀 + hexo + GitHub Action 抓取文章 + Webify（境内）/Vercel（境外）部署  👉  [IMQL.LIFE](https://www.imql.life/categories/%E6%88%91%E7%9A%84%E5%8D%9A%E5%AE%A2/)
 
-## 感谢
+## 🌹 感谢
 感谢以下用户贡献了很多bugs和建议
 - [CC康纳百川](https://github.com/CCKNBC) 
 - [Steven Shum](https://github.com/shenweiyan)

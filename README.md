@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Elog</h1>
-  <p>开放式跨端博客解决方案，随意组合写作平台（语雀/Notion/FlowUs）和博客平台（Hexo/Vitepress/Confluence/WordPress）等</p>
+  <p>开放式跨端博客解决方案，随意组合写作平台（语雀/飞书/Notion/FlowUs）和博客平台（Hexo/Vitepress/Confluence/WordPress）等</p>
   <a href="http://makeapullrequest.com">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome">
   </a>
@@ -74,6 +74,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 - [x] Notion
 - [x] 语雀
 - [x] FlowUs
+- [x] 飞书云文档
 
 **博客平台**
 - [x]  Hexo
@@ -89,6 +90,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 和很多在线平台一样，Notion和语雀也同样存在图片防盗链的问题，直接将写作平台的图片链接放到其他站点的话，会加载不出来。
 为了解决这个问题，Elog支持了在生成MD文件之前，将扫描到的图片上传到图床上，并对文档中的图片链接进行替换。
 当前支持的图床有：
+- [x] 本地
 - [x] 腾讯云COS
 - [x] 阿里云OSS
 - [x] Github图床
@@ -96,7 +98,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 - [x] 又拍云
 
 ## ✨ 特性
-- 📝 写作平台支持语雀/Notion/FlowUs
+- 📝 写作平台支持语雀/Notion/FlowUs/飞书云文档
 - 🚀 博客平台支持所有通过渲染本地 Markdown 文档生成静态站点的博客平台
 - 🚀 博客平台支持Confluence/WordPress站点
 - 🌅 图床平台支持存放到本地或上传到阿里云/腾讯云/Github/七牛云/又拍云
