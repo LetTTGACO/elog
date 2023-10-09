@@ -27,6 +27,11 @@ const configJsStr =
   "      sorts: true, // [{timestamp: 'created_time', direction: 'descending'}],\n" +
   '      catalog: false,\n' +
   '    },\n' +
+  '    feishu: {\n' +
+  '      folderToken: process.env.FEISHU_FOLDER_TOKEN,\n' +
+  '      appId: process.env.FEISHU_APP_ID,\n' +
+  '      appSecret: process.env.FEISHU_APP_SECRET,\n' +
+  '    },\n' +
   '    flowus: {\n' +
   '      tablePageId: process.env.FLOWUS_TABLE_PAGE_ID,\n' +
   "      filter: true, // {property: 'status',value: '已发布'}\n" +

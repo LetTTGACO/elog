@@ -16,6 +16,11 @@ const envStr =
   '#FlowUs\n' +
   'FLOWUS_TABLE_PAGE_ID=\n' +
   '\n' +
+  '#飞书云文档\n' +
+  'FEISHU_APP_ID=\n' +
+  'FEISHU_APP_SECRET=\n' +
+  'FEISHU_FOLDER_TOKEN=\n' +
+  '\n' +
   '# Confluence\n' +
   'CONFLUENCE_BASE_URL=\n' +
   'CONFLUENCE_USER=\n' +
