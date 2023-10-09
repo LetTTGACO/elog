@@ -7,8 +7,8 @@ import frontMatter from 'front-matter'
  * 格式化时间
  * @param date
  */
-export function formatDate(date: Date | string | number) {
-  return moment(date).format('YYYY-MM-DD HH:mm:ss')
+export function formatDate(date: Date | number) {
+  return moment(Number(date)).format('YYYY-MM-DD HH:mm:ss')
 }
 
 /**

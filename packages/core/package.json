@@ -28,6 +28,7 @@
     "@elog/sdk-notion": "workspace:*",
     "@elog/sdk-yuque": "workspace:*",
     "@elog/sdk-flowus": "workspace:*",
+    "@elog/sdk-feishu": "workspace:*",
     "@elog/shared": "workspace:*",
     "@elog/types": "workspace:*"
   },

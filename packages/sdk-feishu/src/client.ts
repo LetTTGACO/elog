@@ -11,12 +11,12 @@ class FeiShuClient {
   config: FeiShuConfig
   feishu: FeiShuApi
   f2m: FeiShuToMarkdown
-  catalog: any[] = []
+  catalog: Omit<FeiShuDoc, 'properties'>[] = []
 
   constructor(config: FeiShuConfig) {
     this.config = config
     this.config.folderToken = config.folderToken || process.env.FEISHU_FOLDER_TOKEN!
-    this.config.appId = config.folderToken || process.env.FEISHU_APP_ID!
+    this.config.appId = config.appId || process.env.FEISHU_APP_ID!
     this.config.appSecret = config.appSecret || process.env.FEISHU_APP_SECRET!
     if (!this.config.folderToken) {
       out.err('缺少参数', '缺少目标文件夹Token')
@@ -35,36 +35,28 @@ class FeiShuClient {
     const self = this
 
     // 深度优先遍历tree
-    function dfs(tree: IFolderData[], catalog = []) {
+    function dfs(tree: IFolderData[], catalog = [], level = 0) {
       tree.map((item) => {
-        // @ts-ignore
-        item.catalog = [...catalog, { title: item.name, doc_id: item.token }]
-        if (
-          item.type === 'docx' ||
-          (item.type === 'shortcut' && item.shortcut_info!.target_type === 'docx')
-        ) {
+        const newCatalog = [...catalog, { title: item.name, doc_id: item.token }]
+        if (item.type === 'docx') {
           self.catalog.push({
             id: item.token,
             doc_id: item.token,
             title: item.name,
-            // @ts-ignore
-            updated: item.modified_time,
-            // @ts-ignore
-            createdAt: item.created_time,
-            // @ts-ignore
-            updatedAt: item.modified_time,
+            updated: Number(item.modified_time + '000'),
+            createdAt: Number(item.created_time + '000'),
+            updatedAt: Number(item.modified_time + '000'),
             // 目录信息
-            // @ts-ignore
-            catalog: item.catalog,
+            catalog: level > 0 ? newCatalog : [],
           })
         }
         if (item.children) {
-          dfs(item.children, catalog)
+          dfs(item.children, catalog, level + 1)
         }
       })
     }
     dfs(tree)
-    return this.catalog
+    return this.catalog as FeiShuDoc[]
   }
 
   async download(page: FeiShuDoc): Promise<DocDetail> {

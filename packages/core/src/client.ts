@@ -7,6 +7,7 @@ import {
 } from '@elog/sdk-yuque'
 import NotionClient, { NotionConfig } from '@elog/sdk-notion'
 import FlowUsClient, { FlowUsConfig } from '@elog/sdk-flowus'
+import FeiShuClient, { FeiShuConfig } from '@elog/sdk-feishu'
 // deploy
 import DeployClient, { DeployConfig, DeployPlatformEnum } from '@elog/deploy'
 // imageClient
@@ -28,7 +29,7 @@ class Elog {
   /** 配置文件 */
   config: ElogConfig
   /** 下载器 */
-  downloaderClient: YuqueWithToken | YuqueWithPwd | NotionClient | FlowUsClient
+  downloaderClient: YuqueWithToken | YuqueWithPwd | NotionClient | FlowUsClient | FeiShuClient
   /** 部署器 */
   deployClient: DeployClient
   /** 图片转CDN转换器 */
@@ -90,6 +91,9 @@ class Elog {
     } else if (config.write.platform === WritePlatform.FLOWUS) {
       let flowusConfig = config.write.flowus as FlowUsConfig
       return new FlowUsClient(flowusConfig)
+    } else if (config.write.platform === WritePlatform.FEISHU) {
+      let feiShuConfig = config.write.feishu as FeiShuConfig
+      return new FeiShuClient(feiShuConfig)
     } else {
       out.err('错误', '未知的写作平台')
       process.exit(0)
@@ -224,6 +228,9 @@ class Elog {
       } else if (this.config.write.platform === WritePlatform.FLOWUS) {
         const flowusClient = this.downloaderClient as FlowUsClient
         catalog = flowusClient.ctx.catalog
+      } else if (this.config.write.platform === WritePlatform.FEISHU) {
+        const feiShuClient = this.downloaderClient as FeiShuClient
+        catalog = feiShuClient.ctx.catalog
       }
 
       let cacheDocs: DocDetail[] = this.cachedArticles.map((item) => {
