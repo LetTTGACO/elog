@@ -27,7 +27,7 @@ class FeiShuClient {
       appSecret: this.config.appSecret,
       baseUrl: this.config.baseUrl,
     })
-    this.f2m = new FeiShuToMarkdown({ client: this.feishu })
+    this.f2m = new FeiShuToMarkdown()
   }
 
   async getPageList(): Promise<FeiShuDoc[]> {
