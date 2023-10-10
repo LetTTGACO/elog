@@ -1,5 +1,14 @@
 # @elog/cli
 
+## 0.8.0-beta.2
+
+### Patch Changes
+
+- 升级 feishux 相关库依赖
+- Updated dependencies
+  - @elog/shared@0.8.0-beta.2
+  - @elog/core@0.8.0-beta.2
+
 ## 0.8.0-beta.1
 
 ### Patch Changes
