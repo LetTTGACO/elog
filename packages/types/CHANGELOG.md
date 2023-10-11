@@ -1,5 +1,17 @@
 # @elog/types
 
+## 0.8.0
+
+### Minor Changes
+
+- 9776e2a: 写作平台支持飞书云文档
+
+### Patch Changes
+
+- 173b4b2: 修复飞书标题生成缺失
+- 写作平台支持飞书云文档
+- 2d9ee98: 升级 feishux 相关库依赖
+
 ## 0.8.0-beta.2
 
 ### Patch Changes
