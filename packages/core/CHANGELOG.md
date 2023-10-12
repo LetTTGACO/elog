@@ -1,5 +1,20 @@
 # @elog/core
 
+## 0.8.1
+
+### Patch Changes
+
+- 增加添加 env 文件到 gitignore 的提示
+- Updated dependencies
+  - @elog/plugin-image@0.8.1
+  - @elog/sdk-feishu@0.8.1
+  - @elog/sdk-flowus@0.8.1
+  - @elog/sdk-notion@0.8.1
+  - @elog/sdk-yuque@0.8.1
+  - @elog/deploy@0.8.1
+  - @elog/shared@0.8.1
+  - @elog/types@0.8.1
+
 ## 0.8.0
 
 ### Minor Changes

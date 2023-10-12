@@ -1,5 +1,17 @@
 # @elog/deploy
 
+## 0.8.1
+
+### Patch Changes
+
+- 增加添加 env 文件到 gitignore 的提示
+- Updated dependencies
+  - @elog/plugin-adapter@0.8.1
+  - @elog/sdk-confluence@0.8.1
+  - @elog/sdk-wordpress@0.8.1
+  - @elog/shared@0.8.1
+  - @elog/types@0.8.1
+
 ## 0.8.0
 
 ### Minor Changes
