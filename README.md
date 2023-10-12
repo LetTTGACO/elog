@@ -135,6 +135,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 - [hexo.bmqy.net](https://github.com/bmqy/hexo.bmqy.net) notion + hexo + GitHub Action 持续集成  👉  [北门清燕](https://www.bmqy.net/)
 - [www](https://github.com/ql-isaac/www) 语雀 + hexo + GitHub Action 抓取文章 + Webify（境内）/Vercel（境外）部署  👉  [IMQL.LIFE](https://www.imql.life/categories/%E6%88%91%E7%9A%84%E5%8D%9A%E5%AE%A2/)
 - [Notion-Action-MD](https://github.com/cyolc932/elog) Notion + Elog 文档备份 + GitHub Action 持续集成  👉  [DC&#39;s Blog](https://amydc.com/a/24c2897b-78f3-4f6a-b8e6-292ea60edf7c)
+- [happyzhangyyds](https://github.com/happyzhangyyds/elog) Notion + Elog 文档备份 + GitHub Action 持续集成  👉  [MatrixCore&#39;s Blog](https://matrixcore.top/article/elog)
 
 ## 🌹 感谢
 
@@ -145,6 +146,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 - [北门清燕](https://github.com/bmqy)
 - [觉·白](https://github.com/vannvan)
 - [JasonMa](https://github.com/JasonMa0012)
+- [happyzhangyyds](https://github.com/happyzhangyyds)
 
 感谢下列项目提供了灵感
 
