@@ -89,6 +89,8 @@ class ImageUploader {
             out.info('上传成功', newUrl)
           }
           output.push({ original: img.original, url: newUrl })
+        } else {
+          out.warning('上传失败：' + img.fileName + ' 请检查图床配置')
         }
       } else {
         output.push({ original: img.original, url: img.url! })
@@ -222,6 +224,8 @@ class ImageUploader {
             out.info('上传成功', newUrl)
           }
           output.push({ original: img.original, url: newUrl })
+        } else {
+          out.warning('上传失败：' + img.fileName + ' 请检查图床配置')
         }
       } else {
         output.push({ original: img.original, url: img.url! })

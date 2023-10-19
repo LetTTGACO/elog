@@ -27,6 +27,11 @@ export const request = async <T>(
     ...reqOpts,
   }
   out.debug(`API请求URL: ${url}`)
-  out.debug(`API请求参数: ${JSON.stringify(opts)}`)
+  if (url.includes('api.github.com')) {
+    // Github Base64 输出太多，只输出headers
+    out.debug(`API请求Header参数: ${JSON.stringify(reqOpts?.headers || {})}`)
+  } else {
+    out.debug(`API请求参数: ${JSON.stringify(opts)}`)
+  }
   return req(url, opts)
 }

@@ -63,7 +63,7 @@ class ImgBedClient {
    * @param fileName
    */
   async hasImage(fileName: string): Promise<string | undefined> {
-    return await this.imageClient.hasImage(fileName)
+    return this.imageClient.hasImage(fileName)
   }
 
   /**
@@ -72,7 +72,7 @@ class ImgBedClient {
    * @param fileName
    */
   async uploadImg(imgBuffer: Buffer, fileName: string): Promise<string | undefined> {
-    return await this.imageClient.uploadImg(imgBuffer, fileName)
+    return this.imageClient.uploadImg(imgBuffer, fileName)
   }
 }
 

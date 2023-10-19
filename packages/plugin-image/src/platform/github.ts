@@ -74,13 +74,26 @@ class GithubClient {
         } else {
           return result.data.content.download_url as string
         }
+      } else {
+        if (base64File) {
+          if (result.data?.message === 'Bad credentials') {
+            // token 配置错误
+            out.warning(
+              '请求失败',
+              'Github Token 配置错误，配置文档：https://elog.1874.cool/notion/gvnxobqogetukays#github',
+            )
+          } else {
+            out.warning('请求失败', JSON.stringify(result.data))
+          }
+        } else {
+          out.debug('NOT FOUND', JSON.stringify(result.data))
+        }
       }
     } catch (e: any) {
       if (base64File) {
         out.warning('请求失败', e.message)
         out.debug(e)
       } else {
-        out.warning('NOT FOUND', e.message)
         out.debug(e)
       }
     }
@@ -101,7 +114,7 @@ class GithubClient {
    */
   async uploadImg(imgBuffer: Buffer, fileName: string): Promise<string | undefined> {
     const base64File = imgBuffer.toString('base64')
-    return await this._fetch(fileName, { method: 'PUT' }, base64File)
+    return this._fetch(fileName, { method: 'PUT' }, base64File)
   }
 }
 
