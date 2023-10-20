@@ -9,7 +9,7 @@ process.on('exit', (code) => {
   // 全局监听退出事件
   // TODO 区分不同的code
   // eslint-disable-next-line no-console
-  console.error('Elog配置文档: https://elog.1874.cool/notion/start')
+  console.error('请查阅Elog配置文档: https://elog.1874.cool/notion/start')
 })
 
 require('./../dist/index.js')
