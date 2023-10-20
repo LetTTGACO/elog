@@ -1,5 +1,14 @@
 # @elog/cli
 
+## 0.8.2
+
+### Patch Changes
+
+- 修复 github 上传失败时日志输出问题
+- Updated dependencies
+  - @elog/shared@0.8.2
+  - @elog/core@0.8.2
+
 ## 0.8.1
 
 ### Patch Changes

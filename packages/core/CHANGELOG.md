@@ -1,5 +1,20 @@
 # @elog/core
 
+## 0.8.2
+
+### Patch Changes
+
+- 修复 github 上传失败时日志输出问题
+- Updated dependencies
+  - @elog/plugin-image@0.8.2
+  - @elog/sdk-feishu@0.8.2
+  - @elog/sdk-flowus@0.8.2
+  - @elog/sdk-notion@0.8.2
+  - @elog/sdk-yuque@0.8.2
+  - @elog/deploy@0.8.2
+  - @elog/shared@0.8.2
+  - @elog/types@0.8.2
+
 ## 0.8.1
 
 ### Patch Changes

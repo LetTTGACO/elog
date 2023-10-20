@@ -1,6 +1,6 @@
 {
   "name": "@elog/sdk-yuque",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "elog的语雀SDK，从语雀写作平台获取文章",
   "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-sdk-yuque#readme",
   "author": "1874 <me@mail.1874.cool>",

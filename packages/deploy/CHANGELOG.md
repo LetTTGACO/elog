@@ -1,5 +1,17 @@
 # @elog/deploy
 
+## 0.8.2
+
+### Patch Changes
+
+- 修复 github 上传失败时日志输出问题
+- Updated dependencies
+  - @elog/plugin-adapter@0.8.2
+  - @elog/sdk-confluence@0.8.2
+  - @elog/sdk-wordpress@0.8.2
+  - @elog/shared@0.8.2
+  - @elog/types@0.8.2
+
 ## 0.8.1
 
 ### Patch Changes
