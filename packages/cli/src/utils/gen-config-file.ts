@@ -6,18 +6,18 @@ const configJsStr =
   "    platform: 'yuque',\n" +
   '    yuque: {\n' +
   '      token: process.env.YUQUE_TOKEN,\n' +
-  "      baseUrl: '',\n" +
   '      login: process.env.YUQUE_LOGIN,\n' +
   '      repo: process.env.YUQUE_REPO,\n' +
   '      onlyPublic: false,\n' +
-  '      onlyPublished: true,\n' +
+  '      onlyPublished: false,\n' +
   '    },\n' +
   "    'yuque-pwd': {\n" +
   '      username: process.env.YUQUE_USERNAME,\n' +
   '      password: process.env.YUQUE_PASSWORD,\n' +
-  "      host: '',\n" +
   '      login: process.env.YUQUE_LOGIN,\n' +
   '      repo: process.env.YUQUE_REPO,\n' +
+  '      onlyPublic: false,\n' +
+  '      onlyPublished: false,\n' +
   '      linebreak: false,\n' +
   '    },\n' +
   '    notion: {\n' +
