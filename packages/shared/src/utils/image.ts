@@ -29,10 +29,10 @@ export const getFileTypeFromUrl = (url: string) => {
         type: filetype,
       }
     } else {
-      out.warning(`获取文件名失败: ${url}，跳过上传，请检查`)
+      out.warning(`获取文件名失败，跳过: ${url}`)
     }
   } else {
-    out.warning(`获取文件名失败: ${url}，跳过上传，请检查`)
+    out.warning(`获取文件名失败，跳过: ${url}`)
   }
 }
 
