@@ -25,8 +25,9 @@ class YuqueClient {
   constructor(config: YuqueWithTokenConfig) {
     this.config = config
     this.config.token = config.token || process.env.YUQUE_TOKEN!
-    if (!this.config.token) {
-      out.err('缺少参数', '缺少语雀Token')
+    if (!this.config.token || !this.config.repo || !this.config.login) {
+      out.err('缺少参数', '缺少语雀配置信息')
+      out.info('请查阅Elog配置文档: https://elog.1874.cool/notion/write-platform')
       process.exit(-1)
     }
     this.namespace = `${config.login}/${config.repo}`
