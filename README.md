@@ -33,12 +33,6 @@
   </a>
 </div>
 
-## 🌍 交流与反馈
-
-<p>如果遇到问题，请加入下方交流群进行反馈，获取最新进展。</p>
-<p>微信扫码加入群聊</p>
-<img style="width: 200px; height: 200px" src="https://user-images.githubusercontent.com/37357188/217702971-47dd05ea-e689-4091-b4e7-3ae4559ca215.png">
-
 ## 前言
 
 在遇到Elog之前，你的博客可能是：
@@ -71,7 +65,7 @@
 - WordPress
 - GHost
 
-## ELog
+## Elog
 
 如果我既想用最熟悉、最舒适的编辑器，又想用主流的博客平台，怎么办呢？
 
@@ -137,6 +131,12 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 - [www](https://github.com/ql-isaac/www) 语雀 + hexo + GitHub Action 抓取文章 + Webify（境内）/Vercel（境外）部署  👉  [IMQL.LIFE](https://www.imql.life/categories/%E6%88%91%E7%9A%84%E5%8D%9A%E5%AE%A2/)
 - [Notion-Action-MD](https://github.com/cyolc932/elog) Notion + Elog 文档备份 + GitHub Action 持续集成  👉  [DC&#39;s Blog](https://aaqq.cc/article/24c2897b-78f3-4f6a-b8e6-292ea60edf7c)
 - [happyzhangyyds](https://github.com/happyzhangyyds/elog) Notion + Elog 文档备份 + GitHub Action 持续集成  👉  [MatrixCore&#39;s Blog](https://matrixcore.top/article/elog)
+
+## 🌍 交流与反馈
+
+<p>如果遇到问题，请加入下方交流群进行反馈，获取最新进展。</p>
+<p>微信扫码加入群聊</p>
+<img style="width: 200px; height: 200px" src="https://user-images.githubusercontent.com/37357188/217702971-47dd05ea-e689-4091-b4e7-3ae4559ca215.png">
 
 ## 🌹 感谢
 
