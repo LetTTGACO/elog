@@ -327,7 +327,7 @@ class Elog {
       this.writeArticleCache()
       // 结束进程
       if (isNeedSyncForce) {
-        out.access('任务结束', ' 同步成功！ ')
+        out.access('任务结束', '同步成功！')
       } else {
         out.access('任务结束', '没有需要同步的文档')
       }
@@ -349,7 +349,7 @@ class Elog {
     this.syncForced()
     // 写入文章缓存
     this.writeArticleCache()
-    out.access('任务结束', ' 同步成功！ ')
+    out.access('任务结束', '同步成功！')
   }
 }
 
