@@ -1,5 +1,15 @@
 # @elog/sdk-feishu
 
+## 0.8.3
+
+### Patch Changes
+
+- 增加语雀 pwd 模式下的参数
+  1.onlyPublic 只下载公开文档
+  2.onlyPublished 只下载已发布文档
+- Updated dependencies
+  - @elog/shared@0.8.3
+
 ## 0.8.2
 
 ### Patch Changes
