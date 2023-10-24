@@ -9,7 +9,7 @@ const configJsStr =
   '      login: process.env.YUQUE_LOGIN,\n' +
   '      repo: process.env.YUQUE_REPO,\n' +
   '      onlyPublic: false,\n' +
-  '      onlyPublished: false,\n' +
+  '      onlyPublished: true,\n' +
   '    },\n' +
   "    'yuque-pwd': {\n" +
   '      username: process.env.YUQUE_USERNAME,\n' +
@@ -17,7 +17,7 @@ const configJsStr =
   '      login: process.env.YUQUE_LOGIN,\n' +
   '      repo: process.env.YUQUE_REPO,\n' +
   '      onlyPublic: false,\n' +
-  '      onlyPublished: false,\n' +
+  '      onlyPublished: true,\n' +
   '      linebreak: false,\n' +
   '    },\n' +
   '    notion: {\n' +
