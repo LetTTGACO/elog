@@ -6,7 +6,7 @@ export interface FeiShuConfig {
   /** 父文件夹token */
   folderToken?: string
   /** 知识库 ID */
-  spaceId?: string
+  wikiId?: string
   appId: string
   appSecret: string
   baseUrl?: string

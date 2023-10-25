@@ -21,7 +21,7 @@ const envStr =
   'FEISHU_APP_ID=\n' +
   'FEISHU_APP_SECRET=\n' +
   'FEISHU_FOLDER_TOKEN=\n' +
-  'FEISHU_SPACE_ID=\n' +
+  'FEISHU_WIKI_ID=\n' +
   '\n' +
   '# Confluence\n' +
   'CONFLUENCE_BASE_URL=\n' +
