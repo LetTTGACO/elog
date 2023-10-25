@@ -1,7 +1,7 @@
 import { out } from '@elog/shared'
 import { FeiShuConfig, FeiShuDoc } from './types'
 import { FeiShuClient as FeiShuApi } from '@feishux/api'
-import { IFolderData } from '@feishux/shared'
+import { IFolderData, IWikiNode } from '@feishux/shared'
 import { FeiShuToMarkdown } from '@feishux/doc-to-md'
 import { DocDetail } from '@elog/types'
 import asyncPool from 'tiny-async-pool'
@@ -18,8 +18,8 @@ class FeiShuClient {
     this.config.folderToken = config.folderToken || process.env.FEISHU_FOLDER_TOKEN!
     this.config.appId = config.appId || process.env.FEISHU_APP_ID!
     this.config.appSecret = config.appSecret || process.env.FEISHU_APP_SECRET!
-    if (!this.config.folderToken) {
-      out.err('缺少参数', '缺少目标文件夹Token')
+    if (!this.config.appId || !this.config.appSecret) {
+      out.err('缺少参数', '缺少文件夹Token或知识库 ID')
       process.exit(-1)
     }
     this.feishu = new FeiShuApi({
@@ -31,7 +31,79 @@ class FeiShuClient {
   }
 
   async getPageList(): Promise<FeiShuDoc[]> {
-    const tree = await this.feishu.getFolderTree(this.config.folderToken)
+    // 知识库
+    if (this.config.type === 'wiki') {
+      return this.getWikiList()
+    }
+    // 我的空间
+    return this.getSpaceList()
+  }
+
+  /**
+   * 获取知识库文档
+   */
+  async getWikiList(): Promise<FeiShuDoc[]> {
+    // 获取知识库字节点
+    const getNodes = async (
+      parentNode?: {
+        nodeToken: string
+        objToken: string
+        title: string
+      },
+      level = 0,
+      catalog = [],
+    ) => {
+      let nodes = await this.feishu.getReposNodes(
+        this.config.spaceId as string,
+        parentNode?.nodeToken,
+      )
+      // @ts-ignore
+      nodes = nodes
+        .filter((item) => item.obj_type == 'doc' || item.obj_type == 'docx')
+        .map((item) => {
+          const newCatalog = [
+            ...catalog,
+            { title: parentNode?.title || '', doc_id: parentNode?.objToken || '' },
+          ]
+          const doc: Omit<FeiShuDoc, 'properties'> & Partial<IWikiNode> = {
+            doc_id: item.obj_token,
+            id: item.obj_token,
+            title: item.title,
+            createdAt: Number(item.obj_create_time + '000'),
+            updated: Number(item.obj_edit_time + '000'),
+            updatedAt: Number(item.obj_edit_time + '000'),
+            catalog: level > 0 ? newCatalog : [],
+            has_child: item.has_child,
+            node_token: item.node_token,
+            parent_node_token: item.parent_node_token,
+          }
+          this.catalog.push(doc)
+          return doc
+        })
+      for (const doc of nodes) {
+        if (doc.has_child) {
+          await getNodes(
+            {
+              nodeToken: doc.node_token,
+              title: doc.title,
+              objToken: doc.obj_token,
+            },
+            level + 1,
+            catalog,
+          )
+        }
+      }
+    }
+    await getNodes()
+    return this.catalog as FeiShuDoc[]
+  }
+
+  /**
+   * 获取我的空间下指定文件夹文档
+   */
+
+  async getSpaceList(): Promise<FeiShuDoc[]> {
+    const tree = await this.feishu.getFolderTree(this.config.folderToken as string)
     const self = this
 
     // 深度优先遍历tree

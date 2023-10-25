@@ -28,6 +28,7 @@ const configJsStr =
   '      catalog: false,\n' +
   '    },\n' +
   '    feishu: {\n' +
+  '      spaceId: process.env.FEISHU_SPACE_ID,\n' +
   '      folderToken: process.env.FEISHU_FOLDER_TOKEN,\n' +
   '      appId: process.env.FEISHU_APP_ID,\n' +
   '      appSecret: process.env.FEISHU_APP_SECRET,\n' +

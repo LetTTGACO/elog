@@ -1,7 +1,12 @@
 import { DocProperties } from '@elog/types'
 
 export interface FeiShuConfig {
-  folderToken: string
+  /** 知识库/我的空间 */
+  type: 'wiki' | 'space'
+  /** 父文件夹token */
+  folderToken?: string
+  /** 知识库 ID */
+  spaceId?: string
   appId: string
   appSecret: string
   baseUrl?: string

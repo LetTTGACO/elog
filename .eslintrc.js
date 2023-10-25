@@ -4,7 +4,6 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   rules: {
     'no-var': 'error', // 不能使用var声明变量
-    '@typescript-eslint/indent': ['error', 2],
     'import/extensions': 'off',
     'linebreak-style': [0, 'error', 'windows'],
     'space-before-function-paren': 0, // 在函数左括号的前面是否有空格

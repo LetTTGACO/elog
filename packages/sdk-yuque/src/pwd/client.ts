@@ -22,8 +22,8 @@ class YuqueClient {
     this.config = config
     this.config.username = config.username || process.env.YUQUE_USERNAME!
     this.config.password = config.password || process.env.YUQUE_PASSWORD!
-    if (!this.config.username || !this.config.password) {
-      out.err('缺少参数', '缺少语雀账号密码')
+    if (!this.config.username || !this.config.password || !this.config.login || !this.config.repo) {
+      out.err('缺少参数', '缺少语雀配置信息')
       process.exit(-1)
     }
     this.namespace = `${this.config.login}/${this.config.repo}`
