@@ -69,7 +69,10 @@ class FeiShuClient {
         .map((item) => {
           const newCatalog = [
             ...catalog,
-            { title: parentNode?.title || '', doc_id: parentNode?.objToken || '' },
+            {
+              title: parentNode?.title || '',
+              doc_id: parentNode?.objToken || parentNode?.nodeToken || '',
+            },
           ]
           const doc: Omit<FeiShuDoc, 'properties'> & Partial<IWikiNode> = {
             doc_id: item.obj_token,
