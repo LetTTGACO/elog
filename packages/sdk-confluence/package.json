@@ -1,6 +1,6 @@
 {
   "name": "@elog/sdk-confluence",
-  "version": "0.9.0-beta.0",
+  "version": "0.9.0-beta.1",
   "description": "elog的Confluence SDK，将文档更新到Confluence上去",
   "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/sdk-confluence#readme",
   "author": "1874 <me@mail.1874.cool>",

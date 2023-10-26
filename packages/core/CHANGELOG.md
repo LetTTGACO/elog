@@ -1,5 +1,20 @@
 # @elog/core
 
+## 0.9.0-beta.1
+
+### Patch Changes
+
+- 飞书依赖升级
+- Updated dependencies
+  - @elog/plugin-image@0.9.0-beta.1
+  - @elog/sdk-feishu@0.9.0-beta.1
+  - @elog/sdk-flowus@0.9.0-beta.1
+  - @elog/sdk-notion@0.9.0-beta.1
+  - @elog/sdk-yuque@0.9.0-beta.1
+  - @elog/deploy@0.9.0-beta.1
+  - @elog/shared@0.9.0-beta.1
+  - @elog/types@0.9.0-beta.1
+
 ## 0.9.0-beta.0
 
 ### Minor Changes
