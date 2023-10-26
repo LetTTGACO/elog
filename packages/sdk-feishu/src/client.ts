@@ -51,29 +51,20 @@ class FeiShuClient {
    */
   async getWikiList(): Promise<FeiShuDoc[]> {
     // 获取知识库字节点
-    const getNodes = async (
-      parentNode?: {
-        nodeToken?: string
-        objToken?: string
-        title?: string
-      },
-      level = 0,
-      catalog = [],
-    ) => {
-      let nodes = await this.feishu.getReposNodes(
-        this.config.wikiId as string,
-        parentNode?.nodeToken,
-      )
-      nodes = nodes
-        .filter((item) => item.obj_type == 'doc' || item.obj_type == 'docx')
-        .map((item) => {
-          const newCatalog = [
-            ...catalog,
-            {
-              title: parentNode?.title || '',
-              doc_id: parentNode?.objToken || parentNode?.nodeToken || '',
-            },
-          ]
+    const tree = await this.feishu.getReposNodesTree(
+      this.config.wikiId as string,
+      this.config.folderToken,
+    )
+    const self = this
+
+    // 深度优先遍历tree
+    function dfs(tree: IWikiNode[], catalog: any[] = [], level = 0, parent?: IWikiNode) {
+      tree.map((item) => {
+        const newCatalog = [
+          ...catalog,
+          { title: parent?.title, doc_id: parent?.obj_token || parent?.node_token },
+        ]
+        if (item.obj_type == 'doc' || item.obj_type == 'docx') {
           const doc: Omit<FeiShuDoc, 'properties'> & Partial<IWikiNode> = {
             doc_id: item.obj_token,
             id: item.obj_token,
@@ -86,24 +77,14 @@ class FeiShuClient {
             node_token: item.node_token,
             parent_node_token: item.parent_node_token,
           }
-          this.catalog.push(doc)
-          return doc
-        }) as unknown as Omit<FeiShuDoc, 'properties'> & IWikiNode[]
-      for (const doc of nodes as any[]) {
-        if (doc.has_child) {
-          await getNodes(
-            {
-              nodeToken: doc.node_token,
-              title: doc.title,
-              objToken: doc.obj_token,
-            },
-            level + 1,
-            doc.catalog,
-          )
+          self.catalog.push(doc)
         }
-      }
+        if (item.children) {
+          dfs(item.children, level > 0 ? newCatalog : [], level + 1, item)
+        }
+      })
     }
-    await getNodes({ nodeToken: this.config.folderToken })
+    dfs(tree)
     return this.catalog as FeiShuDoc[]
   }
 
