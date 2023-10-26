@@ -113,9 +113,9 @@ class FeiShuClient {
     const self = this
 
     // 深度优先遍历tree
-    function dfs(tree: IFolderData[], catalog = [], level = 0) {
+    function dfs(tree: IFolderData[], catalog: any[] = [], level = 0, parent?: IFolderData) {
       tree.map((item) => {
-        const newCatalog = [...catalog, { title: item.name, doc_id: item.token }]
+        const newCatalog = [...catalog, { title: parent?.name, doc_id: parent?.token }]
         if (item.type === 'docx') {
           self.catalog.push({
             id: item.token,
@@ -129,7 +129,7 @@ class FeiShuClient {
           })
         }
         if (item.children) {
-          dfs(item.children, catalog, level + 1)
+          dfs(item.children, level > 0 ? newCatalog : [], level + 1, item)
         }
       })
     }
