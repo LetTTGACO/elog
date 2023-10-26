@@ -1,5 +1,23 @@
 # @elog/core
 
+## 0.9.0-beta.0
+
+### Minor Changes
+
+- 1.飞书支持我的空间/知识库文档下载 2.飞书高亮块支持 emoji 3.飞书文档支持按层级下载 4.增加语雀参数校验 5.修复飞书云文档导出问题
+
+### Patch Changes
+
+- Updated dependencies
+  - @elog/plugin-image@0.9.0-beta.0
+  - @elog/sdk-feishu@0.9.0-beta.0
+  - @elog/sdk-flowus@0.9.0-beta.0
+  - @elog/sdk-notion@0.9.0-beta.0
+  - @elog/sdk-yuque@0.9.0-beta.0
+  - @elog/deploy@0.9.0-beta.0
+  - @elog/shared@0.9.0-beta.0
+  - @elog/types@0.9.0-beta.0
+
 ## 0.8.3
 
 ### Patch Changes
