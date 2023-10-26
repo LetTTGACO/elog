@@ -121,6 +121,10 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 
 [Elog 使用文档](https://elog.1874.cool/)
 
+备用文档地址1：[https://1874.notion.site](https://1874.notion.site/0aa9217e5bcc46768bdae424fddcbc28)
+
+备用文档地址2：[https://wordpress.1874.cool](https://wordpress.1874.cool)
+
 ## 🔗 最佳实践
 
 - [elog-docs](https://github.com/LetTTGACO/elog-docs) 多写作平台云端写作 + vitepress + GitHub Action + GitHub Pages 持续集成  👉  [Elog Docs](https://elog.1874.cool/)
