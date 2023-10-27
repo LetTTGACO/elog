@@ -1,5 +1,20 @@
 # @elog/core
 
+## 0.9.0-beta.2
+
+### Patch Changes
+
+- 过滤语雀数据表文档类型
+- Updated dependencies
+  - @elog/plugin-image@0.9.0-beta.2
+  - @elog/sdk-feishu@0.9.0-beta.2
+  - @elog/sdk-flowus@0.9.0-beta.2
+  - @elog/sdk-notion@0.9.0-beta.2
+  - @elog/sdk-yuque@0.9.0-beta.2
+  - @elog/deploy@0.9.0-beta.2
+  - @elog/shared@0.9.0-beta.2
+  - @elog/types@0.9.0-beta.2
+
 ## 0.9.0-beta.1
 
 ### Patch Changes

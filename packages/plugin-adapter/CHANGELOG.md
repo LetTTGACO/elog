@@ -1,5 +1,14 @@
 # @elog/plugin-adapter
 
+## 0.9.0-beta.2
+
+### Patch Changes
+
+- 过滤语雀数据表文档类型
+- Updated dependencies
+  - @elog/shared@0.9.0-beta.2
+  - @elog/types@0.9.0-beta.2
+
 ## 0.9.0-beta.1
 
 ### Patch Changes

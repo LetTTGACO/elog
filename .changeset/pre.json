@@ -17,6 +17,7 @@
     "@elog/types": "0.8.3"
   },
   "changesets": [
+    "chilled-timers-exist",
     "good-worms-teach",
     "quiet-parrots-fly"
   ]
