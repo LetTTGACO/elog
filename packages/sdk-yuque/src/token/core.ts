@@ -28,6 +28,12 @@ class YuqueWithToken {
     // 过滤未发布和公开的文章
     pages = pages
       .filter((page) => {
+        if (page.format === 'laketable') {
+          out.warning(`【${page.title}】: 存在暂不支持的文档格式：数据表，已跳过`)
+        }
+        return ['lake', 'markdown'].includes(page.format)
+      })
+      .filter((page) => {
         return this.config.onlyPublic ? !!page.public : true
       })
       .filter((page) => {

@@ -148,7 +148,7 @@ export interface YuqueDoc {
   /** 用户/团队编号 */
   user_id: number
   /** 描述了正文的格式 */
-  format: 'lake' | 'markdown'
+  format: 'lake' | 'markdown' | 'laketable'
   /** 公开级别 [0 - 私密, 1 - 公开] */
   public: 1 | 0
   /** 状态 [0 - 草稿, 1 - 发布] */
