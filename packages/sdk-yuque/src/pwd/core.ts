@@ -36,7 +36,7 @@ class YuqueWithPwd {
     pages = pages
       .filter((page) => {
         if (page.format === 'laketable') {
-          out.warning(`【${page.title}】: 存在暂不支持的文档格式：数据表，已跳过`)
+          out.warning('跳过下载', `【${page.title}】存在暂不支持的文档格式：数据表`)
         }
         return ['lake', 'markdown'].includes(page.format)
       })
