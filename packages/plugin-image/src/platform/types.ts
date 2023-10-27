@@ -1,6 +1,7 @@
 import { ImagePlatformEnum } from './const'
 import { COSOptions } from 'cos-nodejs-sdk-v5'
 import { Options as OSSOptions } from 'ali-oss'
+import { DocDetail } from '@elog/types'
 
 interface ImgBaseConfig {
   host?: string
@@ -41,6 +42,8 @@ export interface UPYunConfig extends ImgBaseConfig {
   password: string
 }
 
+export type GetImagePath = (doc: DocDetail) => { dirPath: string; prefixKey: string }
+
 export interface GithubConfig extends ImgBaseConfig {
   user: string
   token: string
@@ -50,7 +53,11 @@ export interface GithubConfig extends ImgBaseConfig {
 
 export interface ImgLocalConfig {
   outputDir: string
-  prefixKey: string
+  prefixKey?: string
+  /** 路径根据文档计算 */
+  pathFlowDoc?: boolean
+  /** 图片路径拓展点 */
+  imagePathExt?: string
 }
 
 /**

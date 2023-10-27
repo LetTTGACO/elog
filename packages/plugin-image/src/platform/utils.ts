@@ -22,6 +22,19 @@ export const getSecretExt = async <T>(config: T & SecretExt) => {
   }
 }
 
+export const getImagePathExt = (imagePathExt: string) => {
+  out.access('注意', '正在使用图片路径拓展点，请遵循拓展点注入规范')
+  try {
+    const imagePathExtPath = path.resolve(process.cwd(), imagePathExt)
+    const { getImagePath } = require(imagePathExtPath)
+    return getImagePath
+  } catch (e: any) {
+    out.err(e.message)
+    out.err('执行失败', '图片路径拓展点执行失败，请检查！')
+    process.exit(1)
+  }
+}
+
 /**
  * 生成路径前缀
  * 固定格式 'prefix/'，开头无需/，结尾需要/，如果没传，则默认为空

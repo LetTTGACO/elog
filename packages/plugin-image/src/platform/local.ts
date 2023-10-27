@@ -1,13 +1,44 @@
-import { ImgLocalConfig } from './types'
+import { GetImagePath, ImgLocalConfig } from './types'
 import * as fs from 'fs'
 import path from 'path'
 import mkdirp from 'mkdirp'
 import { out } from '@elog/shared'
+import { DocDetail } from '@elog/types'
+import { getImagePathExt } from './utils'
 
-class CosClient {
+class LocalClient {
   config: ImgLocalConfig
+  getImagePath: GetImagePath
   constructor(config: ImgLocalConfig) {
     this.config = config
+    this.getImagePath = this.initImagePath()
+  }
+
+  initImagePath() {
+    if (this.config.imagePathExt) {
+      return getImagePathExt(this.config.imagePathExt)
+    } else {
+      return this.genImagePath
+    }
+  }
+
+  async genImagePath(doc: DocDetail) {
+    const dirPath = path.resolve(process.cwd(), this.config.outputDir)
+    let prefixKey = ''
+    if (this.config.pathFlowDoc) {
+      // TODO 图片前缀根据文档路径计算
+      console.log(doc)
+      prefixKey = ''
+    } else {
+      prefixKey = this.config.prefixKey || '/'
+      if (!prefixKey.endsWith('/')) {
+        prefixKey = prefixKey + '/'
+      }
+    }
+    return {
+      dirPath,
+      prefixKey,
+    }
   }
 
   /**
@@ -22,22 +53,21 @@ class CosClient {
   /**
    * 上传图片到图床
    * @param imgBuffer
-   * @param fileName
+   * @param imageName
+   * @param doc
    */
-  async uploadImg(imgBuffer: Buffer, fileName: string): Promise<string | undefined> {
+  async uploadImg(
+    imgBuffer: Buffer,
+    imageName: string,
+    doc: DocDetail,
+  ): Promise<string | undefined> {
     try {
-      // 将文件写入本地
-      // 文件路径
-      const dirPath = path.resolve(process.cwd(), this.config.outputDir)
+      const { dirPath, prefixKey } = this.getImagePath(doc)
       mkdirp.sync(dirPath)
-      const filePath = path.resolve(dirPath, fileName)
+      const filePath = path.resolve(dirPath, imageName)
       fs.writeFileSync(filePath, imgBuffer)
-      let prefixKey = this.config.prefixKey || '/'
-      if (!prefixKey.endsWith('/')) {
-        prefixKey = prefixKey + '/'
-      }
       // 计算root和output的相对路径
-      return prefixKey + fileName
+      return prefixKey + imageName
     } catch (e: any) {
       out.err('写入错误', e.message)
       out.debug(e)
@@ -45,4 +75,4 @@ class CosClient {
   }
 }
 
-export default CosClient
+export default LocalClient

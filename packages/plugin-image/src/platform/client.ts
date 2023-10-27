@@ -5,6 +5,7 @@ import GithubClient from './github'
 import QiniuClient from './qiniu'
 import LocalClient from './local'
 import { out } from '@elog/shared'
+import { DocDetail } from '@elog/types'
 import {
   CosConfig,
   GithubConfig,
@@ -70,9 +71,14 @@ class ImgBedClient {
    * 上传图片到图床
    * @param imgBuffer
    * @param fileName
+   * @param doc
    */
-  async uploadImg(imgBuffer: Buffer, fileName: string): Promise<string | undefined> {
-    return this.imageClient.uploadImg(imgBuffer, fileName)
+  async uploadImg(
+    imgBuffer: Buffer,
+    fileName: string,
+    doc: DocDetail,
+  ): Promise<string | undefined> {
+    return this.imageClient.uploadImg(imgBuffer, fileName, doc)
   }
 }
 

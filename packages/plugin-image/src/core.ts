@@ -24,9 +24,10 @@ class ImageUploader {
   /**
    * 上传
    * @param urlList
+   * @param doc
    * @param failBack
    */
-  async upload(urlList: ImageUrl[], failBack?: (image: ImageUrl) => void) {
+  async upload(urlList: ImageUrl[], doc: DocDetail, failBack?: (image: ImageUrl) => void) {
     const toUploadURLs = urlList.map(async (image) => {
       return await new Promise<ImageSource | undefined>(async (resolve) => {
         try {
@@ -81,7 +82,7 @@ class ImageUploader {
     for (const img of toUploadImgs) {
       let newUrl: string | undefined = ''
       if (img.upload) {
-        newUrl = await this.ctx.uploadImg(img.buffer!, img.fileName)
+        newUrl = await this.ctx.uploadImg(img.buffer!, img.fileName, doc)
         if (newUrl) {
           if (this.config.platform === ImagePlatformEnum.LOCAL) {
             out.info('生成图片', newUrl)
@@ -121,7 +122,7 @@ class ImageUploader {
       const urlList = getUrlListFromContent(articleInfo.body)
       if (urlList.length) {
         // 上传图片
-        const urls = await this.upload(urlList, () => {
+        const urls = await this.upload(urlList, articleInfo, () => {
           articleInfo.needUpdate = ImageFail
         })
         if (urls?.length) {
@@ -140,9 +141,10 @@ class ImageUploader {
    * 从飞书下载图片
    * @param articleList
    * @param feishuClient
+   * @param doc
    */
 
-  async replaceImagesFromFeiShu(articleList: DocDetail[], feishuClient: any) {
+  async replaceImagesFromFeiShu(articleList: DocDetail[], feishuClient: any, doc: DocDetail) {
     // 遍历文章列表
     for (let i = 0; i < articleList.length; i++) {
       const articleInfo = articleList[i]
@@ -150,7 +152,7 @@ class ImageUploader {
       const urlList = getUrlListFromContent(articleInfo.body)
       if (urlList.length) {
         // 上传图片
-        const urls = await this.uploadFromFeiShu(urlList, feishuClient, () => {
+        const urls = await this.uploadFromFeiShu(urlList, feishuClient, doc, () => {
           articleInfo.needUpdate = ImageFail
         })
         if (urls?.length) {
@@ -167,6 +169,7 @@ class ImageUploader {
   async uploadFromFeiShu(
     urlList: ImageUrl[],
     feishuClient: any,
+    doc: DocDetail,
     failBack?: (image: ImageUrl) => void,
   ) {
     const toUploadURLs = urlList.map(async (image) => {
@@ -216,7 +219,7 @@ class ImageUploader {
     for (const img of toUploadImgs) {
       let newUrl: string | undefined = ''
       if (img.upload) {
-        newUrl = await this.ctx.uploadImg(img.buffer!, img.fileName)
+        newUrl = await this.ctx.uploadImg(img.buffer!, img.fileName, doc)
         if (newUrl) {
           if (this.config.platform === ImagePlatformEnum.LOCAL) {
             out.info('生成图片', newUrl)
