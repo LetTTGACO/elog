@@ -55,7 +55,7 @@ export interface ImgLocalConfig {
   outputDir: string
   prefixKey?: string
   /** 路径根据文档计算 */
-  pathFlowDoc?: boolean
+  pathFollowDoc?: boolean
   /** 图片路径拓展点 */
   imagePathExt?: string
 }

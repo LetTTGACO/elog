@@ -13,12 +13,12 @@ import DeployClient, { DeployConfig, DeployPlatformEnum } from '@elog/deploy'
 // imageClient
 import ImageClient from '@elog/plugin-image'
 // types
-import { ElogConfig, CacheJSON, DocStatusMap } from './types'
+import { CacheJSON, DocStatusMap, ElogConfig } from './types'
 import { BaseDoc, DocDetail } from '@elog/types'
 // const
-import { WritePlatform, DocStatus } from './const'
+import { DocStatus, WritePlatform } from './const'
 // utils
-import { out, ImageFail } from '@elog/shared'
+import { ImageFail, out } from '@elog/shared'
 import * as fs from 'fs'
 import * as path from 'path'
 
@@ -191,6 +191,9 @@ class Elog {
     }
     this.needUpdate = true
     let docDetailList = (await this.downloaderClient.getDocDetailList(ids)) as DocDetail[]
+    if (this.config.deploy.platform === DeployPlatformEnum.LOCAL) {
+      docDetailList = this.processDocPath(docDetailList)
+    }
     // 处理文章的图片
     if (this.config.image?.enable) {
       out.access('开始处理图片...')
@@ -247,6 +250,7 @@ class Elog {
           realName: item.realName,
           relativePath: item.relativePath,
           needUpdate: item.needUpdate,
+          docPath: item.docPath,
         }
       })
       if (this.config.extension?.isFullCache) {
@@ -307,15 +311,38 @@ class Elog {
         if (!deleteItem.relativePath || !deleteItem.realName) {
           continue
         }
-        const docPath = path.join(outputDir, deleteItem.relativePath)
-        if (fs.existsSync(docPath)) {
-          fs.unlinkSync(docPath)
+        const docRealPath = path.join(outputDir, deleteItem.relativePath)
+        if (fs.existsSync(docRealPath)) {
+          fs.unlinkSync(docRealPath)
           out.info('删除文档', `${wasteArticle.realName}.md`)
         }
       }
       return true
     }
     return false
+  }
+
+  /**
+   * 处理本地部署
+   * @param articleList
+   */
+  processDocPath(articleList: DocDetail[]) {
+    for (const post of articleList) {
+      let postPath = this.config.deploy.local.outputDir
+      if (this.config.deploy.local.catalog) {
+        // 开启按目录生成
+        if (Array.isArray(post.catalog)) {
+          // 是否存在目录
+          const tocPath = post.catalog.map((item) => item.title).join('/')
+          postPath = path.join(postPath, tocPath)
+        }
+      }
+      // @ts-ignore
+      post.docPath = postPath
+      // @ts-ignore
+      console.log('post.docPath', post.docPath)
+    }
+    return articleList
   }
 
   // 下载文档 => 增量更新文章到缓存 json 文件

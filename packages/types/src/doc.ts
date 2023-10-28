@@ -69,6 +69,8 @@ export interface DocDetail extends BaseDoc {
   catalog?: DocCatalog[]
   realName?: string
   relativePath?: string
+  /** 文档路径 */
+  docPath?: string
   /** 文章同步出现异常 */
   needUpdate?: number
 }

@@ -18,22 +18,34 @@ class LocalClient {
     if (this.config.imagePathExt) {
       return getImagePathExt(this.config.imagePathExt)
     } else {
+      if (this.config.pathFollowDoc) {
+        // 提示用户，一定开启按 deploy.local.catalog = true
+        out.warning(
+          '注意：当前已开启【图片路径根据文档计算】请检查是否设置 deploy.local.catalog = true',
+        )
+      }
       return this.genImagePath
     }
   }
 
-  async genImagePath(doc: DocDetail) {
-    const dirPath = path.resolve(process.cwd(), this.config.outputDir)
+  genImagePath(doc: DocDetail) {
+    // const dirPath = path.resolve(process.cwd(), this.config.outputDir)
+    const dirPath = this.config.outputDir
     let prefixKey = ''
-    if (this.config.pathFlowDoc) {
-      // TODO 图片前缀根据文档路径计算
-      console.log(doc)
-      prefixKey = ''
+    if (this.config.pathFollowDoc) {
+      // 1.拿到当前文档的路径
+      const docPath = doc.docPath as string
+      // 2.拿到图片输出路径
+      // 3.根据文档路径计算图片的相对路径
+      // 假如文档路径为 ./docs/首页/首页下的文档.md
+      // 图片输出路径为 ./docs/images
+      // 图片前缀为../../images
+      prefixKey = path.relative(docPath, dirPath)
     } else {
       prefixKey = this.config.prefixKey || '/'
-      if (!prefixKey.endsWith('/')) {
-        prefixKey = prefixKey + '/'
-      }
+    }
+    if (!prefixKey.endsWith('/')) {
+      prefixKey = prefixKey + '/'
     }
     return {
       dirPath,
@@ -63,8 +75,9 @@ class LocalClient {
   ): Promise<string | undefined> {
     try {
       const { dirPath, prefixKey } = this.getImagePath(doc)
+      const fullDirPath = path.resolve(process.cwd(), dirPath)
       mkdirp.sync(dirPath)
-      const filePath = path.resolve(dirPath, imageName)
+      const filePath = path.resolve(fullDirPath, imageName)
       fs.writeFileSync(filePath, imgBuffer)
       // 计算root和output的相对路径
       return prefixKey + imageName

@@ -144,7 +144,7 @@ class ImageUploader {
    * @param doc
    */
 
-  async replaceImagesFromFeiShu(articleList: DocDetail[], feishuClient: any, doc: DocDetail) {
+  async replaceImagesFromFeiShu(articleList: DocDetail[], feishuClient: any) {
     // 遍历文章列表
     for (let i = 0; i < articleList.length; i++) {
       const articleInfo = articleList[i]
@@ -152,7 +152,7 @@ class ImageUploader {
       const urlList = getUrlListFromContent(articleInfo.body)
       if (urlList.length) {
         // 上传图片
-        const urls = await this.uploadFromFeiShu(urlList, feishuClient, doc, () => {
+        const urls = await this.uploadFromFeiShu(urlList, feishuClient, articleInfo, () => {
           articleInfo.needUpdate = ImageFail
         })
         if (urls?.length) {
