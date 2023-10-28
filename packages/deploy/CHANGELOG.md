@@ -1,5 +1,17 @@
 # @elog/deploy
 
+## 0.9.0-beta.4
+
+### Patch Changes
+
+- init 图床参数变更
+- Updated dependencies
+  - @elog/plugin-adapter@0.9.0-beta.4
+  - @elog/sdk-confluence@0.9.0-beta.4
+  - @elog/sdk-wordpress@0.9.0-beta.4
+  - @elog/shared@0.9.0-beta.4
+  - @elog/types@0.9.0-beta.4
+
 ## 0.9.0-beta.3
 
 ### Patch Changes

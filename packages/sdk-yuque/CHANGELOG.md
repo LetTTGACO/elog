@@ -1,5 +1,14 @@
 # @elog/sdk-yuque
 
+## 0.9.0-beta.4
+
+### Patch Changes
+
+- init 图床参数变更
+- Updated dependencies
+  - @elog/shared@0.9.0-beta.4
+  - @elog/types@0.9.0-beta.4
+
 ## 0.9.0-beta.3
 
 ### Patch Changes
