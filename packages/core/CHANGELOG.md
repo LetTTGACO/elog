@@ -1,5 +1,20 @@
 # @elog/core
 
+## 0.9.0-beta.3
+
+### Patch Changes
+
+- 1.新增文档图片路径跟随文档路径（适用于多层级导出本地文档） 2.新增文档图片路径自定义拓展点
+- Updated dependencies
+  - @elog/plugin-image@0.9.0-beta.3
+  - @elog/sdk-feishu@0.9.0-beta.3
+  - @elog/sdk-flowus@0.9.0-beta.3
+  - @elog/sdk-notion@0.9.0-beta.3
+  - @elog/sdk-yuque@0.9.0-beta.3
+  - @elog/deploy@0.9.0-beta.3
+  - @elog/shared@0.9.0-beta.3
+  - @elog/types@0.9.0-beta.3
+
 ## 0.9.0-beta.2
 
 ### Patch Changes
