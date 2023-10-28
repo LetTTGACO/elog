@@ -1,5 +1,20 @@
 # @elog/core
 
+## 0.9.0-beta.5
+
+### Patch Changes
+
+- 去除调试参数
+- Updated dependencies
+  - @elog/plugin-image@0.9.0-beta.5
+  - @elog/sdk-feishu@0.9.0-beta.5
+  - @elog/sdk-flowus@0.9.0-beta.5
+  - @elog/sdk-notion@0.9.0-beta.5
+  - @elog/sdk-yuque@0.9.0-beta.5
+  - @elog/deploy@0.9.0-beta.5
+  - @elog/shared@0.9.0-beta.5
+  - @elog/types@0.9.0-beta.5
+
 ## 0.9.0-beta.4
 
 ### Patch Changes

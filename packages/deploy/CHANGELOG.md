@@ -1,5 +1,17 @@
 # @elog/deploy
 
+## 0.9.0-beta.5
+
+### Patch Changes
+
+- 去除调试参数
+- Updated dependencies
+  - @elog/plugin-adapter@0.9.0-beta.5
+  - @elog/sdk-confluence@0.9.0-beta.5
+  - @elog/sdk-wordpress@0.9.0-beta.5
+  - @elog/shared@0.9.0-beta.5
+  - @elog/types@0.9.0-beta.5
+
 ## 0.9.0-beta.4
 
 ### Patch Changes
