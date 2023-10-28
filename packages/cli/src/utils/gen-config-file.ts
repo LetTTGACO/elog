@@ -77,6 +77,8 @@ const configJsStr =
   '    local: {\n' +
   "      outputDir: './docs/images',\n" +
   "      prefixKey: '/images',\n" +
+  '      pathFollowDoc: false,\n' +
+  "      imagePathExt: '',\n" +
   '    },\n' +
   '    oss: {\n' +
   '      secretId: process.env.OSS_SECRET_ID,\n' +
