@@ -44,9 +44,6 @@ class LocalClient {
     } else {
       prefixKey = this.config.prefixKey || '/'
     }
-    if (!prefixKey.endsWith('/')) {
-      prefixKey = prefixKey + '/'
-    }
     return {
       dirPath,
       prefixKey,
@@ -74,7 +71,10 @@ class LocalClient {
     doc: DocDetail,
   ): Promise<string | undefined> {
     try {
-      const { dirPath, prefixKey } = this.getImagePath(doc)
+      let { dirPath, prefixKey } = this.getImagePath(doc)
+      if (!prefixKey.endsWith('/')) {
+        prefixKey = prefixKey + '/'
+      }
       const fullDirPath = path.resolve(process.cwd(), dirPath)
       mkdirp.sync(dirPath)
       const filePath = path.resolve(fullDirPath, imageName)
