@@ -337,10 +337,7 @@ class Elog {
           postPath = path.join(postPath, tocPath)
         }
       }
-      // @ts-ignore
       post.docPath = postPath
-      // @ts-ignore
-      console.log('post.docPath', post.docPath)
     }
     return articleList
   }
