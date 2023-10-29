@@ -42,7 +42,7 @@ class ImageUploader {
           }
           // 完整文件名
           const fullName = `${fileName}.${fileType.type}`
-          out.info('处理图片', `生成文件名: ${fullName}`)
+          // out.info('处理图片', `生成文件名: ${fullName}`)
           // 检查图床是否存在该文件
           let exist = await this.ctx.hasImage(fullName)
           if (exist) {
@@ -85,7 +85,7 @@ class ImageUploader {
         newUrl = await this.ctx.uploadImg(img.buffer!, img.fileName, doc)
         if (newUrl) {
           if (this.config.platform === ImagePlatformEnum.LOCAL) {
-            out.info('生成图片', newUrl)
+            // out.info('生成图片', newUrl)
           } else {
             out.info('上传成功', newUrl)
           }
@@ -179,7 +179,7 @@ class ImageUploader {
           const res = await feishuClient.getResourceItem(image.url)
           // 完整文件名
           const fullName = res.name
-          out.info('处理图片', `生成文件名: ${fullName}`)
+          // out.info('处理图片', `生成文件名: ${fullName}`)
           // 检查图床是否存在该文件
           let exist = await this.ctx.hasImage(fullName)
           if (exist) {
@@ -222,7 +222,7 @@ class ImageUploader {
         newUrl = await this.ctx.uploadImg(img.buffer!, img.fileName, doc)
         if (newUrl) {
           if (this.config.platform === ImagePlatformEnum.LOCAL) {
-            out.info('生成图片', newUrl)
+            // out.info('生成图片', newUrl)
           } else {
             out.info('上传成功', newUrl)
           }

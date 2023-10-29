@@ -156,7 +156,7 @@ class DeployWordPress {
           const fileType = getFileTypeFromUrl(picUrl)?.type
           if (fileType) {
             const filename = `${uuid}.${fileType}`
-            out.info('处理图片', `生成文件名: ${filename}`)
+            // out.info('处理图片', `生成文件名: ${filename}`)
             // 检查是否已经存在图片
             const cacheMedia = wpMedias.find((item) => item.title?.rendered === filename)
             if (cacheMedia) {
