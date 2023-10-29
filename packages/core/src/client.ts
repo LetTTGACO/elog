@@ -65,7 +65,7 @@ class Elog {
       const cacheJson: CacheJSON = require(path.join(process.cwd(), config.extension.cachePath))
       const { docs } = cacheJson
       // 获取缓存文章
-      this.cachedArticles = docs || []
+      this.cachedArticles = (docs as DocDetail[]) || []
     } catch (error) {
       out.access('全量更新', '未获取到缓存，将全量更新文档')
     }
@@ -237,16 +237,14 @@ class Elog {
         catalog = feiShuClient.ctx.catalog
       }
 
-      let cacheDocs: DocDetail[] = this.cachedArticles.map((item) => {
+      let cacheDocs: Partial<DocDetail>[] = this.cachedArticles.map((item) => {
         // 只缓存重要属性
         return {
           id: item.id,
           doc_id: item.doc_id,
           updated: item.updated,
-          body_original: item.body_original,
           properties: item.properties,
           catalog: item.catalog,
-          body: '',
           realName: item.realName,
           relativePath: item.relativePath,
           needUpdate: item.needUpdate,

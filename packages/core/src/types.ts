@@ -37,7 +37,7 @@ export interface ElogConfig {
 
 // region 文章相关
 export interface CacheJSON {
-  docs: DocDetail[]
+  docs: Partial<DocDetail>[]
   catalog: NotionCatalog[] | YuqueCatalog[]
 }
 
