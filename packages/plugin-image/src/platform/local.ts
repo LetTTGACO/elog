@@ -28,9 +28,9 @@ class LocalClient {
     }
   }
 
-  genImagePath(doc: DocDetail) {
+  genImagePath(doc: DocDetail, outputDir: string) {
     // const dirPath = path.resolve(process.cwd(), this.config.outputDir)
-    const dirPath = this.config.outputDir
+    const dirPath = outputDir
     let prefixKey = ''
     if (this.config.pathFollowDoc) {
       // 1.拿到当前文档的路径
@@ -71,7 +71,7 @@ class LocalClient {
     doc: DocDetail,
   ): Promise<string | undefined> {
     try {
-      let { dirPath, prefixKey } = this.getImagePath(doc)
+      let { dirPath, prefixKey } = this.getImagePath(doc, this.config.outputDir)
       if (!prefixKey.endsWith('/')) {
         prefixKey = prefixKey + '/'
       }

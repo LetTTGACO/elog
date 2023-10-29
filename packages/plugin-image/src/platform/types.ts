@@ -42,7 +42,10 @@ export interface UPYunConfig extends ImgBaseConfig {
   password: string
 }
 
-export type GetImagePath = (doc: DocDetail) => { dirPath: string; prefixKey: string }
+export type GetImagePath = (
+  doc: DocDetail,
+  outputDir: string,
+) => { dirPath: string; prefixKey: string }
 
 export interface GithubConfig extends ImgBaseConfig {
   user: string
