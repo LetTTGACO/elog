@@ -1,5 +1,13 @@
 # @elog/sdk-flowus
 
+## 0.9.0-beta.7
+
+### Patch Changes
+
+- 删除 cache.json 缓存文件中的 body_original 字段
+- Updated dependencies
+  - @elog/shared@0.9.0-beta.7
+
 ## 0.9.0-beta.6
 
 ### Patch Changes
