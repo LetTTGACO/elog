@@ -346,7 +346,6 @@ class Elog {
     await this.fetchArticles()
     if (!this.needUpdate) {
       const isNeedSyncForce = this.syncForced()
-      this.writeArticleCache()
       // 结束进程
       if (isNeedSyncForce) {
         out.access('任务结束', '同步成功！')
