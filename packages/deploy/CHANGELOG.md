@@ -1,5 +1,17 @@
 # @elog/deploy
 
+## 0.9.0-beta.6
+
+### Patch Changes
+
+- 日志优化
+- Updated dependencies
+  - @elog/plugin-adapter@0.9.0-beta.6
+  - @elog/sdk-confluence@0.9.0-beta.6
+  - @elog/sdk-wordpress@0.9.0-beta.6
+  - @elog/shared@0.9.0-beta.6
+  - @elog/types@0.9.0-beta.6
+
 ## 0.9.0-beta.5
 
 ### Patch Changes
