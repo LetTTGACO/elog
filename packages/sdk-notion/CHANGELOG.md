@@ -1,5 +1,14 @@
 # @elog/sdk-notion
 
+## 0.9.0-beta.8
+
+### Patch Changes
+
+- 文档不需要更新时，不重复写入缓存文
+- Updated dependencies
+  - @elog/shared@0.9.0-beta.8
+  - @elog/types@0.9.0-beta.8
+
 ## 0.9.0-beta.7
 
 ### Patch Changes

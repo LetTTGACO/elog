@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.9.0-beta.8
+
+### Patch Changes
+
+- 文档不需要更新时，不重复写入缓存文
+
 ## 0.9.0-beta.7
 
 ### Patch Changes

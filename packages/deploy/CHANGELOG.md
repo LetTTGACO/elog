@@ -1,5 +1,17 @@
 # @elog/deploy
 
+## 0.9.0-beta.8
+
+### Patch Changes
+
+- 文档不需要更新时，不重复写入缓存文
+- Updated dependencies
+  - @elog/plugin-adapter@0.9.0-beta.8
+  - @elog/sdk-confluence@0.9.0-beta.8
+  - @elog/sdk-wordpress@0.9.0-beta.8
+  - @elog/shared@0.9.0-beta.8
+  - @elog/types@0.9.0-beta.8
+
 ## 0.9.0-beta.7
 
 ### Patch Changes
