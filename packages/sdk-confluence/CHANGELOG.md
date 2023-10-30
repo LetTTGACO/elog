@@ -1,5 +1,35 @@
 # @elog/sdk-confluence
 
+## 0.9.0
+
+### Minor Changes
+
+- 5d1e137: 1.飞书支持我的空间/知识库文档下载 2.飞书高亮块支持 emoji 3.飞书文档支持按层级下载 4.增加语雀参数校验 5.修复飞书云文档导出问题
+- 0.9.0 正式版
+
+### Patch Changes
+
+- e5b4a63: 过滤语雀数据表文档类型
+- ca153b0: 文档不需要更新时，不重复写入缓存文
+- 04de58b: 日志优化
+- 6046db7: 飞书依赖升级
+- b13c88d: 删除 cache.json 缓存文件中的 body_original 字段
+- f688e74: 1.新增文档图片路径跟随文档路径（适用于多层级导出本地文档） 2.新增文档图片路径自定义拓展点
+- a102d80: 去除调试参数
+- e23ff35: init 图床参数变更
+- Updated dependencies [e5b4a63]
+- Updated dependencies [ca153b0]
+- Updated dependencies [04de58b]
+- Updated dependencies [6046db7]
+- Updated dependencies [b13c88d]
+- Updated dependencies [5d1e137]
+- Updated dependencies [f688e74]
+- Updated dependencies [a102d80]
+- Updated dependencies [e23ff35]
+- Updated dependencies
+  - @elog/shared@0.9.0
+  - @elog/types@0.9.0
+
 ## 0.9.0-beta.8
 
 ### Patch Changes
