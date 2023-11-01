@@ -36,39 +36,39 @@ export function getPropVal(data: any) {
  * @returns {Object}
  */
 export function props(page: NotionDoc): DocProperties {
-  let data: any = {}
-  if (!Object.keys(page.properties).length) return data
+  let properties: any = {}
+  if (!Object.keys(page.properties).length) return properties
   let titleKey = ''
   for (const key in page.properties) {
     if (page.properties[key]?.type === 'title') {
       titleKey = key
     }
-    data[key] = getPropVal(page.properties[key])
+    properties[key] = getPropVal(page.properties[key])
   }
-  if (!data.cover && page.cover) {
+  if (!properties.cover && page.cover) {
     const type = page.cover.type
     if (type) {
       // @ts-ignore
-      data.cover = page.cover[type].url
+      properties.cover = page.cover[type].url
     }
   }
   // 单独处理title
-  if (!data.title) {
+  if (!properties.title) {
     const titleVal = page.properties[titleKey].title
-    data.title = titleVal.map((a: any) => a.plain_text).join('')
+    properties.title = titleVal.map((a: any) => a.plain_text).join('')
   }
   // 单独处理urlname
-  if (!data.urlname) {
-    data.urlname = page.id
+  if (!properties.urlname) {
+    properties.urlname = page.id
   }
   // date
-  if (!data.date) {
-    data.date = formatDate(page.created_time)
+  if (!properties.date) {
+    properties.date = formatDate(page.created_time)
   }
-  if (!data.updated) {
-    data.updated = formatDate(page.last_edited_time)
+  if (!properties.updated) {
+    properties.updated = formatDate(page.last_edited_time)
   }
-  return data
+  return properties
 }
 
 /**
