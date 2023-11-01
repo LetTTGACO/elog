@@ -45,6 +45,13 @@ export function props(page: NotionDoc): DocProperties {
     }
     data[key] = getPropVal(page.properties[key])
   }
+  if (!data.cover && page.cover) {
+    const type = page.cover.type
+    if (type) {
+      // @ts-ignore
+      data.cover = page.cover[type].url
+    }
+  }
   // 单独处理title
   if (!data.title) {
     const titleVal = page.properties[titleKey].title
