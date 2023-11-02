@@ -14,9 +14,8 @@ export const cleanPost = (postPath: string) => {
     rimraf(dist, (error) => {
       if (error) {
         out.err(`清理文档失败: ${error.message}`)
-      } else {
-        out.info('清理文档: ' + dist)
       }
+      out.info('清理文档: ' + dist)
     })
   } catch (error: any) {
     out.err(`清理文档失败: ${error.message}`)
@@ -39,19 +38,16 @@ export const cleanCache = (cachePath: string) => {
 /**
  * 清理本地图片
  */
-export const cleanImages = (imgsPath: string, callback: () => void) => {
+export const cleanImages = (imgsPath: string) => {
   try {
     const dist = path.join(__cwd, imgsPath)
     rimraf(dist, (error) => {
       if (error) {
         out.err(`清理图片失败: ${error.message}`)
-      } else {
-        out.info('清理图片: ' + dist)
       }
-      callback()
+      out.info('清理图片: ' + dist)
     })
   } catch (error: any) {
     out.err(`清理图片失败: ${error.message}`)
-    callback()
   }
 }
