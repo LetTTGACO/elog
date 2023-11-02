@@ -1,5 +1,17 @@
 # @elog/deploy
 
+## 0.9.1-beta.3
+
+### Patch Changes
+
+- 删除缓存优化
+- Updated dependencies
+  - @elog/plugin-adapter@0.9.1-beta.3
+  - @elog/sdk-confluence@0.9.1-beta.3
+  - @elog/sdk-wordpress@0.9.1-beta.3
+  - @elog/shared@0.9.1-beta.3
+  - @elog/types@0.9.1-beta.3
+
 ## 0.9.1-beta.2
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @elog/sdk-yuque
 
+## 0.9.1-beta.3
+
+### Patch Changes
+
+- 删除缓存优化
+- Updated dependencies
+  - @elog/shared@0.9.1-beta.3
+  - @elog/types@0.9.1-beta.3
+
 ## 0.9.1-beta.2
 
 ### Patch Changes
