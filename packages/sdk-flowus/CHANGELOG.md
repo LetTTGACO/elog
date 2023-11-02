@@ -1,13 +1,5 @@
 # @elog/sdk-flowus
 
-## 0.9.1
-
-### Patch Changes
-
-- rimraf 删除优化
-- Updated dependencies
-  - @elog/shared@0.9.1
-
 ## 0.9.0
 
 ### Minor Changes
