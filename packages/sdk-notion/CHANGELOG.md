@@ -1,5 +1,14 @@
 # @elog/sdk-notion
 
+## 0.9.1-beta.0
+
+### Patch Changes
+
+- rimraf 删除优化
+- Updated dependencies
+  - @elog/shared@0.9.1-beta.0
+  - @elog/types@0.9.1-beta.0
+
 ## 0.9.0
 
 ### Minor Changes
