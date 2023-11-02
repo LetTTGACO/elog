@@ -16,12 +16,12 @@ const clean = async (customConfigPath: string, customCachePath: string) => {
     } = config
 
     cleanCache(cacheFilePath)
-    if (deployPlatform === 'local' && docOutputDir) {
-      cleanPost(docOutputDir)
-    }
     // 清楚本地图片
     if (enable && imagePlatform === 'local' && imageOutputDir) {
       cleanImages(imageOutputDir)
+    }
+    if (deployPlatform === 'local' && docOutputDir) {
+      cleanPost(docOutputDir)
     }
   } catch (error: any) {
     out.err(`清理失败, ${error.message}`)
