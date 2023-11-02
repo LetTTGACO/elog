@@ -17,6 +17,7 @@
     "@elog/types": "0.9.0"
   },
   "changesets": [
+    "beige-sloths-jump",
     "strange-hairs-stare"
   ]
 }

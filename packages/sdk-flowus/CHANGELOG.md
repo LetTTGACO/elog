@@ -1,5 +1,13 @@
 # @elog/sdk-flowus
 
+## 0.9.1-beta.1
+
+### Patch Changes
+
+- 删除文件顺序调整
+- Updated dependencies
+  - @elog/shared@0.9.1-beta.1
+
 ## 0.9.1-beta.0
 
 ### Patch Changes

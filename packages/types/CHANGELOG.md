@@ -1,5 +1,11 @@
 # @elog/types
 
+## 0.9.1-beta.1
+
+### Patch Changes
+
+- 删除文件顺序调整
+
 ## 0.9.1-beta.0
 
 ### Patch Changes
