@@ -1,6 +1,6 @@
 {
   "name": "@elog/sdk-wordpress",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "elog的WordPress SDK",
   "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-sdk-wordpress#readme",
   "author": "1874 <me@mail.1874.cool>",

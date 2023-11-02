@@ -1,5 +1,17 @@
 # @elog/deploy
 
+## 0.9.1
+
+### Patch Changes
+
+- rimraf 删除优化
+- Updated dependencies
+  - @elog/plugin-adapter@0.9.1
+  - @elog/sdk-confluence@0.9.1
+  - @elog/sdk-wordpress@0.9.1
+  - @elog/shared@0.9.1
+  - @elog/types@0.9.1
+
 ## 0.9.0
 
 ### Minor Changes
