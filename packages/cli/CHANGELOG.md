@@ -1,5 +1,24 @@
 # @elog/cli
 
+## 0.9.1
+
+### Patch Changes
+
+- 6304b5a: 删除文件顺序调整
+- 86feaeb: 删除缓存优化
+- a240d6c: rimraf 删除优化
+- 删除缓存优化
+- fb93cea: rimraf 删除优化
+- 1cb8ee8: 删除缓存优化
+- Updated dependencies [6304b5a]
+- Updated dependencies [86feaeb]
+- Updated dependencies [a240d6c]
+- Updated dependencies
+- Updated dependencies [fb93cea]
+- Updated dependencies [1cb8ee8]
+  - @elog/shared@0.9.1
+  - @elog/core@0.9.1
+
 ## 0.9.1-beta.4
 
 ### Patch Changes

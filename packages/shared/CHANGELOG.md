@@ -1,5 +1,16 @@
 # @elog/shared
 
+## 0.9.1
+
+### Patch Changes
+
+- 6304b5a: 删除文件顺序调整
+- 86feaeb: 删除缓存优化
+- a240d6c: rimraf 删除优化
+- 删除缓存优化
+- fb93cea: rimraf 删除优化
+- 1cb8ee8: 删除缓存优化
+
 ## 0.9.1-beta.4
 
 ### Patch Changes
