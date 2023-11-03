@@ -42,6 +42,7 @@
     "@types/inquirer": "^8.2.5",
     "@types/rimraf": "^3.0.2",
     "@types/semver": "^7.3.13",
-    "@types/fs-extra": "^11.0.3"
+    "@types/fs-extra": "^11.0.3",
+    "@elog/types": "workspace:*"
   }
 }
