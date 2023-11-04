@@ -48,8 +48,7 @@ export function props(page: NotionDoc): DocProperties {
   if (!properties.cover && page.cover) {
     const type = page.cover.type
     if (type) {
-      // @ts-ignore
-      properties.cover = page.cover[type].url
+      properties.cover = (page.cover as any)[type].url
     }
   }
   // 单独处理title
