@@ -1,5 +1,18 @@
 # @elog/sdk-confluence
 
+## 0.10.0-beta.0
+
+### Minor Changes
+
+- 1. notion sdk 升级
+  2. notion 支持文档图片转 Base64
+
+### Patch Changes
+
+- Updated dependencies
+  - @elog/shared@0.10.0-beta.0
+  - @elog/types@0.10.0-beta.0
+
 ## 0.9.1
 
 ### Patch Changes

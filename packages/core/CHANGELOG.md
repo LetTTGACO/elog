@@ -1,5 +1,24 @@
 # @elog/core
 
+## 0.10.0-beta.0
+
+### Minor Changes
+
+- 1. notion sdk 升级
+  2. notion 支持文档图片转 Base64
+
+### Patch Changes
+
+- Updated dependencies
+  - @elog/plugin-image@0.10.0-beta.0
+  - @elog/sdk-feishu@0.10.0-beta.0
+  - @elog/sdk-flowus@0.10.0-beta.0
+  - @elog/sdk-notion@0.10.0-beta.0
+  - @elog/sdk-yuque@0.10.0-beta.0
+  - @elog/deploy@0.10.0-beta.0
+  - @elog/shared@0.10.0-beta.0
+  - @elog/types@0.10.0-beta.0
+
 ## 0.9.1
 
 ### Patch Changes
