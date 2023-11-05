@@ -19,6 +19,7 @@ export interface NotionConfig {
   filter?: any | boolean
   sorts?: boolean | NotionSortPresetEnum | NotionSort[]
   catalog?: boolean | NotionCatalogConfig
+  imgToBase64?: boolean
   /** 下载文档并发数 */
   limit?: number
 }

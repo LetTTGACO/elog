@@ -27,11 +27,26 @@ class NotionClient {
     this.config = config
     this.config.token = config.token || process.env.NOTION_TOKEN!
     if (!this.config.token) {
-      out.err('缺少参数', '缺少Notion Token')
+      out.err('缺少参数', '缺少 Notion Token')
       process.exit(-1)
     }
+    if (!this.config.databaseId) {
+      out.err('缺少参数', '缺少Notion 数据库 ID')
+      process.exit(-1)
+    }
+    if (this.config.imgToBase64) {
+      out.warning(
+        '注意',
+        '已开启 Notion 文档图片转 Base64，博客平台的 Markdown 解析器/渲染器并未广泛支持 Base64 格式，请自行确认',
+      )
+    }
     this.notion = new Client({ auth: this.config.token })
-    this.n2m = new NotionToMarkdown({ notionClient: this.notion })
+    this.n2m = new NotionToMarkdown({
+      notionClient: this.notion,
+      config: {
+        convertImagesToBase64: this.config.imgToBase64,
+      },
+    })
     this.initCatalogConfig()
     this.requestQueryParams = this.initRequestQueryParams()
   }
@@ -169,7 +184,7 @@ class NotionClient {
     if (!blocks.length) {
       out.warning(`${page.properties.title} 文档下载超时或无内容 `)
     }
-    let body = this.n2m.toMarkdownString(blocks)
+    let body = this.n2m.toMarkdownString(blocks)?.parent || ''
     const timestamp = new Date(page.last_edited_time).getTime()
     let catalog: DocCatalog[] | undefined
     const catalogConfig = this.config.catalog as NotionCatalogConfig

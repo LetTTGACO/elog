@@ -95,6 +95,8 @@ export const getUrlListFromContent = (content: string) => {
       const res = item.match(/\!\[.*\]\((.*?)( ".*")?\)/)
       if (res) {
         const url = res[1]
+        // 过滤 Base64 图片
+        if (url.startsWith('data:')) return undefined
         // 去除#?号
         return {
           original: url,
@@ -109,6 +111,8 @@ export const getUrlListFromContent = (content: string) => {
       const res = item.match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
       if (res) {
         const url = res[1]
+        // 过滤 Base64 图片
+        if (url.startsWith('data:')) return undefined
         // 去除#?号
         return {
           original: url,
