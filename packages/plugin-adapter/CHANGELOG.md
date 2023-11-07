@@ -1,5 +1,17 @@
 # @elog/plugin-adapter
 
+## 0.11.0-beta.0
+
+### Minor Changes
+
+- 支持自定义图床插件
+
+### Patch Changes
+
+- Updated dependencies
+  - @elog/shared@0.11.0-beta.0
+  - @elog/types@0.11.0-beta.0
+
 ## 0.10.0
 
 ### Minor Changes

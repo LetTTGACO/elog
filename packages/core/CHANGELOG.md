@@ -1,5 +1,23 @@
 # @elog/core
 
+## 0.11.0-beta.0
+
+### Minor Changes
+
+- 支持自定义图床插件
+
+### Patch Changes
+
+- Updated dependencies
+  - @elog/plugin-image@0.11.0-beta.0
+  - @elog/sdk-feishu@0.11.0-beta.0
+  - @elog/sdk-flowus@0.11.0-beta.0
+  - @elog/sdk-notion@0.11.0-beta.0
+  - @elog/sdk-yuque@0.11.0-beta.0
+  - @elog/deploy@0.11.0-beta.0
+  - @elog/shared@0.11.0-beta.0
+  - @elog/types@0.11.0-beta.0
+
 ## 0.10.0
 
 ### Minor Changes
