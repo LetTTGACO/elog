@@ -6,5 +6,3 @@ export enum ImagePlatformEnum {
   OSS = 'oss',
   LOCAL = 'local',
 }
-
-export const imageBedList = Object.values(ImagePlatformEnum)

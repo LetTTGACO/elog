@@ -4,7 +4,6 @@ import UPClient from './upyun'
 import GithubClient from './github'
 import QiniuClient from './qiniu'
 import LocalClient from './local'
-import { out } from '@elog/shared'
 import { DocDetail } from '@elog/types'
 import {
   CosConfig,
@@ -15,7 +14,8 @@ import {
   UPYunConfig,
   ImgLocalConfig,
 } from './types'
-import { imageBedList, ImagePlatformEnum } from './const'
+import { ImagePlatformEnum } from './const'
+import { getPlugin } from './utils'
 
 class ImgBedClient {
   config: ImageConfig
@@ -32,10 +32,9 @@ class ImgBedClient {
    * @param {string} platform 图床类型
    * @return {any} 图床实例
    */
-  getImageBedInstance(platform: ImagePlatformEnum) {
-    if (!imageBedList.includes(platform)) {
-      out.err('配置错误', `目前只支持${imageBedList.toString()}`)
-      process.exit(-1)
+  getImageBedInstance(platform: ImagePlatformEnum | string): any {
+    if (this.config.plugin) {
+      return getPlugin(this.config.plugin, this.config)
     }
     switch (platform) {
       case ImagePlatformEnum.COS:

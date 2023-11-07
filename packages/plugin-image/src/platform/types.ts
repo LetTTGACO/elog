@@ -63,11 +63,15 @@ export interface ImgLocalConfig {
   imagePathExt?: string
 }
 
+export type ImagePlugin = string | Function
+
 /**
  * 图床配置
  */
 type ImagePlatformConfig = { [key in ImagePlatformEnum]: any }
 export type ImageConfig = {
   enable: boolean
-  platform: ImagePlatformEnum
+  platform: ImagePlatformEnum | string
+  plugin?: ImagePlugin
+  [key: string]: any
 } & ImagePlatformConfig
