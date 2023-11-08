@@ -153,8 +153,12 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 - [JasonMa](https://github.com/JasonMa0012)
 - [happyzhangyyds](https://github.com/happyzhangyyds)
 - [蜗牛](https://github.com/Hiwoniu)
+- [Derick](https://github.com/DerickIT)
 
 感谢下列项目提供了灵感
 
 - [yuque-tools](https://github.com/vannvan/yuque-tools)
 - [yuque-hexo](https://github.com/x-cold/yuque-hexo)
+
+## 🔗 友情链接
+- [有道云笔记导出](https://github.com/DeppWang/youdaonote-pull)
