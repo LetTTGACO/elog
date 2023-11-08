@@ -1,5 +1,4 @@
 import matter from 'gray-matter'
-import { formatRaw } from '../utils'
 import { DocDetail, DocProperties } from '@elog/types'
 import { out } from '@elog/shared'
 
@@ -23,7 +22,7 @@ export function matterMarkdownAdapter(post: DocDetail) {
     out.warning(`【${post.properties.title}】Front matter 生成失败，请检查文档属性`, e.message)
     out.debug(e)
   }
-  return formatRaw(body)
+  return body
 }
 
 export default matterMarkdownAdapter

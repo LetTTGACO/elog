@@ -1,5 +1,4 @@
 import { DocDetail } from '@elog/types'
-import { formatHtml } from '../utils'
 import { Marked } from 'marked'
 import { markedHighlight } from 'marked-highlight'
 import hljs from 'highlight.js'
@@ -11,7 +10,7 @@ import hljs from 'highlight.js'
 export function htmlAdapter(post: DocDetail) {
   let { body_html, body } = post
   if (body_html) {
-    return formatHtml(body_html)
+    return body_html
   } else {
     const marked = new Marked(
       markedHighlight({

@@ -1,4 +1,3 @@
-import { formatRaw } from '../utils'
 import { md2Wiki } from './render'
 import { DocDetail } from '@elog/types'
 
@@ -8,6 +7,5 @@ import { DocDetail } from '@elog/types'
  */
 export function wikiAdapter(post: DocDetail) {
   const { body } = post
-  const markdown = formatRaw(body)
-  return md2Wiki(markdown)
+  return md2Wiki(body)
 }
