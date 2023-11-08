@@ -1,5 +1,13 @@
 # @elog/sdk-flowus
 
+## 0.11.0-beta.1
+
+### Patch Changes
+
+- 删除 prettier 格式化
+- Updated dependencies
+  - @elog/shared@0.11.0-beta.1
+
 ## 0.11.0-beta.0
 
 ### Minor Changes

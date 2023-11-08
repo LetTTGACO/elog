@@ -1,5 +1,20 @@
 # @elog/core
 
+## 0.11.0-beta.1
+
+### Patch Changes
+
+- 删除 prettier 格式化
+- Updated dependencies
+  - @elog/plugin-image@0.11.0-beta.1
+  - @elog/sdk-feishu@0.11.0-beta.1
+  - @elog/sdk-flowus@0.11.0-beta.1
+  - @elog/sdk-notion@0.11.0-beta.1
+  - @elog/sdk-yuque@0.11.0-beta.1
+  - @elog/deploy@0.11.0-beta.1
+  - @elog/shared@0.11.0-beta.1
+  - @elog/types@0.11.0-beta.1
+
 ## 0.11.0-beta.0
 
 ### Minor Changes

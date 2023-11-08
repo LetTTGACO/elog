@@ -17,6 +17,7 @@
     "@elog/types": "0.10.0"
   },
   "changesets": [
+    "perfect-pumas-teach",
     "rich-dodos-rescue"
   ]
 }
