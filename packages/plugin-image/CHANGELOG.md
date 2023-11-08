@@ -1,5 +1,21 @@
 # @elog/plugin-image
 
+## 0.11.0
+
+### Minor Changes
+
+- 支持自定义图床插件
+- af96001: 支持自定义图床插件
+
+### Patch Changes
+
+- 387d138: 删除 prettier 格式化
+- Updated dependencies
+- Updated dependencies [387d138]
+- Updated dependencies [af96001]
+  - @elog/shared@0.11.0
+  - @elog/types@0.11.0
+
 ## 0.11.0-beta.1
 
 ### Patch Changes
