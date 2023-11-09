@@ -1,0 +1,26 @@
+{
+  "name": "@elog/plugin-img-r2",
+  "version": "0.0.0",
+  "description": "Elog Cloudflare R2图床插件",
+  "homepage": "https://github.com/LetTTGACO/elog/tree/master/plugins/plugin-img-r2#readme",
+  "author": "1874 <me@mail.1874.cool>",
+  "main": "index.js",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LetTTGACO/elog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LetTTGACO/elog/issues"
+  },
+  "scripts": {
+    "build": "rimraf dist && tsup"
+  },
+  "dependencies": {
+    "backblaze-b2": "^1.7.0"
+  }
+}
