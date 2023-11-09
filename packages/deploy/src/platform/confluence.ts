@@ -56,7 +56,7 @@ class DeployConfluence {
         const catalog = articleInfo.catalog
         if (catalog?.length) {
           const parentTitle = catalog[catalog.length - 1].title
-          parentId = rootPageMap[parentTitle].id
+          parentId = rootPageMap[parentTitle]?.id
         }
         // 直接新增
         // 如果有parentId就存在parentPage下，没有则存在空间的rootPage下
