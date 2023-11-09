@@ -105,15 +105,17 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 - [X] 七牛云
 - [X] 又拍云
 
+> 你也可以通过自定义图床插件的方式上传文档图片到任意图床，例如 Cloudflare R2
+
 ## ✨ 特性
 
 - 📝 写作平台支持语雀/Notion/FlowUs/飞书云文档
 - 🚀 博客平台支持所有通过渲染本地 Markdown 文档生成静态站点的博客平台
 - 🚀 博客平台支持Confluence/WordPress站点
 - 🌅 图床平台支持存放到本地或上传到阿里云/腾讯云/Github/七牛云/又拍云
-- 📦 支持生成Front Matter Markdown/支持代码高亮的HTML/适用于Confluence的wiki
+- 📦 支持生成Front Matter Markdown
 - ⚙️ 支持自定义文档处理适配器
-- 🛡 图床平台支持通过拓展点注入密钥
+- 🛡 支持自定义图床插件
 
 更多详情见 [ELog 开发计划](https://1874.notion.site/Elog-91dd2037c9c847e6bc90b712b124189c)
 
