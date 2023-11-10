@@ -1,7 +1,7 @@
 {
   "name": "@elog/plugin-img-b2",
   "version": "0.1.0",
-  "description": "Elog Cloudflare R2图床插件",
+  "description": "Elog Backblaze B2图床插件",
   "homepage": "https://github.com/LetTTGACO/elog/tree/master/plugins/plugin-img-b2#readme",
   "author": "1874 <me@mail.1874.cool>",
   "main": "index.js",
