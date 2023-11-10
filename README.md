@@ -105,7 +105,11 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 - [X] 七牛云
 - [X] 又拍云
 
-> 你也可以通过自定义图床插件的方式上传文档图片到任意图床，例如 Cloudflare R2
+> 你也可以通过自定义图床插件的方式上传文档图片到任意图床
+> 
+> 社区图床插件
+> - [Cloudflare R2](https://github.com/LetTTGACO/elog/tree/master/plugins/plugin-img-r2#readme)
+> - [Backblaze B2](https://github.com/LetTTGACO/elog/tree/master/plugins/plugin-img-b2#readme)
 
 ## ✨ 特性
 
