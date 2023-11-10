@@ -18,7 +18,7 @@
     "url": "https://github.com/LetTTGACO/elog/issues"
   },
   "scripts": {
-    "build": "rimraf dist && tsup"
+    "build": "echo '@elog/plugin-img-b2'"
   },
   "dependencies": {
     "backblaze-b2": "^1.7.0"
