@@ -45,3 +45,6 @@ elog sync -e .elog.env
 ### Github 流水线配置
 将以上用到的环境变量放到 Github 流水线变量即可
 
+## 插件开发文档
+[插件开发文档](https://elog.1874.cool/notion/image-platform#plugin-%E5%AD%97%E6%AE%B5%E8%AF%B4%E6%98%8E)
+
