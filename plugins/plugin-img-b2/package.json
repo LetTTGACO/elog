@@ -1,8 +1,8 @@
 {
-  "name": "@elog/plugin-img-r2",
+  "name": "@elog/plugin-img-b2",
   "version": "0.0.0",
   "description": "Elog Cloudflare R2图床插件",
-  "homepage": "https://github.com/LetTTGACO/elog/tree/master/plugins/plugin-img-r2#readme",
+  "homepage": "https://github.com/LetTTGACO/elog/tree/master/plugins/plugin-img-b2#readme",
   "author": "1874 <me@mail.1874.cool>",
   "main": "index.js",
   "license": "MIT",
