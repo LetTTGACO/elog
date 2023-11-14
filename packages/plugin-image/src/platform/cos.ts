@@ -27,8 +27,8 @@ class CosClient {
       // 如果没开拓展点，就从配置文件/环境变量中读取
       this.config = {
         ...this.config,
-        secretId: this.config.secretId || process.env.COS_SECRET_ID!,
-        secretKey: this.config.secretKey || process.env.COS_SECRET_KEY!,
+        SecretId: this.config.secretId || process.env.COS_SECRET_ID!,
+        SecretKey: this.config.secretKey || process.env.COS_SECRET_KEY!,
       }
     }
     if (!this.config.secretId || !this.config.secretKey) {
