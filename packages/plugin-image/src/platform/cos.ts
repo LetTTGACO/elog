@@ -31,7 +31,7 @@ class CosClient {
         SecretKey: this.config.secretKey || process.env.COS_SECRET_KEY!,
       }
     }
-    if (!this.config.secretId || !this.config.secretKey) {
+    if (!this.config.SecretId || !this.config.SecretKey) {
       out.err('缺少腾讯云COS密钥信息')
       process.exit(-1)
     }
