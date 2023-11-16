@@ -1,7 +1,6 @@
 import { NotionDoc } from './types'
-import moment from 'moment'
 import { DocProperties, DocCatalog } from '@elog/types'
-import { out } from '@elog/shared'
+import { out, getTimes } from '@elog/shared'
 
 /**
  * 获取元数据Val
@@ -62,20 +61,12 @@ export function props(page: NotionDoc): DocProperties {
   }
   // date
   if (!properties.date) {
-    properties.date = formatDate(page.created_time)
+    properties.date = getTimes(page.created_time)
   }
   if (!properties.updated) {
-    properties.updated = formatDate(page.last_edited_time)
+    properties.updated = getTimes(page.last_edited_time)
   }
   return properties
-}
-
-/**
- * 格式化日期
- * @param date
- */
-export function formatDate(date: Date | string) {
-  return moment(date).format('YYYY-MM-DD HH:mm:ss')
 }
 
 export function genCatalog(page: NotionDoc, property: string): DocCatalog[] | undefined {

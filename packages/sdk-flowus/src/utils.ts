@@ -1,17 +1,9 @@
-import { out } from '@elog/shared'
+import { out, getTimes } from '@elog/shared'
 import { DocCatalog, DocProperties } from '@elog/types'
 import { Block } from '@flowusx/flowus-types'
 import moment from 'moment'
 import { FlowUsDoc, FlowUsFilterItem, FlowUsSortItem } from './types'
 import { FlowUsSortDirectionEnum } from './const'
-
-/**
- * 格式化时间
- * @param date
- */
-export function formatDate(date: Date | string | number) {
-  return moment(date).format('YYYY-MM-DD HH:mm:ss')
-}
 
 /**
  * 获取元数据Val
@@ -46,7 +38,7 @@ export function getPropVal(type: string, val: any, pageTitle: string) {
     //   // 更新时间直接在外面取值
     //   return ''
     case 'date':
-      return val.startDate.replace('/', '-') + ' ' + val.startTime
+      return getTimes(val.startDate + ' ' + val.startTime)
     case 'multi_select':
       return val.text.split(',')
     case 'person':
@@ -86,8 +78,8 @@ export function props(pageBlock: Block, tableBlock: Block): DocProperties {
   let properties: any = {}
   properties.urlname = pageBlock.uuid
   properties.title = pageBlock.title
-  properties.updated = formatDate(pageBlock.updatedAt)
-  properties.date = formatDate(pageBlock.createdAt)
+  properties.updated = pageBlock.updatedAt
+  properties.date = pageBlock.createdAt
   const pageProperties = pageBlock.data.collectionProperties
   if (!pageProperties) return properties
   const propIds = Object.keys(pageProperties)

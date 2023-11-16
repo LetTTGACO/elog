@@ -1,10 +1,10 @@
 import filenamify from 'filenamify'
 import path from 'path'
 import mkdirp from 'mkdirp'
-import { out } from '@elog/shared'
+import { out, isTime, timeFormat } from '@elog/shared'
 import fs from 'fs'
 import { AdapterFunction, LocalConfig } from '../types'
-import { FileNameEnum, fileNameList } from '../const'
+import { FileNameEnum } from '../const'
 import { DocDetail } from '@elog/types'
 import { AdapterClient } from '../adapter'
 
@@ -17,8 +17,51 @@ class DeployLocal {
 
   constructor(config: LocalConfig) {
     this.config = config
-    this.adapterClient = new AdapterClient({ format: config.format, formatExt: config.formatExt })
+    this.adapterClient = new AdapterClient({
+      format: config.format,
+      frontMatter: config.frontMatter,
+      formatExt: config.formatExt,
+    })
     this.adapter = this.adapterClient.getAdapter()
+  }
+
+  /**
+   * 过滤 Front-Matter
+   * @param post
+   * @param filename
+   */
+  filterFrontMatter(post: DocDetail, filename: string) {
+    const frontMatter = this.config.frontMatter
+    if (frontMatter?.enable) {
+      if (this.config.frontMatter?.include?.length) {
+        Object.keys(post.properties).forEach((item: string) => {
+          // 过滤不需要的属性
+          if (!this.config.frontMatter?.include?.includes(item)) {
+            if (item !== filename) {
+              delete post.properties[item]
+            }
+          }
+        })
+      }
+      if (frontMatter?.exclude?.length) {
+        Object.keys(post.properties).forEach((item: string) => {
+          if (this.config.frontMatter?.exclude?.includes(item)) {
+            if (item !== filename) {
+              delete post.properties[item]
+            }
+          }
+        })
+      }
+      // 处理时间
+      if (frontMatter?.timeFormat) {
+        Object.keys(post.properties).forEach((key) => {
+          const value = post.properties[key]
+          if (isTime(value)) {
+            post.properties[key] = timeFormat(value, frontMatter?.timezone, frontMatter?.timeFormat)
+          }
+        })
+      }
+    }
   }
 
   /**
@@ -27,17 +70,22 @@ class DeployLocal {
    */
   async deploy(articleList: DocDetail[]) {
     let { filename = FileNameEnum.TITLE } = this.config
-    if (!fileNameList.includes(filename)) {
-      filename = FileNameEnum.TITLE
-      out.warning(
-        '配置错误',
-        `文件命名方式目前只支持${fileNameList.toString()}，将默认以title形式命名`,
-      )
-    }
     const outputDir = path.join(process.cwd(), this.config.outputDir)
 
-    for (const post of articleList) {
-      let formatBody = this.adapter(post)
+    for (let post of articleList) {
+      this.filterFrontMatter(post, filename)
+      let formatRes = await this.adapter(post)
+      let body = ''
+
+      if (typeof formatRes === 'string') {
+        /** @deprecated 兼容处理，将在 1.0 版本移除 */
+        body = formatRes
+      } else {
+        // DocDetail 类型
+        body = formatRes.body
+        post = formatRes
+      }
+
       let fileName = filenamify(post.properties[filename])
       if (!fileName) {
         // 没有文件名的文档
@@ -71,7 +119,7 @@ class DeployLocal {
         out.info('生成文档', `${fileName}.md`)
         mkdirp.sync(outputDir)
       }
-      fs.writeFileSync(postPath, formatBody, {
+      fs.writeFileSync(postPath, body, {
         encoding: 'utf8',
       })
       // 真正的文件名

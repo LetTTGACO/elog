@@ -118,7 +118,7 @@ class DeployWordPress {
           continue
         }
         // 自定义处理md文档
-        articleInfo.body_html = this.adapter(articleInfo)
+        articleInfo.body_html = this.adapter(articleInfo) as string
         const post: UpdateWordPressPost | CreateWordPressPost = {
           title: articleInfo.properties.title,
           content: articleInfo.body_html,

@@ -16,6 +16,7 @@ export enum FileNameEnum {
 }
 export enum FormatEnum {
   MARKDOWN = 'markdown',
+  /** @deprecated 即将1.0废弃 */
   MATTER_MARKDOWN = 'matter-markdown',
   HTML = 'html',
   WIKI = 'wiki',

@@ -9,7 +9,14 @@ export interface LocalConfig {
   filename: FileNameEnum
   format: FormatEnum
   catalog: boolean
-  formatExt?: string
+  formatExt?: string | Function
+  frontMatter?: {
+    enable?: boolean
+    exclude?: string[]
+    include?: string[]
+    timezone?: string
+    timeFormat?: string
+  }
 }
 
 /**
@@ -23,10 +30,15 @@ export type DeployConfig = {
 /** 文档处理适配器 */
 export interface AdapterConfig {
   format: FormatEnum
-  formatExt?: string
+  formatExt?: string | Function
+  frontMatter?: {
+    enable?: boolean
+    exclude?: string[]
+    include?: string[]
+  }
 }
 
-export type AdapterFunction = (doc: DocDetail) => string
+export type AdapterFunction = (doc: DocDetail) => DocDetail | string | Promise<DocDetail>
 
 export interface DocMap<T> {
   [key: string]: T

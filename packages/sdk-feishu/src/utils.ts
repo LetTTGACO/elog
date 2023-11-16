@@ -1,15 +1,6 @@
 import { out } from '@elog/shared'
-import moment from 'moment'
 import { FeiShuDoc } from './types'
 import frontMatter from 'front-matter'
-
-/**
- * 格式化时间
- * @param date
- */
-export function formatDate(date: Date | number) {
-  return moment(Number(date)).format('YYYY-MM-DD HH:mm:ss')
-}
 
 /**
  * 生成元数据
@@ -21,9 +12,9 @@ export const getProps = (page: FeiShuDoc, body: string) => {
     // urlname
     urlname: page.doc_id,
     // 创建时间
-    date: formatDate(page.createdAt),
+    date: Number(page.createdAt + '000'),
     // 更新时间
-    updated: formatDate(page.updatedAt),
+    updated: Number(page.updatedAt + '000'),
   } as any
   try {
     const regex = /^---[\s|\S]+?---/i

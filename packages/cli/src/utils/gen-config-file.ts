@@ -48,7 +48,6 @@ const configJsStr =
   "      filename: 'title',\n" +
   "      format: 'markdown',\n" +
   '      catalog: false,\n' +
-  "      formatExt: '',\n" +
   '    },\n' +
   '    confluence: {\n' +
   '      user: process.env.CONFLUENCE_USER,\n' +
@@ -56,7 +55,6 @@ const configJsStr =
   '      endpoint: process.env.WORDPRESS_ENDPOINT,\n' +
   '      spaceKey: process.env.CONFLUENCE_SPACE_KEY,\n' +
   '      rootPageId: process.env.CONFLUENCE_ROOT_PAGE_ID, // 可选\n' +
-  "      formatExt: '', // 可选\n" +
   '    },\n' +
   '    wordpress: {\n' +
   '      username: process.env.WORDPRESS_USERNAME,\n' +
@@ -68,7 +66,6 @@ const configJsStr =
   "        cover: 'cover',\n" +
   "        description: 'description',\n" +
   '      },\n' +
-  "      formatExt: ''\n" +
   '    },\n' +
   '  },\n' +
   '  image: {\n' +
@@ -78,7 +75,6 @@ const configJsStr =
   "      outputDir: './docs/images',\n" +
   "      prefixKey: '/images',\n" +
   '      pathFollowDoc: false,\n' +
-  "      imagePathExt: '',\n" +
   '    },\n' +
   '    oss: {\n' +
   '      secretId: process.env.OSS_SECRET_ID,\n' +
@@ -87,7 +83,6 @@ const configJsStr =
   '      region: process.env.OSS_REGION,\n' +
   '      host: process.env.OSS_HOST,\n' +
   "      prefixKey: '',\n" +
-  "      secretExt: '', // 可选\n" +
   '    },\n' +
   '    cos: {\n' +
   '      secretId: process.env.COS_SECRET_ID,\n' +
@@ -96,7 +91,6 @@ const configJsStr =
   '      region: process.env.COS_REGION,\n' +
   '      host: process.env.COS_HOST,\n' +
   "      prefixKey: '',\n" +
-  "      secretExt: '', // 可选\n" +
   '    },\n' +
   '    qiniu: {\n' +
   '      secretId: process.env.QINIU_SECRET_ID,\n' +
@@ -105,7 +99,6 @@ const configJsStr =
   '      region: process.env.QINIU_REGION,\n' +
   '      host: process.env.QINIU_HOST,\n' +
   "      prefixKey: '',\n" +
-  "      secretExt: '', // 可选\n" +
   '    },\n' +
   '    upyun: {\n' +
   '      user: process.env.UPYUN_USER,\n' +
@@ -113,7 +106,6 @@ const configJsStr =
   '      bucket: process.env.UPYUN_BUCKET,\n' +
   '      host: process.env.UPYUN_HOST,\n' +
   "      prefixKey: '',\n" +
-  "      secretExt: '', // 可选\n" +
   '    },\n' +
   '    github: {\n' +
   '      user: process.env.GITHUB_USER,\n' +
@@ -122,7 +114,6 @@ const configJsStr =
   "      branch: '',\n" +
   "      host: '',\n" +
   "      prefixKey: '',\n" +
-  "      secretExt: '', // 可选\n" +
   '    },\n' +
   '  },\n' +
   '}\n'

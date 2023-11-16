@@ -71,6 +71,7 @@ export const resolvePluginPath = (pluginPath: string) => {
   } else {
     // 否则认为是包名，从 node_modules 中引入
     return pluginPath
+    // 包不存在
   }
 }
 

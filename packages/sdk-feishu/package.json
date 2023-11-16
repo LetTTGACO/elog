@@ -24,7 +24,6 @@
   },
   "dependencies": {
     "@elog/shared": "workspace:*",
-    "moment": "^2.29.4",
     "front-matter": "^4.0.2",
     "tiny-async-pool": "^1.3.0",
     "@feishux/api": "^0.3.0",

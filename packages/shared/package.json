@@ -28,7 +28,8 @@
     "shelljs": "^0.8.5",
     "urllib": "2.40.0",
     "image-size": "^1.0.2",
-    "mime-types": "^2.1.35"
+    "mime-types": "^2.1.35",
+    "dayjs": "^1.11.10"
   },
   "devDependencies": {
     "@types/debug": "^4.1.7",

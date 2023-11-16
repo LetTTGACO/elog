@@ -1,5 +1,4 @@
 import frontMatter from 'front-matter'
-import moment from 'moment'
 import unified from 'unified'
 import { DocUnite, GetProps } from './types'
 import rehypeParse from 'rehype-parse'
@@ -19,9 +18,9 @@ export const getProps = (page: DocUnite, isPwd?: boolean): GetProps => {
     // urlname
     urlname: page.slug,
     // 创建时间
-    date: formatDate(page.created_at),
+    date: page.created_at,
     // 更新时间
-    updated: formatDate(page.updated_at),
+    updated: page.updated_at,
   } as any
   // 作者
   if (page.book?.user?.name) {
@@ -54,14 +53,6 @@ export const getProps = (page: DocUnite, isPwd?: boolean): GetProps => {
       properties,
     }
   }
-}
-
-/**
- * 格式化日期
- * @param date
- */
-export function formatDate(date: Date) {
-  return moment(date).format('YYYY-MM-DD HH:mm:ss')
 }
 
 /**
