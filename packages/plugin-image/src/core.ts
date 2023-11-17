@@ -4,6 +4,7 @@ import {
   generateUniqueId,
   getFileType,
   getPicBufferFromURL,
+  getUrl,
   getUrlListFromContent,
   ImageFail,
   out,
@@ -36,7 +37,7 @@ class ImageUploader {
           // 生成文件名后缀
           const fileType = getFileType(image.url)
           if (!fileType) {
-            out.warning(`${doc.properties?.title} 存在获取图片类型失败，跳过：${image.url}`)
+            out.warning(`${doc?.properties?.title} 存在获取图片类型失败，跳过：${image.url}`)
             resolve(undefined)
             return
           }
@@ -135,6 +136,19 @@ class ImageUploader {
       }
     }
     return articleList
+  }
+
+  /**
+   * 从图片链接上传到图床/下载到本地，适用于自定义上传图片
+   * @param originalUrl
+   * @param doc
+   */
+  async uploadImageFromUrl(originalUrl: string, doc: DocDetail) {
+    const image = getUrl(originalUrl)
+    // NOTE 这里复用之前的upload可能导致下载图片到本地时，当开启了图片随文档路径时，这里的路径也会随文档路径变化
+    // NOTE 解决办法：几乎没人在支持 front-matter 的博客文档开启图片随文档路径，真要有的话，可以让插件自己截取掉路径，自行处理
+    const urls = await this.upload([image], doc)
+    return urls?.[0]?.url
   }
 
   /**

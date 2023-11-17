@@ -36,10 +36,10 @@ class Deploy {
   /**
    * 部署配置
    * @param articleList
-   * @param deleteList
+   * @param imageClient
    */
-  async deploy(articleList: DocDetail[], deleteList?: DocDetail[]) {
-    return this.deployClient.deploy(articleList, deleteList)
+  async deploy(articleList: DocDetail[], imageClient?: any) {
+    return this.deployClient.deploy(articleList, imageClient)
   }
 }
 

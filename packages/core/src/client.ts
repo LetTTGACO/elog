@@ -286,7 +286,7 @@ class Elog {
    * 部署文章
    */
   async deployArticles() {
-    return this.deployClient.deploy(this.needUpdateArticles)
+    return this.deployClient.deploy(this.needUpdateArticles, this.imageClient)
   }
 
   /**

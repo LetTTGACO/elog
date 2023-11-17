@@ -67,14 +67,15 @@ class DeployLocal {
   /**
    * 本地部署
    * @param articleList
+   * @param imageClient
    */
-  async deploy(articleList: DocDetail[]) {
+  async deploy(articleList: DocDetail[], imageClient?: any) {
     let { filename = FileNameEnum.TITLE } = this.config
     const outputDir = path.join(process.cwd(), this.config.outputDir)
 
     for (let post of articleList) {
       this.filterFrontMatter(post, filename)
-      let formatRes = await this.adapter(post)
+      let formatRes = await this.adapter(post, imageClient)
       let body = ''
 
       if (typeof formatRes === 'string') {

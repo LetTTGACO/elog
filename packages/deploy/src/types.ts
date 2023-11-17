@@ -38,7 +38,10 @@ export interface AdapterConfig {
   }
 }
 
-export type AdapterFunction = (doc: DocDetail) => DocDetail | string | Promise<DocDetail>
+export type AdapterFunction = (
+  doc: DocDetail,
+  imageClient?: any,
+) => DocDetail | string | Promise<DocDetail>
 
 export interface DocMap<T> {
   [key: string]: T

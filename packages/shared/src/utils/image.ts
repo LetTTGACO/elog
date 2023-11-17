@@ -86,7 +86,7 @@ export const cleanParameter = (originalUrl: string) => {
 }
 
 /**
- * 获取图片链接
+ * 从 md 文档获取图片链接列表
  * @param content
  */
 export const getUrlListFromContent = (content: string) => {
@@ -123,6 +123,17 @@ export const getUrlListFromContent = (content: string) => {
     })
     .filter((item) => item) as ImageUrl[]
   return markdownURLList.concat(imageTagURLList)
+}
+
+/**
+ * 从 URL 链接获取干净的 url
+ * @param url
+ */
+export const getUrl = (url: string) => {
+  return {
+    original: url,
+    url: cleanParameter(url),
+  }
 }
 
 /**
