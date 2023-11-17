@@ -18,14 +18,11 @@ const configJsStr =
   '      repo: process.env.YUQUE_REPO,\n' +
   '      onlyPublic: false,\n' +
   '      onlyPublished: true,\n' +
-  '      linebreak: false,\n' +
   '    },\n' +
   '    notion: {\n' +
   '      token: process.env.NOTION_TOKEN,\n' +
   '      databaseId: process.env.NOTION_DATABASE_ID,\n' +
   "      filter: false, // {property: 'status', select: {equals: '已发布'}}\n" +
-  "      sorts: false, // [{timestamp: 'created_time', direction: 'descending'}],\n" +
-  '      catalog: false,\n' +
   '    },\n' +
   '    feishu: {\n' +
   "      type: 'space',\n" +
@@ -37,9 +34,7 @@ const configJsStr =
   '    flowus: {\n' +
   '      tablePageId: process.env.FLOWUS_TABLE_PAGE_ID,\n' +
   "      filter: false, // {property: 'status',value: '已发布'}\n" +
-  "      sort: false, // { property: 'createdAt', direction: 'descending' }\n" +
-  '      catalog: false,\n' +
-  '    },\n' +
+  '    }\n' +
   '  },\n' +
   '  deploy: {\n' +
   "    platform: 'local',\n" +
@@ -47,7 +42,6 @@ const configJsStr =
   "      outputDir: './docs',\n" +
   "      filename: 'title',\n" +
   "      format: 'markdown',\n" +
-  '      catalog: false,\n' +
   '    },\n' +
   '    confluence: {\n' +
   '      user: process.env.CONFLUENCE_USER,\n' +
@@ -60,13 +54,7 @@ const configJsStr =
   '      username: process.env.WORDPRESS_USERNAME,\n' +
   '      password: process.env.WORDPRESS_PASSWORD,\n' +
   '      endpoint: process.env.WORDPRESS_ENDPOINT,\n' +
-  '      keyMap: {\n' +
-  "        tags: 'tags',\n" +
-  "        categories: 'categories',\n" +
-  "        cover: 'cover',\n" +
-  "        description: 'description',\n" +
-  '      },\n' +
-  '    },\n' +
+  '    }\n' +
   '  },\n' +
   '  image: {\n' +
   '    enable: false,\n' +
@@ -111,11 +99,9 @@ const configJsStr =
   '      user: process.env.GITHUB_USER,\n' +
   '      token: process.env.GITHUB_TOKEN,\n' +
   '      repo: process.env.GITHUB_REPO,\n' +
-  "      branch: '',\n" +
-  "      host: '',\n" +
   "      prefixKey: '',\n" +
-  '    },\n' +
-  '  },\n' +
+  '    }\n' +
+  '  }\n' +
   '}\n'
 
 const configJson = JSON.stringify(
