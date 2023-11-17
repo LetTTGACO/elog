@@ -35,7 +35,7 @@ class DeployLocal {
     const formatTime = (format?: string) => {
       Object.keys(post.properties).forEach((key) => {
         const value = post.properties[key]
-        if (isTime(value)) {
+        if (Number.isNaN(Number(value)) && isTime(value)) {
           post.properties[key] = timeFormat(value, frontMatter?.timezone, format)
         }
       })
