@@ -1,5 +1,13 @@
 # @elog/sdk-flowus
 
+## 0.12.0-beta.2
+
+### Patch Changes
+
+- 修复是否是时间的判断
+- Updated dependencies
+  - @elog/shared@0.12.0-beta.2
+
 ## 0.12.0-beta.1
 
 ### Patch Changes

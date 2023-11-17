@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.12.0-beta.2
+
+### Patch Changes
+
+- 修复是否是时间的判断
+
 ## 0.12.0-beta.1
 
 ### Patch Changes

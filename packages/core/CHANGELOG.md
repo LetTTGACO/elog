@@ -1,5 +1,20 @@
 # @elog/core
 
+## 0.12.0-beta.2
+
+### Patch Changes
+
+- 修复是否是时间的判断
+- Updated dependencies
+  - @elog/plugin-image@0.12.0-beta.2
+  - @elog/sdk-feishu@0.12.0-beta.2
+  - @elog/sdk-flowus@0.12.0-beta.2
+  - @elog/sdk-notion@0.12.0-beta.2
+  - @elog/sdk-yuque@0.12.0-beta.2
+  - @elog/deploy@0.12.0-beta.2
+  - @elog/shared@0.12.0-beta.2
+  - @elog/types@0.12.0-beta.2
+
 ## 0.12.0-beta.1
 
 ### Patch Changes

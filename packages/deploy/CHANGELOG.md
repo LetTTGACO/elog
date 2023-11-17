@@ -1,5 +1,17 @@
 # @elog/deploy
 
+## 0.12.0-beta.2
+
+### Patch Changes
+
+- 修复是否是时间的判断
+- Updated dependencies
+  - @elog/plugin-adapter@0.12.0-beta.2
+  - @elog/sdk-confluence@0.12.0-beta.2
+  - @elog/sdk-wordpress@0.12.0-beta.2
+  - @elog/shared@0.12.0-beta.2
+  - @elog/types@0.12.0-beta.2
+
 ## 0.12.0-beta.1
 
 ### Patch Changes
