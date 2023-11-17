@@ -15,7 +15,7 @@ export interface LocalConfig {
     exclude?: string[]
     include?: string[]
     timezone?: string
-    timeFormat?: string
+    timeFormat?: string | boolean
   }
 }
 

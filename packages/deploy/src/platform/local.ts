@@ -32,11 +32,11 @@ class DeployLocal {
    */
   filterFrontMatter(post: DocDetail, filename: string) {
     // 时间格式化
-    const formatTime = (post: DocDetail) => {
+    const formatTime = (format?: string) => {
       Object.keys(post.properties).forEach((key) => {
         const value = post.properties[key]
         if (isTime(value)) {
-          post.properties[key] = timeFormat(value, frontMatter?.timezone, frontMatter?.timeFormat)
+          post.properties[key] = timeFormat(value, frontMatter?.timezone, format)
         }
       })
     }
@@ -61,12 +61,21 @@ class DeployLocal {
           }
         })
       }
-      // 处理时间
-      formatTime(post)
+      if (frontMatter.timeFormat) {
+        // 是否开启时间格式化
+        if (typeof frontMatter.timeFormat === 'boolean') {
+          // 默认以 YYYY-MM-DD HH:mm:ss 格式化
+          formatTime('YYYY-MM-DD HH:mm:ss')
+        }
+        if (typeof frontMatter?.timeFormat === 'string') {
+          formatTime(frontMatter.timeFormat)
+        }
+      }
     } else {
       // NOTE 兼容性配置，兼容低版本，将时间重新格式化，下个 breaking changes 版本删除
       if (this.config.format === FormatEnum.MATTER_MARKDOWN) {
-        formatTime(post)
+        // 默认以 YYYY-MM-DD HH:mm:ss 格式化
+        formatTime('YYYY-MM-DD HH:mm:ss')
       }
     }
   }
