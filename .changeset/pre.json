@@ -19,6 +19,7 @@
     "@elog/plugin-img-r2": "0.1.0"
   },
   "changesets": [
-    "brown-comics-lay"
+    "brown-comics-lay",
+    "popular-kings-tan"
   ]
 }

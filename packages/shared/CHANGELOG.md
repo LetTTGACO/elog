@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.12.0-beta.1
+
+### Patch Changes
+
+- 1.修复是否是时间判断逻辑 2.精简默认配置
+
 ## 0.12.0-beta.0
 
 ### Minor Changes
