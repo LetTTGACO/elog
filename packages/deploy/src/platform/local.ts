@@ -35,8 +35,20 @@ class DeployLocal {
     const formatTime = (format?: string) => {
       Object.keys(post.properties).forEach((key) => {
         const value = post.properties[key]
-        if (Number.isNaN(Number(value)) && isTime(value)) {
-          post.properties[key] = timeFormat(value, frontMatter?.timezone, format)
+        // NOTE 判断 value 是否是时间格式
+        // 如果指定了某个字段是时间，则直接格式化
+        if (frontMatter?.timeKeys?.length) {
+          if (frontMatter?.timeKeys.includes(key) && isTime(value)) {
+            post.properties[key] = timeFormat(value, frontMatter?.timezone, format)
+          }
+        } else {
+          if (Number(value) > 946656000000 && isTime(value)) {
+            // 是大于946656000000（2000-01-01 00:00:00）的数字且是正确的时间
+            post.properties[key] = timeFormat(value, frontMatter?.timezone, format)
+          } else if (Number.isNaN(Number(value)) && isTime(value)) {
+            // 不是数字又是时间才进行时间格式化
+            post.properties[key] = timeFormat(value, frontMatter?.timezone, format)
+          }
         }
       })
     }
