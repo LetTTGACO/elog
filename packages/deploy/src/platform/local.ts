@@ -4,7 +4,7 @@ import mkdirp from 'mkdirp'
 import { out, isTime, timeFormat } from '@elog/shared'
 import fs from 'fs'
 import { AdapterFunction, LocalConfig } from '../types'
-import { FileNameEnum } from '../const'
+import { FileNameEnum, FormatEnum } from '../const'
 import { DocDetail } from '@elog/types'
 import { AdapterClient } from '../adapter'
 
@@ -31,6 +31,15 @@ class DeployLocal {
    * @param filename
    */
   filterFrontMatter(post: DocDetail, filename: string) {
+    // 时间格式化
+    const formatTime = (post: DocDetail) => {
+      Object.keys(post.properties).forEach((key) => {
+        const value = post.properties[key]
+        if (isTime(value)) {
+          post.properties[key] = timeFormat(value, frontMatter?.timezone, frontMatter?.timeFormat)
+        }
+      })
+    }
     const frontMatter = this.config.frontMatter
     if (frontMatter?.enable) {
       if (this.config.frontMatter?.include?.length) {
@@ -53,13 +62,11 @@ class DeployLocal {
         })
       }
       // 处理时间
-      if (frontMatter?.timeFormat) {
-        Object.keys(post.properties).forEach((key) => {
-          const value = post.properties[key]
-          if (isTime(value)) {
-            post.properties[key] = timeFormat(value, frontMatter?.timezone, frontMatter?.timeFormat)
-          }
-        })
+      formatTime(post)
+    } else {
+      // NOTE 兼容性配置，兼容低版本，将时间重新格式化，下个 breaking changes 版本删除
+      if (this.config.format === FormatEnum.MATTER_MARKDOWN) {
+        formatTime(post)
       }
     }
   }
