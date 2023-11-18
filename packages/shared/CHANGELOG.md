@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.12.0-beta.3
+
+### Patch Changes
+
+- 取消时间格式化配置
+
 ## 0.12.0-beta.2
 
 ### Patch Changes
