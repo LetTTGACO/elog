@@ -135,7 +135,7 @@ notion-hexo示例
 
 ## 📦 开箱即用
 
-- [Notion + Hexo + GitHub Actions + Vercel 博客解决方案](https://github.com/elog-x/notion-hexo)  👉  [Notion-Hexo](https://notion-hexo.vercel.app/)
+- [Notion + Elog + Hexo + GitHub Actions + Vercel 博客解决方案](https://github.com/elog-x/notion-hexo)  👉  [Notion-Hexo](https://notion-hexo.vercel.app/)
 - [语雀 + Elog + VitePress + GitHub Actions + Vercel 文档站点解决方案](https://github.com/elog-x/yuque-vitepress)  👉  [Yuque-Vitepress](https://yuque-vitepress.vercel.app/)
 
 ## 🔗 最佳实践
