@@ -1,10 +1,10 @@
 import filenamify from 'filenamify'
 import path from 'path'
 import mkdirp from 'mkdirp'
-import { out, isTime, timeFormat } from '@elog/shared'
+import { out } from '@elog/shared'
 import fs from 'fs'
 import { AdapterFunction, LocalConfig } from '../types'
-import { FileNameEnum, FormatEnum } from '../const'
+import { FileNameEnum } from '../const'
 import { DocDetail } from '@elog/types'
 import { AdapterClient } from '../adapter'
 
@@ -31,27 +31,6 @@ class DeployLocal {
    * @param filename
    */
   filterFrontMatter(post: DocDetail, filename: string) {
-    // 时间格式化
-    const formatTime = (format?: string) => {
-      Object.keys(post.properties).forEach((key) => {
-        const value = post.properties[key]
-        // NOTE 判断 value 是否是时间格式
-        // 如果指定了某个字段是时间，则直接格式化
-        if (frontMatter?.timeKeys?.length) {
-          if (frontMatter?.timeKeys.includes(key) && isTime(value)) {
-            post.properties[key] = timeFormat(value, frontMatter?.timezone, format)
-          }
-        } else {
-          if (Number(value) > 946656000000 && isTime(value)) {
-            // 是大于946656000000（2000-01-01 00:00:00）的数字且是正确的时间
-            post.properties[key] = timeFormat(value, frontMatter?.timezone, format)
-          } else if (Number.isNaN(Number(value)) && isTime(value)) {
-            // 不是数字又是时间才进行时间格式化
-            post.properties[key] = timeFormat(value, frontMatter?.timezone, format)
-          }
-        }
-      })
-    }
     const frontMatter = this.config.frontMatter
     if (frontMatter?.enable) {
       if (this.config.frontMatter?.include?.length) {
@@ -72,22 +51,6 @@ class DeployLocal {
             }
           }
         })
-      }
-      if (frontMatter.timeFormat) {
-        // 是否开启时间格式化
-        if (typeof frontMatter.timeFormat === 'boolean') {
-          // 默认以 YYYY-MM-DD HH:mm:ss 格式化
-          formatTime('YYYY-MM-DD HH:mm:ss')
-        }
-        if (typeof frontMatter?.timeFormat === 'string') {
-          formatTime(frontMatter.timeFormat)
-        }
-      }
-    } else {
-      // NOTE 兼容性配置，兼容低版本，将时间重新格式化，下个 breaking changes 版本删除
-      if (this.config.format === FormatEnum.MATTER_MARKDOWN) {
-        // 默认以 YYYY-MM-DD HH:mm:ss 格式化
-        formatTime('YYYY-MM-DD HH:mm:ss')
       }
     }
   }

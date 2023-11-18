@@ -1,4 +1,4 @@
-import { out } from '@elog/shared'
+import { out, timeFormat } from '@elog/shared'
 import { FeiShuDoc } from './types'
 import frontMatter from 'front-matter'
 
@@ -12,9 +12,9 @@ export const getProps = (page: FeiShuDoc, body: string) => {
     // urlname
     urlname: page.doc_id,
     // 创建时间
-    date: Number(page.createdAt + '000'),
+    date: timeFormat(page.createdAt + '000'),
     // 更新时间
-    updated: Number(page.updatedAt + '000'),
+    updated: timeFormat(page.updatedAt + '000'),
   } as any
   try {
     const regex = /^---[\s|\S]+?---/i

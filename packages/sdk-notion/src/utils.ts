@@ -1,6 +1,6 @@
 import { NotionDoc } from './types'
 import { DocProperties, DocCatalog } from '@elog/types'
-import { out, getTimes } from '@elog/shared'
+import { out, timeFormat } from '@elog/shared'
 
 /**
  * 获取元数据Val
@@ -15,7 +15,7 @@ export function getPropVal(data: any) {
     case 'select':
       return val.name
     case 'date':
-      return val.start
+      return timeFormat(val.start)
     case 'rich_text':
     case 'title':
       return val.map((a: any) => a.plain_text).join('')
@@ -61,10 +61,10 @@ export function props(page: NotionDoc): DocProperties {
   }
   // date
   if (!properties.date) {
-    properties.date = getTimes(page.created_time)
+    properties.date = timeFormat(page.created_time)
   }
   if (!properties.updated) {
-    properties.updated = getTimes(page.last_edited_time)
+    properties.updated = timeFormat(page.last_edited_time)
   }
   return properties
 }

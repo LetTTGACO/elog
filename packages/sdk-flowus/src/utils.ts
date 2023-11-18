@@ -1,7 +1,6 @@
-import { out, getTimes } from '@elog/shared'
+import { out, timeFormat, isTime, getTimes } from '@elog/shared'
 import { DocCatalog, DocProperties } from '@elog/types'
 import { Block } from '@flowusx/flowus-types'
-import moment from 'moment'
 import { FlowUsDoc, FlowUsFilterItem, FlowUsSortItem } from './types'
 import { FlowUsSortDirectionEnum } from './const'
 
@@ -38,7 +37,7 @@ export function getPropVal(type: string, val: any, pageTitle: string) {
     //   // 更新时间直接在外面取值
     //   return ''
     case 'date':
-      return getTimes(val.startDate + ' ' + val.startTime)
+      return timeFormat(val.startDate + ' ' + val.startTime)
     case 'multi_select':
       return val.text.split(',')
     case 'person':
@@ -78,8 +77,8 @@ export function props(pageBlock: Block, tableBlock: Block): DocProperties {
   let properties: any = {}
   properties.urlname = pageBlock.uuid
   properties.title = pageBlock.title
-  properties.updated = pageBlock.updatedAt
-  properties.date = pageBlock.createdAt
+  properties.updated = timeFormat(pageBlock.updatedAt)
+  properties.date = timeFormat(pageBlock.createdAt)
   const pageProperties = pageBlock.data.collectionProperties
   if (!pageProperties) return properties
   const propIds = Object.keys(pageProperties)
@@ -164,10 +163,10 @@ export function sortDocs(docs: FlowUsDoc[], sorts?: FlowUsSortItem) {
       // 判断是不是数字
       if (Number.isNaN(Number(aSortValue)) || Number.isNaN(Number(bSortValue))) {
         // 如果判断字符串是不是时间
-        if (moment(aSortValue).isValid() && moment(bSortValue).isValid()) {
+        if (isTime(aSortValue) && isTime(bSortValue)) {
           // 将2023/05/08 00:00转成时间戳
-          aSortValue = moment(aSortValue).valueOf()
-          bSortValue = moment(bSortValue).valueOf()
+          aSortValue = getTimes(aSortValue)
+          bSortValue = getTimes(bSortValue)
         } else {
           // 都不是则排后面
           return -1

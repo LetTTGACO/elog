@@ -3,7 +3,7 @@ import unified from 'unified'
 import { DocUnite, GetProps } from './types'
 import rehypeParse from 'rehype-parse'
 import rehypeStringify from 'rehype-stringify'
-import { out } from '@elog/shared'
+import { out, timeFormat } from '@elog/shared'
 import { YuQuePwdPublicKey } from './const'
 import JSEncrypt from 'jsencrypt-node'
 
@@ -18,9 +18,9 @@ export const getProps = (page: DocUnite, isPwd?: boolean): GetProps => {
     // urlname
     urlname: page.slug,
     // 创建时间
-    date: page.created_at,
+    date: timeFormat(page.created_at),
     // 更新时间
-    updated: page.updated_at,
+    updated: timeFormat(page.updated_at),
   } as any
   // 作者
   if (page.book?.user?.name) {

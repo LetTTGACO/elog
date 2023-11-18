@@ -10,9 +10,10 @@ dayjs.extend(customParseFormat)
 /**
  * 获取毫秒级时间戳
  * @param time 时间
- * @param timezone 时区，默认 Asia/Shanghai
  */
-export const getTimes = (time: any, timezone = 'Asia/Shanghai') => {
+export const getTimes = (time: any) => {
+  // 时区，默认 Asia/Shanghai
+  const timezone = process.env.TIME_ZONE || 'Asia/Shanghai'
   if (typeof time === 'string') {
     const hasTimezone = /[Zz]|[+-]\d{2}:\d{2}$/.test(time)
     if (hasTimezone) {
@@ -29,14 +30,13 @@ export const getTimes = (time: any, timezone = 'Asia/Shanghai') => {
 /**
  * 格式化时间
  * @param time 时间
- * @param timezone 时区，默认 Asia/Shanghai
- * @param format 格式化，默认YYYY-MM-DD HH:mm:ss
  */
-export const timeFormat = (
-  time: any,
-  timezone = 'Asia/Shanghai',
-  format = 'YYYY-MM-DD HH:mm:ss',
-) => {
+export const timeFormat = (time: any) => {
+  // 时区，默认 Asia/Shanghai
+  const timezone = process.env.TIME_ZONE || 'Asia/Shanghai'
+  // 格式化，默认YYYY-MM-DD HH:mm:ss
+  const format = process.env.TIME_FORMAT || 'YYYY-MM-DD HH:mm:ss'
+
   return dayjs(time).tz(timezone).format(format)
 }
 

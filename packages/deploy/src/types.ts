@@ -14,9 +14,6 @@ export interface LocalConfig {
     enable?: boolean
     exclude?: string[]
     include?: string[]
-    timezone?: string
-    timeKeys?: string[]
-    timeFormat?: string | boolean
   }
 }
 
