@@ -3,10 +3,6 @@ import fs from 'fs'
 const envStr =
   '# 语雀（Token方式）\n' +
   'YUQUE_TOKEN=\n' +
-  '# 语雀（帐号密码方式）\n' +
-  'YUQUE_USERNAME=\n' +
-  '# 语雀公共参数，使用语雀必填\n' +
-  'YUQUE_PASSWORD=\n' +
   'YUQUE_LOGIN=\n' +
   'YUQUE_REPO=\n' +
   '\n' +
