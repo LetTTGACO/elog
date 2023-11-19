@@ -12,9 +12,9 @@ export const getProps = (page: FeiShuDoc, body: string) => {
     // urlname
     urlname: page.doc_id,
     // 创建时间
-    date: timeFormat(page.createdAt + '000'),
+    date: timeFormat(page.createdAt),
     // 更新时间
-    updated: timeFormat(page.updatedAt + '000'),
+    updated: timeFormat(page.updatedAt),
   } as any
   try {
     const regex = /^---[\s|\S]+?---/i
