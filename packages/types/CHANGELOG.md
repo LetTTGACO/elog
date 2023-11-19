@@ -1,5 +1,11 @@
 # @elog/types
 
+## 0.12.0-beta.5
+
+### Patch Changes
+
+- 修复飞书时间格式化
+
 ## 0.12.0-beta.4
 
 ### Patch Changes
