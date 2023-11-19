@@ -1,5 +1,14 @@
 # @elog/sdk-confluence
 
+## 0.12.0-beta.4
+
+### Patch Changes
+
+- 1.去掉语雀账号密码登录模式 2.去掉多余的警告
+- Updated dependencies
+  - @elog/shared@0.12.0-beta.4
+  - @elog/types@0.12.0-beta.4
+
 ## 0.12.0-beta.3
 
 ### Patch Changes
