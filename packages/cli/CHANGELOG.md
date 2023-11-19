@@ -1,5 +1,29 @@
 # @elog/cli
 
+## 0.12.0
+
+### Minor Changes
+
+- 0b378c7: 1.front-matter 支持自定义 2.支持自定义文档处理器异步上传/下载图片 3.时间相关属性默认返回时间戳，支持格式化
+- 0.12.0
+
+### Patch Changes
+
+- 374cce0: 修复飞书时间格式化
+- 030ecd6: 取消时间格式化配置
+- e87b0e1: 1.修复是否是时间判断逻辑 2.精简默认配置
+- a82341b: 修复是否是时间的判断
+- 499b0e4: 1.去掉语雀账号密码登录模式 2.去掉多余的警告
+- Updated dependencies [0b378c7]
+- Updated dependencies [374cce0]
+- Updated dependencies [030ecd6]
+- Updated dependencies [e87b0e1]
+- Updated dependencies
+- Updated dependencies [a82341b]
+- Updated dependencies [499b0e4]
+  - @elog/shared@0.12.0
+  - @elog/core@0.12.0
+
 ## 0.12.0-beta.5
 
 ### Patch Changes
