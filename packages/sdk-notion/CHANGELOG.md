@@ -1,5 +1,14 @@
 # @elog/sdk-notion
 
+## 0.12.1
+
+### Patch Changes
+
+- 飞书 wiki 模式添加 disableParentDoc 属性，用来控制当父文档下存在文档时，父文档需不需要下载
+- Updated dependencies
+  - @elog/shared@0.12.1
+  - @elog/types@0.12.1
+
 ## 0.12.0
 
 ### Minor Changes
