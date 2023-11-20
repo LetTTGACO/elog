@@ -59,7 +59,7 @@ class FeiShuClient {
 
     // 深度优先遍历tree
     function dfs(tree: IWikiNode[], catalog: any[] = [], level = 0, parent?: IWikiNode) {
-      tree.map((item) => {
+      tree.forEach((item) => {
         const newCatalog = [
           ...catalog,
           { title: parent?.title, doc_id: parent?.obj_token || parent?.node_token },
@@ -77,7 +77,12 @@ class FeiShuClient {
             node_token: item.node_token,
             parent_node_token: item.parent_node_token,
           }
-          self.catalog.push(doc)
+          // 首先检查 item 是否没有 children 属性，或者 self.config.disableParentDoc 是否不为 true。
+          // 如果这两个条件中的任何一个为 true，那么 doc 对象就会被添加到 self.catalog 数组中
+          // disableParentDoc 就是为了控制当父文档下存在文档时，父文档需不需要下载
+          if (!item.children || !self.config.disableParentDoc) {
+            self.catalog.push(doc)
+          }
         }
         if (item.children) {
           dfs(item.children, level > 0 ? newCatalog : [], level + 1, item)

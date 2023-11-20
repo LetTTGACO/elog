@@ -10,6 +10,8 @@ export interface FeiShuConfig {
   appId: string
   appSecret: string
   baseUrl?: string
+  /** 是否禁用生成父级文档 */
+  disableParentDoc?: boolean
   /** 下载并发数 */
   limit?: number
 }
