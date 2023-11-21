@@ -44,14 +44,19 @@ class YuqueClient {
       loginType: 'password',
     }
 
-    const res = await request<YuQueResponse<YuqueLogin>>(`${this.baseUrl}/api/accounts/login`, {
-      method: 'post',
-      data: loginInfo,
-      headers: {
-        Referer: this.baseUrl + '/login?goto=https%3A%2F%2Fwww.yuque.com%2Fdashboard',
-        origin: this.baseUrl,
+    const res = await request<YuQueResponse<YuqueLogin>>(
+      `${this.baseUrl}/api/mobile_app/accounts/login?language=zh-cn`,
+      {
+        method: 'post',
+        data: loginInfo,
+        headers: {
+          Referer: this.baseUrl + '/login?goto=https%3A%2F%2Fwww.yuque.com%2Fdashboard',
+          origin: this.baseUrl,
+          'user-agent':
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/20G81 YuqueMobileApp/1.0.2 (AppBuild/650 Device/Phone Locale/zh-cn Theme/light YuqueType/public)',
+        },
       },
-    })
+    )
     if (res.status !== 200) {
       out.err('语雀登陆失败')
       // @ts-ignore
