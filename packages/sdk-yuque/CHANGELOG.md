@@ -1,5 +1,14 @@
 # @elog/sdk-yuque
 
+## 0.12.2
+
+### Patch Changes
+
+- 语雀账号密码模式回归
+- Updated dependencies
+  - @elog/shared@0.12.2
+  - @elog/types@0.12.2
+
 ## 0.12.1
 
 ### Patch Changes

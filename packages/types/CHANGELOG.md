@@ -1,5 +1,11 @@
 # @elog/types
 
+## 0.12.2
+
+### Patch Changes
+
+- 语雀账号密码模式回归
+
 ## 0.12.1
 
 ### Patch Changes
