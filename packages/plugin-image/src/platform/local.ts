@@ -18,12 +18,6 @@ class LocalClient {
     if (this.config.imagePathExt) {
       return getImagePathExt(this.config.imagePathExt)
     } else {
-      // if (this.config.pathFollowDoc) {
-      //   // 提示用户，一定开启按 deploy.local.catalog = true
-      //   out.warning(
-      //     '注意：当前已开启【图片路径根据文档计算】请检查是否设置 deploy.local.catalog = true',
-      //   )
-      // }
       return this.genImagePath
     }
   }
