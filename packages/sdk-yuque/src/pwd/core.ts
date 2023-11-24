@@ -34,6 +34,8 @@ class YuqueWithPwd {
     // 过滤未发布和公开的文章
     pages = pages
       .filter((page) => {
+        // 2023/11/24调整，语雀不再返回format字段
+        if (!page.format) return true
         if (page.format === 'laketable') {
           out.warning('跳过下载', `【${page.title}】存在暂不支持的文档格式：数据表`)
         }
