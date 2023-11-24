@@ -147,6 +147,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 - [Notion-Action-MD](https://github.com/cyolc932/elog) Notion + Elog 文档备份 + GitHub Action 持续集成  👉  [DC&#39;s Blog](https://aaqq.cc/article/24c2897b-78f3-4f6a-b8e6-292ea60edf7c)
 - [happyzhangyyds](https://github.com/happyzhangyyds/elog) Notion + Elog 文档备份 + GitHub Action 持续集成  👉  [MatrixCore&#39;s Blog](https://matrixcore.top/article/elog)
 - Notion + hexo + GitHub Action + cloudflare 持续集成  👉  [Derick&#39;s Blog](https://blog.ithuo.net/post/2023-11-07%2FNotion%E5%8D%9A%E5%AE%A2%E6%8A%98%E8%85%BE%E6%8C%87%E5%8D%97)
+- [语雀写作，Kubernetes部署——Elog+Hexo博客持续集成](https://juejin.cn/post/7304540675668181003)
 
 ## 🌍 交流与反馈
 
