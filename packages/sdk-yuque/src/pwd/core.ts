@@ -3,6 +3,7 @@ import YuqueClient from './client'
 import { BaseDoc } from '@elog/types'
 import { out } from '@elog/shared'
 import { YuqueWithPwdConfig } from './types'
+import { IllegalityDocFormat } from '../const'
 
 /**
  * Yuque SDK
@@ -36,10 +37,11 @@ class YuqueWithPwd {
       .filter((page) => {
         // 2023/11/24调整，语雀不再返回format字段
         if (!page.format) return true
-        if (page.format === 'laketable') {
-          out.warning('跳过下载', `【${page.title}】存在暂不支持的文档格式：数据表`)
+        if (IllegalityDocFormat.some((item) => item === page.format)) {
+          out.warning('注意', `【${page.title}】为不支持的文档格式`)
+          return false
         }
-        return ['lake', 'markdown'].includes(page.format)
+        return true
       })
       .filter((page) => {
         return this.config.onlyPublic ? !!page.public : true
