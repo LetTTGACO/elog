@@ -5,6 +5,7 @@ import { YuQueResponse, YuqueDoc, YuqueDocProperties } from '../types'
 import { DocDetail, YuqueCatalog, DocCatalog } from '@elog/types'
 import { JSDOM } from 'jsdom'
 import { YuqueWithPwdConfig, YuqueLogin, YuqueLoginCookie } from './types'
+import { IllegalityDocFormat } from '../const'
 
 /** 默认语雀API 路径 */
 const DEFAULT_HOST = 'https://www.yuque.com'
@@ -209,8 +210,8 @@ class YuqueClient {
     const promise = async (doc: YuqueDoc) => {
       out.info(`下载文档 ${doc._index}/${docs.length}   `, doc.title)
       let article = await this.getDocDetail(doc.slug)
-      if (!doc.format && article.format === 'laketable') {
-        out.warning('注意', `【${article.title}】为不支持的文档格式：数据表`)
+      if (!doc.format && IllegalityDocFormat.some((item) => item === article.format)) {
+        out.warning('注意', `【${article.title}】为不支持的文档格式`)
       }
       // 解析出properties
       const { body, properties } = getProps(article, true)

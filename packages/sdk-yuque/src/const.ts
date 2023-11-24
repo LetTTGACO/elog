@@ -4,3 +4,5 @@ export const YuQuePwdPublicKey = `-----BEGIN PUBLIC KEY-----
   q70sevcmc8SsBNoaMQtyF/gETPBSsyWv3ccBJFrzZ5hxFdlVUfg6tXARtEI8rbIH
   su6TBkVjk+n1Pw/ihQIDAQAB
   -----END PUBLIC KEY-----`
+
+export const IllegalityDocFormat = ['lakeboard', 'lakesheet', 'laketable']

@@ -80,7 +80,7 @@ export interface YuqueDocDetail {
   /** 用户/团队信息 */
   creator: YuqueUser
   /** 描述了正文的格式 */
-  format: 'lake' | 'markdown' | 'laketable'
+  format: 'lake' | 'markdown' | 'laketable' | 'lakesheet' | 'lakeboard'
   /** 封面 */
   cover?: string
   /** 文档标签 */

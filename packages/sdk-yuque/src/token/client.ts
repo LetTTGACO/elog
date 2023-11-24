@@ -12,6 +12,7 @@ import {
 import { DocDetail, YuqueCatalog, DocCatalog } from '@elog/types'
 import { FormatExt } from './format-ext'
 import { YuqueWithTokenConfig } from './types'
+import { IllegalityDocFormat } from '../const'
 
 /** 默认语雀API 路径 */
 const DEFAULT_API_URL = 'https://www.yuque.com/api/v2'
@@ -144,8 +145,8 @@ class YuqueClient {
     const promise = async (doc: YuqueDoc) => {
       out.info(`下载文档 ${doc._index}/${docs.length}   `, doc.title)
       let article = await this.getDocDetail(doc.slug)
-      if (!doc.format && article.format === 'laketable') {
-        out.warning('注意', `【${article.title}】为不支持的文档格式：数据表`)
+      if (!doc.format && IllegalityDocFormat.some((item) => item === article.format)) {
+        out.warning('注意', `【${article.title}】为不支持的文档格式`)
       }
       article.body_original = article.body
       // 解析出properties
