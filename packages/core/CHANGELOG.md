@@ -1,5 +1,20 @@
 # @elog/core
 
+## 0.12.3
+
+### Patch Changes
+
+- 修复语雀文档获取文档为空的问题
+- Updated dependencies
+  - @elog/plugin-image@0.12.3
+  - @elog/sdk-feishu@0.12.3
+  - @elog/sdk-flowus@0.12.3
+  - @elog/sdk-notion@0.12.3
+  - @elog/sdk-yuque@0.12.3
+  - @elog/deploy@0.12.3
+  - @elog/shared@0.12.3
+  - @elog/types@0.12.3
+
 ## 0.12.2
 
 ### Patch Changes
