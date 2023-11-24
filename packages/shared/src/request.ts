@@ -18,7 +18,6 @@ export const request = async <T>(
       ...reqOpts?.headers,
     },
     gzip: true,
-    proxy: process.env.http_proxy,
     // 超时时间 60s
     timeout: Number(process.env?.REQUEST_TIMEOUT || 60000) || 60000,
     ...reqOpts,
