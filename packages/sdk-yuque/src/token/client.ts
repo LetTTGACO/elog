@@ -144,6 +144,9 @@ class YuqueClient {
     const promise = async (doc: YuqueDoc) => {
       out.info(`下载文档 ${doc._index}/${docs.length}   `, doc.title)
       let article = await this.getDocDetail(doc.slug)
+      if (!doc.format && article.format === 'laketable') {
+        out.warning('注意', `【${article.title}】为不支持的文档格式：数据表`)
+      }
       article.body_original = article.body
       // 解析出properties
       const { body, properties } = getProps(article)

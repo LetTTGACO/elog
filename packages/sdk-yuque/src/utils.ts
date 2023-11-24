@@ -26,6 +26,14 @@ export const getProps = (page: DocUnite, isPwd?: boolean): GetProps => {
   if (page.book?.user?.name) {
     properties.author = page.book.user.name
   }
+  // 封面
+  if (page.cover) {
+    properties.cover = page.cover
+  }
+  // 标签
+  if (page.tags?.length) {
+    properties.tags = page.tags.map((item) => item.title)
+  }
   try {
     if (!isPwd) {
       // front matter信息的<br/>换成 \n
