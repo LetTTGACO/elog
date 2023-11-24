@@ -1,5 +1,13 @@
 # @elog/sdk-flowus
 
+## 0.12.4
+
+### Patch Changes
+
+- 修复语雀文档获取文档为空的问题
+- Updated dependencies
+  - @elog/shared@0.12.4
+
 ## 0.12.3
 
 ### Patch Changes

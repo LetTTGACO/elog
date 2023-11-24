@@ -1,5 +1,17 @@
 # @elog/deploy
 
+## 0.12.4
+
+### Patch Changes
+
+- 修复语雀文档获取文档为空的问题
+- Updated dependencies
+  - @elog/plugin-adapter@0.12.4
+  - @elog/sdk-confluence@0.12.4
+  - @elog/sdk-wordpress@0.12.4
+  - @elog/shared@0.12.4
+  - @elog/types@0.12.4
+
 ## 0.12.3
 
 ### Patch Changes
