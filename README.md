@@ -116,7 +116,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 
 - 📝 写作平台支持语雀/Notion/FlowUs/飞书云文档
 - 🚀 博客平台支持所有通过渲染本地 Markdown 文档生成静态站点的博客平台
-- 🚀 博客平台支持Confluence/WordPress站点
+- 🚀 博客平台支持Halo/Confluence/WordPress站点
 - 🌅 图床平台支持存放到本地或上传到阿里云/腾讯云/Github/七牛云/又拍云
 - 📦 支持生成Front Matter Markdown
 - ⚙️ 支持自定义文档处理适配器
