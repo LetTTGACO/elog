@@ -1,5 +1,13 @@
 # @elog/sdk-feishu
 
+## 0.13.0-beta.3
+
+### Patch Changes
+
+- 升级 flowusx 依赖库
+- Updated dependencies
+  - @elog/shared@0.13.0-beta.3
+
 ## 0.13.0-beta.2
 
 ### Patch Changes
