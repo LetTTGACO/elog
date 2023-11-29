@@ -1,5 +1,12 @@
 # @elog/types
 
+## 0.13.0-beta.1
+
+### Patch Changes
+
+- 1.halo 更新流程优化
+  2.flowus 图片下载优
+
 ## 0.13.0-beta.0
 
 ### Minor Changes

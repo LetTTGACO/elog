@@ -1,5 +1,21 @@
 # @elog/core
 
+## 0.13.0-beta.1
+
+### Patch Changes
+
+- 1.halo 更新流程优化
+  2.flowus 图片下载优
+- Updated dependencies
+  - @elog/plugin-image@0.13.0-beta.1
+  - @elog/sdk-feishu@0.13.0-beta.1
+  - @elog/sdk-flowus@0.13.0-beta.1
+  - @elog/sdk-notion@0.13.0-beta.1
+  - @elog/sdk-yuque@0.13.0-beta.1
+  - @elog/deploy@0.13.0-beta.1
+  - @elog/shared@0.13.0-beta.1
+  - @elog/types@0.13.0-beta.1
+
 ## 0.13.0-beta.0
 
 ### Minor Changes

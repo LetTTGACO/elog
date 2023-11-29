@@ -20,6 +20,7 @@
     "@elog/plugin-img-r2": "0.1.1"
   },
   "changesets": [
-    "real-kids-return"
+    "real-kids-return",
+    "sixty-balloons-drop"
   ]
 }
