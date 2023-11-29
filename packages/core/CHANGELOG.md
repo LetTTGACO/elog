@@ -1,5 +1,20 @@
 # @elog/core
 
+## 0.13.0-beta.2
+
+### Patch Changes
+
+- 升级 flowusx 依赖库
+- Updated dependencies
+  - @elog/plugin-image@0.13.0-beta.2
+  - @elog/sdk-feishu@0.13.0-beta.2
+  - @elog/sdk-flowus@0.13.0-beta.2
+  - @elog/sdk-notion@0.13.0-beta.2
+  - @elog/sdk-yuque@0.13.0-beta.2
+  - @elog/deploy@0.13.0-beta.2
+  - @elog/shared@0.13.0-beta.2
+  - @elog/types@0.13.0-beta.2
+
 ## 0.13.0-beta.1
 
 ### Patch Changes

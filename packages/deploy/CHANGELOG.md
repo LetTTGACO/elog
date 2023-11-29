@@ -1,5 +1,18 @@
 # @elog/deploy
 
+## 0.13.0-beta.2
+
+### Patch Changes
+
+- 升级 flowusx 依赖库
+- Updated dependencies
+  - @elog/plugin-adapter@0.13.0-beta.2
+  - @elog/sdk-confluence@0.13.0-beta.2
+  - @elog/sdk-wordpress@0.13.0-beta.2
+  - @elog/sdk-halo@0.13.0-beta.2
+  - @elog/shared@0.13.0-beta.2
+  - @elog/types@0.13.0-beta.2
+
 ## 0.13.0-beta.1
 
 ### Patch Changes
