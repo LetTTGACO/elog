@@ -34,7 +34,7 @@ class DeployWordPress {
     this.adapter = this.adapterClient.getAdapter()
   }
 
-  async deploy(articleList: DocDetail[], deleteList?: DocDetail[]) {
+  async deploy(articleList: DocDetail[]) {
     try {
       out.access('正在部署到 WordPress...')
       let tagsKey = 'tags'
@@ -65,17 +65,6 @@ class DeployWordPress {
       postList.forEach((item) => {
         postMap[item.title.rendered] = item
       })
-      // 先删除
-      if (deleteList?.length) {
-        for (const articleInfo of deleteList) {
-          // 是否存在
-          const cachePage = postMap[articleInfo.properties.title]
-          if (cachePage) {
-            out.info('删除文档', articleInfo.properties.title)
-            await this.ctx.deletePost(cachePage.id)
-          }
-        }
-      }
       // 获取wp标签
       const wpTags = await this.ctx.getAllTags()
       // 获取wp分类

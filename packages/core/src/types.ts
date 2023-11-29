@@ -19,6 +19,8 @@ interface ExtConfig {
   isFullCache?: boolean
   /** 是否强制同步，开启后会删除本地文档，慎用 */
   isForced?: boolean
+  /** 忽略缓存进行同步 */
+  disableCache?: boolean
 }
 
 /**

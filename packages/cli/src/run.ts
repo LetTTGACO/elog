@@ -30,12 +30,20 @@ export async function run() {
     .option('-a --cache <string>', 'use cache file name, default is elog.cache.json')
     .option('-e, --env <string>', 'use env with custom')
     .option('--full-cache', 'cache doc with full info')
+    .option('--disable-cache', 'sync doc without cache')
     .option('--force', 'sync doc forced')
     .option('--debug', 'enable debug')
     .description('sync doc')
     .action((options) => {
       try {
-        void sync(options.config, options.cache, options.env, options.fullCache, options.force)
+        void sync(
+          options.config,
+          options.cache,
+          options.env,
+          options.fullCache,
+          options.force,
+          options.disableCache,
+        )
       } catch (error: any) {
         out.err('运行失败', error.message)
         process.exit(1)

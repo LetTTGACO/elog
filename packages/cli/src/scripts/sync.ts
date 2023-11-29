@@ -11,6 +11,7 @@ import { getConfig } from '../utils/utils'
  * @param envPath
  * @param isFullCache 缓存所有
  * @param isForced 强制同步
+ * @param disableCache 禁用缓存，全量更新文档
  */
 const sync = async (
   customConfigPath?: string,
@@ -18,6 +19,7 @@ const sync = async (
   envPath?: string,
   isFullCache?: boolean,
   isForced?: boolean,
+  disableCache?: boolean,
 ) => {
   // 加载环境变量
   if (envPath) {
@@ -37,6 +39,7 @@ const sync = async (
       cachePath: cacheFilePath,
       isFullCache: !!isFullCache,
       isForced: !!isForced,
+      disableCache: !!disableCache,
       ...userConfig.extension,
     },
   } as ElogConfig

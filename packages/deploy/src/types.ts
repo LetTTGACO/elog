@@ -1,5 +1,6 @@
 import { DeployPlatformEnum, FileNameEnum, FormatEnum } from './const'
 import { DocDetail } from '@elog/types'
+import { HaloConfig } from '@elog/sdk-halo'
 
 /**
  * local 配置
@@ -15,6 +16,12 @@ export interface LocalConfig {
     exclude?: string[]
     include?: string[]
   }
+}
+
+export interface IHaloConfig extends HaloConfig {
+  formatExt?: string
+  rowType?: string
+  needUploadImage?: boolean
 }
 
 /**

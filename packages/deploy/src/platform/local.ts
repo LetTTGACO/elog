@@ -78,6 +78,10 @@ class DeployLocal {
         post = formatRes
       }
 
+      if (!post.properties[filename]) {
+        out.warning('跳过', `文档缺失${filename}属性， 请检查该字段是否被覆盖`)
+        continue
+      }
       let fileName = filenamify(post.properties[filename])
       if (!fileName) {
         // 没有文件名的文档
