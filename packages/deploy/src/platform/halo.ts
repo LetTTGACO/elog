@@ -143,7 +143,6 @@ class DeployHalo {
         }
       }
     }
-    console.log(process.env.REFERER_URL)
     for (let doc of articleList) {
       if (this.config.needUploadImage) {
         // 收集文档图片
