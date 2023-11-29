@@ -49,7 +49,7 @@ const configJsStr =
   '      policyName: process.env.HALO_POLICY_NAME,\n' +
   "      rowType: 'html',\n" +
   '      needUploadImage: true,\n' +
-  '    }\n' +
+  '    },\n' +
   '    confluence: {\n' +
   '      user: process.env.CONFLUENCE_USER,\n' +
   '      password: process.env.WORDPRESS_PASSWORD,\n' +
