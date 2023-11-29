@@ -23,6 +23,11 @@ const envStr =
   'FEISHU_FOLDER_TOKEN=\n' +
   'FEISHU_WIKI_ID=\n' +
   '\n' +
+  '# Halo\n' +
+  'HALO_ENDPOINT=\n' +
+  'HALO_TOKEN=\n' +
+  'HALO_POLICY_NAME=\n' +
+  '\n' +
   '# Confluence\n' +
   'CONFLUENCE_BASE_URL=\n' +
   'CONFLUENCE_USER=\n' +

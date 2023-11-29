@@ -43,6 +43,13 @@ const configJsStr =
   "      filename: 'title',\n" +
   "      format: 'markdown',\n" +
   '    },\n' +
+  '    halo: {\n' +
+  '      endpoint: process.env.HALO_ENDPOINT,\n' +
+  '      token: process.env.HALO_TOKEN,\n' +
+  '      policyName: process.env.HALO_POLICY_NAME,\n' +
+  "      rowType: 'html',\n" +
+  '      needUploadImage: true,\n' +
+  '    }\n' +
   '    confluence: {\n' +
   '      user: process.env.CONFLUENCE_USER,\n' +
   '      password: process.env.WORDPRESS_PASSWORD,\n' +
