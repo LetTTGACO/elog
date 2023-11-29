@@ -11,7 +11,7 @@ const configJsStr =
   '      onlyPublic: false,\n' +
   '      onlyPublished: true,\n' +
   '    },\n' +
-  '    yuque-pwd: {\n' +
+  "    'yuque-pwd': {\n" +
   '      username: process.env.YUQUE_USERNAME,\n' +
   '      password: process.env.YUQUE_PASSWORD,\n' +
   '      login: process.env.YUQUE_LOGIN,\n' +
