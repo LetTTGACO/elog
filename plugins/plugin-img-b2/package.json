@@ -6,7 +6,6 @@
   "author": "1874 <me@mail.1874.cool>",
   "main": "index.js",
   "license": "MIT",
-  "private": true,
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
