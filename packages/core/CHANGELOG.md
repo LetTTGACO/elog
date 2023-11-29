@@ -1,5 +1,24 @@
 # @elog/core
 
+## 0.13.0-beta.0
+
+### Minor Changes
+
+- 1.博客平台新增 halo
+  2.cli 支持禁用缓存进行同步
+
+### Patch Changes
+
+- Updated dependencies
+  - @elog/plugin-image@0.13.0-beta.0
+  - @elog/sdk-feishu@0.13.0-beta.0
+  - @elog/sdk-flowus@0.13.0-beta.0
+  - @elog/sdk-notion@0.13.0-beta.0
+  - @elog/sdk-yuque@0.13.0-beta.0
+  - @elog/deploy@0.13.0-beta.0
+  - @elog/shared@0.13.0-beta.0
+  - @elog/types@0.13.0-beta.0
+
 ## 0.12.4
 
 ### Patch Changes

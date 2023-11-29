@@ -1,5 +1,18 @@
 # @elog/cli
 
+## 0.13.0-beta.0
+
+### Minor Changes
+
+- 1.博客平台新增 halo
+  2.cli 支持禁用缓存进行同步
+
+### Patch Changes
+
+- Updated dependencies
+  - @elog/shared@0.13.0-beta.0
+  - @elog/core@0.13.0-beta.0
+
 ## 0.12.4
 
 ### Patch Changes
