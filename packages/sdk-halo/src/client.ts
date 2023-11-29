@@ -8,6 +8,7 @@ import {
   CategoryList,
   Content,
   ListedPostList,
+  Policy,
   Post,
   PostRequest,
   Tag,
@@ -120,6 +121,15 @@ class HaloClient {
   }
 
   /**
+   * 获取单个附件
+   */
+  async getAttachment(name: string) {
+    return this.request<Attachment>(`/apis/storage.halo.run/v1alpha1/attachments/${name}`, {
+      method: 'GET',
+    })
+  }
+
+  /**
    * 上传附件
    */
   async uploadAttachment(buffer: Buffer, filename: string) {
@@ -179,6 +189,37 @@ class HaloClient {
   async unpublishPost(docId: string) {
     return this.request<Post>(`/apis/api.console.halo.run/v1alpha1/posts/${docId}/unpublish`, {
       method: 'PUT',
+    })
+  }
+
+  async getPolicy(): Promise<Policy> {
+    return this.request<Policy>(
+      `/apis/storage.halo.run/v1alpha1/policies/${this.config.policyName}`,
+      {
+        method: 'GET',
+      },
+    )
+  }
+
+  /**
+   * 获取附件链接
+   * @param name
+   */
+  async getAttachmentPermalink(name: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const fetchPermalink = () => {
+        this.getAttachment(name)
+          .then((response) => {
+            const permalink = response.status?.permalink
+            if (permalink) {
+              resolve(permalink)
+            } else {
+              setTimeout(fetchPermalink, 1000)
+            }
+          })
+          .catch((error) => reject(error))
+      }
+      fetchPermalink()
     })
   }
 }

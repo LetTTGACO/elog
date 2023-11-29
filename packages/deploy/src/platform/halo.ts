@@ -171,14 +171,16 @@ class DeployHalo {
             }
             try {
               const attachment = await this.ctx.uploadAttachment(buffer, fullName)
-              const imageUrl = attachment.metadata.annotations?.['storage.halo.run/uri']
-              if (!imageUrl) {
-                out.warning('跳过', '获取图片地址失败')
-                continue
-              }
+              const imageUrl = await this.ctx.getAttachmentPermalink(attachment.metadata.name)
               out.info('上传成功', imageUrl)
               // 记录最新的
-              imageMap[fullName] = attachment
+              imageMap[fullName] = {
+                ...attachment,
+                status: {
+                  ...attachment.status,
+                  permalink: imageUrl,
+                },
+              }
               // 替换文档中的图片路径
               doc.body = doc.body.replace(image.original, imageUrl)
             } catch (e: any) {
@@ -193,8 +195,6 @@ class DeployHalo {
         }
       }
       // markdown转 Html
-      // doc = (await this.adapter(doc, imageClient)) as DocDetail
-
       let formatRes = await this.adapter(doc, imageClient)
 
       if (typeof formatRes === 'string') {
