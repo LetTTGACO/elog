@@ -87,6 +87,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 - [X] HuGo
 - [X] Docusaurus
 - [X] Docz
+- [X] Halo
 - [X] Confluence
 - [X] WordPress
 
