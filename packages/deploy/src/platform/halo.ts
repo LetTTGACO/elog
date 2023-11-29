@@ -6,6 +6,7 @@ import { FormatEnum } from '../const'
 import { getNoRepValues } from '../utils/common'
 import { slugify } from 'transliteration'
 import {
+  delay,
   generateUniqueId,
   getFileType,
   getPicBufferFromURL,
@@ -150,7 +151,7 @@ class DeployHalo {
 
         for (const image of urlList) {
           // 生成文件名
-          const fileName = generateUniqueId(image.url)
+          const fileName = generateUniqueId(image.url, 28)
           // 生成文件名后缀
           const fileType = getFileType(image.url)
           if (!fileType) {
@@ -214,7 +215,7 @@ class DeployHalo {
             template: '',
             cover: '',
             deleted: false,
-            publish: true,
+            publish: false,
             pinned: false,
             allowComment: true,
             visible: PostSpecVisibleEnum.Public,
@@ -250,32 +251,18 @@ class DeployHalo {
         }
       }
       // 覆盖文档标题
-      if (doc.properties.title) {
-        params.post.spec.title = doc.properties.title
-      }
+      params.post.spec.title = doc.properties.title
       // 覆盖文档slug
-      if (doc.properties.urlname) {
-        params.post.spec.slug = doc.properties.urlname
-      }
+      params.post.spec.slug = doc.properties.urlname
       // 覆盖文档封面图
-      if (doc.properties.cover) {
-        params.post.spec.cover = doc.properties.cover
-      }
+      params.post.spec.cover = doc.properties.cover
       // 覆盖文档摘要
       if (doc.properties.description) {
         params.post.spec.excerpt.autoGenerate = false
         params.post.spec.excerpt.raw = doc.properties.description
       }
-      // 覆盖文档是否直接发布
-      if (doc.properties.publish === undefined) {
-        params.post.spec.publish = true
-      } else {
-        params.post.spec.publish = !!doc.properties.publish
-      }
       // 覆盖文档是否置顶
-      if (doc.properties.pinned) {
-        params.post.spec.pinned = !!doc.properties.pinned
-      }
+      params.post.spec.pinned = !!doc.properties.pinned
       // 覆盖文档是否公开
       if (doc.properties.public === undefined) {
         params.post.spec.visible = PostSpecVisibleEnum.Public
@@ -307,7 +294,7 @@ class DeployHalo {
         // 不存在，走新增流程
         try {
           await this.ctx.createPost(params)
-          out.info('新增成功', doc.properties.title)
+          out.info('新增文档', doc.properties.title)
         } catch (e: any) {
           out.err(`新增 ${doc.properties.title} 文档失败: ${e.message}`)
           out.debug(e)
@@ -318,13 +305,28 @@ class DeployHalo {
           // 走更新流程
           // 更新基本信息
           await this.ctx.updatePostInfo(doc.doc_id, params.post)
+          // 手动阻塞 500ms
+          await delay()
           // 更新内容信息
           await this.ctx.updatePostContent(doc.doc_id, params.content)
-          out.info('更新成功', doc.properties.title)
+          out.info('更新文档', doc.properties.title)
         } catch (e: any) {
           out.err(`更新 ${doc.properties.title} 文档失败: ${e.message}`)
           out.debug(e)
         }
+      }
+      // 发布文档
+      const publish = doc.properties.publish
+      if (
+        publish === undefined ||
+        (typeof publish === 'string' && publish === 'true') ||
+        (typeof publish === 'boolean' && publish)
+      ) {
+        await this.ctx.publishPost(doc.doc_id)
+        out.info('发布文档', doc.properties.title)
+      } else {
+        await this.ctx.unpublishPost(doc.doc_id)
+        out.info('下架文档', doc.properties.title)
       }
     }
   }

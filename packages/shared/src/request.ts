@@ -31,3 +31,7 @@ export const request = async <T>(
   }
   return req(url, opts)
 }
+
+export async function delay(ms = 500) {
+  await new Promise((resolve) => setTimeout(resolve, ms))
+}

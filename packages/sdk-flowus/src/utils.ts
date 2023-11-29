@@ -79,6 +79,9 @@ export function props(pageBlock: Block, tableBlock: Block): DocProperties {
   properties.title = pageBlock.title
   properties.updated = timeFormat(pageBlock.updatedAt)
   properties.date = timeFormat(pageBlock.createdAt)
+  if (pageBlock.data.fullLink) {
+    properties.cover = pageBlock.data.fullLink
+  }
   const pageProperties = pageBlock.data.collectionProperties
   if (!pageProperties) return properties
   const propIds = Object.keys(pageProperties)

@@ -140,8 +140,12 @@ export const getUrl = (url: string) => {
  * 根据url生成唯一文件名
  * @param url
  */
-export const generateUniqueId = (url: string) => {
-  return createHash('md5').update(url).digest('hex')
+export const generateUniqueId = (url: string, length?: number) => {
+  const hash = createHash('md5').update(url).digest('hex')
+  if (length) {
+    return hash.substring(0, length)
+  }
+  return hash
 }
 
 /**
@@ -149,11 +153,14 @@ export const generateUniqueId = (url: string) => {
  */
 export const getPicBufferFromURL = async (url: string) => {
   try {
+    let referer = ''
+    if (url.includes('cdn.flowus.cn')) {
+      referer = 'https://flowus.cn/'
+    }
     const res = await request<Buffer>(url, {
       dataType: 'arraybuffer',
       headers: {
-        // NOTE FlowUs图片下载有限制，需要referer为https://flowus.cn/
-        referer: process.env.REFERER_URL,
+        referer,
       },
     })
     out.info('下载成功', url)

@@ -134,12 +134,14 @@ class FlowUsClient {
 
   async getPageList(): Promise<FlowUsDoc[]> {
     const pageBlocks = await this.flowus.getDataTableData(this.config.tablePageId)
-    const blocks = pageBlocks.blocks
+    let blocks = pageBlocks.blocks
     const blocksKeys = Object.keys(blocks)
     const tableBlockKey = blocksKeys[0]
     const tableBlock = blocks[tableBlockKey]
     const pageIds = tableBlock.subNodes
     const { filter, sort } = this.filterAndSortParams
+    // 处理 cover 链接
+    blocks = await this.flowus.getOssUrl(blocks)
     let filterAndSortDoc = pageIds.map((pageId) => {
       const pageBLock = blocks[pageId]
       const properties = props(pageBLock, tableBlock)

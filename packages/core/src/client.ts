@@ -118,12 +118,6 @@ class Elog {
    * @param config
    */
   initImgCdn(config: ElogConfig) {
-    if (config.write.platform === WritePlatform.FLOWUS) {
-      // FlowUs对图片的下载有referer限制
-      // 所以需要在下载图片的时候加上referer=https://flowus.cn/
-      // 这里使用过环境变量的方式添加
-      process.env.REFERER_URL = 'https://flowus.cn/'
-    }
     if (config.image?.enable) {
       this.imageClient = new ImageClient(config.image)
     }
