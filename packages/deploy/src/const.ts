@@ -20,6 +20,7 @@ export enum FormatEnum {
   /** @deprecated 即将1.0废弃 */
   MATTER_MARKDOWN = 'matter-markdown',
   HTML = 'html',
+  HTML_HIGHLIGHT = 'html-highlight',
   WIKI = 'wiki',
 }
 

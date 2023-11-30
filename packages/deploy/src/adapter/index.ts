@@ -1,6 +1,7 @@
 import { getPackage } from '@elog/shared'
 import {
   htmlAdapter,
+  htmlAdapterWithHighlight,
   markdownAdapter,
   matterMarkdownAdapter,
   wikiAdapter,
@@ -42,6 +43,8 @@ export class AdapterClient {
           return wikiAdapter
         case FormatEnum.HTML:
           return htmlAdapter
+        case FormatEnum.HTML_HIGHLIGHT:
+          return htmlAdapterWithHighlight
         default:
           return markdownAdapter
       }

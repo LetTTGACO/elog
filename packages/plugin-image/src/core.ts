@@ -35,7 +35,7 @@ class ImageUploader {
           // 生成文件名
           const fileName = generateUniqueId(image.url)
           // 生成文件名后缀
-          const fileType = getFileType(image.url)
+          const fileType = await getFileType(image.url)
           if (!fileType) {
             out.warning(`${doc?.properties?.title} 存在获取图片类型失败，跳过：${image.url}`)
             resolve(undefined)

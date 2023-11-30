@@ -10,6 +10,7 @@ import {
   generateUniqueId,
   getFileType,
   getPicBufferFromURL,
+  getUrl,
   getUrlListFromContent,
   out,
 } from '@elog/shared'
@@ -148,12 +149,16 @@ class DeployHalo {
       if (this.config.needUploadImage) {
         // 收集文档图片
         const urlList = getUrlListFromContent(doc.body)
-
+        // 封面图
+        const cover = doc.properties.cover
+        if (cover) {
+          urlList.push(getUrl(cover))
+        }
         for (const image of urlList) {
           // 生成文件名
           const fileName = generateUniqueId(image.url, 28)
           // 生成文件名后缀
-          const fileType = getFileType(image.url)
+          const fileType = await getFileType(image.url)
           if (!fileType) {
             out.warning(`${doc?.properties?.title} 存在获取图片类型失败，跳过：${image.url}`)
             continue
@@ -184,6 +189,10 @@ class DeployHalo {
               }
               // 替换文档中的图片路径
               doc.body = doc.body.replace(image.original, imageUrl)
+              // 替换属性中的图片
+              if (image.original === cover) {
+                doc.properties.cover = imageUrl
+              }
             } catch (e: any) {
               out.warning('跳过', `${doc?.properties?.title} 存在上传图片失败：${image.url}`)
               out.debug(e)
@@ -192,6 +201,10 @@ class DeployHalo {
             out.info('忽略上传', `图片已存在: ${item.status.permalink}`)
             // 替换文档中的图片路径
             doc.body = doc.body.replace(image.original, item.status.permalink)
+            // 替换属性中的图片
+            if (image.original === cover) {
+              doc.properties.cover = item.status.permalink
+            }
           }
         }
       }

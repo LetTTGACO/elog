@@ -9,8 +9,9 @@ import { createHash } from 'node:crypto'
 /**
  * 通过图片url获取文件type, 不含"."
  * @param url
+ * @param needError
  */
-export const getFileTypeFromUrl = (url: string) => {
+export const getFileTypeFromUrl = (url: string, needError = true) => {
   const reg = /[^/]+(?!.*\/)/g
   const imgName = url
     .match(reg)
@@ -29,15 +30,20 @@ export const getFileTypeFromUrl = (url: string) => {
         type: filetype,
       }
     } else {
-      out.warning(`获取文件名失败，跳过: ${url}`)
+      needError && out.warning(`获取文件名失败，跳过: ${url}`)
     }
   } else {
-    out.warning(`获取文件名失败，跳过: ${url}`)
+    needError && out.warning(`获取文件名失败，跳过: ${url}`)
   }
 }
 
-export const getFileTypeFromBuffer = (buffer: Buffer): any => {
-  return imgSize(buffer).type
+export const getFileTypeFromBuffer = (buffer: Buffer): FileType | undefined => {
+  const fileType = imgSize(buffer).type
+  if (fileType) {
+    return {
+      type: fileType,
+    }
+  }
 }
 
 interface FileType {
@@ -49,9 +55,17 @@ interface FileType {
  * 获取文件类型
  * @param url
  */
-export const getFileType = (url: string) => {
-  let file: FileType | undefined = getFileTypeFromUrl(url)
-  return file
+export const getFileType = async (url: string) => {
+  let fileType: FileType | undefined = getFileTypeFromUrl(url, false)
+  if (!fileType) {
+    // 尝试从 buffer 中获取
+    const buffer = await getPicBufferFromURL(url)
+    if (buffer) {
+      fileType = getFileTypeFromBuffer(buffer)
+      return fileType
+    }
+  }
+  return fileType
 }
 
 /**
@@ -139,6 +153,7 @@ export const getUrl = (url: string) => {
 /**
  * 根据url生成唯一文件名
  * @param url
+ * @param length 长度截取
  */
 export const generateUniqueId = (url: string, length?: number) => {
   const hash = createHash('md5').update(url).digest('hex')

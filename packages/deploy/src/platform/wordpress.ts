@@ -1,7 +1,7 @@
 import {
   cleanParameter,
   generateUniqueId,
-  getFileTypeFromUrl,
+  getFileType,
   getPicBufferFromURL,
   out,
 } from '@elog/shared'
@@ -28,7 +28,7 @@ class DeployWordPress {
     this.config = config
     this.ctx = new WordPressClient(config)
     this.adapterClient = new AdapterClient({
-      format: FormatEnum.HTML,
+      format: FormatEnum.HTML_HIGHLIGHT,
       formatExt: config.formatExt,
     })
     this.adapter = this.adapterClient.getAdapter()
@@ -142,9 +142,9 @@ class DeployWordPress {
           const picUrl = articleInfo.properties[coverKey]
           const url = cleanParameter(picUrl)
           const uuid = generateUniqueId(url)
-          const fileType = getFileTypeFromUrl(picUrl)?.type
+          const fileType = await getFileType(picUrl)
           if (fileType) {
-            const filename = `${uuid}.${fileType}`
+            const filename = `${uuid}.${fileType.type}`
             // out.info('处理图片', `生成文件名: ${filename}`)
             // 检查是否已经存在图片
             const cacheMedia = wpMedias.find((item) => item.title?.rendered === filename)
