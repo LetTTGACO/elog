@@ -273,6 +273,9 @@ class DeployHalo {
       if (doc.properties.description) {
         params.post.spec.excerpt.autoGenerate = false
         params.post.spec.excerpt.raw = doc.properties.description
+      } else {
+        params.post.spec.excerpt.autoGenerate = true
+        params.post.spec.excerpt.raw = ''
       }
       // 覆盖文档是否置顶
       params.post.spec.pinned = !!doc.properties.pinned
