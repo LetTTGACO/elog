@@ -1,5 +1,14 @@
 # @elog/sdk-yuque
 
+## 0.13.0-beta.4
+
+### Patch Changes
+
+- 1.修复 flowus 代码高亮 2.拆分 html 适配器 3.支持 cover 上传到 halo 4.升级 flowusx 依赖 5.图片下载优化 6.支持不开启图床使用图床插件 enableForExt 7.语雀支持同步文章摘要到文档 description 属性
+- Updated dependencies
+  - @elog/shared@0.13.0-beta.4
+  - @elog/types@0.13.0-beta.4
+
 ## 0.13.0-beta.3
 
 ### Patch Changes
