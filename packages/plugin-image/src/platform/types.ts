@@ -72,6 +72,8 @@ type ImagePlatformConfig = { [key in ImagePlatformEnum]: any }
 export type ImageConfig = {
   enable: boolean
   platform: ImagePlatformEnum | string
+  /** 不开启图床使用图床插件 */
+  enableForExt?: string
   plugin?: ImagePlugin
   [key: string]: any
 } & ImagePlatformConfig

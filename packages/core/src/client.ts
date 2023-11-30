@@ -118,7 +118,7 @@ class Elog {
    * @param config
    */
   initImgCdn(config: ElogConfig) {
-    if (config.image?.enable) {
+    if (config.image?.enable || config.image?.enableForExt) {
       this.imageClient = new ImageClient(config.image)
     }
   }

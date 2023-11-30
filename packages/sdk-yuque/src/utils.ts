@@ -34,6 +34,10 @@ export const getProps = (page: DocUnite, isPwd?: boolean): GetProps => {
   if (page.tags?.length) {
     properties.tags = page.tags.map((item) => item.title)
   }
+  // 描述
+  if (page?.description) {
+    properties.description = page?.description
+  }
   try {
     if (!isPwd) {
       // front matter信息的<br/>换成 \n

@@ -83,6 +83,8 @@ export interface YuqueDocDetail {
   format: 'lake' | 'markdown' | 'laketable' | 'lakesheet' | 'lakeboard'
   /** 封面 */
   cover?: string
+  /** 摘要 */
+  description?: string
   /** 文档标签 */
   tags?: { title: string; created_at: string; updated_at: string }[]
   /** 正文 Markdown 源代码 */
