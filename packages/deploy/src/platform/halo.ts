@@ -270,15 +270,16 @@ class DeployHalo {
       // 覆盖文档封面图
       params.post.spec.cover = doc.properties.cover
       // 覆盖文档摘要
-      if (doc.properties.description) {
-        params.post.spec.excerpt.autoGenerate = false
-        params.post.spec.excerpt.raw = doc.properties.description
-      } else {
-        params.post.spec.excerpt.autoGenerate = true
-        params.post.spec.excerpt.raw = ''
-      }
+      params.post.spec.excerpt.raw = doc.properties.excerpt
+      // 是否自动生成文档摘要
+      const autoExcerpt = doc.properties.autoExcerpt
+      params.post.spec.excerpt.autoGenerate =
+        (typeof autoExcerpt === 'string' && autoExcerpt === 'true') ||
+        (typeof autoExcerpt === 'boolean' && autoExcerpt)
       // 覆盖文档是否置顶
-      params.post.spec.pinned = !!doc.properties.pinned
+      const pinned = doc.properties.pinned
+      params.post.spec.pinned =
+        (typeof pinned === 'string' && pinned === 'true') || (typeof pinned === 'boolean' && pinned)
       // 覆盖文档是否公开
       if (doc.properties.public === undefined) {
         params.post.spec.visible = PostSpecVisibleEnum.Public
