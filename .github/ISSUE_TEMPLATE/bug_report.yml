@@ -1,0 +1,49 @@
+name: Bug 反馈
+description: 提交 Bug 反馈
+labels: [bug]
+body:
+  - type: markdown
+    id: preface
+    attributes:
+      value: |
+        感谢你花时间填写此错误报告！在开始之前，我们非常推荐阅读一遍[《Elog 常见问题》](https://elog.1874.cool/notion/qa)，这会在很大程度上提高我们彼此的效率。
+  - type: markdown
+    id: environment
+    attributes:
+      value: "## 环境信息"
+  - type: input
+    id: version
+    attributes:
+      label: "你当前使用的Elog版本"
+      description: "运行 elog --version 命令获取当前 Elog 版本。"
+    validations:
+      required: true
+  - type: textarea
+    id: config
+    attributes:
+      label: "Elog配置文件"
+      description: "如果可以的话，请提供你Elog 配置文件，一般为`elog.config.js`"
+    validations:
+      required: false
+  - type: markdown
+    id: details
+    attributes:
+      value: "## 详细信息"
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: "发生了什么？"
+      description: "为了方便我们管理，请不要在同一个 issue 下报告多个不相关的问题。"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Elog错误日志"
+      description: "请复制并粘贴任何相关的日志输出。这将自动格式化为代码，因此无需反引号。"
+      render: shell
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: "附加信息"
+      description: "如果你还有其他需要提供的信息，可以在这里填写（可以提供截图、视频等）。"

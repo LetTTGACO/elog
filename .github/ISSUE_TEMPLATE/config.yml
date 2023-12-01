@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 对 Elog 有其他想法
+    url: https://github.com/LetTTGACO/elog/discussions
+    about: 如果你对 Elog 有其他想法，欢迎到 Elog 讨论区讨论。
