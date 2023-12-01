@@ -23,6 +23,7 @@ body:
     attributes:
       label: "Elog配置文件"
       description: "如果可以的话，请提供你Elog 配置文件，一般为`elog.config.js`"
+      placeholder: "请勿提交你的账号相关敏感信息"
     validations:
       required: false
   - type: markdown
