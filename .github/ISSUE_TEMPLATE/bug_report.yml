@@ -15,7 +15,7 @@ body:
     id: version
     attributes:
       label: "你当前使用的Elog版本"
-      description: "运行 elog --version 命令获取当前 Elog 版本。"
+      description: "运行 `elog --version` 命令获取当前 Elog 版本。"
     validations:
       required: true
   - type: textarea
