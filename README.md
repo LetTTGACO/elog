@@ -152,7 +152,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 - [语雀写作，Kubernetes部署——Elog+Hexo博客持续集成](https://juejin.cn/post/7304540675668181003)
 
 ## 🌍 交流与反馈
-如果遇到问题，请 [提交 issue](https://github.com/LetTTGACO/elog/issues/new) 或在 [discussions 中留言](https://github.com/LetTTGACO/elog/discussions/categories/q-a)
+如果遇到问题，请 [提交 issue](https://github.com/LetTTGACO/elog/issues/new/choose) 或在 [discussions 中留言](https://github.com/LetTTGACO/elog/discussions/categories/q-a)
 ## 🌹 感谢
 
 感谢以下用户贡献了很多bugs和建议
