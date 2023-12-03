@@ -22,10 +22,10 @@ body:
     id: config
     attributes:
       label: "Elog配置文件"
-      description: "如果可以的话，请提供你Elog 配置文件内容，一般为`elog.config.js`。但请勿提交你的账号相关敏感信息"
+      description: "请提供你Elog 配置文件内容，一般为`elog.config.js`。但请勿提交你的账号相关敏感信息"
       render: javascript
     validations:
-      required: false
+      required: true
   - type: markdown
     id: details
     attributes:
