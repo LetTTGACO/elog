@@ -95,7 +95,7 @@ class YuqueClient {
         `repos/${this.namespace}/docs`,
         {
           method: 'GET',
-          data: { offset, limit: 10 },
+          data: { offset },
         },
         true,
       )
