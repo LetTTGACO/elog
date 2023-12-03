@@ -89,12 +89,13 @@ class YuqueClient {
     // 获取目录信息
     this.catalog = await this.getToc()
     const list: YuqueDoc[] = []
+    const self = this
     const getList = async (offset = 0) => {
-      const res = await this.request<YuqueDocListResponse>(
-        `api/docs`,
+      const res = await self.request<YuqueDocListResponse>(
+        `repos/${this.namespace}/docs`,
         {
           method: 'GET',
-          data: { offset },
+          data: { offset, limit: 10 },
         },
         true,
       )
