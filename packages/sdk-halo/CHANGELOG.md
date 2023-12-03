@@ -1,5 +1,14 @@
 # @elog/sdk-halo
 
+## 0.13.0-beta.6
+
+### Patch Changes
+
+- 修复语雀文档 token 模式超过 100 的分页问题
+- Updated dependencies
+  - @elog/shared@0.13.0-beta.6
+  - @elog/types@0.13.0-beta.6
+
 ## 0.13.0-beta.5
 
 ### Patch Changes

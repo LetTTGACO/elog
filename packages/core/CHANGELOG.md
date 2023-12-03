@@ -1,5 +1,20 @@
 # @elog/core
 
+## 0.13.0-beta.6
+
+### Patch Changes
+
+- 修复语雀文档 token 模式超过 100 的分页问题
+- Updated dependencies
+  - @elog/plugin-image@0.13.0-beta.6
+  - @elog/sdk-feishu@0.13.0-beta.6
+  - @elog/sdk-flowus@0.13.0-beta.6
+  - @elog/sdk-notion@0.13.0-beta.6
+  - @elog/sdk-yuque@0.13.0-beta.6
+  - @elog/deploy@0.13.0-beta.6
+  - @elog/shared@0.13.0-beta.6
+  - @elog/types@0.13.0-beta.6
+
 ## 0.13.0-beta.5
 
 ### Patch Changes
