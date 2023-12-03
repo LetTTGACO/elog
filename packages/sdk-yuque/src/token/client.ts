@@ -8,6 +8,7 @@ import {
   YuqueDocDetail,
   YuqueDocProperties,
   FormatExtFunction,
+  YuqueDocListResponse,
 } from '../types'
 import { DocDetail, YuqueCatalog, DocCatalog } from '@elog/types'
 import { FormatExt } from './format-ext'
@@ -44,8 +45,9 @@ class YuqueClient {
    * send api request to yuque
    * @param api
    * @param reqOpts
+   * @param custom
    */
-  async request<T>(api: string, reqOpts: RequestOptions): Promise<T> {
+  async request<T>(api: string, reqOpts: RequestOptions, custom?: boolean): Promise<T> {
     const { token } = this.config
     let baseUrl = this.config.baseUrl || DEFAULT_API_URL
     if (baseUrl.endsWith('/')) {
@@ -58,6 +60,10 @@ class YuqueClient {
         'X-Auth-Token': token,
       },
       ...reqOpts,
+    }
+    if (custom) {
+      const res = await request<T>(url, opts)
+      return res.data
     }
     const res = await request<YuQueResponse<T>>(url, opts)
     if (res.status !== 200) {
@@ -82,9 +88,23 @@ class YuqueClient {
   async getDocList() {
     // 获取目录信息
     this.catalog = await this.getToc()
-    return this.request<YuqueDoc[]>(`repos/${this.namespace}/docs`, {
-      method: 'GET',
-    })
+    const list: YuqueDoc[] = []
+    const getList = async (offset = 0) => {
+      const res = await this.request<YuqueDocListResponse>(
+        `api/docs`,
+        {
+          method: 'GET',
+          data: { offset },
+        },
+        true,
+      )
+      list.push(...res.data)
+      if (res.meta.total > list.length) {
+        await getList(offset + 1)
+      }
+    }
+    await getList()
+    return list
   }
 
   /**

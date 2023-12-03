@@ -121,6 +121,13 @@ export interface YuqueDocDetail {
   word_count: number
 }
 
+export interface YuqueDocListResponse {
+  meta: {
+    total: number
+  }
+  data: YuqueDoc[]
+}
+
 /** 语雀文档（不带详情）列表返回 */
 export interface YuqueDoc {
   cover: null | string

@@ -1,7 +1,7 @@
 import asyncPool from 'tiny-async-pool'
 import { out, request, RequestOptions } from '@elog/shared'
 import { encrypt, getProps } from '../utils'
-import { YuQueResponse, YuqueDoc, YuqueDocProperties } from '../types'
+import { YuQueResponse, YuqueDoc, YuqueDocProperties, YuqueDocListResponse } from '../types'
 import { DocDetail, YuqueCatalog, DocCatalog } from '@elog/types'
 import { JSDOM } from 'jsdom'
 import { YuqueWithPwdConfig, YuqueLogin, YuqueLoginCookie } from './types'
@@ -131,12 +131,24 @@ class YuqueClient {
   async getDocList() {
     // 获取目录信息
     this.catalog = await this.getToc()
-    const docList = await this.request<YuqueDoc[]>(`api/docs`, {
-      method: 'GET',
-      data: { book_id: this.bookId },
-    })
-    this.docList = docList
-    return docList
+    const list: YuqueDoc[] = []
+    const getList = async (offset = 0) => {
+      const res = await this.request<YuqueDocListResponse>(
+        `api/docs`,
+        {
+          method: 'GET',
+          data: { offset },
+        },
+        true,
+      )
+      list.push(...res.data)
+      if (res.meta.total > list.length) {
+        await getList(offset + 1)
+      }
+    }
+    await getList()
+    this.docList = list
+    return list
   }
 
   /**
