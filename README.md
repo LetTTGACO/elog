@@ -165,6 +165,9 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 - [happyzhangyyds](https://github.com/happyzhangyyds)
 - [蜗牛](https://github.com/Hiwoniu)
 - [Derick](https://github.com/DerickIT)
+- [BreakALegCml](https://github.com/BreakALegCml)
+- [Ymriri](https://github.com/Ymriri)
+- [ruibaby](https://github.com/ruibaby)
 
 感谢下列项目提供了灵感
 
