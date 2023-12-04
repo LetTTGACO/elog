@@ -91,17 +91,18 @@ class YuqueClient {
     const list: YuqueDoc[] = []
     const self = this
     const getList = async (offset = 0) => {
+      const pageSize = 100 // 设置分页大小为100
       const res = await self.request<YuqueDocListResponse>(
         `repos/${this.namespace}/docs`,
         {
           method: 'GET',
-          data: { offset },
+          data: { offset, limit: pageSize },
         },
         true,
       )
       list.push(...res.data)
-      if (res.meta.total > list.length) {
-        await getList(offset + 1)
+      if (res.meta.total > offset + pageSize) {
+        await getList(offset + pageSize)
       }
     }
     await getList()
