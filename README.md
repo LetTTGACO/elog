@@ -176,3 +176,4 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 
 ## 🔗 友情链接
 - [有道云笔记导出](https://github.com/DeppWang/youdaonote-pull)
+- [NotionNext](https://github.com/tangly1024/NotionNext)
