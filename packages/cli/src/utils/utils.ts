@@ -42,6 +42,7 @@ export const getConfig = (customConfigPath?: string, customCachePath?: string) =
 
   return {
     config,
+    configFilePath,
     cacheFilePath,
   }
 }

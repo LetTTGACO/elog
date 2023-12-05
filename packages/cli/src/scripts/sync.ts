@@ -32,7 +32,20 @@ const sync = async (
     out.access('环境变量', `未指定env文件，将从系统环境变量中读取`)
   }
   // 加载配置文件
-  const { config: userConfig, cacheFilePath } = getConfig(customConfigPath, customCachePath)
+  const {
+    config: userConfig,
+    cacheFilePath,
+    configFilePath,
+  } = getConfig(customConfigPath, customCachePath)
+  if (process.cwd() !== path.resolve(path.dirname(configFilePath))) {
+    out.warning(
+      '警告',
+      `当前工作目录: ${process.cwd()} 和配置文件所在目录: ${path.resolve(
+        path.dirname(configFilePath),
+      )} 不在同级，可能导致配置文件中的指定的相对路径输出不准确`,
+    )
+  }
+
   const elogConfig = {
     ...userConfig,
     extension: {
