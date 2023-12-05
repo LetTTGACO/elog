@@ -1,5 +1,6 @@
 name: 新特性建议
 description: 提交新特性建议
+labels: [enhancement]
 body:
   - type: markdown
     id: preface
