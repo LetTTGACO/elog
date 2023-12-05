@@ -176,4 +176,4 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 
 ## 🔗 友情链接
 - [youdaonote-pull](https://github.com/DeppWang/youdaonote-pull) 有道云笔记导出工具
-- [NotionNext](https://github.com/tangly1024/NotionNext) 相比 Elog，支持更多 Notion 格式。使用 NextJS + Notion API 实现的，支持多种部署方案的静态博客，无需服务器、零门槛搭建网站，为Notion和所有创作者设计
+- [NotionNext](https://github.com/tangly1024/NotionNext) 相比 Elog，支持更多 Notion 富文本格式。使用 NextJS + Notion API 实现的，支持多种部署方案的静态博客，无需服务器、零门槛搭建网站，为Notion和所有创作者设计
