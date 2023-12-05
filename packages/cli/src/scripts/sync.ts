@@ -21,10 +21,11 @@ const sync = async (
   isForced?: boolean,
   disableCache?: boolean,
 ) => {
+  const rootDir = process.cwd()
   // 加载环境变量
   if (envPath) {
     // 本地模式
-    envPath = path.resolve(process.cwd(), envPath)
+    envPath = path.resolve(rootDir, envPath)
     out.access('环境变量', `已指定读取env文件为：${envPath}`)
     dotenv.config({ override: true, path: envPath })
   } else {
@@ -37,12 +38,12 @@ const sync = async (
     cacheFilePath,
     configFilePath,
   } = getConfig(customConfigPath, customCachePath)
-  if (process.cwd() !== path.resolve(path.dirname(configFilePath))) {
+  // 配置文件所在目录
+  const configDir = path.dirname(configFilePath)
+  if (rootDir !== configDir) {
     out.warning(
       '警告',
-      `当前工作目录: ${process.cwd()} 和配置文件所在目录: ${path.resolve(
-        path.dirname(configFilePath),
-      )} 不在同级，可能导致配置文件中的指定的相对路径输出不准确`,
+      `当前工作目录: ${rootDir} 和配置文件所在目录: ${configDir} 不在同级，可能导致配置文件中的指定的相对路径输出不准确`,
     )
   }
 
