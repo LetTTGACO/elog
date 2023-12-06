@@ -153,6 +153,11 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 
 ## 🌍 交流与反馈
 如果遇到问题，请 [提交 issue](https://github.com/LetTTGACO/elog/issues/new/choose) 或在 [discussions 中留言](https://github.com/LetTTGACO/elog/discussions/categories/q-a)
+
+## 🥫支持
+- 我有两只猫，假如觉得 Elog 让你生活更美好，可以给猫 [喂罐头 🥫](https://1874.cool/cats)。
+- 如果你喜欢 Elog，可以在 Github Star，更欢迎推荐给你志同道合的朋友使用。
+
 ## 🌹 感谢
 
 感谢以下用户贡献了很多bugs和建议
