@@ -151,7 +151,7 @@ class YuqueClient {
           attachment: true,
           latexcode: false,
           anchor: false,
-          linebreak: this.config.linebreak,
+          linebreak: !!this.config.linebreak,
         },
         dataType: 'text',
       },
