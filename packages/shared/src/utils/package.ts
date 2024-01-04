@@ -30,7 +30,6 @@ export const getPackage = (packageExt: PackageExt) => {
       out.warning('注意', `正在使用插件/拓展点: ${packageExt}，请遵循插件/拓展开发规范`)
       const packageLocalPath = resolvePackageExtPath(packageExt)
       return require(packageLocalPath)
-      // return new PluginInstance(config)
     }
     if (typeof packageExt === 'function') {
       out.warning('注意', `正在使用插件/拓展点: ${packageExt.name}，请遵循插件/拓展开发规范`)
@@ -41,6 +40,7 @@ export const getPackage = (packageExt: PackageExt) => {
   } catch (e: any) {
     if (e.message.includes('Cannot find module')) {
       out.err('插件/拓展点配置有误，请检查')
+      out.err(e.message)
     }
     process.exit(1)
   }
