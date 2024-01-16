@@ -68,8 +68,8 @@ const envStr =
   'UPYUN_HOST=xxx.xx.upaiyun.com\n' +
   '\n' +
   '# Github\n' +
-  'ELOG_GITHUB_USER=\n' +
   'GITHUB_TOKEN=\n' +
+  'ELOG_GITHUB_USER=\n' +
   'ELOG_GITHUB_REPO=\n' +
   '\n'
 
