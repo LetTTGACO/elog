@@ -3,6 +3,7 @@ import path from 'path'
 import { cacheFileNames, configFileNames } from '../const'
 import { out } from '@elog/shared'
 import { ElogConfig } from '@elog/core'
+import * as process from 'process'
 
 export const getPkgJSON = (): any => {
   let pkgJson = { version: '1.0.0' }
@@ -38,11 +39,19 @@ export const getConfig = (customConfigPath?: string, customCachePath?: string) =
 
   const configFilePath = path.join(rootPath, configFile)
 
-  const config: Partial<ElogConfig> = require(configFilePath)
-
-  return {
-    config,
-    configFilePath,
-    cacheFilePath,
+  try {
+    const config: Partial<ElogConfig> = require(configFilePath)
+    return {
+      config,
+      configFilePath,
+      cacheFilePath,
+    }
+  } catch (e: any) {
+    if (e.message?.includes('Cannot find module')) {
+      out.err('错误', `找不到配置文件: ${configFilePath}`)
+    } else {
+      out.err(e.message)
+    }
+    process.exit()
   }
 }
