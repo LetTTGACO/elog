@@ -103,9 +103,9 @@ const configJsStr =
   "      prefixKey: '',\n" +
   '    },\n' +
   '    github: {\n' +
-  '      user: process.env.GITHUB_USER,\n' +
+  '      user: process.env.ELOG_GITHUB_USER,\n' +
   '      token: process.env.GITHUB_TOKEN,\n' +
-  '      repo: process.env.GITHUB_REPO,\n' +
+  '      repo: process.env.ELOG_GITHUB_REPO,\n' +
   "      prefixKey: '',\n" +
   '    }\n' +
   '  }\n' +

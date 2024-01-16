@@ -68,9 +68,9 @@ const envStr =
   'UPYUN_HOST=xxx.xx.upaiyun.com\n' +
   '\n' +
   '# Github\n' +
-  'GITHUB_USER=\n' +
+  'ELOG_GITHUB_USER=\n' +
   'GITHUB_TOKEN=\n' +
-  'GITHUB_REPO=\n' +
+  'ELOG_GITHUB_REPO=\n' +
   '\n'
 
 export const genEnvFile = (envName: string) => {
