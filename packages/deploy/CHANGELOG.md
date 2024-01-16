@@ -1,5 +1,19 @@
 # @elog/deploy
 
+## 0.13.1
+
+### Patch Changes
+
+- 1.增加路径提示 2.语雀 pwd 模式下默认不保留语雀换行
+  3.package 寻找增加打印日志 4.增加运行错误日志打印 5.升级 flowusx 依赖库
+- Updated dependencies
+  - @elog/plugin-adapter@0.13.1
+  - @elog/sdk-confluence@0.13.1
+  - @elog/sdk-wordpress@0.13.1
+  - @elog/sdk-halo@0.13.1
+  - @elog/shared@0.13.1
+  - @elog/types@0.13.1
+
 ## 0.13.0
 
 ### Minor Changes
