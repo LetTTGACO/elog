@@ -68,6 +68,8 @@ const envStr =
   'UPYUN_HOST=xxx.xx.upaiyun.com\n' +
   '\n' +
   '# Github\n' +
+  '# 在 Github 流水线中，Github不允许以GITHUB开头的自定义变量\n' +
+  '# GITHUB_TOKEN 为内置变量，无需改名也无需配置，流水线中可直接获取\n' +
   'GITHUB_TOKEN=\n' +
   'ELOG_GITHUB_USER=\n' +
   'ELOG_GITHUB_REPO=\n' +
