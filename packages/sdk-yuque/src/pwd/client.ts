@@ -99,7 +99,14 @@ class YuqueClient {
     const res = await request<YuQueResponse<T>>(url, opts)
     if (res.status !== 200) {
       // @ts-ignore
-      out.err(res)
+      if (res.status === 404 && res.data?.message === 'book not found') {
+        out.err('配置错误', '知识库不存在，请检查配置')
+        out.info('请参考配置文档：https://elog.1874.cool/notion/write-platform')
+      } else {
+        // @ts-ignore
+        out.err(res.data?.message || res)
+      }
+      process.exit()
     }
     return res.data.data
   }
