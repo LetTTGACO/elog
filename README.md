@@ -151,6 +151,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 - Notion + hexo + GitHub Action + cloudflare 持续集成  👉  [Derick&#39;s Blog](https://blog.ithuo.net/post/2023-11-07%2FNotion%E5%8D%9A%E5%AE%A2%E6%8A%98%E8%85%BE%E6%8C%87%E5%8D%97)
 - [语雀写作，Kubernetes部署——Elog+Hexo博客持续集成](https://juejin.cn/post/7304540675668181003)
 - [next-yuque-elog](https://github.com/lidelong-0201/next-yuque-elog) yuque写作 + elog同步 + nextjs渲染 + vercel部署  👉  [delong的博客](https://lidelong.xyz/)
+- [Ymri's Haven](https://github.com/Ymriri/Haven) 语雀 + VitePress + GitHub Actions + Vercel部署  👉  [Ymri's Haven](https://blog.ym94.cn/)
 ## 🌍 交流与反馈
 如果遇到问题，请 [提交 issue](https://github.com/LetTTGACO/elog/issues/new/choose) 或在 [discussions 中留言](https://github.com/LetTTGACO/elog/discussions/categories/q-a)
 
