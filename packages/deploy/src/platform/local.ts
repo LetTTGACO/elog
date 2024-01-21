@@ -100,7 +100,7 @@ class DeployLocal {
           fileName = this.checkFileName(fileName + tocPath, fileName, post.doc_id)
           const outdir = path.join(outputDir, tocPath)
           mkdirp.sync(outdir)
-          postPath = path.join(outdir, `${fileName}.${this.fileExt}}`)
+          postPath = path.join(outdir, `${fileName}.${this.fileExt}`)
           // 生成文件夹
           out.info('生成文档', `${fileName}.${this.fileExt}`)
         } else {
