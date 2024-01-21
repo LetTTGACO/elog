@@ -14,6 +14,8 @@ class DeployLocal {
   adapterClient: AdapterClient
   /** 文档处理适配器 */
   adapter: AdapterFunction
+  /** 文件后缀 */
+  fileExt: string
 
   constructor(config: LocalConfig) {
     this.config = config
@@ -23,6 +25,7 @@ class DeployLocal {
       formatExt: config.formatExt,
     })
     this.adapter = this.adapterClient.getAdapter()
+    this.fileExt = this.adapterClient.getFileExt()
   }
 
   /**
@@ -97,22 +100,22 @@ class DeployLocal {
           fileName = this.checkFileName(fileName + tocPath, fileName, post.doc_id)
           const outdir = path.join(outputDir, tocPath)
           mkdirp.sync(outdir)
-          postPath = path.join(outdir, `${fileName}.md`)
+          postPath = path.join(outdir, `${fileName}.${this.fileExt}}`)
           // 生成文件夹
-          out.info('生成文档', `${fileName}.md`)
+          out.info('生成文档', `${fileName}.${this.fileExt}`)
         } else {
           out.warning('目录缺失', `${fileName}缺失目录信息，将生成在指定目录`)
           // 不存在则直接生成
           fileName = this.checkFileName(fileName, fileName, post.doc_id)
-          postPath = path.join(outputDir, `${fileName}.md`)
-          out.info('生成文档', `${fileName}.md`)
+          postPath = path.join(outputDir, `${fileName}.${this.fileExt}`)
+          out.info('生成文档', `${fileName}.${this.fileExt}`)
           mkdirp.sync(outputDir)
         }
       } else {
         // 直接生成
         fileName = this.checkFileName(fileName, fileName, post.doc_id)
-        postPath = path.join(outputDir, `${fileName}.md`)
-        out.info('生成文档', `${fileName}.md`)
+        postPath = path.join(outputDir, `${fileName}.${this.fileExt}`)
+        out.info('生成文档', `${fileName}.${this.fileExt}`)
         mkdirp.sync(outputDir)
       }
       fs.writeFileSync(postPath, body, {
@@ -136,7 +139,10 @@ class DeployLocal {
     let newName: string
     if (this.cacheFileNames.includes(fileName)) {
       const newFileName = `${originName}_${doc_id}`
-      out.warning('文档重复', `${originName}.md文档已存在，将为自动重命名为${newFileName}.md`)
+      out.warning(
+        '文档重复',
+        `${originName}.${this.fileExt}文档已存在，将为自动重命名为${newFileName}.${this.fileExt}`,
+      )
       newName = newFileName
     } else {
       newName = originName

@@ -7,7 +7,7 @@ import {
   wikiAdapter,
 } from '@elog/plugin-adapter'
 import { AdapterConfig, AdapterFunction } from '../types'
-import { FormatEnum } from '../const'
+import { FileExtEnum, FormatEnum } from '../const'
 
 /**
  * 文档处理适配器
@@ -15,6 +15,7 @@ import { FormatEnum } from '../const'
 export class AdapterClient {
   config: AdapterConfig
   ctx: AdapterFunction
+  fileExt: string = FileExtEnum.MARKDOWN
 
   constructor(config: AdapterConfig) {
     this.config = config
@@ -32,18 +33,23 @@ export class AdapterClient {
     } else {
       switch (this.config.format) {
         case FormatEnum.MARKDOWN: {
+          this.fileExt = FileExtEnum.MARKDOWN
           if (this.config.frontMatter?.enable) {
             return matterMarkdownAdapter
           }
           return markdownAdapter
         }
         case FormatEnum.MATTER_MARKDOWN:
+          this.fileExt = FileExtEnum.MARKDOWN
           return matterMarkdownAdapter
         case FormatEnum.WIKI:
+          this.fileExt = FileExtEnum.WIKI
           return wikiAdapter
         case FormatEnum.HTML:
+          this.fileExt = FileExtEnum.HTML
           return htmlAdapter
         case FormatEnum.HTML_HIGHLIGHT:
+          this.fileExt = FileExtEnum.HTML
           return htmlAdapterWithHighlight
         default:
           return markdownAdapter
@@ -56,5 +62,12 @@ export class AdapterClient {
    */
   public getAdapter() {
     return this.ctx
+  }
+
+  /**
+   * 获取文件后缀
+   */
+  public getFileExt() {
+    return this.fileExt
   }
 }

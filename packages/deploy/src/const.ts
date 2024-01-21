@@ -24,6 +24,12 @@ export enum FormatEnum {
   WIKI = 'wiki',
 }
 
+export enum FileExtEnum {
+  MARKDOWN = 'md',
+  HTML = 'html',
+  WIKI = 'wiki',
+}
+
 export const fileNameList = Object.values(FileNameEnum)
 
 export const formatList = Object.values(FormatEnum)

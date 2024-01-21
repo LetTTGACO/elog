@@ -310,7 +310,7 @@ class Elog {
         const docRealPath = path.join(outputDir, deleteItem.relativePath)
         if (fs.existsSync(docRealPath)) {
           fs.unlinkSync(docRealPath)
-          out.info('删除文档', `${wasteArticle.realName}.md`)
+          out.info('删除文档', wasteArticle.realName)
         }
       }
       return true
