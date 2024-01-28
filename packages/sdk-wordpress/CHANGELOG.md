@@ -1,5 +1,14 @@
 # @elog/sdk-wordpress
 
+## 0.13.2-beta.0
+
+### Patch Changes
+
+- 1.修复文件后缀,支持生成 HTML 2.修改 github 图床默认变量命名 3.增加禁用替换 html 中的 img
+- Updated dependencies
+  - @elog/shared@0.13.2-beta.0
+  - @elog/types@0.13.2-beta.0
+
 ## 0.13.1
 
 ### Patch Changes
