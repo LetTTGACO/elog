@@ -102,8 +102,12 @@ export const cleanParameter = (originalUrl: string) => {
 /**
  * 从 md 文档获取图片链接列表
  * @param content
+ * @param html 是否解析 html
  */
-export const getUrlListFromContent = (content: string) => {
+export const getUrlListFromContent = (
+  content: string,
+  { disableHtmlImg = false }: { disableHtmlImg: boolean },
+) => {
   const markdownURLList = (content.match(/!\[[^\]]*\]\(([^)]+)\)/g) || [])
     .map((item: string) => {
       const res = item.match(/\!\[.*\]\((.*?)( ".*")?\)/)
@@ -120,22 +124,25 @@ export const getUrlListFromContent = (content: string) => {
       return undefined
     })
     .filter((item) => item) as ImageUrl[]
-  const imageTagURLList = (content.match(/<img.*?(?:>|\/>)/gi) || [])
-    .map((item: string) => {
-      const res = item.match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
-      if (res) {
-        const url = res[1]
-        // 过滤 Base64 图片
-        if (url.startsWith('data:')) return undefined
-        // 去除#?号
-        return {
-          original: url,
-          url: cleanParameter(url),
+  let imageTagURLList: ImageUrl[] = []
+  if (!disableHtmlImg) {
+    imageTagURLList = (content.match(/<img.*?(?:>|\/>)/gi) || [])
+      .map((item: string) => {
+        const res = item.match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
+        if (res) {
+          const url = res[1]
+          // 过滤 Base64 图片
+          if (url.startsWith('data:')) return undefined
+          // 去除#?号
+          return {
+            original: url,
+            url: cleanParameter(url),
+          }
         }
-      }
-      return undefined
-    })
-    .filter((item) => item) as ImageUrl[]
+        return undefined
+      })
+      .filter((item) => item) as ImageUrl[]
+  }
   return markdownURLList.concat(imageTagURLList)
 }
 
