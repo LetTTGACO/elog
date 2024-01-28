@@ -5,6 +5,7 @@ import { getEtag } from './qetag.js'
 import { request } from '../request'
 import out from '../out'
 import { createHash } from 'node:crypto'
+import { DocDetail } from '@elog/types'
 
 /**
  * 通过图片url获取文件type, 不含"."
@@ -102,12 +103,14 @@ export const cleanParameter = (originalUrl: string) => {
 /**
  * 从 md 文档获取图片链接列表
  * @param content
- * @param html 是否解析 html
+ * @param doc
  */
 export const getUrlListFromContent = (
-  content: string,
-  { disableHtmlImg = false }: { disableHtmlImg: boolean },
+  doc: DocDetail,
+  { enableHtmlImg = true }: { enableHtmlImg: boolean },
 ) => {
+  const content = doc.body
+  const docEnableHtmlImg = doc.properties.enableHtmlImg as boolean
   const markdownURLList = (content.match(/!\[[^\]]*\]\(([^)]+)\)/g) || [])
     .map((item: string) => {
       const res = item.match(/\!\[.*\]\((.*?)( ".*")?\)/)
@@ -125,7 +128,12 @@ export const getUrlListFromContent = (
     })
     .filter((item) => item) as ImageUrl[]
   let imageTagURLList: ImageUrl[] = []
-  if (!disableHtmlImg) {
+  // 优先级docEnableHtmlImg > enableHtmlImg
+  // 如果docEnableHtmlImg和enableHtmlImg不一致，以docEnableHtmlImg为主
+  if (!docEnableHtmlImg) {
+    return markdownURLList
+  }
+  if (enableHtmlImg || docEnableHtmlImg) {
     imageTagURLList = (content.match(/<img.*?(?:>|\/>)/gi) || [])
       .map((item: string) => {
         const res = item.match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
