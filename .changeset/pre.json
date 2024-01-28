@@ -18,6 +18,7 @@
     "@elog/types": "0.13.1"
   },
   "changesets": [
-    "khaki-humans-hide"
+    "khaki-humans-hide",
+    "young-penguins-hide"
   ]
 }

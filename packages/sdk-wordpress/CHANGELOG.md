@@ -1,5 +1,14 @@
 # @elog/sdk-wordpress
 
+## 0.13.2-beta.1
+
+### Patch Changes
+
+- 默认禁用替换 html 中的 img
+- Updated dependencies
+  - @elog/shared@0.13.2-beta.1
+  - @elog/types@0.13.2-beta.1
+
 ## 0.13.2-beta.0
 
 ### Patch Changes

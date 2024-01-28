@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.13.2-beta.1
+
+### Patch Changes
+
+- 默认禁用替换 html 中的 img
+
 ## 0.13.2-beta.0
 
 ### Patch Changes
