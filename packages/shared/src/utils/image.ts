@@ -107,10 +107,10 @@ export const cleanParameter = (originalUrl: string) => {
  */
 export const getUrlListFromContent = (
   doc: DocDetail,
-  { enableHtmlImg = true }: { enableHtmlImg: boolean },
+  { enableReplaceImgInHtml = true }: { enableReplaceImgInHtml: boolean },
 ) => {
   const content = doc.body
-  const docEnableHtmlImg = doc.properties.enableHtmlImg as boolean
+  const docEnableReplaceImgInHtml = doc.properties.enableReplaceImgInHtml as boolean
   const markdownURLList = (content.match(/!\[[^\]]*\]\(([^)]+)\)/g) || [])
     .map((item: string) => {
       const res = item.match(/\!\[.*\]\((.*?)( ".*")?\)/)
@@ -128,12 +128,12 @@ export const getUrlListFromContent = (
     })
     .filter((item) => item) as ImageUrl[]
   let imageTagURLList: ImageUrl[] = []
-  // 优先级docEnableHtmlImg > enableHtmlImg
+  // 优先级docEnableHtmlImg > enableReplaceImgInHtml
   // 如果docEnableHtmlImg和enableHtmlImg不一致，以docEnableHtmlImg为主
-  if (!docEnableHtmlImg) {
+  if (!docEnableReplaceImgInHtml) {
     return markdownURLList
   }
-  if (enableHtmlImg || docEnableHtmlImg) {
+  if (enableReplaceImgInHtml || docEnableReplaceImgInHtml) {
     imageTagURLList = (content.match(/<img.*?(?:>|\/>)/gi) || [])
       .map((item: string) => {
         const res = item.match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)

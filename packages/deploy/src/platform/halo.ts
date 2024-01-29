@@ -149,7 +149,7 @@ class DeployHalo {
       if (this.config.needUploadImage) {
         // 收集文档图片
         const urlList = getUrlListFromContent(doc, {
-          enableHtmlImg: !!this.config.enableHtmlImg,
+          enableReplaceImgInHtml: !!this.config.enableReplaceImgInHtml,
         })
         // 封面图
         const cover = doc.properties.cover
