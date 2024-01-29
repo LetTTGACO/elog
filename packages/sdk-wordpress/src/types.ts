@@ -11,6 +11,8 @@ export interface WordPressConfig {
   }
   namespace?: string
   formatExt?: string
+  /** 是否需要上传文章中的图片 */
+  needUploadImage?: boolean
 }
 
 /**
