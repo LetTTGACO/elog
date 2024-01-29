@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.13.2-beta.3
+
+### Patch Changes
+
+- 去掉识别 html 中的 img
+
 ## 0.13.2-beta.1
 
 ### Patch Changes

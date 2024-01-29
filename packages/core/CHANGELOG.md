@@ -1,5 +1,20 @@
 # @elog/core
 
+## 0.13.2-beta.3
+
+### Patch Changes
+
+- 去掉识别 html 中的 img
+- Updated dependencies
+  - @elog/plugin-image@0.13.2-beta.3
+  - @elog/sdk-feishu@0.13.2-beta.3
+  - @elog/sdk-flowus@0.13.2-beta.3
+  - @elog/sdk-notion@0.13.2-beta.3
+  - @elog/sdk-yuque@0.13.2-beta.3
+  - @elog/deploy@0.13.2-beta.3
+  - @elog/shared@0.13.2-beta.3
+  - @elog/types@0.13.2-beta.3
+
 ## 0.13.2-beta.1
 
 ### Patch Changes

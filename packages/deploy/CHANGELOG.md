@@ -1,5 +1,18 @@
 # @elog/deploy
 
+## 0.13.2-beta.3
+
+### Patch Changes
+
+- 去掉识别 html 中的 img
+- Updated dependencies
+  - @elog/plugin-adapter@0.13.2-beta.3
+  - @elog/sdk-confluence@0.13.2-beta.3
+  - @elog/sdk-wordpress@0.13.2-beta.3
+  - @elog/sdk-halo@0.13.2-beta.3
+  - @elog/shared@0.13.2-beta.3
+  - @elog/types@0.13.2-beta.3
+
 ## 0.13.2-beta.2
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @elog/sdk-flowus
 
+## 0.13.2-beta.3
+
+### Patch Changes
+
+- 去掉识别 html 中的 img
+- Updated dependencies
+  - @elog/shared@0.13.2-beta.3
+
 ## 0.13.2-beta.2
 
 ### Patch Changes
