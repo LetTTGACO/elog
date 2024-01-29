@@ -71,8 +71,6 @@ export type ImagePlugin = string | Function
 type ImagePlatformConfig = { [key in ImagePlatformEnum]: any }
 export type ImageConfig = {
   enable: boolean
-  /** 是否禁用替换 Html 标签的图片 */
-  disableHtmlImg?: boolean
   platform: ImagePlatformEnum | string
   /** 不开启图床使用图床插件 */
   enableForExt?: string

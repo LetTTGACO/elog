@@ -120,9 +120,7 @@ class ImageUploader {
     for (let i = 0; i < articleList.length; i++) {
       const articleInfo = articleList[i]
       // 获取图片URL列表
-      const urlList = getUrlListFromContent(articleInfo.body, {
-        disableHtmlImg: !!this.config.disableHtmlImg,
-      })
+      const urlList = getUrlListFromContent(articleInfo.body)
       if (urlList.length) {
         // 上传图片
         const urls = await this.upload(urlList, articleInfo, () => {
@@ -157,6 +155,7 @@ class ImageUploader {
    * 从飞书下载图片
    * @param articleList
    * @param feishuClient
+   * @param doc
    */
 
   async replaceImagesFromFeiShu(articleList: DocDetail[], feishuClient: any) {
@@ -164,9 +163,7 @@ class ImageUploader {
     for (let i = 0; i < articleList.length; i++) {
       const articleInfo = articleList[i]
       // 获取图片URL列表
-      const urlList = getUrlListFromContent(articleInfo.body, {
-        disableHtmlImg: !!this.config.disableHtmlImg,
-      })
+      const urlList = getUrlListFromContent(articleInfo.body)
       if (urlList.length) {
         // 上传图片
         const urls = await this.uploadFromFeiShu(urlList, feishuClient, articleInfo, () => {

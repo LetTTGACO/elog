@@ -22,8 +22,6 @@ export interface IHaloConfig extends HaloConfig {
   formatExt?: string
   rowType?: string
   needUploadImage?: boolean
-  /** 是否禁用替换 html 中的 img 标签 */
-  disableHtmlImg?: boolean
 }
 
 /**
