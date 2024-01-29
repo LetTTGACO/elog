@@ -121,7 +121,7 @@ class ImageUploader {
       const articleInfo = articleList[i]
       // 获取图片URL列表
       const urlList = getUrlListFromContent(articleInfo, {
-        enableReplaceImgInHtml: !!this.config.enableReplaceImgInHtml,
+        enableHtmlImg: !!this.config.enableHtmlImg,
       })
       if (urlList.length) {
         // 上传图片
@@ -165,7 +165,7 @@ class ImageUploader {
       const articleInfo = articleList[i]
       // 获取图片URL列表
       const urlList = getUrlListFromContent(articleInfo, {
-        enableReplaceImgInHtml: !!this.config.enableReplaceImgInHtml,
+        enableHtmlImg: !!this.config.enableHtmlImg,
       })
       if (urlList.length) {
         // 上传图片
