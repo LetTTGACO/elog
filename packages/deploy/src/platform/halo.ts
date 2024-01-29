@@ -148,8 +148,8 @@ class DeployHalo {
     for (let doc of articleList) {
       if (this.config.needUploadImage) {
         // 收集文档图片
-        const urlList = getUrlListFromContent(doc, {
-          enableHtmlImg: !!this.config.enableHtmlImg,
+        const urlList = getUrlListFromContent(doc.body, {
+          disableHtmlImg: !!this.config.disableHtmlImg,
         })
         // 封面图
         const cover = doc.properties.cover

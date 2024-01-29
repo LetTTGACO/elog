@@ -120,8 +120,8 @@ class ImageUploader {
     for (let i = 0; i < articleList.length; i++) {
       const articleInfo = articleList[i]
       // 获取图片URL列表
-      const urlList = getUrlListFromContent(articleInfo, {
-        enableHtmlImg: !!this.config.enableHtmlImg,
+      const urlList = getUrlListFromContent(articleInfo.body, {
+        disableHtmlImg: !!this.config.disableHtmlImg,
       })
       if (urlList.length) {
         // 上传图片
@@ -164,8 +164,8 @@ class ImageUploader {
     for (let i = 0; i < articleList.length; i++) {
       const articleInfo = articleList[i]
       // 获取图片URL列表
-      const urlList = getUrlListFromContent(articleInfo, {
-        enableHtmlImg: !!this.config.enableHtmlImg,
+      const urlList = getUrlListFromContent(articleInfo.body, {
+        disableHtmlImg: !!this.config.disableHtmlImg,
       })
       if (urlList.length) {
         // 上传图片
