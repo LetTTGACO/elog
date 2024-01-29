@@ -1,5 +1,22 @@
 # @elog/cli
 
+## 0.13.2
+
+### Patch Changes
+
+- 1.修复文件后缀,支持生成 HTML 2.修改 github 图床默认变量命名 3.去掉替换 html 中的 img
+- ff4a8e2: 1.修复文件后缀,支持生成 HTML 2.修改 github 图床默认变量命名 3.增加禁用替换 html 中的 img
+- 9f6c6c9: 去掉识别 html 中的 img
+- 76c7410: 默认禁用替换 html 中的 img
+- dfcc626: 默认禁用替换 html 中的 img
+- Updated dependencies
+- Updated dependencies [ff4a8e2]
+- Updated dependencies [9f6c6c9]
+- Updated dependencies [76c7410]
+- Updated dependencies [dfcc626]
+  - @elog/shared@0.13.2
+  - @elog/core@0.13.2
+
 ## 0.13.2-beta.3
 
 ### Patch Changes
