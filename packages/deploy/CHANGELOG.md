@@ -1,5 +1,18 @@
 # @elog/deploy
 
+## 0.13.2-beta.2
+
+### Patch Changes
+
+- 默认禁用替换 html 中的 img
+- Updated dependencies
+  - @elog/plugin-adapter@0.13.2-beta.2
+  - @elog/sdk-confluence@0.13.2-beta.2
+  - @elog/sdk-wordpress@0.13.2-beta.2
+  - @elog/sdk-halo@0.13.2-beta.2
+  - @elog/shared@0.13.2-beta.2
+  - @elog/types@0.13.2-beta.2
+
 ## 0.13.2-beta.1
 
 ### Patch Changes

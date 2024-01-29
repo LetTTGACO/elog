@@ -19,6 +19,7 @@
   },
   "changesets": [
     "khaki-humans-hide",
+    "stale-terms-rush",
     "young-penguins-hide"
   ]
 }
