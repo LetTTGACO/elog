@@ -120,23 +120,24 @@ export const getUrlListFromContent = (content: string) => {
       return undefined
     })
     .filter((item) => item) as ImageUrl[]
-  const imageTagURLList = (content.match(/<img.*?(?:>|\/>)/gi) || [])
-    .map((item: string) => {
-      const res = item.match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
-      if (res) {
-        const url = res[1]
-        // 过滤 Base64 图片
-        if (url.startsWith('data:')) return undefined
-        // 去除#?号
-        return {
-          original: url,
-          url: cleanParameter(url),
-        }
-      }
-      return undefined
-    })
-    .filter((item) => item) as ImageUrl[]
-  return markdownURLList.concat(imageTagURLList)
+  // const imageTagURLList = (content.match(/<img.*?(?:>|\/>)/gi) || [])
+  //   .map((item: string) => {
+  //     const res = item.match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
+  //     if (res) {
+  //       const url = res[1]
+  //       // 过滤 Base64 图片
+  //       if (url.startsWith('data:')) return undefined
+  //       // 去除#?号
+  //       return {
+  //         original: url,
+  //         url: cleanParameter(url),
+  //       }
+  //     }
+  //     return undefined
+  //   })
+  //   .filter((item) => item) as ImageUrl[]
+  // return markdownURLList.concat(imageTagURLList)
+  return markdownURLList
 }
 
 /**
