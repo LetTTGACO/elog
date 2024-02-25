@@ -35,6 +35,10 @@ const configJsStr =
   '      tablePageId: process.env.FLOWUS_TABLE_PAGE_ID,\n' +
   "      filter: false, // {property: 'status',value: '已发布'}\n" +
   '    }\n' +
+  '    wolai: {\n' +
+  '      token: process.env.WOLAI_TOKEN,\n' +
+  '      pageId: process.env.WOLAI_PAGE_ID,\n' +
+  '    }\n' +
   '  },\n' +
   '  deploy: {\n' +
   "    platform: 'local',\n" +

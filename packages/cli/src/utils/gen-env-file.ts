@@ -23,6 +23,11 @@ const envStr =
   'FEISHU_FOLDER_TOKEN=\n' +
   'FEISHU_WIKI_ID=\n' +
   '\n' +
+  '#WoLai\n' +
+  'WOLAI_TOKEN=\n' +
+  'WOLAI_PAGE_ID=\n' +
+  '\n' +
+  '\n' +
   '# Halo\n' +
   'HALO_ENDPOINT=\n' +
   'HALO_TOKEN=\n' +
