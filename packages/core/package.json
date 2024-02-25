@@ -29,6 +29,7 @@
     "@elog/sdk-yuque": "workspace:*",
     "@elog/sdk-flowus": "workspace:*",
     "@elog/sdk-feishu": "workspace:*",
+    "@elog/sdk-wolai": "workspace:*",
     "@elog/shared": "workspace:*",
     "@elog/types": "workspace:*"
   },

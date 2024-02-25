@@ -8,6 +8,7 @@ import {
 import NotionClient, { NotionConfig } from '@elog/sdk-notion'
 import FlowUsClient, { FlowUsConfig } from '@elog/sdk-flowus'
 import FeiShuClient, { FeiShuConfig } from '@elog/sdk-feishu'
+import WoLaiClient, { WoLaiConfig } from '@elog/sdk-wolai'
 // deploy
 import DeployClient, { DeployConfig, DeployPlatformEnum } from '@elog/deploy'
 // imageClient
@@ -29,7 +30,13 @@ class Elog {
   /** 配置文件 */
   config: ElogConfig
   /** 下载器 */
-  downloaderClient: YuqueWithToken | YuqueWithPwd | NotionClient | FlowUsClient | FeiShuClient
+  downloaderClient:
+    | YuqueWithToken
+    | YuqueWithPwd
+    | NotionClient
+    | FlowUsClient
+    | FeiShuClient
+    | WoLaiClient
   /** 部署器 */
   deployClient: DeployClient
   /** 图片转CDN转换器 */
@@ -98,6 +105,9 @@ class Elog {
     } else if (config.write.platform === WritePlatform.FEISHU) {
       let feiShuConfig = config.write.feishu as FeiShuConfig
       return new FeiShuClient(feiShuConfig)
+    } else if (config.write.platform === WritePlatform.WOLAI) {
+      let woLaiConfig = config.write.wolai as WoLaiConfig
+      return new WoLaiClient(woLaiConfig)
     } else {
       out.err('错误', '未知的写作平台')
       process.exit(0)
@@ -233,6 +243,9 @@ class Elog {
       } else if (this.config.write.platform === WritePlatform.FEISHU) {
         const feiShuClient = this.downloaderClient as FeiShuClient
         catalog = feiShuClient.ctx.catalog
+      } else if (this.config.write.platform === WritePlatform.WOLAI) {
+        const woLaiClient = this.downloaderClient as WoLaiClient
+        catalog = woLaiClient.ctx.catalog
       }
 
       let cacheDocs: Partial<DocDetail>[] = this.cachedArticles.map((item) => {

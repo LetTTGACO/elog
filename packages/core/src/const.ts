@@ -15,4 +15,5 @@ export enum WritePlatform {
   NOTION = 'notion',
   FLOWUS = 'flowus',
   FEISHU = 'feishu',
+  WOLAI = 'wolai',
 }
