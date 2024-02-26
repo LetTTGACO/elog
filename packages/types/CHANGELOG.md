@@ -1,5 +1,11 @@
 # @elog/types
 
+## 0.14.0-beta.0
+
+### Minor Changes
+
+- 写作平台支持 wolai
+
 ## 0.13.2
 
 ### Patch Changes

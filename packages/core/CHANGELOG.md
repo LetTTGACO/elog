@@ -1,5 +1,24 @@
 # @elog/core
 
+## 0.14.0-beta.0
+
+### Minor Changes
+
+- 写作平台支持 wolai
+
+### Patch Changes
+
+- Updated dependencies
+  - @elog/plugin-image@0.14.0-beta.0
+  - @elog/sdk-feishu@0.14.0-beta.0
+  - @elog/sdk-flowus@0.14.0-beta.0
+  - @elog/sdk-notion@0.14.0-beta.0
+  - @elog/sdk-wolai@0.14.0-beta.0
+  - @elog/sdk-yuque@0.14.0-beta.0
+  - @elog/deploy@0.14.0-beta.0
+  - @elog/shared@0.14.0-beta.0
+  - @elog/types@0.14.0-beta.0
+
 ## 0.13.2
 
 ### Patch Changes
