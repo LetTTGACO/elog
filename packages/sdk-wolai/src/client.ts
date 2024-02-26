@@ -4,6 +4,10 @@ import { DocCatalog, DocDetail, DocProperties } from '@elog/types'
 import asyncPool from 'tiny-async-pool'
 import { genCatalog, props } from './utils'
 import * as buffer from 'buffer'
+
+/**
+ * WoLaiClient
+ */
 class WoLaiClient {
   config: WoLaiConfig
   docList: WoLaiTableRow[] = []
@@ -43,7 +47,7 @@ class WoLaiClient {
    */
   async getDocList(): Promise<WoLaiDoc[]> {
     // 获取表格信息
-    const res = await this.request<WoLaiTablePage>('pages/getPageChunks', {
+    const tablePage = await this.request<WoLaiTablePage>('pages/getPageChunks', {
       method: 'post',
       data: {
         pageId: this.config.pageId,
@@ -54,7 +58,7 @@ class WoLaiClient {
         chunkNumber: 0,
       },
     })
-    const databaseId = res.block[this.config.pageId].value.database_id
+    const databaseId = tablePage.block[this.config.pageId].value.database_id
     // 获取表格文档列表
     const rows = await this.request<WoLaiTableRows>('database/tableViewRows', {
       method: 'post',
@@ -77,7 +81,7 @@ class WoLaiClient {
       },
     })
     // 转换 props
-    const tableFields = res.database_tables[databaseId].properties
+    const tableFields = tablePage.database_tables[databaseId].properties
     const docs = rows.rows.map((row, index) => {
       const properties = props(row, tableFields)
       return {
@@ -107,7 +111,7 @@ class WoLaiClient {
         },
       },
     })
-    // 从 url 下载
+    // 从 url 下载buffer
     const res = await request<Buffer>(url, { method: 'get', dataType: 'buffer' })
     // Buffer 转字符串
     const body = buffer.Buffer.from(res.data).toString('utf-8')
@@ -120,7 +124,7 @@ class WoLaiClient {
       body_original: body,
       updated: row.edited_time,
     }
-    let catalog: DocCatalog[] | undefined
+    let catalog: DocCatalog[] | undefined = []
     const catalogConfig = this.config.catalog
     if (catalogConfig?.enable) {
       // 生成目录
