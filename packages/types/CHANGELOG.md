@@ -1,5 +1,11 @@
 # @elog/types
 
+## 0.13.3-beta.0
+
+### Patch Changes
+
+- 解决 window 系统的路径兼容性问题
+
 ## 0.13.2
 
 ### Patch Changes
