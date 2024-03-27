@@ -74,7 +74,7 @@ class LocalClient {
       const filePath = path.resolve(fullDirPath, imageName)
       fs.writeFileSync(filePath, imgBuffer)
       // 计算root和output的相对路径
-      return prefixKey + imageName
+      return path.join(prefixKey, imageName)
     } catch (e: any) {
       out.err('写入错误', e.message)
       out.debug(e)
