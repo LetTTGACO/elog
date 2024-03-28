@@ -1,5 +1,18 @@
 # @elog/deploy
 
+## 0.13.3-beta.1
+
+### Patch Changes
+
+- 强行替换图片路径为 Unix 风格的路径
+- Updated dependencies
+  - @elog/plugin-adapter@0.13.3-beta.1
+  - @elog/sdk-confluence@0.13.3-beta.1
+  - @elog/sdk-wordpress@0.13.3-beta.1
+  - @elog/sdk-halo@0.13.3-beta.1
+  - @elog/shared@0.13.3-beta.1
+  - @elog/types@0.13.3-beta.1
+
 ## 0.13.3-beta.0
 
 ### Patch Changes

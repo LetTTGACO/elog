@@ -1,5 +1,14 @@
 # @elog/sdk-halo
 
+## 0.13.3-beta.1
+
+### Patch Changes
+
+- 强行替换图片路径为 Unix 风格的路径
+- Updated dependencies
+  - @elog/shared@0.13.3-beta.1
+  - @elog/types@0.13.3-beta.1
+
 ## 0.13.3-beta.0
 
 ### Patch Changes
