@@ -35,6 +35,8 @@ class LocalClient {
       // 图片输出路径为 ./docs/images
       // 图片前缀为../../images
       prefixKey = path.relative(docPath, dirPath)
+      // 强行替换图片路径为Unix风格的路径，即 /
+      prefixKey = prefixKey.split(path.sep).join('/')
     } else {
       prefixKey = this.config.prefixKey || '/'
     }
@@ -74,7 +76,9 @@ class LocalClient {
       const filePath = path.resolve(fullDirPath, imageName)
       fs.writeFileSync(filePath, imgBuffer)
       // 计算root和output的相对路径
-      return prefixKey + imageName
+      const sysPath = path.join(prefixKey, imageName)
+      // 强行替换图片路径为Unix风格的路径，即 /
+      return sysPath.split(path.sep).join('/')
     } catch (e: any) {
       out.err('写入错误', e.message)
       out.debug(e)

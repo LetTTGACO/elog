@@ -6,6 +6,25 @@
 
 - 写作平台支持 wolai
 
+## 0.13.3
+
+### Patch Changes
+
+- e686d88: 解决 window 系统的路径兼容性问题
+- 2dd3db7: 强行替换图片路径为 Unix 风格的路径
+
+## 0.13.3-beta.1
+
+### Patch Changes
+
+- 强行替换图片路径为 Unix 风格的路径
+
+## 0.13.3-beta.0
+
+### Patch Changes
+
+- 解决 window 系统的路径兼容性问题
+
 ## 0.13.2
 
 ### Patch Changes
