@@ -1,5 +1,22 @@
 # @elog/core
 
+## 0.13.3
+
+### Patch Changes
+
+- e686d88: 解决 window 系统的路径兼容性问题
+- 2dd3db7: 强行替换图片路径为 Unix 风格的路径
+- Updated dependencies [e686d88]
+- Updated dependencies [2dd3db7]
+  - @elog/plugin-image@0.13.3
+  - @elog/sdk-feishu@0.13.3
+  - @elog/sdk-flowus@0.13.3
+  - @elog/sdk-notion@0.13.3
+  - @elog/sdk-yuque@0.13.3
+  - @elog/deploy@0.13.3
+  - @elog/shared@0.13.3
+  - @elog/types@0.13.3
+
 ## 0.13.3-beta.1
 
 ### Patch Changes
