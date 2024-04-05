@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [ `cat $1 | wc -w` -lt 2 ]; then
+  echo ""
+  echo "Invalid commit message: The message must contain at least 2 words."
+	exit 1
+fi

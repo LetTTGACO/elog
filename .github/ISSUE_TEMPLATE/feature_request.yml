@@ -1,0 +1,35 @@
+name: 新特性建议
+description: 提交新特性建议
+labels: [enhancement]
+body:
+  - type: markdown
+    id: preface
+    attributes:
+      value: '你好！感谢你为 Elog 提交新特性建议。在开始之前，我们非常推荐阅读一遍[《Elog文档》](https://elog.1874.cool)，这会在很大程度上提高我们彼此的效率。'
+  - type: markdown
+    id: environment
+    attributes:
+      value: '## 环境信息'
+  - type: input
+    id: version
+    attributes:
+      label: '你当前使用的Elog版本'
+      description: '运行 elog --version 命令获取当前 Elog 版本。'
+    validations:
+      required: true
+  - type: markdown
+    id: details
+    attributes:
+      value: '## 详细信息'
+  - type: textarea
+    id: description
+    attributes:
+      label: '描述一下此特性'
+      description: '为了方便我们管理，请不要在同一个 issue 下提交多个没有相关性的特性。'
+    validations:
+      required: true
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: '附加信息'
+      description: '如果你还有其他需要提供的信息，可以在这里填写（可以提供截图、视频等）。'

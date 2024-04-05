@@ -1,0 +1,12 @@
+{
+  "name": "@elogx-test/cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo '123"
+  },
+  "dependencies": {
+    "commander": "~12.0.0"
+  }
+}

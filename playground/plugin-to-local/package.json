@@ -1,0 +1,22 @@
+{
+  "name": "@elogx-test/plugin-to-local",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsup"
+  },
+  "dependencies": {
+    "mkdirp": "~3.0.1"
+  },
+  "devDependencies": {
+    "tsup": "^6.7.0",
+    "@elogx-test/elog": "workspace: *",
+    "typescript": "~5.2.2",
+    "@types/node": "~18.15.3",
+    "@types/mkdirp": "~2.0.0"
+  }
+}
