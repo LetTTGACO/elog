@@ -1,4 +1,4 @@
-import type { DocDirectoryInfo, FromPluginBaseOptions } from '@elogx-test/elog';
+import type { DocStructure, FromPluginBaseOptions } from '@elogx-test/elog';
 
 /**
  * @see https://www.yuque.com/yuque/developer/userserializer
@@ -177,7 +177,7 @@ export interface YuqueDoc {
   /** 字数 */
   word_count: number;
   _index?: number;
-  directoryInfo: DocDirectoryInfo[];
+  docStructure: DocStructure[];
 }
 
 // region start

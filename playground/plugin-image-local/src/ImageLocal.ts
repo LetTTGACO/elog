@@ -23,7 +23,7 @@ export default class ImageLocal {
     let prefixKey = '';
     if (this.config.pathFollowDoc?.enable) {
       // 是否存在目录
-      const tocPath = doc.directoryInfo.map((item) => item.title).join('/');
+      const tocPath = doc.docStructure.map((item) => item.title).join('/');
       const docPath = path.join(this.config.pathFollowDoc.docOutputDir, tocPath);
       // 2.拿到图片输出路径
       // 3.根据文档路径计算图片的相对路径

@@ -86,7 +86,6 @@ export class PluginDriver {
         if (typeof handler !== 'function') {
           return handler;
         }
-        // eslint-disable-next-line @typescript-eslint/ban-types
         const hookResult = (handler as Function).apply(context, parameters);
 
         if (!hookResult?.then) {

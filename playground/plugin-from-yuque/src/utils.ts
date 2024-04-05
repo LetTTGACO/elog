@@ -2,13 +2,14 @@ import frontMatter from 'front-matter';
 import { YuQuePwdPublicKey } from './const';
 import JSEncrypt from 'jsencrypt-node';
 import { YuqueDoc } from './types';
-import { PluginContext } from '@elogx-test/elog';
+import type { PluginContext, DocProperties } from '@elogx-test/elog';
+import asyncPool from 'tiny-async-pool';
 
 /**
  * 生成元数据
  */
 export const getProps = (doc: YuqueDoc, body: string, ctx: PluginContext, isPwd?: boolean) => {
-  let properties = {
+  let properties: DocProperties = {
     // 注入title
     title: doc.title,
     // urlname
@@ -96,4 +97,16 @@ export const encrypt = (password: string) => {
   const time = Date.now();
   const symbol = time + ':' + password;
   return encryptor.encrypt(symbol);
+};
+
+/**
+ * 异步池
+ * @param args
+ */
+export const asyncPoolAll = async <IN, OUT>(...args: Parameters<typeof asyncPool<IN, OUT>>) => {
+  const results = [];
+  for await (const result of asyncPool<IN, OUT>(...args)) {
+    results.push(result);
+  }
+  return results;
 };

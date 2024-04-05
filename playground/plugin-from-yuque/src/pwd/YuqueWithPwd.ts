@@ -1,12 +1,13 @@
 import { YuqueDoc, YuqueWithPwdConfig } from '../types';
-import type { DocDetail, DocDirectoryInfo, PluginContext } from '@elogx-test/elog';
+import type { DocDetail, DocStructure, PluginContext } from '@elogx-test/elog';
 import YuqueApi from './YuqueApi';
 import { IllegalityDocFormat } from '../const';
-import { getProps, processMarkdownRaw } from '../utils';
-import asyncPool from 'tiny-async-pool';
+import { asyncPoolAll, getProps, processMarkdownRaw } from '../utils';
 import Context from '../Context';
 import path from 'path';
 import fs from 'fs';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 
 export default class YuqueWithPwd extends Context {
   private readonly config: YuqueWithPwdConfig;
@@ -25,23 +26,24 @@ export default class YuqueWithPwd extends Context {
     }
     // 初始化语雀 api
     this.api = new YuqueApi(config, ctx);
+    this.initIncrementalUpdate();
   }
 
   /**
    * 初始化增量配置
    */
-  async initIncrementalUpdate() {
+  initIncrementalUpdate() {
     if (this.config.disableCache) {
       this.ctx.success('全量更新', '已禁用缓存，将全量更新文档');
-      return;
-    }
-    try {
-      const cacheJson = await import(path.join(process.cwd(), this.config.cacheFilePath!));
-      const { docs } = cacheJson;
-      // 获取缓存文章
-      this.cachedDocList = docs as DocDetail[];
-    } catch (error) {
-      this.ctx.success('全量更新', '未获取到缓存，将全量更新文档');
+    } else {
+      try {
+        const cacheJson = require(path.join(process.cwd(), this.config.cacheFilePath!));
+        const { docs } = cacheJson;
+        // 获取缓存文章
+        this.cachedDocList = docs as DocDetail[];
+      } catch (error) {
+        this.ctx.success('全量更新', '未获取到缓存，将全量更新文档');
+      }
     }
   }
 
@@ -63,7 +65,7 @@ export default class YuqueWithPwd extends Context {
       })
       .map((item, index) => {
         const doc = yuqueDocs.find((doc) => doc.slug === item.url)!;
-        let catalogPath: DocDirectoryInfo[] = [];
+        let catalogPath: DocStructure[] = [];
         let parentId = item.parent_uuid;
         for (let i = 0; i < item.level; i++) {
           const current = catalog.find((item) => item.uuid === parentId)!;
@@ -75,8 +77,7 @@ export default class YuqueWithPwd extends Context {
         }
         return {
           ...doc,
-          directoryInfo: catalogPath.reverse(),
-          _index: index + 1,
+          docStructure: catalogPath.reverse(),
         } as YuqueDoc;
       })
       .filter((page) => {
@@ -109,7 +110,7 @@ export default class YuqueWithPwd extends Context {
       const cacheIndex = this.cachedDocList.findIndex((cacheItem) => cacheItem.id === article.slug);
       // 新增的则加入需要下载的ids列表
       if (cacheIndex < 0) {
-        needUpdateDocs.push(article);
+        needUpdateDocs.push({ ...article, _index: needUpdateDocs.length + 1 });
         // 记录被更新文章状态
         idMap[article.slug] = {
           status: 'create',
@@ -126,7 +127,7 @@ export default class YuqueWithPwd extends Context {
         }
         if (!cacheAvailable || cacheArticle.error === 1) {
           // 如果文章更新了则加入需要下载的ids列表, 没有更新则不需要下载
-          needUpdateDocs.push(article);
+          needUpdateDocs.push({ ...article, _index: needUpdateDocs.length + 1 });
           // 记录被更新文章状态和索引
           idMap[article.slug] = {
             index: cacheIndex,
@@ -141,9 +142,9 @@ export default class YuqueWithPwd extends Context {
       process.exit();
     }
 
-    const docDetailList: DocDetail[] = [];
+    let docDetailList: DocDetail[] = [];
     const promise = async (doc: YuqueDoc) => {
-      this.ctx.info(`下载文档 ${doc._index}/${needUpdateDocs.length}   `, doc.title);
+      this.ctx.info(`下载文档 ${doc._index}/${needUpdateDocs.length}`, doc.title);
       let articleStr = await this.api.getDocString(doc.slug);
       // 处理文档 front-matter
       const { body, properties } = getProps(doc, articleStr, this.ctx, true);
@@ -155,13 +156,11 @@ export default class YuqueWithPwd extends Context {
         body: newBody,
         properties,
         updateTime: new Date(doc.updated_at).getTime(),
-        directoryInfo: doc.directoryInfo,
+        docStructure: doc.docStructure,
       };
       return docDetail;
     };
-    for await (const docDetail of asyncPool(this.config.limit || 3, needUpdateDocs, promise)) {
-      docDetailList.push(docDetail);
-    }
+    docDetailList = await asyncPoolAll(this.config.limit || 3, needUpdateDocs, promise);
     // 更新缓存里的文章
     for (const docDetail of docDetailList) {
       const { index, status } = idMap[docDetail.id];
@@ -175,20 +174,20 @@ export default class YuqueWithPwd extends Context {
     }
     this.ctx.info('已下载数', String(needUpdateDocs.length));
     // 写入缓存
-    let cacheDocs: Partial<DocDetail>[] = this.cachedDocList.map((item) => {
-      // 只缓存重要属性
-      return {
+    // 写入缓存
+    const cacheJson = {
+      docs: this.cachedDocList.map((item) => ({
         id: item.id,
         title: item.title,
         updateTime: item.updateTime,
         properties: item.properties,
-        directoryInfo: item.directoryInfo,
+        docStructure: item.docStructure,
         error: item.error,
-      };
-    });
-    const cacheJson = {
-      docs: cacheDocs,
-      catalog,
+      })) as Partial<DocDetail>[],
+      docStructure: yuqueDocs.map((item) => ({
+        id: item.slug,
+        title: item.title,
+      })) as DocStructure[],
     };
     try {
       fs.writeFileSync(this.config.cacheFilePath!, JSON.stringify(cacheJson, null, 2), {

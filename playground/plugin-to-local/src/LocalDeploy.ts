@@ -70,9 +70,9 @@ export default class {
       let postPath: string;
       if (this.config.deployByStructure) {
         // 开启按目录生成
-        if (Array.isArray(doc.directoryInfo)) {
+        if (Array.isArray(doc.docStructure)) {
           // 是否存在目录
-          const tocPath = doc.directoryInfo.map((item) => item.title).join('/');
+          const tocPath = doc.docStructure.map((item) => item.title).join('/');
           fileName = this.checkFileName(fileName + tocPath, fileName, doc.id);
           const outDir = path.join(outputDir, tocPath);
           mkdirp.sync(outDir);
