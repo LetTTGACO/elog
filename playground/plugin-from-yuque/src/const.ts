@@ -6,3 +6,11 @@ export const YuQuePwdPublicKey = `-----BEGIN PUBLIC KEY-----
   -----END PUBLIC KEY-----`;
 
 export const IllegalityDocFormat = ['lakeboard', 'lakesheet', 'laketable'];
+
+/**
+ * 文章更新状态
+ */
+export enum DocStatus {
+  update = 'update',
+  create = 'create',
+}

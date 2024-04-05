@@ -1,4 +1,5 @@
 import type { DocStructure, FromPluginBaseOptions } from '@elogx-test/elog';
+import { DocStatus } from './const';
 
 /**
  * @see https://www.yuque.com/yuque/developer/userserializer
@@ -178,6 +179,13 @@ export interface YuqueDoc {
   word_count: number;
   _index?: number;
   docStructure: DocStructure[];
+}
+
+export interface DocStatusMap {
+  [key: string]: {
+    updateIndex: number;
+    status: DocStatus;
+  };
 }
 
 // region start
