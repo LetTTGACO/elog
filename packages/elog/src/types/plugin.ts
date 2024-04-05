@@ -71,3 +71,13 @@ export interface IPlugin<A = any> extends Partial<PluginHooks> {
 export type PluginHooks = {
   [K in keyof FunctionPluginHooks]: ObjectHook<FunctionPluginHooks[K]>;
 };
+
+/**
+ * 写作平台基础配置
+ */
+export interface FromPluginBaseOptions {
+  /** 是否禁用缓存 */
+  disableCache?: boolean;
+  /** 缓存文件路径 */
+  cacheFilePath?: string;
+}

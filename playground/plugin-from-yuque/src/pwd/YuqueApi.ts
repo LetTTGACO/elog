@@ -2,16 +2,16 @@ import { YuqueCatalog, YuqueDoc, YuqueWithPwdConfig } from '../types';
 import { PluginContext } from '@elogx-test/elog';
 import { encrypt } from '../utils';
 import { JSDOM } from 'jsdom';
+import Context from '../Context';
 
-export default class YuqueApi {
+export default class YuqueApi extends Context {
   private config: YuqueWithPwdConfig;
-  private readonly ctx: PluginContext;
   private yuqueCookie: any;
   private bookId: string = '';
 
   constructor(config: YuqueWithPwdConfig, ctx: PluginContext) {
+    super(ctx);
     this.config = config;
-    this.ctx = ctx;
   }
   /**
    * 登陆

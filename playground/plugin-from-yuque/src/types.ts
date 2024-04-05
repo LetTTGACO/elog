@@ -1,4 +1,4 @@
-import type { DocDirectoryInfo } from '@elogx-test/elog';
+import type { DocDirectoryInfo, FromPluginBaseOptions } from '@elogx-test/elog';
 
 /**
  * @see https://www.yuque.com/yuque/developer/userserializer
@@ -181,7 +181,7 @@ export interface YuqueDoc {
 }
 
 // region start
-export interface YuqueWithPwdConfig {
+export interface YuqueWithPwdConfig extends FromPluginBaseOptions {
   baseUrl?: string;
   username: string;
   password: string;
@@ -202,7 +202,7 @@ export interface YuqueInputConfig {
   pwd?: YuqueWithPwdConfig;
 }
 
-export interface YuqueWithTokenConfig {
+export interface YuqueWithTokenConfig extends FromPluginBaseOptions {
   /**
    * yuque token, https://www.yuque.com/settings/tokens
    */

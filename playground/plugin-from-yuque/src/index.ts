@@ -10,9 +10,11 @@ export default function yuque(options: YuqueInputConfig): IPlugin {
       let docDetailList: DocDetail[] = [];
       if (options.pwd) {
         const client = new YuqueWithPwd(options.pwd, this);
+        await client.initIncrementalUpdate();
         docDetailList = await client.getDocDetailList();
       } else if (options.token) {
         const client = new YuqueWithToken(options.token, this);
+        await client.initIncrementalUpdate();
         docDetailList = await client.getDocDetailList();
       }
       return docDetailList;

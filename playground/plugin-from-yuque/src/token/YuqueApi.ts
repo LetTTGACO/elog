@@ -6,13 +6,13 @@ import type {
   YuqueWithTokenConfig,
 } from '../types';
 import { PluginContext } from '@elogx-test/elog';
+import Context from '../Context';
 
-export default class YuqueApi {
+export default class YuqueApi extends Context {
   private readonly config: YuqueWithTokenConfig;
-  private readonly ctx: PluginContext;
   constructor(config: YuqueWithTokenConfig, ctx: PluginContext) {
+    super(ctx);
     this.config = config;
-    this.ctx = ctx;
   }
 
   /**
