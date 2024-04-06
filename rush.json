@@ -225,7 +225,7 @@
      * The default branch name. This tells "rush change" which remote branch to compare against.
      * The default value is "main"
      */
-    "defaultBranch": "1.0",
+    "defaultBranch": "1.0-dev",
 
     /**
      * The default remote. This tells "rush change" which remote to compare against if the remote URL is
@@ -408,14 +408,12 @@
       "packageName": "test-elog",
       "projectFolder": "tests/test-elog",
       "reviewCategory": "tests",
-      "versionPolicyName": "tests",
       "shouldPublish": false
     },
     {
       "packageName": "@elogx-test/elog",
       "projectFolder": "packages/elog",
-      "reviewCategory": "package",
-      "versionPolicyName": "package",
+      "reviewCategory": "packages",
       "shouldPublish": true
     },
     //    {
@@ -450,7 +448,6 @@
       "packageName": "@elogx-test/plugin-from-yuque",
       "projectFolder": "playground/plugin-from-yuque",
       "reviewCategory": "playground",
-      "versionPolicyName": "playground",
       "shouldPublish": true
     },
     //    {
@@ -471,7 +468,6 @@
       "packageName": "@elogx-test/plugin-image-local",
       "projectFolder": "playground/plugin-image-local",
       "reviewCategory": "playground",
-      "versionPolicyName": "playground",
       "shouldPublish": true
     },
     //    {
@@ -513,7 +509,6 @@
       "packageName": "@elogx-test/plugin-to-local",
       "projectFolder": "playground/plugin-to-local",
       "reviewCategory": "playground",
-      "versionPolicyName": "playground",
       "shouldPublish": true
     }
     //    {
