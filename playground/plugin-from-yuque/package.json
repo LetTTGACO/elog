@@ -1,6 +1,6 @@
 {
   "name": "@elogx-test/plugin-from-yuque",
-  "version": "1.0.1-beta.0",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -16,7 +16,7 @@
   "author": "",
   "license": "MIT",
   "peerDependencies": {
-    "@elogx-test/elog": "^1.0.0"
+    "@elogx-test/elog": "^1.0.2"
   },
   "peerDependenciesMeta": {
     "@elogx-test/elog": {
@@ -36,7 +36,7 @@
     "tsup": "^6.7.0",
     "typescript": "~5.2.2",
     "@types/node": "~18.15.3",
-    "@elogx-test/elog": "workspace: *",
+    "@elogx-test/elog": "workspace:*",
     "@types/tiny-async-pool": "~2.0.3",
     "@types/jsdom": "21.1.2"
   }

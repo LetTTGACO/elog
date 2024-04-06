@@ -17,10 +17,10 @@
   },
   "private": true,
   "dependencies": {
-    "@elogx-test/elog": "workspace: *",
-    "@elogx-test/plugin-from-yuque": "workspace: *",
-    "@elogx-test/plugin-image-local": "workspace: *",
-    "@elogx-test/plugin-to-local": "workspace: *",
+    "@elogx-test/elog": "workspace:*",
+    "@elogx-test/plugin-from-yuque": "workspace:*",
+    "@elogx-test/plugin-image-local": "workspace:*",
+    "@elogx-test/plugin-to-local": "workspace:*",
     "@types/node": "~18.15.3"
   }
 }
