@@ -44,7 +44,7 @@ export function println(level: LogLevel, head: string, content?: string) {
     head = content;
   }
 
-  const MIN_HEAD_LENGTH = 14;
+  const MIN_HEAD_LENGTH = 12;
   const emptyHead = head.replace(/[\u4e00-\u9fa5]/g, 'aa');
 
   const headLength = Math.max(emptyHead.length + 2, MIN_HEAD_LENGTH);

@@ -88,7 +88,7 @@ importers:
         version: 11.0.4
     devDependencies:
       '@elogx-test/elog':
-        specifier: 'workspace: *'
+        specifier: workspace:*
         version: link:../../packages/elog
       '@types/jsdom':
         specifier: 21.1.2
@@ -113,7 +113,7 @@ importers:
         version: 3.0.1
     devDependencies:
       '@elogx-test/elog':
-        specifier: 'workspace: *'
+        specifier: workspace:*
         version: link:../../packages/elog
       '@types/mkdirp':
         specifier: ~2.0.0
@@ -135,7 +135,7 @@ importers:
         version: 3.0.1
     devDependencies:
       '@elogx-test/elog':
-        specifier: 'workspace: *'
+        specifier: workspace:*
         version: link:../../packages/elog
       '@types/mkdirp':
         specifier: ~2.0.0
@@ -153,16 +153,16 @@ importers:
   ../../tests/test-elog:
     dependencies:
       '@elogx-test/elog':
-        specifier: 'workspace: *'
+        specifier: workspace:*
         version: link:../../packages/elog
       '@elogx-test/plugin-from-yuque':
-        specifier: 'workspace: *'
+        specifier: workspace:*
         version: link:../../playground/plugin-from-yuque
       '@elogx-test/plugin-image-local':
-        specifier: 'workspace: *'
+        specifier: workspace:*
         version: link:../../playground/plugin-image-local
       '@elogx-test/plugin-to-local':
-        specifier: 'workspace: *'
+        specifier: workspace:*
         version: link:../../playground/plugin-to-local
       '@types/node':
         specifier: ~18.15.3
