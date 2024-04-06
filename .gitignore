@@ -76,3 +76,5 @@ common/autoinstallers/*/.npmrc
 .heft
 dist
 .run
+.npmrc
+.npmignore

@@ -1,11 +1,15 @@
 {
   "name": "@elogx-test/plugin-from-yuque",
-  "version": "1.0.0",
+  "version": "1.0.1-beta.0",
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "build": "tsup"
   },
