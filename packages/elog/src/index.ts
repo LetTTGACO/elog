@@ -4,4 +4,5 @@ export * from './types/doc';
 export * from './types/plugin';
 export { defineConfig } from './utils/elog';
 import elog from './node-entry';
+export { run } from './cli';
 export default elog;

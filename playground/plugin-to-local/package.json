@@ -9,6 +9,14 @@
   "scripts": {
     "build": "tsup"
   },
+  "peerDependencies": {
+    "@elogx-test/elog": "^1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@elogx-test/elog": {
+      "optional": true
+    }
+  },
   "dependencies": {
     "mkdirp": "~3.0.1"
   },

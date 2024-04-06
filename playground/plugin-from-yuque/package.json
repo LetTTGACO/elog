@@ -11,6 +11,14 @@
   },
   "author": "",
   "license": "MIT",
+  "peerDependencies": {
+    "@elogx-test/elog": "^1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@elogx-test/elog": {
+      "optional": true
+    }
+  },
   "dependencies": {
     "tiny-async-pool": "~2.1.0",
     "front-matter": "~4.0.2",

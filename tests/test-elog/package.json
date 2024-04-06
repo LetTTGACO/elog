@@ -1,11 +1,15 @@
 {
-  "name": "test",
+  "name": "test-elog",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "echo \"Error: no build specified\" && exit 1"
+    "build": "",
+    "elog:init-templ": "elog init --template yuque-local",
+    "elog:init": "elog init",
+    "elog:sync": "elog sync --env .elog.env",
+    "elog:version": "elog --version",
+    "elog": "elog"
   },
   "repository": {
     "type": "git",
@@ -16,6 +20,7 @@
     "@elogx-test/elog": "workspace: *",
     "@elogx-test/plugin-from-yuque": "workspace: *",
     "@elogx-test/plugin-image-local": "workspace: *",
-    "@elogx-test/plugin-to-local": "workspace: *"
+    "@elogx-test/plugin-to-local": "workspace: *",
+    "@types/node": "~18.15.3"
   }
 }

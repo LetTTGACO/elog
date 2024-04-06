@@ -9,8 +9,17 @@ elog({
       username: '',
       password: '',
       login: '',
-      repo: '',
+      repo: 'elog-docs',
       linebreak: false,
+      cacheFilePath: './elog.cache.json',
+    },
+    token: {
+      token: '',
+      login: '',
+      repo: '',
+      onlyPublic: false,
+      cacheFilePath: './elog.cache.json',
+      disableCache: true,
     },
   }),
   to: [
@@ -24,7 +33,6 @@ elog({
   plugins: [
     imageElog({
       outputDir: './images',
-      // prefixKey: '../../images',
       pathFollowDoc: { enable: true, docOutputDir: './docs' },
     }),
   ],

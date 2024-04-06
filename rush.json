@@ -405,18 +405,11 @@
     //   "tags": [ "tools" ]
     // }
     {
-      "packageName": "test",
-      "projectFolder": "examples/test",
-      "reviewCategory": "examples",
-      "versionPolicyName": "examples",
+      "packageName": "test-elog",
+      "projectFolder": "tests/test-elog",
+      "reviewCategory": "tests",
+      "versionPolicyName": "tests",
       "shouldPublish": false
-    },
-    {
-      "packageName": "@elogx-test/cli",
-      "projectFolder": "packages/cli",
-      "reviewCategory": "package",
-      "versionPolicyName": "package",
-      "shouldPublish": true
     },
     {
       "packageName": "@elogx-test/elog",

@@ -206,8 +206,8 @@ export interface YuqueWithPwdConfig extends FromPluginBaseOptions {
 }
 
 export interface YuqueInputConfig {
-  token?: YuqueWithTokenConfig;
-  pwd?: YuqueWithPwdConfig;
+  token?: Partial<YuqueWithTokenConfig>;
+  pwd?: Partial<YuqueWithPwdConfig>;
 }
 
 export interface YuqueWithTokenConfig extends FromPluginBaseOptions {

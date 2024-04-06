@@ -37,10 +37,9 @@ export interface PluginContext {
 /**
  * 用于插件注册配置参数，实现 CLI 命令行配置参数的上下文
  */
-export interface RegisterContext {}
+// export interface RegisterContext {}
 
 type ObjectHook<T> = T | { handler: T };
-export type Argument<H extends keyof FunctionPluginHooks> = ReturnType<FunctionPluginHooks[H]>;
 
 export type FunctionReducePluginHooks = 'transform';
 export type FunctionVoidPluginHooks = 'start' | 'end' | 'deploy';
@@ -51,8 +50,10 @@ export type ReducePluginHooks = Pick<FunctionPluginHooks, FunctionReducePluginHo
 export interface FunctionPluginHooks {
   /** 当前插件流程开始前钩子 */
   start: (this: PluginContext) => Promise<void> | void;
+  /** 返回插件的默认配置 */
+  config: () => any;
   /** 注册插件配置参数的钩子 */
-  register: (this: RegisterContext) => any;
+  register: () => any;
   /** 用于 From 插件的开始下载的钩子 */
   down: (this: PluginContext) => Promise<DocDetail[]> | DocDetail[];
   /** 用于自定义处理文档信息 */
