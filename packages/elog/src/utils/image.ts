@@ -56,7 +56,7 @@ export const getFileTypeFromBuffer = (buffer: Buffer): FileType | undefined => {
  * 去除图片链接中多余的参数
  * @param originalUrl
  */
-export const cleanParameter = (originalUrl: string) => {
+export const cleanUrlParam = (originalUrl: string) => {
   let newUrl = originalUrl;
   // 去除#号
   const indexPoundSign = originalUrl.indexOf('#');
@@ -86,7 +86,7 @@ export const getUrlListFromContent = (content: string) => {
         // 去除#?号
         return {
           original: url,
-          url: cleanParameter(url),
+          url: cleanUrlParam(url),
         };
       }
       return undefined;
@@ -101,7 +101,7 @@ export const getUrlListFromContent = (content: string) => {
 export const getBaseUrl = (url: string) => {
   return {
     original: url,
-    url: cleanParameter(url),
+    url: cleanUrlParam(url),
   };
 };
 
@@ -110,7 +110,7 @@ export const getBaseUrl = (url: string) => {
  * @param url
  * @param length 长度截取
  */
-export const generateUniqueId = (url: string, length?: number) => {
+export const genUniqueIdFromUrl = (url: string, length?: number) => {
   const hash = createHash('md5').update(url).digest('hex');
   if (length) {
     return hash.substring(0, length);

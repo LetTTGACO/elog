@@ -24,9 +24,7 @@ export default class YuqueWithPwd extends Context {
       // 删除最后一个斜杠
       this.config.baseUrl = this.config.baseUrl.slice(0, -1);
     }
-    this.config.cacheFilePath =
-      this.config.cacheFilePath || process.env.ELOG_CACHE_PATH || 'elog.cache.json';
-    this.config.disableCache = process.env.ELOG_DISABLE_CACHE === 'true';
+    this.config.cacheFilePath = this.config.cacheFilePath || 'elog.cache.json';
     // 初始化语雀 api
     this.api = new YuqueApi(config, ctx);
     this.initIncrementalUpdate();

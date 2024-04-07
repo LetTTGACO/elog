@@ -4,8 +4,8 @@ import { NormalizeElogOption } from '../types/common';
 import out from './logger';
 import request from './request';
 import {
-  cleanParameter,
-  generateUniqueId,
+  cleanUrlParam,
+  genUniqueIdFromUrl,
   getBaseUrl,
   getBufferFromUrl,
   getFileType,
@@ -27,10 +27,10 @@ export function getPluginContext(
     info: out.info,
     warn: out.warn,
     imageUtil: {
-      generateUniqueId,
+      genUniqueIdFromUrl,
       getFileTypeFromUrl,
       getFileTypeFromBuffer,
-      cleanParameter,
+      cleanUrlParam,
       getUrlListFromContent,
       getBaseUrl,
       getFileType,

@@ -22,14 +22,12 @@ export async function run() {
   program
     .command('sync')
     .option('-c --config <string>', 'use config with custom, default is elog.config.ts')
-    .option('-a --cache <string>', 'use cache file name, default is elog.cache.json')
     .option('-e, --env <string>', 'use env with custom')
-    .option('--disable-cache', 'sync doc without cache')
     .option('--debug', 'enable debug')
     .description('sync doc')
     .action((options) => {
       try {
-        void sync(options.config, options.cache, options.env, options.disableCache);
+        void sync(options.config, options.env, options.debug);
       } catch (error: any) {
         out.error(error.message);
       }

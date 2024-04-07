@@ -7,18 +7,14 @@ import out from '../utils/logger';
 /**
  * 同步
  * @param customConfigPath
- * @param customCachePath
  * @param envPath
- * @param disableCache 禁用缓存，全量更新文档
+ * @param enableDebug DEBUG 模式
  */
-const sync = async (
-  customConfigPath?: string,
-  customCachePath?: string,
-  envPath?: string,
-  disableCache?: boolean,
-) => {
-  process.env.ELOG_CACHE_PATH = customCachePath || 'elog.cache.json';
-  process.env.ELOG_DISABLE_CACHE = disableCache ? 'true' : 'false';
+const sync = async (customConfigPath?: string, envPath?: string, enableDebug?: boolean) => {
+  // 是否开始 DEBUG 模式
+  if (enableDebug) {
+    process.env.DEBUG = 'true';
+  }
   const rootDir = process.cwd();
   // 加载环境变量
   if (envPath) {

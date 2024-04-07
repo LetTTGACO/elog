@@ -2,8 +2,8 @@ import { DocDetail } from './doc';
 import { LoggingFunction } from './log';
 import type request from '../utils/request';
 import {
-  cleanParameter,
-  generateUniqueId,
+  cleanUrlParam,
+  genUniqueIdFromUrl,
   getBaseUrl,
   getBufferFromUrl,
   getFileType,
@@ -13,10 +13,10 @@ import {
 } from '../utils/image';
 
 interface ImageUtilContext {
-  generateUniqueId: typeof generateUniqueId;
+  genUniqueIdFromUrl: typeof genUniqueIdFromUrl;
   getFileTypeFromUrl: typeof getFileTypeFromUrl;
   getFileTypeFromBuffer: typeof getFileTypeFromBuffer;
-  cleanParameter: typeof cleanParameter;
+  cleanUrlParam: typeof cleanUrlParam;
   getUrlListFromContent: typeof getUrlListFromContent;
   getBaseUrl: typeof getBaseUrl;
   getFileType: typeof getFileType;

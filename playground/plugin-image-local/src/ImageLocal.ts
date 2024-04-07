@@ -110,7 +110,7 @@ export default class ImageLocal {
       return await new Promise<ImageSource | undefined>(async (resolve) => {
         try {
           // 生成文件名
-          const fileName = this.ctx.imageUtil.generateUniqueId(image.url);
+          const fileName = this.ctx.imageUtil.genUniqueIdFromUrl(image.url);
           // 生成文件名后缀
           const fileType = await this.ctx.imageUtil.getFileType(image.url);
           if (!fileType) {
