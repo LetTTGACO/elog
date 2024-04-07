@@ -8,6 +8,7 @@
     "elog:init-templ": "elog init --template yuque-local",
     "elog:init": "elog init",
     "elog:sync": "elog sync --env .elog.env",
+    "elog:sync-muti": "elog sync --env .elog.env --config elog.config-muti.ts --cache elog.cache-muti.json ",
     "elog:version": "elog --version",
     "elog": "elog"
   },

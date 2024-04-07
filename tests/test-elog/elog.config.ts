@@ -1,6 +1,7 @@
 import { defineConfig } from '@elogx-test/elog';
 import fromYuque from '@elogx-test/plugin-from-yuque';
 import toLocal from '@elogx-test/plugin-to-local';
+import imageLocal from '@elogx-test/plugin-image-local';
 
 export default defineConfig({
   from: fromYuque({
@@ -25,6 +26,19 @@ export default defineConfig({
       deployByStructure: true,
       filename: 'title',
       frontMatter: { enable: true },
+    }),
+    toLocal({
+      outputDir: './docs-new',
+      deployByStructure: true,
+      filename: 'title',
+      frontMatter: { enable: true },
+    }),
+  ],
+  plugins: [
+    imageLocal({
+      outputDir: './images',
+      prefixKey: '../../images',
+      // pathFollowDoc: { enable: true, docOutputDir: './docs' },
     }),
   ],
 });
