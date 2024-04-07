@@ -4,27 +4,23 @@ import HaloApi from './HaloApi';
 import { slugify } from 'transliteration';
 import { delay, getIds, getNoRepValues, htmlAdapter } from './utils';
 import type { PostRequest } from '@halo-dev/api-client';
+import Context from './Context';
 
-export default class {
+export default class extends Context {
   private readonly config: HaloConfig;
-  private readonly ctx: PluginContext;
   private readonly api: HaloApi;
 
   constructor(config: HaloConfig, ctx: PluginContext) {
+    super(ctx);
     this.config = config;
-    this.ctx = ctx;
     this.api = new HaloApi(config, ctx);
   }
 
-  /**
-   * 本地部署
-   * @param docs
-   */
   async deploy(docs: DocDetail[]) {
     if (docs.length === 0) {
       this.ctx.error('没有可部署的文档');
     }
-    const docDetailList = JSON.parse(JSON.stringify(docs));
+    const docDetailList = JSON.parse(JSON.stringify(docs)) as DocDetail[];
 
     this.ctx.success('正在部署到 Halo...');
     // 获取文章列表
@@ -126,7 +122,7 @@ export default class {
       }
     }
     for (let doc of docDetailList) {
-      if (this.config.needUploadImage) {
+      if (this.config.enableUploadImage) {
         // 收集文档图片
         const urlList = this.ctx.imageUtil.getUrlListFromContent(doc.body);
         // 封面图
@@ -189,6 +185,7 @@ export default class {
         }
       }
       // markdown转 Html
+      const mdBody = doc.body;
       doc.body = htmlAdapter(doc);
 
       // 上传文档
@@ -216,7 +213,7 @@ export default class {
           apiVersion: 'content.halo.run/v1alpha1',
           kind: 'Post',
           metadata: {
-            name: doc.doc_id,
+            name: doc.id,
           },
         },
         content: {
@@ -226,7 +223,7 @@ export default class {
         },
       };
       // 判断文档是否存在 halo
-      const item = postMap[doc.doc_id];
+      const item = postMap[doc.id];
       if (item) {
         params = item;
         params.content = {
@@ -269,13 +266,13 @@ export default class {
         params.post.spec.categories = categoryIds;
       }
       // 覆盖文档内容
-      params.content.content = doc.body_html;
+      params.content.content = doc.body;
       if (this.config.rowType === 'markdown') {
-        params.content.raw = doc.body;
+        params.content.raw = mdBody;
         params.content.rawType = 'markdown';
       } else {
         params.content.rawType = 'html';
-        params.content.raw = doc.body_html;
+        params.content.raw = doc.body;
       }
       // 判断文档是否存在 halo
       if (!item) {
@@ -291,11 +288,11 @@ export default class {
         try {
           // 走更新流程
           // 更新基本信息
-          await this.api.updatePostInfo(doc.doc_id, params.post);
+          await this.api.updatePostInfo(doc.id, params.post);
           // 手动阻塞 500ms
           await delay();
           // 更新内容信息
-          await this.api.updatePostContent(doc.doc_id, params.content);
+          await this.api.updatePostContent(doc.id, params.content);
           this.ctx.info('更新文档', doc.properties.title);
         } catch (e: any) {
           this.ctx.warn(`更新 ${doc.properties.title} 文档失败: ${e.message}`);
@@ -309,10 +306,10 @@ export default class {
         (typeof publish === 'string' && publish === 'true') ||
         (typeof publish === 'boolean' && publish)
       ) {
-        await this.api.publishPost(doc.doc_id);
+        await this.api.publishPost(doc.id);
         this.ctx.info('发布文档', doc.properties.title);
       } else {
-        await this.api.unpublishPost(doc.doc_id);
+        await this.api.unpublishPost(doc.id);
         this.ctx.info('下架文档', doc.properties.title);
       }
     }

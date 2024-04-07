@@ -510,13 +510,13 @@
       "projectFolder": "playground/plugin-to-local",
       "reviewCategory": "playground",
       "shouldPublish": true
+    },
+    {
+      "packageName": "@elogx-test/plugin-to-wordpress",
+      "projectFolder": "playground/plugin-to-wordpress",
+      "reviewCategory": "playground",
+      "versionPolicyName": "playground",
+      "shouldPublish": true
     }
-    //    {
-    //      "packageName": "@elogx-test/plugin-to-wordpress",
-    //      "projectFolder": "playground/plugin-to-wordpress",
-    //      "reviewCategory": "playground",
-    //      "versionPolicyName": "playground",
-    //      "shouldPublish": true
-    //    }
   ]
 }

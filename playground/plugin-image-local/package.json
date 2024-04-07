@@ -14,7 +14,7 @@
     "build": "tsup"
   },
   "peerDependencies": {
-    "@elogx-test/elog": "^1.0.2"
+    "@elogx-test/elog": "^1.0.0"
   },
   "peerDependenciesMeta": {
     "@elogx-test/elog": {

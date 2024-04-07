@@ -10,6 +10,6 @@ export interface HaloConfig {
   policyName?: string;
   /** 组名称 */
   groupName?: string;
-  needUploadImage?: boolean;
+  enableUploadImage?: boolean;
   rowType?: string;
 }
