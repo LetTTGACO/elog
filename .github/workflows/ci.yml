@@ -18,7 +18,7 @@ jobs:
           email: 1225751694@qq.com
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18.16.0
       - name: Verify Change Logs
         run: node common/scripts/install-run-rush.js change --verify
       - name: Rush Install
