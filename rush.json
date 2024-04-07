@@ -498,13 +498,13 @@
     //      "versionPolicyName": "playground",
     //      "shouldPublish": true
     //    },
-    //    {
-    //      "packageName": "@elogx-test/plugin-to-halo",
-    //      "projectFolder": "playground/plugin-to-halo",
-    //      "reviewCategory": "playground",
-    //      "versionPolicyName": "playground",
-    //      "shouldPublish": true
-    //    },
+    {
+      "packageName": "@elogx-test/plugin-to-halo",
+      "projectFolder": "playground/plugin-to-halo",
+      "reviewCategory": "playground",
+      "versionPolicyName": "playground",
+      "shouldPublish": true
+    },
     {
       "packageName": "@elogx-test/plugin-to-local",
       "projectFolder": "playground/plugin-to-local",

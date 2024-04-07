@@ -28,7 +28,6 @@
     "tsup": "^6.7.0",
     "@elogx-test/elog": "workspace:*",
     "typescript": "~5.2.2",
-    "@types/node": "~18.15.3",
-    "@types/mkdirp": "~2.0.0"
+    "@types/node": "~18.15.3"
   }
 }

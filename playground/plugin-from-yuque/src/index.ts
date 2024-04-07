@@ -6,23 +6,6 @@ import YuqueWithToken from './token/YuqueWithToken';
 export default function yuque(options: YuqueInputConfig): IPlugin {
   return {
     name: 'from-yuque',
-    config() {
-      return {
-        pwd: {
-          username: '',
-          password: '',
-          login: '',
-          repo: '',
-          linebreak: false,
-        },
-        token: {
-          token: '',
-          login: '',
-          repo: '',
-          onlyPublic: false,
-        },
-      };
-    },
     async down(this) {
       let docDetailList: DocDetail[] = [];
       if (options.pwd) {
