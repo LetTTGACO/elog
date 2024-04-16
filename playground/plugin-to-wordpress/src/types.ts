@@ -13,24 +13,6 @@ export interface WordPressConfig {
     description?: string;
   };
   namespace?: string;
-  formatExt?: string;
-  /** 是否需要上传文章中的图片 */
-  enableUploadImage?: boolean;
-}
-
-export interface WordPressConfig {
-  username: string;
-  password: string;
-  endpoint: string;
-  keyMap?: {
-    tags?: string;
-    categories?: string;
-    urlname?: string;
-    cover?: string;
-    description?: string;
-  };
-  namespace?: string;
-  formatExt?: string;
   /** 是否需要上传文章中的图片 */
   enableUploadImage?: boolean;
 }

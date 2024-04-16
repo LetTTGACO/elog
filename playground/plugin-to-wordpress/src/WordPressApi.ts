@@ -22,8 +22,6 @@ export default class WordPressApi extends Context {
     if (!config.endpoint) {
       this.ctx.error('缺少WordPress endpoint');
     }
-    this.config.username = config.username || process.env.WORDPRESS_USERNAME!;
-    this.config.password = config.password || process.env.WORDPRESS_PASSWORD!;
     if (!this.config.username || !this.config.password) {
       this.ctx.error('缺少WordPress账号或密码');
     }

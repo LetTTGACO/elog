@@ -24,9 +24,9 @@ export default class extends Context {
     if (docs.length === 0) {
       this.ctx.error('没有可部署的文档');
     }
+    this.ctx.success('正在部署到 WordPress...');
     const articleList = JSON.parse(JSON.stringify(docs)) as DocDetail[];
     try {
-      this.ctx.success('正在部署到 WordPress...');
       let tagsKey = 'tags';
       let categoriesKey = 'categories';
       let urlnameKey = 'urlname';

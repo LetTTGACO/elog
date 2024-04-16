@@ -30,7 +30,7 @@ importers:
         version: 1.1.1
       inquirer:
         specifier: ~9.2.17
-        version: 9.2.17
+        version: 9.2.18
       joycon:
         specifier: 3.1.1
         version: 3.1.1
@@ -128,6 +128,25 @@ importers:
         specifier: ~5.2.2
         version: 5.2.2
 
+  ../../playground/plugin-to-confluence:
+    dependencies:
+      marked:
+        specifier: ~12.0.1
+        version: 12.0.1
+    devDependencies:
+      '@elogx-test/elog':
+        specifier: workspace:*
+        version: link:../../packages/elog
+      '@types/node':
+        specifier: ~18.15.3
+        version: 18.15.13
+      tsup:
+        specifier: ^6.7.0
+        version: 6.7.0(typescript@5.2.2)
+      typescript:
+        specifier: ~5.2.2
+        version: 5.2.2
+
   ../../playground/plugin-to-halo:
     dependencies:
       formstream:
@@ -148,7 +167,7 @@ importers:
         version: 2.10.0
       '@types/markdown-it':
         specifier: ~14.0.0
-        version: 14.0.0
+        version: 14.0.1
       '@types/node':
         specifier: ~18.15.3
         version: 18.15.13
@@ -195,7 +214,7 @@ importers:
         version: link:../../packages/elog
       '@types/markdown-it':
         specifier: ~14.0.0
-        version: 14.0.0
+        version: 14.0.1
       '@types/node':
         specifier: ~18.15.3
         version: 18.15.13
@@ -679,6 +698,11 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
 
+  /@inquirer/figures@1.0.0:
+    resolution: {integrity: sha512-3fw+7+77/duTnMJTeSS44wneszghI4tkr0m0xdIJabbYRe36ElzmsqyboMZ1nFRon6sT+ckVvYDVjwapKv+2sw==}
+    engines: {node: '>=18'}
+    dev: false
+
   /@isaacs/cliui@8.0.2:
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
@@ -803,8 +827,8 @@ packages:
     resolution: {integrity: sha512-t7dhREVv6dbNj0q17X12j7yDG4bD/DHYX7o5/DbDxobP0HnGPgpRz2Ej77aL7TZT3DSw13fqUTj8J4mMnqa7WA==}
     dev: true
 
-  /@types/markdown-it@14.0.0:
-    resolution: {integrity: sha512-2rStaAqMaLQNfo9mg2HNlley75jUTAkZKqlk3pxDSgaFk44zd+CAVpczpoh6/RtOzfUtwpEyD6lsHWUfKbVSDg==}
+  /@types/markdown-it@14.0.1:
+    resolution: {integrity: sha512-6WfOG3jXR78DW8L5cTYCVVGAsIFZskRHCDo5tbqa+qtKVt4oDRVH7hyIWu1SpDQJlmIoEivNQZ5h+AGAOrgOtQ==}
     dependencies:
       '@types/linkify-it': 3.0.5
       '@types/mdurl': 1.0.5
@@ -1414,11 +1438,6 @@ packages:
     resolution: {integrity: sha512-NiSupZ4OeuGwr68lGIeym/ksIZMJodUGOSCZ/FSnTxcrekbvqrgdUxlJOMpijaKZVjAJrWrGs/6Jy8OMuyj9ow==}
     dev: false
 
-  /escape-string-regexp@1.0.5:
-    resolution: {integrity: sha512-vbRorB5FUQWvla16U8R/qgaFIya2qGzwDrNmCZuYKrbdSUMG6I1ZCGQRefkRVhuOkIGVne7BQ35DSfo1qvJqFg==}
-    engines: {node: '>=0.8.0'}
-    dev: false
-
   /escape-string-regexp@4.0.0:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
@@ -1612,13 +1631,6 @@ packages:
     dependencies:
       reusify: 1.0.4
     dev: true
-
-  /figures@3.2.0:
-    resolution: {integrity: sha512-yaduQFRKLXYOGgEn6AZau90j3ggSOyiqXU0F9JZfeXYhNa+Jk4X+s45A2zg5jns87GAFa34BBm2kXw4XpNcbdg==}
-    engines: {node: '>=8'}
-    dependencies:
-      escape-string-regexp: 1.0.5
-    dev: false
 
   /file-entry-cache@6.0.1:
     resolution: {integrity: sha512-7Gps/XWymbLk2QLYK4NzpMOrYjMhdIxXuIvy2QBsLE6ljuodKvdkWs/cpyJJ3CVIVpH0Oi1Hvg1ovbMzLdFBBg==}
@@ -2029,17 +2041,17 @@ packages:
   /inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
 
-  /inquirer@9.2.17:
-    resolution: {integrity: sha512-Vr3Ia2ud5sGnioURkE69endl4SkeJcMzTF6SosKcX5GALJfId7C+JvO5ZZb6y1LOXnEofCPbwzoQ1q0e8Gaduw==}
+  /inquirer@9.2.18:
+    resolution: {integrity: sha512-Qzm+UP7L9beFyycZ9Nxzqj7WBgeJIaT4Ue0+2bmQp9yZXiUW2azrmBnp3vlInMw1wXkUmaM0hiMcht7CjJzASw==}
     engines: {node: '>=18'}
     dependencies:
+      '@inquirer/figures': 1.0.0
       '@ljharb/through': 2.3.13
       ansi-escapes: 4.3.2
       chalk: 5.3.0
       cli-cursor: 3.1.0
       cli-width: 4.1.0
       external-editor: 3.1.0
-      figures: 3.2.0
       lodash: 4.17.21
       mute-stream: 1.0.0
       ora: 5.4.1
@@ -2283,6 +2295,12 @@ packages:
       mdurl: 2.0.0
       punycode.js: 2.3.1
       uc.micro: 2.1.0
+    dev: false
+
+  /marked@12.0.1:
+    resolution: {integrity: sha512-Y1/V2yafOcOdWQCX0XpAKXzDakPOpn6U0YLxTJs3cww6VxOzZV1BTOOYWLvH3gX38cq+iLwljHHTnMtlDfg01Q==}
+    engines: {node: '>= 18'}
+    hasBin: true
     dev: false
 
   /mdast-util-to-hast@13.1.0:
@@ -2641,8 +2659,8 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  /qs@6.12.0:
-    resolution: {integrity: sha512-trVZiI6RMOkO476zLGaBIzszOdFPnCCXHPG9kn0yuS1uz6xdVxPfZdB3vUig9pxPFDM9BRAgz/YUIVQ1/vuiUg==}
+  /qs@6.12.1:
+    resolution: {integrity: sha512-zWmv4RSuB9r2mYQw3zxQuHWeU+42aKi1wWig/j4ele4ygELZ7PEO6MM7rim9oAQH2A5MWfsAVf/jPvTPgCbvUQ==}
     engines: {node: '>=0.6'}
     dependencies:
       side-channel: 1.0.6
@@ -2939,7 +2957,7 @@ packages:
       formidable: 1.2.6
       methods: 1.1.2
       mime: 2.6.0
-      qs: 6.12.0
+      qs: 6.12.1
       readable-stream: 3.6.2
     transitivePeerDependencies:
       - supports-color
@@ -3196,7 +3214,7 @@ packages:
       iconv-lite: 0.4.24
       ip: 1.1.9
       pump: 3.0.0
-      qs: 6.12.0
+      qs: 6.12.1
       statuses: 1.5.0
       utility: 1.18.0
     dev: false
@@ -3316,7 +3334,7 @@ packages:
     dependencies:
       li: 1.3.0
       parse-link-header: 1.0.1
-      qs: 6.12.0
+      qs: 6.12.1
       superagent: 4.1.0
     transitivePeerDependencies:
       - supports-color

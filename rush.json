@@ -491,13 +491,12 @@
     //      "versionPolicyName": "playground",
     //      "shouldPublish": true
     //    },
-    //    {
-    //      "packageName": "@elogx-test/plugin-to-confluence",
-    //      "projectFolder": "playground/plugin-to-confluence",
-    //      "reviewCategory": "playground",
-    //      "versionPolicyName": "playground",
-    //      "shouldPublish": true
-    //    },
+    {
+      "packageName": "@elogx-test/plugin-to-confluence",
+      "projectFolder": "playground/plugin-to-confluence",
+      "reviewCategory": "playground",
+      "shouldPublish": true
+    },
     {
       "packageName": "@elogx-test/plugin-to-halo",
       "projectFolder": "playground/plugin-to-halo",
