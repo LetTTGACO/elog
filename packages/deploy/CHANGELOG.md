@@ -1,5 +1,18 @@
 # @elog/deploy
 
+## 0.13.4
+
+### Patch Changes
+
+- 修复 out 无法打印错误
+- Updated dependencies
+  - @elog/plugin-adapter@0.13.4
+  - @elog/sdk-confluence@0.13.4
+  - @elog/sdk-wordpress@0.13.4
+  - @elog/sdk-halo@0.13.4
+  - @elog/shared@0.13.4
+  - @elog/types@0.13.4
+
 ## 0.13.3
 
 ### Patch Changes
