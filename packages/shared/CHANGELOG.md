@@ -6,6 +6,12 @@
 
 - 写作平台支持 wolai
 
+## 0.13.4
+
+### Patch Changes
+
+- 修复 out 无法打印错误
+
 ## 0.13.3
 
 ### Patch Changes

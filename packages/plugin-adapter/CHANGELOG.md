@@ -12,6 +12,15 @@
   - @elog/shared@0.14.0-beta.0
   - @elog/types@0.14.0-beta.0
 
+## 0.13.4
+
+### Patch Changes
+
+- 修复 out 无法打印错误
+- Updated dependencies
+  - @elog/shared@0.13.4
+  - @elog/types@0.13.4
+
 ## 0.13.3
 
 ### Patch Changes

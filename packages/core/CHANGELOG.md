@@ -19,6 +19,21 @@
   - @elog/shared@0.14.0-beta.0
   - @elog/types@0.14.0-beta.0
 
+## 0.13.4
+
+### Patch Changes
+
+- 修复 out 无法打印错误
+- Updated dependencies
+  - @elog/plugin-image@0.13.4
+  - @elog/sdk-feishu@0.13.4
+  - @elog/sdk-flowus@0.13.4
+  - @elog/sdk-notion@0.13.4
+  - @elog/sdk-yuque@0.13.4
+  - @elog/deploy@0.13.4
+  - @elog/shared@0.13.4
+  - @elog/types@0.13.4
+
 ## 0.13.3
 
 ### Patch Changes

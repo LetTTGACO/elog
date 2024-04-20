@@ -20,6 +20,10 @@ export function println(level: LogLevel, head: string, content?: string) {
     [LogLevel.ERROR]: chalk.red,
     [LogLevel.DEBUG]: chalk.magenta,
   }
+  if ((head as any) instanceof Error && (head as any).stack && (head as any).stack.length > 0) {
+    console.log(head)
+    return
+  }
   if (typeof head === 'object' && !content) {
     try {
       head = JSON.stringify(head)
