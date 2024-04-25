@@ -170,7 +170,7 @@ export const generateUniqueId = (url: string, length?: number) => {
 export const getPicBufferFromURL = async (url: string) => {
   try {
     let referer = ''
-    if (url.includes('cdn.flowus.cn')) {
+    if (url.includes('cdn.flowus.cn') || url.includes('flowus.net.cn')) {
       referer = 'https://flowus.cn/'
     }
     const res = await request<Buffer>(url, {

@@ -19,6 +19,22 @@
   - @elog/shared@0.14.0-beta.0
   - @elog/types@0.14.0-beta.0
 
+## 0.13.5
+
+### Patch Changes
+
+- 1.修复 flowus subnodes 存在空 block 的情况
+  2.flowus 暂不支持分栏布局 3.修复 flowus 图片问题
+- Updated dependencies
+  - @elog/plugin-image@0.13.5
+  - @elog/sdk-feishu@0.13.5
+  - @elog/sdk-flowus@0.13.5
+  - @elog/sdk-notion@0.13.5
+  - @elog/sdk-yuque@0.13.5
+  - @elog/deploy@0.13.5
+  - @elog/shared@0.13.5
+  - @elog/types@0.13.5
+
 ## 0.13.4
 
 ### Patch Changes
