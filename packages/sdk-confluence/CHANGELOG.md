@@ -1,5 +1,15 @@
 # @elog/sdk-confluence
 
+## 0.13.5
+
+### Patch Changes
+
+- 1.修复 flowus subnodes 存在空 block 的情况
+  2.flowus 暂不支持分栏布局 3.修复 flowus 图片问题
+- Updated dependencies
+  - @elog/shared@0.13.5
+  - @elog/types@0.13.5
+
 ## 0.13.4
 
 ### Patch Changes
