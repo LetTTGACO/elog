@@ -122,7 +122,7 @@ export interface WoLaiTableRow {
 }
 
 export interface WoLaiDoc extends WoLaiTableRow {
-  _index: number
+  _index?: number
   properties: DocProperties
 }
 

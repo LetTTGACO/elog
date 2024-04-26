@@ -82,12 +82,11 @@ class WoLaiClient {
     })
     // 转换 props
     const tableFields = tablePage.database_tables[databaseId].properties
-    const docs = rows.rows.map((row, index) => {
+    const docs = rows.rows.map((row) => {
       const properties = props(row, tableFields)
       return {
         ...row,
         properties,
-        _index: index + 1,
       }
     })
     this.catalog.push(...docs)
@@ -146,13 +145,20 @@ class WoLaiClient {
     let docs = cachedDocs
     if (ids.length) {
       // 取交集，过滤不需要下载的page
-      docs = docs.filter((doc) => {
-        const exist = ids.indexOf(doc.block_id) > -1
-        if (!exist) {
-          out.info('跳过下载', doc.properties.title)
-        }
-        return exist
-      })
+      docs = docs
+        .filter((doc) => {
+          const exist = ids.indexOf(doc.block_id) > -1
+          if (!exist) {
+            out.info('跳过下载', doc.properties.title)
+          }
+          return exist
+        })
+        .map((item, index) => {
+          return {
+            ...item,
+            _index: index + 1,
+          }
+        })
     }
     if (!docs?.length) {
       out.access('跳过', '没有需要下载的文章')
