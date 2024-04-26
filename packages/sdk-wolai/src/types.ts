@@ -1,4 +1,5 @@
 import type { DocProperties } from '@elog/types'
+import { WolaiSortPresetEnum } from './const'
 export interface WoLaiConfig {
   token: string
   /** 文档ID */
@@ -9,8 +10,26 @@ export interface WoLaiConfig {
   baseUrl?: string
   /** 并发限制 */
   limit?: number
+  filter?: WolaiFilter
+  sort?: WolaiSort
 }
 
+export interface WolaiFilterItem {
+  property: string
+  value: string
+}
+
+export interface WolaiSortItem {
+  property: string
+  direction: string
+}
+
+export type WolaiFilter = boolean | WolaiFilterItem | WolaiFilterItem[]
+export type WolaiSort = boolean | WolaiSortPresetEnum | WolaiSortItem
+export interface WolaiFilterAndSortParams {
+  filter?: WolaiFilterItem | WolaiFilterItem[]
+  sort?: WolaiSortItem
+}
 /**
  * 文档块值
  */
@@ -123,6 +142,8 @@ export interface WoLaiTableRow {
 
 export interface WoLaiDoc extends WoLaiTableRow {
   _index?: number
+  createdAt: number
+  updatedAt: number
   properties: DocProperties
 }
 

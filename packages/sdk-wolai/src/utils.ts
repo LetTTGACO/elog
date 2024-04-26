@@ -1,6 +1,13 @@
-import { WoLaiDatabaseTableProperty, WoLaiTableRow } from './types'
+import {
+  WoLaiDatabaseTableProperty,
+  WoLaiDoc,
+  WolaiFilterItem,
+  WolaiSortItem,
+  WoLaiTableRow,
+} from './types'
 import { DocProperties, DocCatalog, DocDetail } from '@elog/types'
-import { timeFormat, out } from '@elog/shared'
+import { timeFormat, out, isTime, getTimes } from '@elog/shared'
+import { WolaiSortDirectionEnum } from './const'
 
 /**
  * 获取元数据Val
@@ -138,4 +145,74 @@ export function genCatalog(doc: DocDetail, property: string): DocCatalog[] | und
     out.warning(`${doc.properties.title} 文档分类信息提取失败，${property} 字段只能是单选/多选`)
     return undefined
   }
+}
+
+/**
+ * 文档排序
+ * @param docs
+ * @param sorts
+ */
+export function sortDocs(docs: WoLaiDoc[], sorts?: WolaiSortItem) {
+  return docs.sort((a, b) => {
+    if (sorts) {
+      let aSortValue = a.properties[sorts.property]
+      let bSortValue = b.properties[sorts.property]
+      const sortDirection = sorts.direction
+      // 如果不存在则不排序
+      if (!aSortValue || !bSortValue) {
+        return 0
+      }
+      // 判断是不是数字
+      if (Number.isNaN(Number(aSortValue)) || Number.isNaN(Number(bSortValue))) {
+        // 如果判断字符串是不是时间
+        if (isTime(aSortValue) && isTime(bSortValue)) {
+          // 将2023/05/08 00:00转成时间戳
+          aSortValue = getTimes(aSortValue)
+          bSortValue = getTimes(bSortValue)
+        } else {
+          // 都不是则排后面
+          return -1
+        }
+      } else {
+        aSortValue = Number(aSortValue)
+        bSortValue = Number(bSortValue)
+      }
+
+      if (sortDirection === WolaiSortDirectionEnum.ascending) {
+        // 正序排序
+        return aSortValue - bSortValue
+      } else if (sortDirection === WolaiSortDirectionEnum.descending) {
+        // 倒序排序
+        return bSortValue - aSortValue
+      } else {
+        // 属性错误
+        return 0
+      }
+    } else {
+      // 不排序
+      return 0
+    }
+  })
+}
+
+/**
+ * 文档过滤
+ * @param docs
+ * @param filter
+ */
+export function filterDocs(docs: WoLaiDoc[], filter?: WolaiFilterItem | WolaiFilterItem[]) {
+  return docs.filter((page) => {
+    const pageProperties = page.properties
+    // 过滤
+    if (filter && Array.isArray(filter)) {
+      return filter.every((f) => {
+        return pageProperties[f.property] === f.value
+      })
+      // 如果是对象
+    } else if (typeof filter === 'object') {
+      return pageProperties[filter.property] === filter.value
+    }
+    // 不过滤
+    return true
+  })
 }

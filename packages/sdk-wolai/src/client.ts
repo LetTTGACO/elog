@@ -1,9 +1,17 @@
-import { WoLaiConfig, WoLaiDoc, WoLaiTablePage, WoLaiTableRow, WoLaiTableRows } from './types'
+import {
+  WoLaiConfig,
+  WoLaiDoc,
+  WolaiFilterAndSortParams,
+  WoLaiTablePage,
+  WoLaiTableRow,
+  WoLaiTableRows,
+} from './types'
 import { out, request, RequestOptions } from '@elog/shared'
 import { DocCatalog, DocDetail, DocProperties } from '@elog/types'
 import asyncPool from 'tiny-async-pool'
-import { genCatalog, props } from './utils'
+import { filterDocs, genCatalog, props, sortDocs } from './utils'
 import * as buffer from 'buffer'
+import { WolaiSortDirectionEnum, WolaiSortPresetEnum } from './const'
 
 /**
  * WoLaiClient
@@ -12,6 +20,7 @@ class WoLaiClient {
   config: WoLaiConfig
   docList: WoLaiTableRow[] = []
   catalog: WoLaiTableRow[] = []
+  filterAndSortParams: WolaiFilterAndSortParams
 
   constructor(config: WoLaiConfig) {
     this.config = config
@@ -19,6 +28,88 @@ class WoLaiClient {
     if (!this.config.token || !this.config.pageId) {
       out.err('缺少参数', '缺少WoLai配置信息')
       process.exit(-1)
+    }
+    this.filterAndSortParams = this.initFilterAndSortParamsParams()
+  }
+
+  /**
+   * 初始化过滤和排序参数
+   */
+  initFilterAndSortParamsParams(): WolaiFilterAndSortParams {
+    let sort = this.config.sort as WolaiFilterAndSortParams['sort']
+    if (typeof this.config.sort === 'boolean') {
+      if (!this.config.sort) {
+        // 不排序
+        sort = undefined
+      } else {
+        // 默认排序
+        sort = { property: 'createdAt', direction: WolaiSortDirectionEnum.descending }
+      }
+    } else if (typeof this.config.sort === 'string') {
+      // 预设值
+      const sortPreset = this.config.sort as WolaiSortPresetEnum
+      switch (sortPreset) {
+        case WolaiSortPresetEnum.dateDesc:
+          sort = { property: 'date', direction: WolaiSortDirectionEnum.descending }
+          break
+        case WolaiSortPresetEnum.dateAsc:
+          sort = { property: 'date', direction: WolaiSortDirectionEnum.ascending }
+          break
+        case WolaiSortPresetEnum.sortDesc:
+          sort = { property: 'sort', direction: WolaiSortDirectionEnum.descending }
+          break
+        case WolaiSortPresetEnum.sortAsc:
+          sort = { property: 'sort', direction: WolaiSortDirectionEnum.ascending }
+          break
+        case WolaiSortPresetEnum.createTimeDesc:
+          sort = {
+            property: 'createdAt',
+            direction: WolaiSortDirectionEnum.descending,
+          }
+          break
+        case WolaiSortPresetEnum.createTimeAsc:
+          sort = {
+            property: 'createdAt',
+            direction: WolaiSortDirectionEnum.ascending,
+          }
+          break
+        case WolaiSortPresetEnum.updateTimeDesc:
+          sort = {
+            property: 'updatedAt',
+            direction: WolaiSortDirectionEnum.descending,
+          }
+          break
+        case WolaiSortPresetEnum.updateTimeAsc:
+          sort = {
+            property: 'updatedAt',
+            direction: WolaiSortDirectionEnum.ascending,
+          }
+          break
+        default:
+          sort = {
+            property: 'createdAt',
+            direction: WolaiSortDirectionEnum.descending,
+          }
+      }
+    }
+
+    let filter = this.config.filter as WolaiFilterAndSortParams['filter']
+    // 如果是boolean类型
+    if (typeof this.config.filter === 'boolean') {
+      // 如果设置为false
+      if (!this.config.filter) {
+        filter = undefined
+      } else {
+        // 如果设置为true
+        filter = {
+          property: 'status',
+          value: '已发布',
+        }
+      }
+    }
+    return {
+      filter,
+      sort,
     }
   }
 
@@ -82,14 +173,21 @@ class WoLaiClient {
     })
     // 转换 props
     const tableFields = tablePage.database_tables[databaseId].properties
-    const docs = rows.rows.map((row) => {
+    let docs = rows.rows.map((row) => {
       const properties = props(row, tableFields)
       return {
         ...row,
+        createdAt: row.created_time,
+        updatedAt: row.edited_time,
         properties,
       }
     })
-    this.catalog.push(...docs)
+    const { filter, sort } = this.filterAndSortParams
+    docs = filterDocs(docs, filter)
+    // 排序
+    docs = sortDocs(docs, sort)
+    // 过滤条件
+    this.catalog = docs
     this.docList = docs
     return docs
   }
