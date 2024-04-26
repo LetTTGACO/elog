@@ -1,5 +1,26 @@
 # @elog/core
 
+## 0.14.0
+
+### Minor Changes
+
+- wolai 支持排序和筛选
+- 1bedfa7: 写作平台支持 wolai
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [1bedfa7]
+  - @elog/plugin-image@0.14.0
+  - @elog/sdk-feishu@0.14.0
+  - @elog/sdk-flowus@0.14.0
+  - @elog/sdk-notion@0.14.0
+  - @elog/sdk-wolai@0.14.0
+  - @elog/sdk-yuque@0.14.0
+  - @elog/deploy@0.14.0
+  - @elog/shared@0.14.0
+  - @elog/types@0.14.0
+
 ## 0.14.0-beta.0
 
 ### Minor Changes

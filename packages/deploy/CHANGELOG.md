@@ -1,5 +1,23 @@
 # @elog/deploy
 
+## 0.14.0
+
+### Minor Changes
+
+- wolai 支持排序和筛选
+- 1bedfa7: 写作平台支持 wolai
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [1bedfa7]
+  - @elog/plugin-adapter@0.14.0
+  - @elog/sdk-confluence@0.14.0
+  - @elog/sdk-wordpress@0.14.0
+  - @elog/sdk-halo@0.14.0
+  - @elog/shared@0.14.0
+  - @elog/types@0.14.0
+
 ## 0.14.0-beta.0
 
 ### Minor Changes
