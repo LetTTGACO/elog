@@ -1,0 +1,38 @@
+{
+  "name": "@elogx-test/plugin-from-notion",
+  "version": "1.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsup"
+  },
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "@elogx-test/elog": "^1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@elogx-test/elog": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@notionhq/client": "~2.2.15",
+    "notion-to-md": "~3.1.1",
+    "tiny-async-pool": "~2.1.0"
+  },
+  "devDependencies": {
+    "tsup": "^6.7.0",
+    "typescript": "~5.2.2",
+    "@types/node": "~18.15.3",
+    "@elogx-test/elog": "workspace:*",
+    "@types/tiny-async-pool": "~2.0.3"
+  }
+}

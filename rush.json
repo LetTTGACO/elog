@@ -430,13 +430,13 @@
     //      "versionPolicyName": "playground",
     //      "shouldPublish": true
     //    },
-    //    {
-    //      "packageName": "@elogx-test/plugin-from-notion",
-    //      "projectFolder": "playground/plugin-from-notion",
-    //      "reviewCategory": "playground",
-    //      "versionPolicyName": "playground",
-    //      "shouldPublish": true
-    //    },
+    {
+      "packageName": "@elogx-test/plugin-from-notion",
+      "projectFolder": "playground/plugin-from-notion",
+      "reviewCategory": "playground",
+      "versionPolicyName": "playground",
+      "shouldPublish": true
+    },
     //    {
     //      "packageName": "@elogx-test/plugin-from-wolai",
     //      "projectFolder": "playground/plugin-from-wolai",
