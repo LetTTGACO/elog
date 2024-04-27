@@ -1,11 +1,13 @@
 import { PluginDriver } from './utils/PluginDriver';
-import { NormalizeElogOption } from './types/common';
+import { ElogConfig } from './types/common';
 
 export default class Graph {
   readonly pluginDriver: PluginDriver;
+  readonly elogConfig: ElogConfig;
 
-  constructor(options: NormalizeElogOption) {
-    this.pluginDriver = new PluginDriver(this, options.plugins, options);
+  constructor(options: ElogConfig) {
+    this.elogConfig = options;
+    this.pluginDriver = new PluginDriver(options);
   }
 
   /**
@@ -13,7 +15,7 @@ export default class Graph {
    */
   async sync(): Promise<void> {
     // 执行插件的start钩子
-    await this.pluginDriver.executeVoidHooks('start', []);
+    await this.pluginDriver.executeVoidHooks('start', [this.elogConfig]);
     // 从写作平台下载文档
     let docList = await this.pluginDriver.executeFromPluginHook('down', []);
     // 执行插件的transform钩子，处理文档详情

@@ -1,6 +1,4 @@
-import type Graph from '../Graph';
-import { IPlugin, PluginContext } from '../types/plugin';
-import { NormalizeElogOption } from '../types/common';
+import { PluginContext } from '../types/plugin';
 import out from './logger';
 import request from './request';
 import {
@@ -14,11 +12,7 @@ import {
   getUrlListFromContent,
 } from './image';
 
-export function getPluginContext(
-  plugin: IPlugin,
-  graph: Graph,
-  options: NormalizeElogOption,
-): PluginContext {
+export function getPluginContext(): PluginContext {
   return {
     request,
     debug: out.debug,
@@ -26,7 +20,7 @@ export function getPluginContext(
     success: out.success,
     info: out.info,
     warn: out.warn,
-    imageUtil: {
+    imgUtil: {
       genUniqueIdFromUrl,
       getFileTypeFromUrl,
       getFileTypeFromBuffer,

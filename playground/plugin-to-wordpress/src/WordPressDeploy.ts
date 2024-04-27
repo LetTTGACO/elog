@@ -129,9 +129,9 @@ export default class extends Context {
         // 处理封面图
         if (articleInfo.properties[coverKey]) {
           const picUrl = articleInfo.properties[coverKey];
-          const url = this.ctx.imageUtil.cleanUrlParam(picUrl);
-          const uuid = this.ctx.imageUtil.genUniqueIdFromUrl(url);
-          const fileType = await this.ctx.imageUtil.getFileType(picUrl);
+          const url = this.ctx.imgUtil.cleanUrlParam(picUrl);
+          const uuid = this.ctx.imgUtil.genUniqueIdFromUrl(url);
+          const fileType = await this.ctx.imgUtil.getFileType(picUrl);
           if (fileType) {
             const filename = `${uuid}.${fileType.type}`;
             // 检查是否已经存在图片
@@ -140,7 +140,7 @@ export default class extends Context {
               this.ctx.info('忽略上传', `图片已存在: ${cacheMedia.guid.rendered}`);
               post.featured_media = cacheMedia.id;
             } else {
-              const pic = await this.ctx.imageUtil.getBufferFromUrl(picUrl);
+              const pic = await this.ctx.imgUtil.getBufferFromUrl(picUrl);
               if (!pic) {
                 continue;
               }
@@ -157,12 +157,12 @@ export default class extends Context {
         // 处理文档图片
         if (this.config.enableUploadImage) {
           // 收集文档图片
-          const urlList = this.ctx.imageUtil.getUrlListFromContent(articleInfo.body);
+          const urlList = this.ctx.imgUtil.getUrlListFromContent(articleInfo.body);
           for (const image of urlList) {
             // 生成文件名
-            const fileName = this.ctx.imageUtil.genUniqueIdFromUrl(image.url, 28);
+            const fileName = this.ctx.imgUtil.genUniqueIdFromUrl(image.url, 28);
             // 生成文件名后缀
-            const fileType = await this.ctx.imageUtil.getFileType(image.url);
+            const fileType = await this.ctx.imgUtil.getFileType(image.url);
             if (!fileType) {
               this.ctx.warn(
                 `${articleInfo?.properties?.title} 存在获取图片类型失败，跳过：${image.url}`,
@@ -176,7 +176,7 @@ export default class extends Context {
             if (!item) {
               // 上传
               // 获取 buffer
-              const buffer = await this.ctx.imageUtil.getBufferFromUrl(image.original);
+              const buffer = await this.ctx.imgUtil.getBufferFromUrl(image.original);
               if (!buffer) {
                 this.ctx.warn(
                   '跳过',

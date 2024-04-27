@@ -11,6 +11,7 @@ import {
   getFileTypeFromUrl,
   getUrlListFromContent,
 } from '../utils/image';
+import { InputOptions } from './common';
 
 interface ImageUtilContext {
   genUniqueIdFromUrl: typeof genUniqueIdFromUrl;
@@ -31,7 +32,7 @@ export interface PluginContext {
   error: (head: string) => never;
   info: LoggingFunction;
   warn: LoggingFunction;
-  imageUtil: ImageUtilContext;
+  imgUtil: ImageUtilContext;
 }
 
 /**
@@ -49,11 +50,7 @@ export type ReducePluginHooks = Pick<FunctionPluginHooks, FunctionReducePluginHo
 
 export interface FunctionPluginHooks {
   /** 当前插件流程开始前钩子 */
-  start: (this: PluginContext) => Promise<void> | void;
-  /** 返回插件的默认配置 */
-  config: () => any;
-  /** 注册插件配置参数的钩子 */
-  register: () => any;
+  start: (this: PluginContext, inputOptions: InputOptions) => Promise<void> | void;
   /** 用于 From 插件的开始下载的钩子 */
   down: (this: PluginContext) => Promise<DocDetail[]> | DocDetail[];
   /** 用于自定义处理文档信息 */
@@ -72,13 +69,3 @@ export interface IPlugin<A = any> extends Partial<PluginHooks> {
 export type PluginHooks = {
   [K in keyof FunctionPluginHooks]: ObjectHook<FunctionPluginHooks[K]>;
 };
-
-/**
- * 写作平台基础配置
- */
-export interface FromPluginBaseOptions {
-  /** 是否禁用缓存 */
-  disableCache?: boolean;
-  /** 缓存文件路径 */
-  cacheFilePath?: string;
-}

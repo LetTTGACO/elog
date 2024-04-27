@@ -22,17 +22,22 @@ export default class ImageLocal {
     const dirPath = this.config.outputDir;
     let prefixKey = '';
     if (this.config.pathFollowDoc?.enable) {
-      // 是否存在目录
-      const tocPath = doc.docStructure.map((item) => item.title).join('/');
-      const docPath = path.join(this.config.pathFollowDoc.docOutputDir, tocPath);
-      // 2.拿到图片输出路径
-      // 3.根据文档路径计算图片的相对路径
-      // 假如文档路径为 ./docs/首页/首页下的文档.md
-      // 图片输出路径为 ./docs/images
-      // 图片前缀为../../images
-      prefixKey = path.relative(docPath, dirPath);
-      // 强行替换图片路径为Unix风格的路径，即 /
-      prefixKey = prefixKey.split(path.sep).join('/');
+      if (doc.docStructure) {
+        // 是否存在目录
+        const tocPath = doc.docStructure.map((item) => item.title).join('/');
+        const docPath = path.join(this.config.pathFollowDoc.docOutputDir, tocPath);
+        // 2.拿到图片输出路径
+        // 3.根据文档路径计算图片的相对路径
+        // 假如文档路径为 ./docs/首页/首页下的文档.md
+        // 图片输出路径为 ./docs/images
+        // 图片前缀为../../images
+        prefixKey = path.relative(docPath, dirPath);
+        // 强行替换图片路径为Unix风格的路径，即 /
+        prefixKey = prefixKey.split(path.sep).join('/');
+      } else {
+        this.ctx.warn('文档不存在目录信息，请检查配置');
+        prefixKey = this.config.prefixKey || './';
+      }
     } else {
       prefixKey = this.config.prefixKey || './';
     }
@@ -76,7 +81,7 @@ export default class ImageLocal {
     for (let i = 0; i < docDetailList.length; i++) {
       const articleInfo = docDetailList[i];
       // 获取图片URL列表
-      const urlList = this.ctx.imageUtil.getUrlListFromContent(articleInfo.body);
+      const urlList = this.ctx.imgUtil.getUrlListFromContent(articleInfo.body);
       if (urlList.length) {
         // 上传图片
         const urls = await this.transformImages(urlList, articleInfo, () => {
@@ -110,9 +115,9 @@ export default class ImageLocal {
       return await new Promise<ImageSource | undefined>(async (resolve) => {
         try {
           // 生成文件名
-          const fileName = this.ctx.imageUtil.genUniqueIdFromUrl(image.url);
+          const fileName = this.ctx.imgUtil.genUniqueIdFromUrl(image.url);
           // 生成文件名后缀
-          const fileType = await this.ctx.imageUtil.getFileType(image.url);
+          const fileType = await this.ctx.imgUtil.getFileType(image.url);
           if (!fileType) {
             this.ctx.warn(`${doc?.properties?.title} 存在获取图片类型失败，跳过：${image.url}`);
             resolve(undefined);
@@ -120,7 +125,7 @@ export default class ImageLocal {
           }
           // 完整文件名
           const fullName = `${fileName}.${fileType.type}`;
-          const buffer = await this.ctx.imageUtil.getBufferFromUrl(image.original);
+          const buffer = await this.ctx.imgUtil.getBufferFromUrl(image.original);
           if (!buffer) {
             failBack?.(image);
             resolve(undefined);

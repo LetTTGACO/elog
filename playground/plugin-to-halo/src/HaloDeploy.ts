@@ -124,17 +124,17 @@ export default class extends Context {
     for (let doc of docDetailList) {
       if (this.config.enableUploadImage) {
         // 收集文档图片
-        const urlList = this.ctx.imageUtil.getUrlListFromContent(doc.body);
+        const urlList = this.ctx.imgUtil.getUrlListFromContent(doc.body);
         // 封面图
         const cover = doc.properties.cover;
         if (cover) {
-          urlList.push(this.ctx.imageUtil.getBaseUrl(cover));
+          urlList.push(this.ctx.imgUtil.getBaseUrl(cover));
         }
         for (const image of urlList) {
           // 生成文件名
-          const fileName = this.ctx.imageUtil.genUniqueIdFromUrl(image.url, 28);
+          const fileName = this.ctx.imgUtil.genUniqueIdFromUrl(image.url, 28);
           // 生成文件名后缀
-          const fileType = await this.ctx.imageUtil.getFileType(image.url);
+          const fileType = await this.ctx.imgUtil.getFileType(image.url);
           if (!fileType) {
             this.ctx.warn(`${doc?.properties?.title} 存在获取图片类型失败，跳过：${image.url}`);
             continue;
@@ -146,7 +146,7 @@ export default class extends Context {
           if (!item) {
             // 上传
             // 获取 buffer
-            const buffer = await this.ctx.imageUtil.getBufferFromUrl(image.original);
+            const buffer = await this.ctx.imgUtil.getBufferFromUrl(image.original);
             if (!buffer) {
               this.ctx.warn('跳过', `${doc?.properties?.title} 存在获取图片内容失败：${image.url}`);
               continue;

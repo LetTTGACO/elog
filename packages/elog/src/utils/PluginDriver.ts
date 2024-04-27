@@ -1,4 +1,3 @@
-import Graph from '../Graph';
 import {
   FunctionPluginHooks,
   FunctionReducePluginHooks,
@@ -9,7 +8,7 @@ import {
   ReducePluginHooks,
   VoidPluginHooks,
 } from '../types/plugin';
-import { NormalizeElogOption } from '../types/common';
+import { ElogConfig } from '../types/common';
 import { getPluginContext } from './PluginContext';
 import out from './logger';
 import { getOrCreate } from './getOrCreate';
@@ -19,11 +18,30 @@ export class PluginDriver {
   private readonly sortedPlugins = new Map<keyof PluginHooks, IPlugin[]>();
   private readonly pluginContexts: ReadonlyMap<IPlugin, PluginContext>;
 
-  constructor(graph: Graph, plugins: readonly IPlugin[], options: NormalizeElogOption) {
-    this.plugins = plugins;
-    this.pluginContexts = new Map(
-      this.plugins.map((plugin) => [plugin, getPluginContext(plugin, graph, options)]),
-    );
+  constructor(option: ElogConfig) {
+    this.plugins = this.normalizeOptions(option);
+    this.pluginContexts = new Map(this.plugins.map((plugin) => [plugin, getPluginContext()]));
+  }
+
+  normalizeOptions(option: ElogConfig): IPlugin[] {
+    if (!option.from) {
+      throw new Error('You must supply an `from` option to elog');
+    }
+    if (!option.to) {
+      throw new Error('You must supply an `to` option to elog');
+    }
+
+    if (!option.plugins) {
+      option.plugins = [];
+    }
+    let sortedPlugins = [option.from, ...option.plugins];
+    if (Array.isArray(option.to)) {
+      sortedPlugins = [...sortedPlugins, ...option.to];
+    } else {
+      sortedPlugins.push(option.to);
+    }
+
+    return sortedPlugins;
   }
 
   async executeChainHooks<H extends FunctionReducePluginHooks>(

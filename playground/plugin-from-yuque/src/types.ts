@@ -1,4 +1,4 @@
-import type { DocStructure, FromPluginBaseOptions } from '@elogx-test/elog';
+import type { DocStructure } from '@elogx-test/elog';
 import { DocStatus } from './const';
 
 /**
@@ -188,6 +188,16 @@ export interface DocStatusMap {
   };
 }
 
+/**
+ * 写作平台基础配置
+ */
+export interface FromPluginBaseOptions {
+  /** 是否禁用缓存 */
+  disableCache?: boolean;
+  /** 缓存文件路径 */
+  cacheFilePath?: string;
+}
+
 // region start
 export interface YuqueWithPwdConfig extends FromPluginBaseOptions {
   baseUrl?: string;
@@ -199,10 +209,6 @@ export interface YuqueWithPwdConfig extends FromPluginBaseOptions {
   onlyPublic?: boolean;
   /** 下载并发数 */
   limit?: number;
-  cache?: {
-    enable?: boolean;
-    cacheDir: string;
-  };
 }
 
 export interface YuqueInputConfig {
@@ -222,10 +228,6 @@ export interface YuqueWithTokenConfig extends FromPluginBaseOptions {
   onlyPublic?: boolean;
   /** 下载并发数 */
   limit?: number;
-  cache?: {
-    enable?: boolean;
-    cacheDir: string;
-  };
 }
 
 // end-region
