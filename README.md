@@ -136,6 +136,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 ## 📦 开箱即用
 
 - [Notion + Elog + Hexo + GitHub Actions + Vercel 博客解决方案](https://github.com/elog-x/notion-hexo)  👉  [Notion-Hexo](https://notion-hexo.vercel.app/)
+- [语雀 + Elog + Hexo + GitHub Actions + Vercel 博客解决方案](https://github.com/elog-x/yuque-hexo)  👉  [Yuque-Hexo](https://yuque-hexo.vercel.app/)
 - [语雀 + Elog + VitePress + GitHub Actions + Vercel 文档站点解决方案](https://github.com/elog-x/yuque-vitepress)  👉  [Yuque-Vitepress](https://yuque-vitepress.vercel.app/)
 - [FlowUs + Elog + Halo + GitHub Actions 博客解决方案](https://github.com/elog-x/flowus-halo)  👉  [FlowUs-Halo](https://halo.1874.cool/archives/flowus-halo)
 - [Notion + Elog + Halo + GitHub Actions 博客解决方案](https://github.com/elog-x/notion-halo)  👉  [Notion-Halo](https://halo.1874.cool/archives/notion-halo)
