@@ -1,17 +1,29 @@
-import type { LocalConfig } from './types';
-import type { DocDetail, PluginContext } from '@elogx-test/elog';
+import { DocDetail, ElogBaseContext, PluginContext } from '@elogx-test/elog';
 import path from 'path';
 import fs from 'fs';
 import { mkdirp } from 'mkdirp';
+import type { AdapterFunction, LocalConfig } from './types';
+import { markdownAdapter, matterMarkdownAdapter } from './utils';
 
-export default class {
+export default class LocalDeploy extends ElogBaseContext {
   private readonly config: LocalConfig;
-  private readonly ctx: PluginContext;
   private cacheFileNames: string[] = [];
+  /** 文档处理适配器 */
+  docAdapter: AdapterFunction;
 
   constructor(config: LocalConfig, ctx: PluginContext) {
+    super(ctx);
     this.config = config;
-    this.ctx = ctx;
+    // 文档适配器
+    this.docAdapter = this.initDocApter();
+  }
+
+  private initDocApter() {
+    if (this.config.frontMatter?.enable) {
+      return matterMarkdownAdapter;
+    } else {
+      return markdownAdapter;
+    }
   }
 
   /**
@@ -49,7 +61,7 @@ export default class {
    * @param docDetailList
    */
   deploy(docDetailList: DocDetail[]) {
-    let { filename = 'title' } = this.config;
+    let { filename = 'title', fileExt = 'md' } = this.config;
     const outputDir = path.join(process.cwd(), this.config.outputDir);
     if (!docDetailList?.length) {
       this.ctx.success('任务结束', '没有需要部署的文档');
@@ -58,7 +70,10 @@ export default class {
     const newDocDetailList = JSON.parse(JSON.stringify(docDetailList)) as DocDetail[];
 
     for (let doc of newDocDetailList) {
+      // 过滤 Front-Matter
       this.filterFrontMatter(doc, filename);
+      // 生成 Front-Matter
+      doc.body = this.docAdapter(doc);
 
       let fileName = doc.properties[filename];
       if (!doc.properties[filename]) {
@@ -67,7 +82,7 @@ export default class {
         fileName = `未命名文档_${doc.id}`;
       }
 
-      let postPath: string;
+      let docPath: string;
       if (this.config.deployByStructure) {
         // 开启按目录生成
         if (Array.isArray(doc.docStructure)) {
@@ -76,25 +91,25 @@ export default class {
           fileName = this.checkFileName(fileName + tocPath, fileName, doc.id);
           const outDir = path.join(outputDir, tocPath);
           mkdirp.sync(outDir);
-          postPath = path.join(outDir, `${fileName}.md`);
+          docPath = path.join(outDir, `${fileName}.${fileExt}`);
           // 生成文件夹
-          this.ctx.info('生成文档', `${fileName}.md`);
+          this.ctx.info('生成文档', `${fileName}.${fileExt}`);
         } else {
           this.ctx.warn('目录缺失', `${fileName}缺失目录信息，将生成在指定目录`);
           // 不存在则直接生成
           fileName = this.checkFileName(fileName, fileName, doc.id);
-          postPath = path.join(outputDir, `${fileName}.md`);
-          this.ctx.info('生成文档', `${fileName}.md`);
+          docPath = path.join(outputDir, `${fileName}.${fileExt}`);
+          this.ctx.info('生成文档', `${fileName}.${fileExt}`);
           mkdirp.sync(outputDir);
         }
       } else {
         // 直接生成
         fileName = this.checkFileName(fileName, fileName, doc.id);
-        postPath = path.join(outputDir, `${fileName}.md`);
-        this.ctx.info('生成文档', `${fileName}.md`);
+        docPath = path.join(outputDir, `${fileName}.${fileExt}`);
+        this.ctx.info('生成文档', `${fileName}.${fileExt}`);
         mkdirp.sync(outputDir);
       }
-      fs.writeFileSync(postPath, doc.body, {
+      fs.writeFileSync(docPath, doc.body, {
         encoding: 'utf8',
       });
     }
@@ -107,10 +122,14 @@ export default class {
    * @param docId
    */
   private checkFileName(fileName: string, originName: string, docId: string) {
+    const { fileExt = 'md' } = this.config;
     let newName: string;
     if (this.cacheFileNames.includes(fileName)) {
       const newFileName = `${originName}_${docId}`;
-      this.ctx.warn('文档重复', `${originName}.md 文档已存在，将为自动重命名为${newFileName}.md`);
+      this.ctx.warn(
+        '文档重复',
+        `${originName}.${fileExt} 文档已存在，将为自动重命名为${newFileName}.${fileExt}`,
+      );
       newName = newFileName;
     } else {
       newName = originName;

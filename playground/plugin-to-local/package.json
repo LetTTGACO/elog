@@ -22,7 +22,8 @@
     }
   },
   "dependencies": {
-    "mkdirp": "~3.0.1"
+    "mkdirp": "~3.0.1",
+    "gray-matter": "~4.0.3"
   },
   "devDependencies": {
     "tsup": "^6.7.0",
