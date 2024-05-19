@@ -1,12 +1,12 @@
 import type { IPlugin } from '@elogx-test/elog';
-import type { FlowUsConfig } from './types';
+import type { WoLaiConfig } from './types';
 import WolaiClient from './WolaiClient';
 
-export default function yuque(options: Partial<FlowUsConfig>): IPlugin {
+export default function yuque(options: Partial<WoLaiConfig>): IPlugin {
   return {
     name: 'from-flowus',
     async down(this) {
-      const notion = new WolaiClient(options as FlowUsConfig, this);
+      const notion = new WolaiClient(options as WoLaiConfig, this);
       return notion.getDocDetailList();
     },
   };

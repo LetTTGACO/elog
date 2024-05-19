@@ -111,6 +111,9 @@ importers:
       '@feishux/shared':
         specifier: ^0.3.1
         version: 0.3.1
+      front-matter:
+        specifier: ~4.0.2
+        version: 4.0.2
     devDependencies:
       '@elogx-test/elog':
         specifier: workspace:*
