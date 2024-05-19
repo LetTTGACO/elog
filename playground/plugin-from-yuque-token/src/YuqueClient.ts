@@ -20,11 +20,11 @@ export default class YuqueClient extends ElogFromContext {
   async getDocDetailList() {
     this.ctx.info('正在获取文档列表，请稍等...');
     // 获取目录
-    const catalogList = await this.api.getToc();
+    const sortedDocList = await this.api.getSortedDocList();
     // 获取文档列表
     let yuqueBaseDocList = await this.api.getDocList();
     // 根据目录排序文档顺序，处理文档目录
-    yuqueBaseDocList = catalogList
+    yuqueBaseDocList = sortedDocList
       .filter((item) => {
         return item.type === 'DOC';
       })
@@ -33,7 +33,7 @@ export default class YuqueClient extends ElogFromContext {
         let catalogPath: DocStructure[] = [];
         let parentId = item.parent_uuid;
         for (let i = 0; i < item.level; i++) {
-          const current = catalogList.find((item) => item.uuid === parentId)!;
+          const current = sortedDocList.find((item) => item.uuid === parentId)!;
           parentId = current.parent_uuid;
           catalogPath.push({
             id: item.slug,
@@ -70,7 +70,6 @@ export default class YuqueClient extends ElogFromContext {
       process.exit();
     }
     this.ctx.info('待下载数', String(needUpdateDocList.length));
-    let docDetailList: DocDetail[];
     const promise = async (doc: YuqueDoc) => {
       this.ctx.info(`下载文档 ${doc._index}/${needUpdateDocList.length}   `, doc.title);
       let article = await this.api.getDocDetail(doc.slug);
@@ -88,7 +87,7 @@ export default class YuqueClient extends ElogFromContext {
       };
       return docDetail;
     };
-    docDetailList = await this.asyncPool(this.config.limit || 3, needUpdateDocList, promise);
+    const docDetailList = await this.asyncPool(this.config.limit || 3, needUpdateDocList, promise);
     // 更新缓存里的文章
     this.updateCache(docDetailList, idMap);
     this.ctx.info('已下载数', String(needUpdateDocList.length));

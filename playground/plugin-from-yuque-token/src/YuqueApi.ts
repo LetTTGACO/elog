@@ -58,7 +58,7 @@ export default class YuqueApi extends ElogBaseContext {
   /**
    * 获取目录
    */
-  async getToc() {
+  async getSortedDocList() {
     return this.requestInternal<YuqueCatalog[]>(
       `repos/${this.config.login}/${this.config.repo}/toc`,
       {
