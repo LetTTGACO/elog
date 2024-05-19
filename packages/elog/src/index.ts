@@ -1,10 +1,11 @@
+import { defineConfig } from './utils/elog';
+import elog from './node-entry';
+import { run } from './cli';
 export type * from './types/log';
 export * from './types/common';
 export * from './types/doc';
 export * from './types/plugin';
 export * from './utils/context';
 export * from './utils/doc/form';
-export { defineConfig } from './utils/elog';
-import elog from './node-entry';
-export { run } from './cli';
+export { run, defineConfig };
 export default elog;
