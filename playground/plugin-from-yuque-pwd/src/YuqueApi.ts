@@ -1,10 +1,9 @@
-import { YuqueCatalog, YuqueDoc, YuqueWithPwdConfig } from '../types';
-import { PluginContext } from '@elogx-test/elog';
-import { encrypt } from '../utils';
+import { YuqueCatalog, YuqueDoc, YuqueWithPwdConfig } from './types';
+import { ElogBaseContext, PluginContext } from '@elogx-test/elog';
+import { encrypt } from './utils';
 import { JSDOM } from 'jsdom';
-import Context from '../Context';
 
-export default class YuqueApi extends Context {
+export default class YuqueApi extends ElogBaseContext {
   private config: YuqueWithPwdConfig;
   private yuqueCookie: any;
   private bookId: string = '';
@@ -12,6 +11,14 @@ export default class YuqueApi extends Context {
   constructor(config: YuqueWithPwdConfig, ctx: PluginContext) {
     super(ctx);
     this.config = config;
+    if (!this.config.username || !this.config.password || !this.config.login || !this.config.repo) {
+      this.ctx.error('缺少语雀配置信息');
+    }
+    this.config.baseUrl = this.config.baseUrl || 'https://www.yuque.com';
+    if (this.config.baseUrl.endsWith('/')) {
+      // 删除最后一个斜杠
+      this.config.baseUrl = this.config.baseUrl.slice(0, -1);
+    }
   }
   /**
    * 登陆
@@ -83,9 +90,9 @@ export default class YuqueApi extends Context {
   }
 
   /**
-   * 获取目录
+   * 获取目录信息（已排序）
    */
-  async getToc() {
+  async getSortedInfoList() {
     try {
       const res = await this.requestInternal(
         `${this.config.login}/${this.config.repo}`,

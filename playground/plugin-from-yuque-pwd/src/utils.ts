@@ -3,12 +3,11 @@ import { YuQuePwdPublicKey } from './const';
 import JSEncrypt from 'jsencrypt-node';
 import { YuqueDoc } from './types';
 import type { PluginContext, DocProperties } from '@elogx-test/elog';
-import asyncPool from 'tiny-async-pool';
 
 /**
  * 生成元数据
  */
-export const getProps = (doc: YuqueDoc, body: string, ctx: PluginContext, isPwd?: boolean) => {
+export const getProps = (doc: YuqueDoc, body: string, ctx: PluginContext) => {
   let properties: DocProperties = {
     // 注入title
     title: doc.title,
@@ -19,6 +18,7 @@ export const getProps = (doc: YuqueDoc, body: string, ctx: PluginContext, isPwd?
     date: doc.created_at,
     // 更新时间
     // updated: timeFormat(doc.updated_at),
+    // TODO Front-Matter 字段确认
     updated: doc.updated_at,
   } as any;
 
@@ -27,15 +27,10 @@ export const getProps = (doc: YuqueDoc, body: string, ctx: PluginContext, isPwd?
     properties.cover = doc.cover;
   }
   // 描述
-  if (doc?.description) {
+  if (doc.description) {
     properties.description = doc.custom_description || doc.description;
   }
   try {
-    if (!isPwd) {
-      // front matter信息的<br/>换成 \n
-      const regex = /^---[\s|\S]+?---/i;
-      body = body.replace(regex, (a) => a.replace(/(<br \/>|<br>|<br\/>)/gi, '\n'));
-    }
     const result = frontMatter(body);
     body = result.body;
     let attributes = <Record<string, string>>result.attributes;
@@ -78,15 +73,6 @@ export function processMarkdownRaw(raw: string) {
 }
 
 /**
- * 不处理
- * @param doc
- */
-export function noProcess(doc: { body: string }) {
-  let { body: raw } = doc;
-  return raw;
-}
-
-/**
  * 加密
  * @param password
  * @returns
@@ -97,16 +83,4 @@ export const encrypt = (password: string) => {
   const time = Date.now();
   const symbol = time + ':' + password;
   return encryptor.encrypt(symbol);
-};
-
-/**
- * 异步池
- * @param args
- */
-export const asyncPoolAll = async <IN, OUT>(...args: Parameters<typeof asyncPool<IN, OUT>>) => {
-  const results = [];
-  for await (const result of asyncPool<IN, OUT>(...args)) {
-    results.push(result);
-  }
-  return results;
 };

@@ -1,5 +1,4 @@
 import type { DocStructure } from '@elogx-test/elog';
-import { DocStatus } from './const';
 
 /**
  * @see https://www.yuque.com/yuque/developer/userserializer
@@ -181,13 +180,6 @@ export interface YuqueDoc {
   docStructure: DocStructure[];
 }
 
-export interface DocStatusMap {
-  [key: string]: {
-    updateIndex: number;
-    status: DocStatus;
-  };
-}
-
 /**
  * 写作平台基础配置
  */
@@ -199,22 +191,8 @@ export interface FromPluginBaseOptions {
 }
 
 // region start
-export interface YuqueWithPwdConfig extends FromPluginBaseOptions {
-  baseUrl?: string;
-  username: string;
-  password: string;
-  login: string;
-  repo: string;
-  linebreak?: boolean;
-  onlyPublic?: boolean;
-  /** 下载并发数 */
-  limit?: number;
-}
 
-export interface YuqueInputConfig {
-  token?: Partial<YuqueWithTokenConfig>;
-  pwd?: Partial<YuqueWithPwdConfig>;
-}
+export type YuqueInputConfig = Partial<YuqueWithTokenConfig>;
 
 export interface YuqueWithTokenConfig extends FromPluginBaseOptions {
   /**
@@ -242,8 +220,6 @@ export interface YuqueCatalog {
   parent_uuid: string;
   /** 官方token模式存在 */
   slug: string;
-  /** 客户端api模式下存在 */
-  url: string;
   /** 官方token模式存在 */
   depth: number;
   /** depth - 1 */

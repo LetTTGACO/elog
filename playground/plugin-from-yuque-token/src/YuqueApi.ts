@@ -4,15 +4,23 @@ import type {
   YuqueDocDetail,
   YuqueDocListResponse,
   YuqueWithTokenConfig,
-} from '../types';
-import { PluginContext } from '@elogx-test/elog';
-import Context from '../Context';
+} from './types';
+import { ElogBaseContext, PluginContext } from '@elogx-test/elog';
 
-export default class YuqueApi extends Context {
+export default class YuqueApi extends ElogBaseContext {
   private readonly config: YuqueWithTokenConfig;
   constructor(config: YuqueWithTokenConfig, ctx: PluginContext) {
     super(ctx);
     this.config = config;
+    if (!this.config.token || !this.config.repo || !this.config.login) {
+      this.ctx.info('请查阅Elog配置文档: https://elog.1874.cool/notion/write-platform');
+      this.ctx.error('缺少语雀配置信息');
+    }
+    this.config.baseUrl = this.config.baseUrl || 'https://www.yuque.com';
+    if (this.config.baseUrl.endsWith('/')) {
+      // 删除最后一个斜杠
+      this.config.baseUrl = this.config.baseUrl.slice(0, -1);
+    }
   }
 
   /**
