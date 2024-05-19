@@ -65,8 +65,8 @@ export const writeCacheFunc = (options: WriteCacheConfig & { cacheFilePath: stri
 export const filterDocs = <T>(
   cachedDocList: DocDetail[],
   docs: T[],
-  idKey: string,
-  updateKey: string,
+  idKey: keyof T,
+  updateKey: keyof T,
 ) => {
   // TODO 优化
   // 过滤掉被删除的文章

@@ -58,7 +58,7 @@ export class ElogFromContext extends ElogBaseContext {
    * @param idKey
    * @param updateKey
    */
-  filterDocs<T>(docs: T[], idKey: string, updateKey: string) {
+  filterDocs<T>(docs: T[], idKey: keyof T, updateKey: keyof T) {
     return filterDocs(this.cachedDocList, docs, idKey, updateKey);
   }
 

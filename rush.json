@@ -416,33 +416,36 @@
       "reviewCategory": "packages",
       "shouldPublish": true
     },
-    //    {
-    //      "packageName": "@elogx-test/plugin-from-feishu",
-    //      "projectFolder": "playground/plugin-from-feishu",
-    //      "reviewCategory": "playground",
-    //      "versionPolicyName": "playground",
-    //      "shouldPublish": true
-    //    },
-    //    {
-    //      "packageName": "@elogx-test/plugin-from-flowus",
-    //      "projectFolder": "playground/plugin-from-flowus",
-    //      "reviewCategory": "playground",
-    //      "versionPolicyName": "playground",
-    //      "shouldPublish": true
-    //    },
+    {
+      "packageName": "@elogx-test/plugin-from-feishu-wiki",
+      "projectFolder": "playground/plugin-from-feishu-wiki",
+      "reviewCategory": "playground",
+      "shouldPublish": true
+    },
+    {
+      "packageName": "@elogx-test/plugin-from-feishu-space",
+      "projectFolder": "playground/plugin-from-feishu-space",
+      "reviewCategory": "playground",
+      "shouldPublish": true
+    },
+    {
+      "packageName": "@elogx-test/plugin-from-flowus",
+      "projectFolder": "playground/plugin-from-flowus",
+      "reviewCategory": "playground",
+      "shouldPublish": true
+    },
     {
       "packageName": "@elogx-test/plugin-from-notion",
       "projectFolder": "playground/plugin-from-notion",
       "reviewCategory": "playground",
       "shouldPublish": true
     },
-    //    {
-    //      "packageName": "@elogx-test/plugin-from-wolai",
-    //      "projectFolder": "playground/plugin-from-wolai",
-    //      "reviewCategory": "playground",
-    //      "versionPolicyName": "playground",
-    //      "shouldPublish": true
-    //    },
+    {
+      "packageName": "@elogx-test/plugin-from-wolai",
+      "projectFolder": "playground/plugin-from-wolai",
+      "reviewCategory": "playground",
+      "shouldPublish": true
+    },
     {
       "packageName": "@elogx-test/plugin-from-yuque-token",
       "projectFolder": "playground/plugin-from-yuque-token",

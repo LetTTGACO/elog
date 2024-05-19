@@ -78,4 +78,6 @@ export interface FromPluginBaseConfig {
   disableCache?: boolean;
   /** 缓存文件路径 */
   cacheFilePath?: string;
+  /** 下载并发数 */
+  limit?: number;
 }
