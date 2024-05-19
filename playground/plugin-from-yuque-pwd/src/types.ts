@@ -58,6 +58,8 @@ export interface YuqueDoc {
   docStructure: DocStructure[];
 }
 
+export type YuqueInputConfig = Partial<YuqueWithPwdConfig>;
+
 export interface YuqueWithPwdConfig extends FromPluginBaseConfig {
   baseUrl?: string;
   username: string;
