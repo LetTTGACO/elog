@@ -1,4 +1,3 @@
-import Context from './Context';
 import type {
   NotionCatalogConfig,
   NotionConfig,
@@ -6,13 +5,13 @@ import type {
   NotionQueryParams,
   NotionSort,
 } from './types';
-import { DocDetail, DocStructure, PluginContext } from '@elogx-test/elog';
+import { DocDetail, DocStructure, ElogBaseContext, PluginContext } from '@elogx-test/elog';
 import { Client as NotionClient } from '@notionhq/client';
 import { NotionToMarkdown } from 'notion-to-md';
 import { NotionSortDirectionEnum, NotionSortPresetEnum } from './const';
 import { props } from './utils';
 
-export default class NotionApi extends Context {
+export default class NotionApi extends ElogBaseContext {
   config: NotionConfig;
   notion: NotionClient;
   n2m: NotionToMarkdown;
