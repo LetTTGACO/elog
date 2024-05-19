@@ -1,0 +1,38 @@
+{
+  "name": "@elogx-test/plugin-from-feishu-space",
+  "version": "1.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsup"
+  },
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "@elogx-test/elog": "^1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@elogx-test/elog": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "front-matter": "~4.0.2",
+    "@feishux/api": "^0.3.1",
+    "@feishux/doc-to-md": "^0.3.1",
+    "@feishux/shared": "^0.3.1"
+  },
+  "devDependencies": {
+    "tsup": "^6.7.0",
+    "typescript": "~5.2.2",
+    "@types/node": "~18.15.3",
+    "@elogx-test/elog": "workspace:*"
+  }
+}
