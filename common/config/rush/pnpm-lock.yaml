@@ -10,6 +10,9 @@ importers:
 
   ../../packages/elog:
     dependencies:
+      '@types/tiny-async-pool':
+        specifier: ~2.0.3
+        version: 2.0.3
       bundle-require:
         specifier: ^4.0.0
         version: 4.0.2(esbuild@0.20.2)
@@ -37,6 +40,9 @@ importers:
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
+      tiny-async-pool:
+        specifier: ~2.1.0
+        version: 2.1.0
       urllib:
         specifier: 2.41.0
         version: 2.41.0
@@ -94,7 +100,50 @@ importers:
         specifier: ~5.2.2
         version: 5.2.2
 
-  ../../playground/plugin-from-yuque:
+  ../../playground/plugin-from-yuque-pwd:
+    dependencies:
+      front-matter:
+        specifier: ~4.0.2
+        version: 4.0.2
+      jsdom:
+        specifier: ^21.1.2
+        version: 21.1.2
+      jsencrypt-node:
+        specifier: ~1.0.4
+        version: 1.0.4
+      rehype-parse:
+        specifier: ~9.0.0
+        version: 9.0.0
+      rehype-stringify:
+        specifier: ~10.0.0
+        version: 10.0.0
+      tiny-async-pool:
+        specifier: ~2.1.0
+        version: 2.1.0
+      unified:
+        specifier: ~11.0.4
+        version: 11.0.4
+    devDependencies:
+      '@elogx-test/elog':
+        specifier: workspace:*
+        version: link:../../packages/elog
+      '@types/jsdom':
+        specifier: 21.1.2
+        version: 21.1.2
+      '@types/node':
+        specifier: ~18.15.3
+        version: 18.15.13
+      '@types/tiny-async-pool':
+        specifier: ~2.0.3
+        version: 2.0.3
+      tsup:
+        specifier: ^6.7.0
+        version: 6.7.0(typescript@5.2.2)
+      typescript:
+        specifier: ~5.2.2
+        version: 5.2.2
+
+  ../../playground/plugin-from-yuque-token:
     dependencies:
       front-matter:
         specifier: ~4.0.2
@@ -261,9 +310,9 @@ importers:
       '@elogx-test/elog':
         specifier: workspace:*
         version: link:../../packages/elog
-      '@elogx-test/plugin-from-yuque':
+      '@elogx-test/plugin-from-yuque-pwd':
         specifier: workspace:*
-        version: link:../../playground/plugin-from-yuque
+        version: link:../../playground/plugin-from-yuque-pwd
       '@elogx-test/plugin-image-local':
         specifier: workspace:*
         version: link:../../playground/plugin-image-local
@@ -911,7 +960,6 @@ packages:
 
   /@types/tiny-async-pool@2.0.3:
     resolution: {integrity: sha512-n3l1s538tKo9RBoHs4I3DG/VmD3VYhF5mHcgu1sU4Lq7JCNBtxnpBy3OkWSbZsp5r5QOuplh2UkXXXwufoAuNQ==}
-    dev: true
 
   /@types/tough-cookie@4.0.5:
     resolution: {integrity: sha512-/Ad8+nIOV7Rl++6f1BdKxFSMgmoqEoYbHRpPcx3JEfv8VRsQe9Z4mCXeJBzxs7mbHY/XOZZuXlRNfhpVPbs6ZA==}

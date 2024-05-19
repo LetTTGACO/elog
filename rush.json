@@ -434,7 +434,6 @@
       "packageName": "@elogx-test/plugin-from-notion",
       "projectFolder": "playground/plugin-from-notion",
       "reviewCategory": "playground",
-      "versionPolicyName": "playground",
       "shouldPublish": true
     },
     //    {
@@ -445,8 +444,14 @@
     //      "shouldPublish": true
     //    },
     {
-      "packageName": "@elogx-test/plugin-from-yuque",
-      "projectFolder": "playground/plugin-from-yuque",
+      "packageName": "@elogx-test/plugin-from-yuque-token",
+      "projectFolder": "playground/plugin-from-yuque-token",
+      "reviewCategory": "playground",
+      "shouldPublish": true
+    },
+    {
+      "packageName": "@elogx-test/plugin-from-yuque-pwd",
+      "projectFolder": "playground/plugin-from-yuque-pwd",
       "reviewCategory": "playground",
       "shouldPublish": true
     },

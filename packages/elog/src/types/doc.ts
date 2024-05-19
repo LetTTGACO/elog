@@ -34,4 +34,34 @@ export interface DocDetail {
   docStructure?: DocStructure[];
   /** 文档出错代码，下次同步时会重新下载并同步 */
   error?: number;
+  [key: string]: any;
+}
+
+export interface BaseConfig {
+  /** 是否禁用缓存 */
+  disableCache?: boolean;
+  /** 缓存文件目录 */
+  cacheFilePath?: string;
+  /** 下载并发数 */
+  limit?: number;
+}
+
+export interface WriteCacheConfig {
+  cachedDocList?: Partial<DocDetail>[];
+  sortedDocList: DocStructure[];
+}
+
+export interface DocStatusMap {
+  [key: string]: {
+    updateIndex: number;
+    status: DocStatus;
+  };
+}
+
+/**
+ * 文章更新状态
+ */
+export enum DocStatus {
+  update = 'update',
+  create = 'create',
 }
