@@ -1,6 +1,5 @@
 import { NotionDoc } from './types';
 import { DocProperties } from '@elogx-test/elog';
-import asyncPool from 'tiny-async-pool';
 
 /**
  * 获取元数据Val
@@ -70,15 +69,3 @@ export function props(page: NotionDoc): DocProperties {
   }
   return properties;
 }
-
-/**
- * 异步池
- * @param args
- */
-export const asyncPoolAll = async <IN, OUT>(...args: Parameters<typeof asyncPool<IN, OUT>>) => {
-  const results = [];
-  for await (const result of asyncPool<IN, OUT>(...args)) {
-    results.push(result);
-  }
-  return results;
-};

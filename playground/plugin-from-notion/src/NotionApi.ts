@@ -154,7 +154,7 @@ export default class NotionApi extends ElogBaseContext {
   /**
    * 获取文章列表（不带详情）
    */
-  async getDocList() {
+  async getSortedDocList() {
     const docList: NotionDoc[] = [];
     const getList = async () => {
       let resp = await this.notion.databases.query({
@@ -174,7 +174,7 @@ export default class NotionApi extends ElogBaseContext {
           ...this.requestQueryParams,
           start_cursor: resp.next_cursor,
         };
-        await this.getDocList();
+        await this.getSortedDocList();
       }
     };
     await getList();

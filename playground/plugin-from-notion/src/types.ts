@@ -2,16 +2,6 @@ import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { NotionSortDirectionEnum, NotionSortPresetEnum } from './const';
 import { DocProperties, DocStructure, type FromPluginBaseConfig } from '@elogx-test/elog';
 
-/**
- * 写作平台基础配置
- */
-export interface FromPluginBaseOptions {
-  /** 是否禁用缓存 */
-  disableCache?: boolean;
-  /** 缓存文件路径 */
-  cacheFilePath?: string;
-}
-
 export interface NotionConfig extends FromPluginBaseConfig {
   token: string;
   /** 数据库id */
@@ -20,8 +10,6 @@ export interface NotionConfig extends FromPluginBaseConfig {
   sorts?: boolean | NotionSortPresetEnum | NotionSort[];
   catalog?: boolean | NotionCatalogConfig;
   imgToBase64?: boolean;
-  /** 下载并发数 */
-  limit?: number;
 }
 
 export interface NotionSort {

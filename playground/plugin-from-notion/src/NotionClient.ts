@@ -44,9 +44,9 @@ export default class NotionClient extends ElogFromContext {
   async getDocDetailList() {
     this.ctx.info('正在获取文档列表，请稍等...');
     // 获取待发布的文章
-    const notionBaseDocList = await this.api.getDocList();
+    const sortedDocList = await this.api.getSortedDocList();
     const { docList: needUpdateDocList, idMap } = this.filterDocs(
-      notionBaseDocList,
+      sortedDocList,
       'id',
       'last_edited_time',
     );
@@ -56,7 +56,6 @@ export default class NotionClient extends ElogFromContext {
       process.exit();
     }
     this.ctx.info('待下载数', String(needUpdateDocList.length));
-    let docDetailList: DocDetail[];
     const promise = async (doc: NotionDoc) => {
       this.ctx.info(`下载文档 ${doc._index}/${needUpdateDocList.length}   `, doc.properties.title);
       let article = await this.api.getDocDetail(doc);
@@ -70,13 +69,13 @@ export default class NotionClient extends ElogFromContext {
       };
       return docDetail;
     };
-    docDetailList = await this.asyncPool(this.config.limit || 3, needUpdateDocList, promise);
+    const docDetailList = await this.asyncPool(this.config.limit || 3, needUpdateDocList, promise);
     // 更新缓存
     this.updateCache(docDetailList, idMap);
     this.ctx.info('已下载数', String(needUpdateDocList.length));
     // 写入缓存
     this.writeCache({
-      sortedDocList: notionBaseDocList.map((item) => ({
+      sortedDocList: sortedDocList.map((item) => ({
         id: item.id,
         title: item.properties.title,
       })),

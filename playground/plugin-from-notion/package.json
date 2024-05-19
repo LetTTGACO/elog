@@ -25,14 +25,12 @@
   },
   "dependencies": {
     "@notionhq/client": "~2.2.15",
-    "notion-to-md": "~3.1.1",
-    "tiny-async-pool": "~2.1.0"
+    "notion-to-md": "~3.1.1"
   },
   "devDependencies": {
     "tsup": "^6.7.0",
     "typescript": "~5.2.2",
     "@types/node": "~18.15.3",
-    "@elogx-test/elog": "workspace:*",
-    "@types/tiny-async-pool": "~2.0.3"
+    "@elogx-test/elog": "workspace:*"
   }
 }
