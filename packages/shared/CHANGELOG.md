@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.14.1
+
+### Patch Changes
+
+- 修复 init 配置文件错误
+
 ## 0.14.0
 
 ### Minor Changes

@@ -1,5 +1,18 @@
 # @elog/deploy
 
+## 0.14.1
+
+### Patch Changes
+
+- 修复 init 配置文件错误
+- Updated dependencies
+  - @elog/plugin-adapter@0.14.1
+  - @elog/sdk-confluence@0.14.1
+  - @elog/sdk-wordpress@0.14.1
+  - @elog/sdk-halo@0.14.1
+  - @elog/shared@0.14.1
+  - @elog/types@0.14.1
+
 ## 0.14.0
 
 ### Minor Changes
