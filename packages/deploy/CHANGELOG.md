@@ -1,5 +1,18 @@
 # @elog/deploy
 
+## 0.14.2-beta.0
+
+### Patch Changes
+
+- 升级 feishu 依赖
+- Updated dependencies
+  - @elog/plugin-adapter@0.14.2-beta.0
+  - @elog/sdk-confluence@0.14.2-beta.0
+  - @elog/sdk-wordpress@0.14.2-beta.0
+  - @elog/sdk-halo@0.14.2-beta.0
+  - @elog/shared@0.14.2-beta.0
+  - @elog/types@0.14.2-beta.0
+
 ## 0.14.1
 
 ### Patch Changes

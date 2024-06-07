@@ -1,6 +1,6 @@
 {
   "name": "@elog/sdk-halo",
-  "version": "0.14.1",
+  "version": "0.14.2-beta.0",
   "description": "elog的Halo SDK",
   "homepage": "https://github.com/LetTTGACO/elog/tree/master/packages/elog-sdk-wordpress#readme",
   "author": "1874 <me@mail.1874.cool>",

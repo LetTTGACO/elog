@@ -1,5 +1,21 @@
 # @elog/core
 
+## 0.14.2-beta.0
+
+### Patch Changes
+
+- 升级 feishu 依赖
+- Updated dependencies
+  - @elog/plugin-image@0.14.2-beta.0
+  - @elog/sdk-feishu@0.14.2-beta.0
+  - @elog/sdk-flowus@0.14.2-beta.0
+  - @elog/sdk-notion@0.14.2-beta.0
+  - @elog/sdk-wolai@0.14.2-beta.0
+  - @elog/sdk-yuque@0.14.2-beta.0
+  - @elog/deploy@0.14.2-beta.0
+  - @elog/shared@0.14.2-beta.0
+  - @elog/types@0.14.2-beta.0
+
 ## 0.14.1
 
 ### Patch Changes

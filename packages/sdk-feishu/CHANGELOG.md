@@ -1,5 +1,13 @@
 # @elog/sdk-feishu
 
+## 0.14.2-beta.0
+
+### Patch Changes
+
+- 升级 feishu 依赖
+- Updated dependencies
+  - @elog/shared@0.14.2-beta.0
+
 ## 0.14.1
 
 ### Patch Changes
