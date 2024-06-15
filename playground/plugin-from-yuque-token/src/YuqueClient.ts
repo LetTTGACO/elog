@@ -24,7 +24,7 @@ export default class YuqueClient extends ElogFromContext {
    * 获取文章详情列表
    */
   async getDocDetailList() {
-    this.ctx.info('正在获取文档列表，请稍等...');
+    this.ctx.info('正在获取待更新文档，请稍等...');
     // 获取目录
     const sortedDocList = await this.api.getSortedDocList();
     // 获取文档列表
@@ -81,7 +81,7 @@ export default class YuqueClient extends ElogFromContext {
       // 处理语雀字符串
       let newBody = processMarkdownRaw(body);
       const docDetail: DocDetail = {
-        id: doc.slug,
+        id: doc.id as unknown as string,
         title: doc.title,
         body: newBody,
         properties,

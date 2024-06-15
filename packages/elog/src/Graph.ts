@@ -14,6 +14,7 @@ export default class Graph {
   private readonly cachedDocList: DocDetail[] = [];
   constructor(options: ElogConfig) {
     this.elogConfig = options;
+    this.elogConfig.cacheFilePath = this.elogConfig.cacheFilePath || 'elog.cache.json';
     this.cachedDocList = this.initCache(options);
     this.pluginDriver = new PluginDriver(options, this.cachedDocList);
   }
@@ -27,8 +28,8 @@ export default class Graph {
       return [];
     } else {
       try {
-        const cacheJson = require(path.join(process.cwd(), baseConfig.cacheFilePath));
-        const { cachedDocList } = cacheJson;
+        const cacheJson = require(path.join(process.cwd(), baseConfig.cacheFilePath!));
+        const { cachedDocList = [] } = cacheJson;
         // 获取缓存文章
         return cachedDocList as (DocDetail & DocExt)[];
       } catch (error) {
@@ -46,17 +47,17 @@ export default class Graph {
   writeCache<T>(sortedDocList: SortedDoc<T>[] = []) {
     try {
       const { cacheFilePath } = this.elogConfig;
-      // 判断cachedDocList列表中对象是否有 body 属性
-      const hasBody = this.cachedDocList?.some((doc) => !!doc.body);
-      if (hasBody) {
-        out.debug(
-          '警告',
-          '缓存信息存在 body（文档内容）信息，可能会导致缓存文件过大，如无必要用途建议删除 body 属性',
-        );
-      }
+      // // 判断cachedDocList列表中对象是否有 body 属性
+      // const hasBody = this.cachedDocList?.some((doc) => !!doc.body);
+      // if (hasBody) {
+      //   out.debug(
+      //     '警告',
+      //     '缓存信息存在 body（文档内容）信息，可能会导致缓存文件过大，如无必要用途建议删除 body 属性',
+      //   );
+      // }
       // 写入缓存
       const cacheJson = {
-        cachedDocList: this.cachedDocList,
+        cachedDocList: this.cachedDocList.map((item) => ({ ...item, body: undefined })),
         sortedDocList: sortedDocList,
       };
       fs.writeFileSync(cacheFilePath!, JSON.stringify(cacheJson, null, 2), {
@@ -73,7 +74,9 @@ export default class Graph {
    * @param docStatusMap
    */
   updateCache(docList: DocDetail[], docStatusMap: any) {
+    console.log('docStatusMap', docStatusMap);
     for (const doc of docList) {
+      console.log('doc.id', doc.id);
       const { _updateIndex, _status } = docStatusMap[doc.id];
       if (_status === DocStatus.NEW) {
         // 新增文档

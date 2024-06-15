@@ -9,7 +9,7 @@ export interface ElogCacheConfig {
   /** 是否禁用缓存 */
   disableCache?: boolean;
   /** 缓存文件目录 */
-  cacheFilePath: string;
+  cacheFilePath?: string;
 }
 /**
  * elog.config.ts 配置文件

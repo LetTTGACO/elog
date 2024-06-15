@@ -42,7 +42,7 @@ export default class NotionClient extends ElogFromContext {
    * 获取文章列表
    */
   async getDocDetailList() {
-    this.ctx.info('正在获取文档列表，请稍等...');
+    this.ctx.info('正在获取待更新文档，请稍等...');
     // 获取待发布的文章
     const sortedDocList = await this.api.getSortedDocList();
     // 过滤不需要更新的文档
