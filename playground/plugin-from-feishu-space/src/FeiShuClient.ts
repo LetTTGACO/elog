@@ -29,9 +29,7 @@ export default class FeiShuClient extends ElogFromContext {
 
     const promise = async (doc: FeiShuDoc) => {
       this.ctx.info(`下载文档 ${doc._index}/${needUpdateDocList.length}   `, doc.title);
-      const docDetail = await this.api.getDocDetail(doc);
-      // TODO 将图片转成 base64
-      return docDetail;
+      return this.api.getDocDetail(doc);
     };
     const docDetailList = await this.asyncPool(this.config.limit || 3, needUpdateDocList, promise);
     this.ctx.info('已下载数', String(needUpdateDocList.length));

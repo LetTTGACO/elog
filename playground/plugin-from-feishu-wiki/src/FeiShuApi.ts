@@ -85,7 +85,14 @@ export default class FeiShuApi extends ElogBaseContext {
       this.ctx.debug(e);
     }
     // 解析出properties
-    const { body: newBody, properties } = getProps(doc, body);
+    let { body: newBody, properties } = getProps(doc, body);
+    // 处理图片
+    const imgList = this.ctx.imgUtil.getUrlListFromContent(newBody);
+    for (let i = 0; i < imgList.length; i++) {
+      const token = imgList[i].url;
+      const base64 = await this.bufferToBase64(token);
+      newBody = newBody.replace(imgList[i].url, base64);
+    }
     return {
       id: doc.id,
       properties,
@@ -94,5 +101,16 @@ export default class FeiShuApi extends ElogBaseContext {
       updateTime: doc.updated,
       docStructure: doc.catalog,
     };
+  }
+
+  /**
+   * Buffer 转 base64
+   * @param token
+   */
+  async bufferToBase64(token: string) {
+    const res = await this.feishu.getResourceItem(token);
+    const buffer = res.buffer as unknown as Buffer;
+    // buffer 转 base64
+    return buffer.toString('base64');
   }
 }
