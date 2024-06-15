@@ -18,7 +18,6 @@ export interface DocStructure {
   id: string;
   /** 文档标题 */
   title: string;
-  updateTime: number;
   [key: string]: any;
 }
 
@@ -62,3 +61,5 @@ export interface WriteCacheConfig {
   cachedDocList?: Partial<DocDetail>[];
   sortedDocList: DocStructure[];
 }
+
+export type SortedDoc<T> = T & { id: string; updateTime: number };

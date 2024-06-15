@@ -2,7 +2,7 @@ import { PluginDriver } from './utils/PluginDriver';
 import { ElogCacheConfig, ElogConfig } from './types/common';
 import out from './utils/logger';
 import path from 'path';
-import { DocDetail, DocExt, DocStructure } from './types/doc';
+import { DocDetail, DocExt, SortedDoc } from './types/doc';
 import fs from 'fs';
 import { DocStatus } from './const';
 import { createRequire } from 'module';
@@ -43,7 +43,7 @@ export default class Graph {
    * 写入缓存信息
    * @param sortedDocList
    */
-  writeCache(sortedDocList: DocStructure[] = []) {
+  writeCache<T>(sortedDocList: SortedDoc<T>[] = []) {
     try {
       const { cacheFilePath } = this.elogConfig;
       // 判断cachedDocList列表中对象是否有 body 属性

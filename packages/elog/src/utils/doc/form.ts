@@ -1,4 +1,4 @@
-import { DocDetail, DocStructure } from '../../types/doc';
+import { DocDetail, SortedDoc } from '../../types/doc';
 import out from '../logger';
 import asyncPool from 'tiny-async-pool';
 import { DocStatus } from '../../const';
@@ -8,7 +8,7 @@ import { DocStatus } from '../../const';
  * @param cachedDocList
  * @param docs
  */
-export const filterDocs = <T>(cachedDocList: DocDetail[], docs: (T & DocStructure)[]) => {
+export const filterDocs = <T>(cachedDocList: DocDetail[], docs: SortedDoc<T>[]) => {
   // 过滤掉被删除的文章
   cachedDocList = cachedDocList.filter((cache) => {
     return docs.findIndex((item) => item.id === cache.id) !== -1;

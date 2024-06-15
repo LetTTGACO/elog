@@ -1,4 +1,4 @@
-import { DocDetail, DocStructure } from './doc';
+import { DocDetail, SortedDoc } from './doc';
 import { LoggingFunction } from './log';
 import type request from '../utils/request';
 import {
@@ -51,7 +51,7 @@ export type ReducePluginHooks = Pick<FunctionPluginHooks, FunctionReducePluginHo
 
 export interface FromPluginReturn {
   docDetailList: DocDetail[];
-  sortedDocList?: DocStructure[];
+  sortedDocList?: SortedDoc<any>[];
   docStatusMap: any;
 }
 
