@@ -31,7 +31,7 @@ export default class WolaiClient extends ElogFromContext {
       this.ctx.info(`下载文档 ${doc._index}/${needUpdateDocList.length}   `, doc.properties.title);
       return this.api.getDocDetail(doc);
     };
-    const docDetailList = await this.asyncPool(this.config.limit || 3, needUpdateDocList, promise);
+    const docDetailList = await this.asyncPool(this.config.limit || 10, needUpdateDocList, promise);
     this.ctx.info('已下载数', String(needUpdateDocList.length));
     return {
       docDetailList,

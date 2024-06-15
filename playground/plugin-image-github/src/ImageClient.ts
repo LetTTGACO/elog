@@ -15,6 +15,6 @@ export default class ImageClient extends ElogImageContext {
    * @param docDetailList
    */
   async processImages(docDetailList: DocDetail[]) {
-    return this.replaceImages(docDetailList, this.api);
+    return this.replaceImages(docDetailList, this.api, 3);
   }
 }

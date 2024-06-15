@@ -19,12 +19,13 @@ export class ElogImageContext extends ElogBaseContext {
    * 替换图片
    * @param docDetailList
    * @param uploader
+   * @param limit
    */
-  async replaceImages(docDetailList: DocDetail[], uploader: ImageUploader) {
+  async replaceImages(docDetailList: DocDetail[], uploader: ImageUploader, limit?: number) {
     if (this.imageBaseConfig.disable) {
       this.ctx.info('图片替换已禁用');
       return docDetailList;
     }
-    return replaceImagesFunc(docDetailList, uploader, this.imageBaseConfig.limit || 10);
+    return replaceImagesFunc(docDetailList, uploader, limit || this.imageBaseConfig.limit || 10);
   }
 }

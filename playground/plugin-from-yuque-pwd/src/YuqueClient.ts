@@ -92,7 +92,7 @@ export default class YuqueClient extends ElogFromContext {
       };
       return docDetail;
     };
-    const docDetailList = await this.asyncPool(this.config.limit || 3, needUpdateDocList, promise);
+    const docDetailList = await this.asyncPool(this.config.limit || 10, needUpdateDocList, promise);
     this.ctx.info('已下载数', String(needUpdateDocList.length));
     return {
       docDetailList,
