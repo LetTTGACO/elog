@@ -11,12 +11,12 @@ export interface ImageLocalConfig {
 
 export interface ImageUrl {
   url: string;
-  original: string;
+  originalUrl: string;
 }
 
 export interface ImageSource {
   fileName: string;
-  original: string;
+  originalUrl: string;
   url?: string;
   buffer?: Buffer;
 }

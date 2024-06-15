@@ -464,40 +464,36 @@
       "reviewCategory": "playground",
       "shouldPublish": true
     },
-    //    {
-    //      "packageName": "@elogx-test/plugin-image-github",
-    //      "projectFolder": "playground/plugin-image-github",
-    //      "reviewCategory": "playground",
-    //      "versionPolicyName": "playground",
-    //      "shouldPublish": true
-    //    },
+    {
+      "packageName": "@elogx-test/plugin-image-github",
+      "projectFolder": "playground/plugin-image-github",
+      "reviewCategory": "playground",
+      "shouldPublish": true
+    },
     {
       "packageName": "@elogx-test/plugin-image-local",
       "projectFolder": "playground/plugin-image-local",
       "reviewCategory": "playground",
       "shouldPublish": true
     },
-    //    {
-    //      "packageName": "@elogx-test/plugin-image-oss",
-    //      "projectFolder": "playground/plugin-image-oss",
-    //      "reviewCategory": "playground",
-    //      "versionPolicyName": "playground",
-    //      "shouldPublish": true
-    //    },
-    //    {
-    //      "packageName": "@elogx-test/plugin-image-qiniu",
-    //      "projectFolder": "playground/plugin-image-qiniu",
-    //      "reviewCategory": "playground",
-    //      "versionPolicyName": "playground",
-    //      "shouldPublish": true
-    //    },
-    //    {
-    //      "packageName": "@elogx-test/plugin-image-upyun",
-    //      "projectFolder": "playground/plugin-image-upyun",
-    //      "reviewCategory": "playground",
-    //      "versionPolicyName": "playground",
-    //      "shouldPublish": true
-    //    },
+    {
+      "packageName": "@elogx-test/plugin-image-oss",
+      "projectFolder": "playground/plugin-image-oss",
+      "reviewCategory": "playground",
+      "shouldPublish": true
+    },
+    {
+      "packageName": "@elogx-test/plugin-image-qiniu",
+      "projectFolder": "playground/plugin-image-qiniu",
+      "reviewCategory": "playground",
+      "shouldPublish": true
+    },
+    {
+      "packageName": "@elogx-test/plugin-image-upyun",
+      "projectFolder": "playground/plugin-image-upyun",
+      "reviewCategory": "playground",
+      "shouldPublish": true
+    },
     {
       "packageName": "@elogx-test/plugin-to-confluence",
       "projectFolder": "playground/plugin-to-confluence",

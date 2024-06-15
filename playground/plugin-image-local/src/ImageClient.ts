@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import { mkdirp } from 'mkdirp';
 
-export default class ImageLocal {
+export default class ImageClient {
   private readonly config: ImageLocalConfig;
   private readonly ctx: PluginContext;
 
@@ -92,7 +92,7 @@ export default class ImageLocal {
           // 替换文章中的图片
           urls.forEach((item) => {
             this.ctx.info('图片替换', `${item.url}`);
-            articleInfo.body = articleInfo.body.replace(item.original, item.url);
+            articleInfo.body = articleInfo.body.replace(item.originalUrl, item.url);
           });
         }
       }
@@ -125,7 +125,7 @@ export default class ImageLocal {
           }
           // 完整文件名
           const fullName = `${fileName}.${fileType.type}`;
-          const buffer = await this.ctx.imgUtil.getBufferFromUrl(image.original);
+          const buffer = await this.ctx.imgUtil.getBufferFromUrl(image.originalUrl);
           if (!buffer) {
             failBack?.(image);
             resolve(undefined);
@@ -135,7 +135,7 @@ export default class ImageLocal {
           resolve({
             buffer,
             fileName: fullName,
-            original: image.original,
+            originalUrl: image.originalUrl,
           });
         } catch (err: any) {
           resolve(undefined);
@@ -151,15 +151,15 @@ export default class ImageLocal {
       let newUrl: string | undefined = '';
       newUrl = this.writeImageToLocal(img.buffer!, img.fileName, doc);
       if (newUrl) {
-        output.push({ original: img.original, url: newUrl });
+        output.push({ originalUrl: img.originalUrl, url: newUrl });
       }
     }
     if (output.length) {
       output
-        .filter((item) => item.url && item.url !== item.original)
+        .filter((item) => item.url && item.url !== item.originalUrl)
         .map((item) => {
           return {
-            original: item.original,
+            original: item.originalUrl,
             url: item.url,
           };
         });

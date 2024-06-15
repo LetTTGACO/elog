@@ -1,0 +1,33 @@
+{
+  "name": "@elogx-test/plugin-image-qiniu",
+  "version": "1.0.2",
+  "description": "",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "@elogx-test/elog": "^1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@elogx-test/elog": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "qiniu": "~7.12.0"
+  },
+  "devDependencies": {
+    "tsup": "^6.7.0",
+    "@elogx-test/elog": "workspace:*",
+    "typescript": "~5.2.2",
+    "@types/node": "~18.15.3"
+  }
+}
