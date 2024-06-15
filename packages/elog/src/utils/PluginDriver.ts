@@ -12,15 +12,18 @@ import { ElogConfig } from '../types/common';
 import { getPluginContext } from './PluginContext';
 import out from './logger';
 import { getOrCreate } from './getOrCreate';
+import { DocDetail } from '../types/doc';
 
 export class PluginDriver {
   private readonly plugins: readonly IPlugin[];
   private readonly sortedPlugins = new Map<keyof PluginHooks, IPlugin[]>();
   private readonly pluginContexts: ReadonlyMap<IPlugin, PluginContext>;
 
-  constructor(option: ElogConfig) {
+  constructor(option: ElogConfig, cacheDocList: DocDetail[]) {
     this.plugins = this.normalizeOptions(option);
-    this.pluginContexts = new Map(this.plugins.map((plugin) => [plugin, getPluginContext()]));
+    this.pluginContexts = new Map(
+      this.plugins.map((plugin) => [plugin, getPluginContext(cacheDocList)]),
+    );
   }
 
   normalizeOptions(option: ElogConfig): IPlugin[] {

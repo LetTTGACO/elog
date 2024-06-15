@@ -1,4 +1,4 @@
-import { DocDetail } from './doc';
+import { DocDetail, DocStructure } from './doc';
 import { LoggingFunction } from './log';
 import type request from '../utils/request';
 import {
@@ -26,6 +26,7 @@ interface ImageUtilContext {
 
 export interface PluginContext {
   request: typeof request;
+  cacheDocList: DocDetail[];
   /** 注入日志输出模块 */
   debug: LoggingFunction;
   success: LoggingFunction;
@@ -48,11 +49,17 @@ export type FunctionVoidPluginHooks = 'start' | 'end' | 'deploy';
 export type VoidPluginHooks = Pick<FunctionPluginHooks, FunctionVoidPluginHooks>;
 export type ReducePluginHooks = Pick<FunctionPluginHooks, FunctionReducePluginHooks>;
 
+export interface FromPluginReturn {
+  docDetailList: DocDetail[];
+  sortedDocList?: DocStructure[];
+  docStatusMap: any;
+}
+
 export interface FunctionPluginHooks {
   /** 当前插件流程开始前钩子 */
   start: (this: PluginContext, inputOptions: InputOptions) => Promise<void> | void;
   /** 用于 From 插件的开始下载的钩子 */
-  down: (this: PluginContext) => Promise<DocDetail[]> | DocDetail[];
+  down: (this: PluginContext) => Promise<FromPluginReturn> | FromPluginReturn;
   /** 用于自定义处理文档信息 */
   transform: (this: PluginContext, docs: DocDetail[]) => Promise<DocDetail[]> | DocDetail[];
   /** 用于 To 插件的开始部署的钩子 */

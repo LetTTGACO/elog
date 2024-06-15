@@ -458,13 +458,12 @@
       "reviewCategory": "playground",
       "shouldPublish": true
     },
-    //    {
-    //      "packageName": "@elogx-test/plugin-image-cos",
-    //      "projectFolder": "playground/plugin-image-cos",
-    //      "reviewCategory": "playground",
-    //      "versionPolicyName": "playground",
-    //      "shouldPublish": true
-    //    },
+    {
+      "packageName": "@elogx-test/plugin-image-cos",
+      "projectFolder": "playground/plugin-image-cos",
+      "reviewCategory": "playground",
+      "shouldPublish": true
+    },
     //    {
     //      "packageName": "@elogx-test/plugin-image-github",
     //      "projectFolder": "playground/plugin-image-github",

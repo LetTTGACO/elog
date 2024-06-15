@@ -11,10 +11,12 @@ import {
   getFileTypeFromUrl,
   getUrlListFromContent,
 } from './image';
+import { DocDetail } from '../types/doc';
 
-export function getPluginContext(): PluginContext {
+export function getPluginContext(cacheDocList: DocDetail[]): PluginContext {
   return {
     request,
+    cacheDocList,
     debug: out.debug,
     error: out.error,
     success: out.success,

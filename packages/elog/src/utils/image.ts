@@ -2,16 +2,13 @@ import out from './logger';
 import imgSize from 'image-size';
 import request from './request';
 import { createHash } from 'node:crypto';
+import { ImageUrl } from '../types/image';
 
 interface FileType {
   type: string;
   name?: string;
 }
 
-interface ImageUrl {
-  url: string;
-  original: string;
-}
 /**
  * 通过图片url获取文件type, 不含"."
  * @param url
@@ -85,7 +82,7 @@ export const getUrlListFromContent = (content: string) => {
         if (url.startsWith('data:')) return undefined;
         // 去除#?号
         return {
-          original: url,
+          originalUrl: url,
           url: cleanUrlParam(url),
         };
       }

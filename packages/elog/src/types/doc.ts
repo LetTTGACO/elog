@@ -1,3 +1,5 @@
+import { DocStatus } from '../const';
+
 /** 文章属性 */
 export interface DocProperties {
   /** 文档短路径 */
@@ -16,7 +18,14 @@ export interface DocStructure {
   id: string;
   /** 文档标题 */
   title: string;
+  updateTime: number;
   [key: string]: any;
+}
+
+export interface DocExt {
+  _index: number;
+  _status: DocStatus;
+  _updateIndex: number;
 }
 
 export interface DocDetail {
@@ -25,43 +34,31 @@ export interface DocDetail {
   /** 文档标题 */
   title: string;
   /** 文档更新时间，时间戳 */
-  updateTime: number | string;
+  updateTime: number;
   /** 实际部署时的文档字符串 */
   body: string;
   /** 文档属性 */
   properties: DocProperties;
   /** 文档原本的目录信息 */
   docStructure?: DocStructure[];
-  /** 文档出错代码，下次同步时会重新下载并同步 */
-  error?: number;
   [key: string]: any;
 }
 
-export interface BaseConfig {
-  /** 是否禁用缓存 */
-  disableCache?: boolean;
-  /** 缓存文件目录 */
-  cacheFilePath?: string;
+export interface FromBaseConfig {
   /** 下载并发数 */
   limit?: number;
+}
+
+export interface ImageBaseConfig {
+  /** 是否禁用 */
+  disable?: boolean;
+  /** 自定义域名 */
+  host?: string;
+  /** 路径前缀 */
+  prefixKey?: string;
 }
 
 export interface WriteCacheConfig {
   cachedDocList?: Partial<DocDetail>[];
   sortedDocList: DocStructure[];
-}
-
-export interface DocStatusMap {
-  [key: string]: {
-    updateIndex: number;
-    status: DocStatus;
-  };
-}
-
-/**
- * 文章更新状态
- */
-export enum DocStatus {
-  update = 'update',
-  create = 'create',
 }
