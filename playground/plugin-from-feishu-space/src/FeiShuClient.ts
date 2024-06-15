@@ -7,7 +7,7 @@ export default class FeiShuClient extends ElogFromContext {
   api: FeiShuApi;
 
   constructor(config: FeiShuConfig, ctx: PluginContext) {
-    super(ctx, config);
+    super(ctx);
     this.config = config;
     this.api = new FeiShuApi(config, ctx);
   }
@@ -19,7 +19,7 @@ export default class FeiShuClient extends ElogFromContext {
     this.ctx.info('正在获取文档列表，请稍等...');
     // 获取已排序的文档
     const sortedDocList = await this.api.getSortedDocList();
-    const { docList: needUpdateDocList, idMap } = this.filterDocs(sortedDocList, 'id', 'updated');
+    const { docList: needUpdateDocList, docStatusMap } = this.filterDocs(sortedDocList);
     // 没有则不需要更新
     if (!needUpdateDocList.length) {
       this.ctx.success('任务结束', '没有需要同步的文档');
@@ -29,19 +29,16 @@ export default class FeiShuClient extends ElogFromContext {
 
     const promise = async (doc: FeiShuDoc) => {
       this.ctx.info(`下载文档 ${doc._index}/${needUpdateDocList.length}   `, doc.title);
-      return this.api.getDocDetail(doc);
+      const docDetail = await this.api.getDocDetail(doc);
+      // TODO 将图片转成 base64
+      return docDetail;
     };
     const docDetailList = await this.asyncPool(this.config.limit || 3, needUpdateDocList, promise);
-    // 更新缓存
-    this.updateCache(docDetailList, idMap);
     this.ctx.info('已下载数', String(needUpdateDocList.length));
-    // 写入缓存
-    this.writeCache({
-      sortedDocList: sortedDocList.map((item) => ({
-        id: item.id,
-        title: item.title,
-      })),
-    });
-    return docDetailList;
+    return {
+      docDetailList,
+      sortedDocList,
+      docStatusMap,
+    };
   }
 }

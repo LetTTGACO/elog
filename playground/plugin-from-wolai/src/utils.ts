@@ -6,7 +6,7 @@ import {
   WoLaiTableRow,
 } from './types';
 import { WolaiSortDirectionEnum } from './const';
-import { DocDetail, DocProperties, DocStructure } from '@elogx-test/elog';
+import { DocDetail, DocProperties, DocStructure, SortedDoc } from '@elogx-test/elog';
 
 /**
  * 获取元数据Val
@@ -123,7 +123,7 @@ export function genCatalog(doc: DocDetail, property: string): DocStructure[] | u
  * @param docs
  * @param sorts
  */
-export function sortDocs(docs: WoLaiDoc[], sorts?: WolaiSortItem) {
+export function sortDocs(docs: SortedDoc<WoLaiDoc>[], sorts?: WolaiSortItem) {
   return docs.sort((a, b) => {
     if (sorts) {
       let aSortValue = a.properties[sorts.property];
@@ -166,7 +166,10 @@ export function sortDocs(docs: WoLaiDoc[], sorts?: WolaiSortItem) {
  * @param docs
  * @param filter
  */
-export function filterDocs(docs: WoLaiDoc[], filter?: WolaiFilterItem | WolaiFilterItem[]) {
+export function filterDocs(
+  docs: SortedDoc<WoLaiDoc>[],
+  filter?: WolaiFilterItem | WolaiFilterItem[],
+) {
   return docs.filter((page) => {
     const pageProperties = page.properties;
     // 过滤

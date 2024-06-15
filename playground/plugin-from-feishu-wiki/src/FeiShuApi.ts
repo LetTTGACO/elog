@@ -1,4 +1,4 @@
-import { DocDetail, ElogBaseContext, PluginContext } from '@elogx-test/elog';
+import { DocDetail, ElogBaseContext, PluginContext, SortedDoc } from '@elogx-test/elog';
 import { FeiShuClient as FeiShuSDK } from '@feishux/api';
 import { FeiShuToMarkdown } from '@feishux/doc-to-md';
 import { FeiShuConfig, FeiShuDoc } from './types';
@@ -32,7 +32,7 @@ export default class FeiShuApi extends ElogBaseContext {
       this.config.wikiId as string,
       this.config.folderToken,
     );
-    const sortedDocList: (FeiShuDoc & Partial<IWikiNode>)[] = [];
+    const sortedDocList: SortedDoc<FeiShuDoc & Partial<IWikiNode>>[] = [];
     const self = this;
 
     // 深度优先遍历tree
@@ -43,16 +43,17 @@ export default class FeiShuApi extends ElogBaseContext {
           { title: parent?.title, doc_id: parent?.obj_token || parent?.node_token },
         ];
         if (item.obj_type == 'doc' || item.obj_type == 'docx') {
-          const doc: FeiShuDoc & Partial<IWikiNode> = {
+          const doc: SortedDoc<FeiShuDoc & Partial<IWikiNode>> = {
             id: item.obj_token,
             title: item.title,
             createdAt: Number(item.obj_create_time + '000'),
             updated: Number(item.obj_edit_time + '000'),
             updatedAt: Number(item.obj_edit_time + '000'),
-            catalog: level > 0 ? newCatalog : [],
             has_child: item.has_child,
             node_token: item.node_token,
             parent_node_token: item.parent_node_token,
+            updateTime: Number(item.obj_edit_time + '000'),
+            catalog: level > 0 ? newCatalog : [],
           };
           // 首先检查 item 是否没有 children 属性，或者 self.config.disableParentDoc 是否不为 true。
           // 如果这两个条件中的任何一个为 true，那么 doc 对象就会被添加到 self.catalog 数组中

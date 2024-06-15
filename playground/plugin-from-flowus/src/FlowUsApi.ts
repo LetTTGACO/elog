@@ -1,5 +1,11 @@
 import { FlowUsCatalogConfig, FlowUsConfig, FlowUsDoc, FlowUsFilterAndSortParams } from './types';
-import { DocDetail, DocStructure, ElogBaseContext, PluginContext } from '@elogx-test/elog';
+import {
+  DocDetail,
+  DocStructure,
+  ElogBaseContext,
+  PluginContext,
+  SortedDoc,
+} from '@elogx-test/elog';
 import { FlowUsSortDirectionEnum, FlowUsSortPresetEnum } from './const';
 import { FlowUsClient as FlowUsSDK } from '@flowusx/flowus-client';
 import { filterDocs, genCatalog, props, sortDocs } from './utils';
@@ -143,9 +149,10 @@ export default class FlowUsApi extends ElogBaseContext {
         updated: pageBLock.updatedAt,
         createdAt: pageBLock.createdAt,
         updatedAt: pageBLock.updatedAt,
+        updateTime: pageBLock.updatedAt,
         properties,
       };
-    }) as FlowUsDoc[];
+    }) as SortedDoc<FlowUsDoc>[];
     // 过滤
     filterAndSortDoc = filterDocs(filterAndSortDoc, filter);
     // 排序

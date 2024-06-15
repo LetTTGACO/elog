@@ -1,7 +1,7 @@
 import { FlowUsDoc, FlowUsFilterItem, FlowUsSortItem } from './types';
 import { FlowUsSortDirectionEnum } from './const';
 import { Block } from '@flowusx/flowus-types';
-import { DocProperties, DocStructure } from '@elogx-test/elog';
+import { DocProperties, DocStructure, SortedDoc } from '@elogx-test/elog';
 
 /**
  * 获取元数据Val
@@ -155,7 +155,7 @@ export function genCatalog(
  * @param docs
  * @param sorts
  */
-export function sortDocs(docs: FlowUsDoc[], sorts?: FlowUsSortItem) {
+export function sortDocs(docs: SortedDoc<FlowUsDoc>[], sorts?: FlowUsSortItem) {
   return docs.sort((a, b) => {
     if (sorts) {
       let aSortValue = a.properties[sorts.property];
@@ -198,7 +198,10 @@ export function sortDocs(docs: FlowUsDoc[], sorts?: FlowUsSortItem) {
  * @param docs
  * @param filter
  */
-export function filterDocs(docs: FlowUsDoc[], filter?: FlowUsFilterItem | FlowUsFilterItem[]) {
+export function filterDocs(
+  docs: SortedDoc<FlowUsDoc>[],
+  filter?: FlowUsFilterItem | FlowUsFilterItem[],
+) {
   return docs.filter((page) => {
     const pageProperties = page.properties;
     // 过滤

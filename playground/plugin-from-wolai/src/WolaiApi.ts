@@ -12,6 +12,7 @@ import {
   DocStructure,
   ElogBaseContext,
   PluginContext,
+  SortedDoc,
 } from '@elogx-test/elog';
 import { WolaiSortPresetEnum, WolaiSortDirectionEnum } from './const';
 import { filterDocs, genCatalog, props, sortDocs } from './utils';
@@ -208,13 +209,15 @@ export default class WolaiApi extends ElogBaseContext {
     const tableFields = tablePage.database_tables[databaseId].properties;
     let docs = list.rows.map((row) => {
       const properties = props(row, tableFields);
-      return {
+      const doc: SortedDoc<WoLaiDoc> = {
         ...row,
         createdAt: row.created_time,
         updatedAt: row.edited_time,
+        updateTime: row.edited_time,
         properties,
         id: row.block_id,
-      } as WoLaiDoc;
+      };
+      return doc;
     });
     const { filter, sort } = this.initFilterAndSortParamsParams();
     // 过滤

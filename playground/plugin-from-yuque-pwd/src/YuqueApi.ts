@@ -92,7 +92,7 @@ export default class YuqueApi extends ElogBaseContext {
   /**
    * 获取目录信息（已排序）
    */
-  async getSortedDocList() {
+  async getToc() {
     try {
       const res = await this.requestInternal(
         `${this.config.login}/${this.config.repo}`,

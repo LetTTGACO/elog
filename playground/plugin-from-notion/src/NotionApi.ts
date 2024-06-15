@@ -5,7 +5,13 @@ import type {
   NotionQueryParams,
   NotionSort,
 } from './types';
-import { DocDetail, DocStructure, ElogBaseContext, PluginContext } from '@elogx-test/elog';
+import {
+  DocDetail,
+  DocStructure,
+  ElogBaseContext,
+  PluginContext,
+  SortedDoc,
+} from '@elogx-test/elog';
 import { Client as NotionClient } from '@notionhq/client';
 import { NotionToMarkdown } from 'notion-to-md';
 import { NotionSortDirectionEnum, NotionSortPresetEnum } from './const';
@@ -155,16 +161,19 @@ export default class NotionApi extends ElogBaseContext {
    * 获取文章列表（不带详情）
    */
   async getSortedDocList() {
-    const docList: NotionDoc[] = [];
+    const docList: SortedDoc<NotionDoc>[] = [];
     const getList = async () => {
       let resp = await this.notion.databases.query({
         ...this.requestQueryParams,
       });
-      let docs = resp.results as NotionDoc[];
+      let docs = resp.results as SortedDoc<NotionDoc>[];
       docs = docs.map((doc) => {
         // 转换props
         doc.properties = props(doc);
-        return doc;
+        return {
+          ...doc,
+          updateTime: new Date(doc.last_edited_time).getTime(),
+        };
       });
       docList.push(...docs);
       // 分页查询

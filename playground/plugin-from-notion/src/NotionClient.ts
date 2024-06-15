@@ -1,5 +1,5 @@
 import { NotionConfig, NotionDoc } from './types';
-import { DocDetail, ElogFromContext, PluginContext } from '@elogx-test/elog';
+import { ElogFromContext, PluginContext } from '@elogx-test/elog';
 import NotionApi from './NotionApi';
 
 export default class NotionClient extends ElogFromContext {
@@ -7,7 +7,7 @@ export default class NotionClient extends ElogFromContext {
   private readonly api: NotionApi;
 
   constructor(config: NotionConfig, ctx: PluginContext) {
-    super(ctx, config);
+    super(ctx);
     this.config = config;
     this.api = new NotionApi(config, ctx);
     this.initCatalogConfig();
@@ -45,11 +45,8 @@ export default class NotionClient extends ElogFromContext {
     this.ctx.info('正在获取文档列表，请稍等...');
     // 获取待发布的文章
     const sortedDocList = await this.api.getSortedDocList();
-    const { docList: needUpdateDocList, idMap } = this.filterDocs(
-      sortedDocList,
-      'id',
-      'last_edited_time',
-    );
+    // 过滤不需要更新的文档
+    const { docList: needUpdateDocList, docStatusMap } = this.filterDocs(sortedDocList);
     // 没有则不需要更新
     if (!needUpdateDocList.length) {
       this.ctx.success('任务结束', '没有需要同步的文档');
@@ -58,28 +55,14 @@ export default class NotionClient extends ElogFromContext {
     this.ctx.info('待下载数', String(needUpdateDocList.length));
     const promise = async (doc: NotionDoc) => {
       this.ctx.info(`下载文档 ${doc._index}/${needUpdateDocList.length}   `, doc.properties.title);
-      let article = await this.api.getDocDetail(doc);
-      const docDetail: DocDetail = {
-        id: doc.id,
-        title: doc.properties.title,
-        body: article.body,
-        properties: article.properties,
-        updateTime: new Date(doc.last_edited_time).getTime(),
-        docStructure: doc.docStructure,
-      };
-      return docDetail;
+      return this.api.getDocDetail(doc);
     };
     const docDetailList = await this.asyncPool(this.config.limit || 3, needUpdateDocList, promise);
-    // 更新缓存
-    this.updateCache(docDetailList, idMap);
     this.ctx.info('已下载数', String(needUpdateDocList.length));
-    // 写入缓存
-    this.writeCache({
-      sortedDocList: sortedDocList.map((item) => ({
-        id: item.id,
-        title: item.properties.title,
-      })),
-    });
-    return docDetailList;
+    return {
+      docDetailList,
+      sortedDocList,
+      docStatusMap,
+    };
   }
 }

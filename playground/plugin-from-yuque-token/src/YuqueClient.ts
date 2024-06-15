@@ -1,5 +1,11 @@
 import { YuqueDoc, YuqueWithTokenConfig } from './types';
-import { DocDetail, DocStructure, ElogFromContext, PluginContext } from '@elogx-test/elog';
+import {
+  DocDetail,
+  DocStructure,
+  ElogFromContext,
+  PluginContext,
+  SortedDoc,
+} from '@elogx-test/elog';
 import YuqueApi from './YuqueApi';
 import { IllegalityDocFormat } from './const';
 import { getProps, processMarkdownRaw } from './utils';
@@ -8,7 +14,7 @@ export default class YuqueClient extends ElogFromContext {
   private readonly config: YuqueWithTokenConfig;
   private readonly api: YuqueApi;
   constructor(config: YuqueWithTokenConfig, ctx: PluginContext) {
-    super(ctx, config);
+    super(ctx);
     this.config = config;
     // 初始化语雀 api
     this.api = new YuqueApi(config, ctx);
@@ -22,7 +28,7 @@ export default class YuqueClient extends ElogFromContext {
     // 获取目录
     const sortedDocList = await this.api.getSortedDocList();
     // 获取文档列表
-    let yuqueBaseDocList = await this.api.getDocList();
+    let yuqueBaseDocList = (await this.api.getDocList()) as SortedDoc<YuqueDoc>[];
     // 根据目录排序文档顺序，处理文档目录
     yuqueBaseDocList = sortedDocList
       .filter((item) => {
@@ -42,8 +48,9 @@ export default class YuqueClient extends ElogFromContext {
         }
         return {
           ...doc,
+          updateTime: new Date(doc.updated_at).getTime(),
           docStructure: catalogPath.reverse(),
-        } as YuqueDoc;
+        };
       })
       .filter((page) => {
         // 过滤不支持的文档格式
@@ -59,11 +66,7 @@ export default class YuqueClient extends ElogFromContext {
         return this.config.onlyPublic ? !!page.public : true;
       });
     // 过滤未更新的文档
-    const { docList: needUpdateDocList, idMap } = this.filterDocs(
-      yuqueBaseDocList,
-      'slug',
-      'updated_at',
-    );
+    const { docList: needUpdateDocList, docStatusMap } = this.filterDocs(yuqueBaseDocList);
     // 没有则不需要更新
     if (!needUpdateDocList.length) {
       this.ctx.success('任务结束', '没有需要同步的文档');
@@ -88,16 +91,11 @@ export default class YuqueClient extends ElogFromContext {
       return docDetail;
     };
     const docDetailList = await this.asyncPool(this.config.limit || 3, needUpdateDocList, promise);
-    // 更新缓存里的文章
-    this.updateCache(docDetailList, idMap);
     this.ctx.info('已下载数', String(needUpdateDocList.length));
-    // 写入缓存
-    this.writeCache({
-      sortedDocList: yuqueBaseDocList.map((item) => ({
-        id: item.slug,
-        title: item.title,
-      })),
-    });
-    return docDetailList;
+    return {
+      docDetailList,
+      sortedDocList,
+      docStatusMap,
+    };
   }
 }

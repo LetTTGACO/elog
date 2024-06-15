@@ -1,4 +1,4 @@
-import { DocDetail, ElogBaseContext, PluginContext } from '@elogx-test/elog';
+import { DocDetail, ElogBaseContext, PluginContext, SortedDoc } from '@elogx-test/elog';
 import { FeiShuClient as FeiShuSDK } from '@feishux/api';
 import { FeiShuToMarkdown } from '@feishux/doc-to-md';
 import { FeiShuConfig, FeiShuDoc } from './types';
@@ -28,7 +28,7 @@ export default class FeiShuApi extends ElogBaseContext {
 
   async getSortedDocList() {
     const tree = await this.feishu.getFolderTree(this.config.folderToken as string);
-    const sortedDocList: FeiShuDoc[] = [];
+    const sortedDocList: SortedDoc<FeiShuDoc>[] = [];
     // 深度优先遍历tree
     function dfs(tree: IFolderData[], catalog: any[] = [], level = 0, parent?: IFolderData) {
       tree.map((item) => {
@@ -40,6 +40,7 @@ export default class FeiShuApi extends ElogBaseContext {
             updated: Number(item.modified_time + '000'),
             createdAt: Number(item.created_time + '000'),
             updatedAt: Number(item.modified_time + '000'),
+            updateTime: Number(item.modified_time + '000'),
             // 目录信息
             catalog: level > 0 ? newCatalog : [],
           });
