@@ -1,10 +1,10 @@
 import { DocDetail } from './doc';
 
 export interface ImageUrl {
-  /** 更新后的 url */
-  url: string;
+  data: string;
   /** 原始 url*/
   originalUrl: string;
+  type: 'url' | 'base64';
 }
 
 export interface ImageSource {

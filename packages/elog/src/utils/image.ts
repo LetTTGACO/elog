@@ -72,18 +72,26 @@ export const cleanUrlParam = (originalUrl: string) => {
  * 从 md 文档获取图片链接列表
  * @param content
  */
-export const getUrlListFromContent = (content: string) => {
+export const getUrlListFromContent = (content: string): ImageUrl[] => {
   return (content.match(/!\[[^\]]*\]\(([^)]+)\)/g) || [])
     .map((item: string) => {
       const res = item.match(/\!\[.*\]\((.*?)( ".*")?\)/);
       if (res) {
-        const url = res[1];
+        let url = res[1];
         // 过滤 Base64 图片
-        if (url.startsWith('data:')) return undefined;
+        if (url.startsWith('data:')) {
+          return {
+            originalUrl: url,
+            data: url,
+            type: 'buffer',
+          };
+        }
         // 去除#?号
+        url = cleanUrlParam(url);
         return {
           originalUrl: url,
-          url: cleanUrlParam(url),
+          data: url,
+          type: 'url',
         };
       }
       return undefined;
@@ -120,6 +128,16 @@ export const genUniqueIdFromUrl = (url: string, length?: number) => {
  * @param url
  */
 export const getFileType = async (url: string) => {
+  // 从 base64 中获取文件类型
+  if (url.startsWith('data:')) {
+    const base64Reg = /^data:image\/(\w+);base64,/;
+    const res = url.match(base64Reg);
+    if (res) {
+      return {
+        type: res[1],
+      };
+    }
+  }
   let fileType: FileType | undefined = getFileTypeFromUrl(url, false);
   if (!fileType) {
     // 尝试从 buffer 中获取

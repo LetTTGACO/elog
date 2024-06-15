@@ -56,11 +56,15 @@ export const transformImagesFunc = async (options: TransformImageOptions) => {
   const promise = async (image: ImageUrl): Promise<ImageSource | undefined> => {
     try {
       // 生成文件名
-      const fileName = genUniqueIdFromUrl(image.url);
+      const fileName = genUniqueIdFromUrl(image.data);
       // 生成文件名后缀
-      const fileType = await getFileType(image.url);
+      const fileType = await getFileType(image.data);
       if (!fileType) {
-        out.warn(`${doc?.properties?.title} 存在获取图片类型失败，跳过：${image.url}`);
+        if (image.type === 'url') {
+          out.warn(`${doc?.properties?.title} 存在获取图片类型失败，跳过：${image.data}`);
+        } else {
+          out.warn(`${doc?.properties?.title} 存在获取图片类型失败`);
+        }
         return undefined;
       }
       // 完整文件名
@@ -76,7 +80,17 @@ export const transformImagesFunc = async (options: TransformImageOptions) => {
           url: exist,
         };
       } else {
-        const buffer = await getBufferFromUrl(image.originalUrl);
+        let buffer = null;
+        if (image.type === 'base64') {
+          // base64 转 buffer
+          const buffer = Buffer.from(image.data, 'base64');
+          if (!buffer) {
+            failBack?.(image);
+            return undefined;
+          }
+        } else {
+          buffer = await getBufferFromUrl(image.originalUrl);
+        }
         if (!buffer) {
           failBack?.(image);
           return undefined;
@@ -84,7 +98,11 @@ export const transformImagesFunc = async (options: TransformImageOptions) => {
         // 上传图片
         let url = await imageClient.uploadImage(fileName, buffer);
         if (!url) {
-          out.warn(`${doc?.properties?.title} 存在上传图片失败：${image.url}`);
+          if (image.type === 'url') {
+            out.warn(`${doc?.properties?.title} 存在上传图片失败：${image.data}`);
+          } else {
+            out.warn(`${doc?.properties?.title} 存在上传图片失败`);
+          }
           url = image.originalUrl;
         } else {
           out.info('上传成功', url);
