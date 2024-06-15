@@ -14,7 +14,6 @@ export default class Graph {
   private readonly cachedDocList: DocDetail[] = [];
   constructor(options: ElogConfig) {
     this.elogConfig = options;
-    this.elogConfig.cacheFilePath = this.elogConfig.cacheFilePath || 'elog.cache.json';
     this.cachedDocList = this.initCache(options);
     this.pluginDriver = new PluginDriver(options, this.cachedDocList);
   }
@@ -47,14 +46,6 @@ export default class Graph {
   writeCache<T>(sortedDocList: SortedDoc<T>[] = []) {
     try {
       const { cacheFilePath } = this.elogConfig;
-      // // 判断cachedDocList列表中对象是否有 body 属性
-      // const hasBody = this.cachedDocList?.some((doc) => !!doc.body);
-      // if (hasBody) {
-      //   out.debug(
-      //     '警告',
-      //     '缓存信息存在 body（文档内容）信息，可能会导致缓存文件过大，如无必要用途建议删除 body 属性',
-      //   );
-      // }
       // 写入缓存
       const cacheJson = {
         cachedDocList: this.cachedDocList.map((item) => ({ ...item, body: undefined })),
@@ -63,6 +54,7 @@ export default class Graph {
       fs.writeFileSync(cacheFilePath!, JSON.stringify(cacheJson, null, 2), {
         encoding: 'utf8',
       });
+      out.success('任务结束', `同步成功，已生成缓存文件：${cacheFilePath}`);
     } catch (e) {
       out.warn('缓存失败', `写入缓存信息失败，请检查，${e.message}`);
     }
@@ -74,9 +66,7 @@ export default class Graph {
    * @param docStatusMap
    */
   updateCache(docList: DocDetail[], docStatusMap: any) {
-    console.log('docStatusMap', docStatusMap);
     for (const doc of docList) {
-      console.log('doc.id', doc.id);
       const { _updateIndex, _status } = docStatusMap[doc.id];
       if (_status === DocStatus.NEW) {
         // 新增文档

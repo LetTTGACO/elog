@@ -2,6 +2,7 @@ import path from 'path';
 import JoyCon from 'joycon';
 import { bundleRequire } from 'bundle-require';
 import { defineConfig } from './elog';
+import { ElogConfig } from '../types/common';
 
 export async function loadConfigFromFile(
   cwd: string,
@@ -21,9 +22,33 @@ export async function loadConfigFromFile(
     const config = await bundleRequire({
       filepath: configPath,
     });
+
+    let data: ElogConfig | ElogConfig[] = config.mod.default || config.mod;
+    if (Array.isArray(data)) {
+      if (data.length > 1) {
+        data = data.map((item, index) => {
+          return {
+            ...item,
+            cacheFilePath: item.cacheFilePath || `elog.cache${index + 1}.json`,
+          };
+        });
+      } else {
+        data = data.map((item) => {
+          return {
+            ...item,
+            cacheFilePath: item.cacheFilePath || 'elog.cache.json',
+          };
+        });
+      }
+    } else {
+      data = {
+        ...data,
+        cacheFilePath: data.cacheFilePath || 'elog.cache.json',
+      };
+    }
     return {
       path: configPath,
-      data: config.mod.default || config.mod,
+      data,
     };
   }
 

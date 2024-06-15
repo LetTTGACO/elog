@@ -7,7 +7,7 @@ export default defineConfig({
   from: fromYuque({
     token: process.env.YUQUE_TOKEN,
     login: process.env.YUQUE_LOGIN,
-    repo: process.env.YUQUE_REPO,
+    repo: process.env.YUQUE_REPO1,
     onlyPublic: false,
   }),
   to: [
