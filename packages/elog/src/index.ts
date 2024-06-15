@@ -4,6 +4,7 @@ import { run } from './cli';
 export type * from './types/log';
 export * from './types/common';
 export * from './types/doc';
+export * from './types/image';
 export * from './types/plugin';
 export * from './utils/context';
 export * from './utils/doc/form';

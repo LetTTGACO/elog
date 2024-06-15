@@ -7,7 +7,24 @@ export interface ImageUrl {
   originalUrl: string;
 }
 
+export interface ImageSource {
+  fileName: string;
+  originalUrl: string;
+  url: string;
+}
+
 export interface ImageUploader {
-  hasImage: (filename: string) => string | null;
-  uploadImage: (fileName: string, buffer: Buffer, doc?: DocDetail) => string | null;
+  hasImage: (filename: string) => Promise<string | null | undefined>;
+  uploadImage: (
+    fileName: string,
+    buffer: Buffer,
+    doc?: DocDetail,
+  ) => Promise<string | null | undefined>;
+}
+
+export interface ImageBaseConfig {
+  /** 是否禁用 */
+  disable?: boolean;
+  /** 并发数 */
+  limit?: number;
 }

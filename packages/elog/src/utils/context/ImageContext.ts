@@ -1,19 +1,30 @@
 import { PluginContext } from '../../types/plugin';
-import { DocDetail, ImageBaseConfig } from '../../types/doc';
+import { DocDetail } from '../../types/doc';
 
 import { ElogBaseContext } from './BaseContext';
-import { ImageUploader } from '../../types/image';
+import { ImageBaseConfig, ImageUploader } from '../../types/image';
+import { replaceImagesFunc } from '../doc/image';
 
 /**
- * 适用于 From 写作平台的 Elog 工具类
+ * 适用于图片替换工具类
  */
 export class ElogImageContext extends ElogBaseContext {
-  // private readonly baseConfig: ImageBaseConfig;
-  // private readonly uploader: ImageUploader;
-  constructor(ctx: PluginContext, baseConfig: ImageBaseConfig, uploader: ImageUploader) {
+  private readonly imageBaseConfig: ImageBaseConfig;
+  constructor(ctx: PluginContext, imageBaseConfig: ImageBaseConfig) {
     super(ctx);
-    // this.baseConfig = baseConfig;
+    this.imageBaseConfig = imageBaseConfig;
   }
 
-  replaceImages(docList: DocDetail[]) {}
+  /**
+   * 替换图片
+   * @param docDetailList
+   * @param uploader
+   */
+  async replaceImages(docDetailList: DocDetail[], uploader: ImageUploader) {
+    if (this.imageBaseConfig.disable) {
+      this.ctx.info('图片替换已禁用');
+      return docDetailList;
+    }
+    return replaceImagesFunc(docDetailList, uploader, this.imageBaseConfig.limit || 10);
+  }
 }

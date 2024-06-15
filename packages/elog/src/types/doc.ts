@@ -43,23 +43,4 @@ export interface DocDetail {
   [key: string]: any;
 }
 
-export interface FromBaseConfig {
-  /** 下载并发数 */
-  limit?: number;
-}
-
-export interface ImageBaseConfig {
-  /** 是否禁用 */
-  disable?: boolean;
-  /** 自定义域名 */
-  host?: string;
-  /** 路径前缀 */
-  prefixKey?: string;
-}
-
-export interface WriteCacheConfig {
-  cachedDocList?: Partial<DocDetail>[];
-  sortedDocList: DocStructure[];
-}
-
 export type SortedDoc<T> = T & { id: string; updateTime: number };
