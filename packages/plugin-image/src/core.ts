@@ -12,6 +12,7 @@ import {
 import { DocDetail } from '@elog/types'
 import { ImagePlatformEnum } from './platform/const'
 import { ImageSource, ImageUrl } from './types'
+import asyncPool from 'tiny-async-pool'
 
 class ImageUploader {
   config: ImageConfig
@@ -155,7 +156,6 @@ class ImageUploader {
    * 从飞书下载图片
    * @param articleList
    * @param feishuClient
-   * @param doc
    */
 
   async replaceImagesFromFeiShu(articleList: DocDetail[], feishuClient: any) {
@@ -180,57 +180,59 @@ class ImageUploader {
     }
     return articleList
   }
+
+  /**
+   * 从飞书上传图片
+   * @param urlList
+   * @param feishuClient
+   * @param doc
+   * @param failBack
+   */
   async uploadFromFeiShu(
     urlList: ImageUrl[],
     feishuClient: any,
     doc: DocDetail,
     failBack?: (image: ImageUrl) => void,
   ) {
-    const toUploadURLs = urlList.map(async (image) => {
-      return await new Promise<ImageSource | undefined>(async (resolve) => {
-        try {
-          // 从飞书下载图片
-          const res = await feishuClient.getResourceItem(image.url)
-          // 完整文件名
-          const fullName = res.name
-          // out.info('处理图片', `生成文件名: ${fullName}`)
-          // 检查图床是否存在该文件
-          let exist = await this.ctx.hasImage(fullName)
-          if (exist) {
-            out.info('忽略上传', `图片已存在: ${exist}`)
-            // 图片已存在
-            resolve({
-              fileName: fullName,
-              original: image.original,
-              url: exist,
-              upload: false,
-            })
-          } else {
-            const buffer = res.buffer
-            if (!buffer) {
-              failBack?.(image)
-              resolve(undefined)
-              return
-            }
-            // 上传图片
-            resolve({
-              buffer,
-              fileName: fullName,
-              original: image.original,
-              upload: true,
-            })
+    const toUploadURLs: ImageSource[] = []
+    const promise = async (image: ImageUrl) => {
+      try {
+        // 从飞书下载图片
+        const res = await feishuClient.getResourceItem(image.url)
+        // 完整文件名
+        const fullName = res.name
+        // out.info('处理图片', `生成文件名: ${fullName}`)
+        // 检查图床是否存在该文件
+        let exist = await this.ctx.hasImage(fullName)
+        if (exist) {
+          out.info('忽略上传', `图片已存在: ${exist}`)
+          // 图片已存在
+          toUploadURLs.push({
+            fileName: fullName,
+            original: image.original,
+            url: exist,
+            upload: false,
+          })
+        } else {
+          const buffer = res.buffer
+          if (!buffer) {
+            failBack?.(image)
+            return
           }
-        } catch (err: any) {
-          resolve(undefined)
+          // 上传图片
+          toUploadURLs.push({
+            buffer,
+            fileName: fullName,
+            original: image.original,
+            upload: true,
+          })
         }
-      })
-    })
-    const toUploadImgs = (await Promise.all(toUploadURLs).then((imgs) =>
-      imgs.filter((img) => img !== undefined),
-    )) as ImageSource[]
+      } catch (err: any) {}
+    }
+    await asyncPool(this.config.limit || 3, urlList, promise)
     let output: ImageUrl[] = []
 
-    for (const img of toUploadImgs) {
+    for (const img of toUploadURLs) {
       let newUrl: string | undefined = ''
       if (img.upload) {
         newUrl = await this.ctx.uploadImg(img.buffer!, img.fileName, doc)

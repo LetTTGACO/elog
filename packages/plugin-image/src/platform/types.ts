@@ -75,5 +75,7 @@ export type ImageConfig = {
   /** 不开启图床使用图床插件 */
   enableForExt?: string
   plugin?: ImagePlugin
+  /** 下载并发数 */
+  limit?: number
   [key: string]: any
 } & ImagePlatformConfig
