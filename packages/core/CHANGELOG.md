@@ -1,5 +1,21 @@
 # @elog/core
 
+## 0.14.2-beta.1
+
+### Patch Changes
+
+- 修复飞书下载并发限制
+- Updated dependencies
+  - @elog/plugin-image@0.14.2-beta.1
+  - @elog/sdk-feishu@0.14.2-beta.1
+  - @elog/sdk-flowus@0.14.2-beta.1
+  - @elog/sdk-notion@0.14.2-beta.1
+  - @elog/sdk-wolai@0.14.2-beta.1
+  - @elog/sdk-yuque@0.14.2-beta.1
+  - @elog/deploy@0.14.2-beta.1
+  - @elog/shared@0.14.2-beta.1
+  - @elog/types@0.14.2-beta.1
+
 ## 0.14.2-beta.0
 
 ### Patch Changes

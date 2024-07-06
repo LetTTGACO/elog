@@ -1,5 +1,18 @@
 # @elog/deploy
 
+## 0.14.2-beta.1
+
+### Patch Changes
+
+- 修复飞书下载并发限制
+- Updated dependencies
+  - @elog/plugin-adapter@0.14.2-beta.1
+  - @elog/sdk-confluence@0.14.2-beta.1
+  - @elog/sdk-wordpress@0.14.2-beta.1
+  - @elog/sdk-halo@0.14.2-beta.1
+  - @elog/shared@0.14.2-beta.1
+  - @elog/types@0.14.2-beta.1
+
 ## 0.14.2-beta.0
 
 ### Patch Changes
