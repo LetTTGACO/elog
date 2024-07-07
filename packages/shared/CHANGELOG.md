@@ -1,5 +1,13 @@
 # @elog/shared
 
+## 0.14.2
+
+### Patch Changes
+
+- 610747c: 修复飞书下载并发限制
+- 0b79baf: 升级 feishu 依赖
+- 0.14.2
+
 ## 0.14.2-beta.1
 
 ### Patch Changes

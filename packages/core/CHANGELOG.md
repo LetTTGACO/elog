@@ -1,5 +1,25 @@
 # @elog/core
 
+## 0.14.2
+
+### Patch Changes
+
+- 610747c: 修复飞书下载并发限制
+- 0b79baf: 升级 feishu 依赖
+- 0.14.2
+- Updated dependencies [610747c]
+- Updated dependencies [0b79baf]
+- Updated dependencies
+  - @elog/plugin-image@0.14.2
+  - @elog/sdk-feishu@0.14.2
+  - @elog/sdk-flowus@0.14.2
+  - @elog/sdk-notion@0.14.2
+  - @elog/sdk-wolai@0.14.2
+  - @elog/sdk-yuque@0.14.2
+  - @elog/deploy@0.14.2
+  - @elog/shared@0.14.2
+  - @elog/types@0.14.2
+
 ## 0.14.2-beta.1
 
 ### Patch Changes
