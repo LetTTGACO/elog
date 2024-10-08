@@ -158,6 +158,7 @@ Elog将这些平台揉合在一起，你可以随意组合写作平台和博客�
 - [Xlenco&#39;s Blog](https://github.com/xlenco/blog) hexo+elog+语雀，部署在vercel和azure web  👉  [Xlenco&#39;s Blog](https://blog.xlenco.top/p/1420.html)
 - FlowUs+Hexo+Github Actions+Vercel 博客解决方案  👉  [白](https://www.imbai.cn/posts/32113.html)
 - [OfferNow](https://github.com/white0dew/OfferNow) 语雀 + Elog + NextJs渲染   👉  [OffewNow](https://offernow.cn/)
+- [yuque_halo](https://github.com/Flionay/yuque_halo) 语雀 + Halo + GitHub Actions 👉  [AngYi](https://www.angyi.online/archives/rw9pet6kloggaehv)
 
 ## 👬 社区生态
 可访问 [awesome-elog仓库](https://github.com/elog-x/awesome-elog) 查看相关资源，如果你也有优秀的实践或工具，欢迎提交PR到 [awesome-elog](https://github.com/elog-x/awesome-elog)
