@@ -156,7 +156,7 @@ class YuqueClient {
         method: 'GET',
         data: {
           attachment: true,
-          latexcode: false,
+          latexcode: this.config.keepLatexCode, // 是否保留latex代码
           anchor: false,
           linebreak: !!this.config.linebreak,
         },
