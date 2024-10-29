@@ -1,5 +1,14 @@
 # @elog/sdk-notion
 
+## 0.14.3
+
+### Patch Changes
+
+- 语雀 pwd 模式下增加是否保留公式代码选项
+- Updated dependencies
+  - @elog/shared@0.14.3
+  - @elog/types@0.14.3
+
 ## 0.14.2
 
 ### Patch Changes
