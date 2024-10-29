@@ -6,7 +6,7 @@ export interface YuqueWithPwdConfig {
   repo: string
   linebreak?: boolean
   /** 保留公式代码而不是以图片形式 */
-  keepLatexCode?: boolean
+  latexCode?: boolean
   onlyPublic?: boolean
   onlyPublished?: boolean
   /** 下载并发数 */
