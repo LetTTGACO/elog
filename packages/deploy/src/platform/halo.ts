@@ -229,6 +229,9 @@ class DeployHalo {
             cover: '',
             deleted: false,
             publish: false,
+            publishTime: doc.properties.date
+              ? new Date(doc.properties.date).toISOString()
+              : new Date().toISOString(),
             pinned: false,
             allowComment: true,
             visible: PostSpecVisibleEnum.Public,
@@ -245,6 +248,9 @@ class DeployHalo {
           kind: 'Post',
           metadata: {
             name: doc.doc_id,
+            creationTimestamp: doc.properties.date
+              ? new Date(doc.properties.date).toISOString()
+              : new Date().toISOString(),
           },
         },
         content: {
@@ -261,6 +267,11 @@ class DeployHalo {
           raw: '',
           content: '',
           rawType: 'html',
+        }
+        // 如果存在日期属性，更新现有帖子的创建时间戳
+        if (doc.properties.date) {
+          params.post.spec.publishTime = new Date(doc.properties.date).toISOString()
+          params.post.metadata.creationTimestamp = new Date(doc.properties.date).toISOString()
         }
       }
       // 覆盖文档标题
