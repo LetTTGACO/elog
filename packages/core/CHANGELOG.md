@@ -1,5 +1,21 @@
 # @elog/core
 
+## 0.14.4
+
+### Patch Changes
+
+- 发布到 halo 平台时添加创建时间和发布时间
+- Updated dependencies
+  - @elog/plugin-image@0.14.4
+  - @elog/sdk-feishu@0.14.4
+  - @elog/sdk-flowus@0.14.4
+  - @elog/sdk-notion@0.14.4
+  - @elog/sdk-wolai@0.14.4
+  - @elog/sdk-yuque@0.14.4
+  - @elog/deploy@0.14.4
+  - @elog/shared@0.14.4
+  - @elog/types@0.14.4
+
 ## 0.14.3
 
 ### Patch Changes
