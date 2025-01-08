@@ -1,5 +1,18 @@
 # @elog/deploy
 
+## 0.14.5
+
+### Patch Changes
+
+- 修复写入文件时，文件名不合法时无法写入的问题
+- Updated dependencies
+  - @elog/plugin-adapter@0.14.5
+  - @elog/sdk-confluence@0.14.5
+  - @elog/sdk-wordpress@0.14.5
+  - @elog/sdk-halo@0.14.5
+  - @elog/shared@0.14.5
+  - @elog/types@0.14.5
+
 ## 0.14.4
 
 ### Patch Changes

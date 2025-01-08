@@ -1,5 +1,14 @@
 # @elog/sdk-notion
 
+## 0.14.5
+
+### Patch Changes
+
+- 修复写入文件时，文件名不合法时无法写入的问题
+- Updated dependencies
+  - @elog/shared@0.14.5
+  - @elog/types@0.14.5
+
 ## 0.14.4
 
 ### Patch Changes

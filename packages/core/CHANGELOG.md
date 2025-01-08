@@ -1,5 +1,21 @@
 # @elog/core
 
+## 0.14.5
+
+### Patch Changes
+
+- 修复写入文件时，文件名不合法时无法写入的问题
+- Updated dependencies
+  - @elog/plugin-image@0.14.5
+  - @elog/sdk-feishu@0.14.5
+  - @elog/sdk-flowus@0.14.5
+  - @elog/sdk-notion@0.14.5
+  - @elog/sdk-wolai@0.14.5
+  - @elog/sdk-yuque@0.14.5
+  - @elog/deploy@0.14.5
+  - @elog/shared@0.14.5
+  - @elog/types@0.14.5
+
 ## 0.14.4
 
 ### Patch Changes
