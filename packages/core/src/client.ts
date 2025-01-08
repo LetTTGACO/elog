@@ -19,7 +19,7 @@ import { BaseDoc, DocDetail } from '@elog/types'
 // const
 import { DocStatus, WritePlatform } from './const'
 // utils
-import { ImageFail, out } from '@elog/shared'
+import { ImageFail, DocFail, out } from '@elog/shared'
 import * as fs from 'fs'
 import * as path from 'path'
 
@@ -181,7 +181,10 @@ class Elog {
             `上次同步时 【${cacheArticle.properties.title}】 存在图片下载失败，本次将尝试重新同步`,
           )
         }
-        if (!cacheAvailable || cacheArticle.needUpdate === ImageFail) {
+        if (cacheArticle.needUpdate === DocFail) {
+          out.access(`上次同步时 【${cacheArticle.doc_id}】存在文档错误，本次将尝试重新同步`)
+        }
+        if (!cacheAvailable || cacheArticle.needUpdate) {
           // 如果文章更新了则加入需要下载的ids列表, 没有更新则不需要下载
           ids.push(article.doc_id)
           // 记录被更新文章状态和索引
@@ -359,7 +362,7 @@ class Elog {
       const isNeedSyncForce = this.syncForced()
       // 结束进程
       if (isNeedSyncForce) {
-        out.access('任务结束', '同步成功！')
+        out.access('任务结束', '同步完成！')
       } else {
         out.access('任务结束', '没有需要同步的文档')
       }
@@ -381,7 +384,7 @@ class Elog {
     this.syncForced()
     // 写入文章缓存
     this.writeArticleCache()
-    out.access('任务结束', '同步成功！')
+    out.access('任务结束', '同步完成！')
   }
 }
 

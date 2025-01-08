@@ -1,7 +1,7 @@
 import filenamify from 'filenamify'
 import path from 'path'
 import mkdirp from 'mkdirp'
-import { out } from '@elog/shared'
+import { DocFail, out } from '@elog/shared'
 import fs from 'fs'
 import { AdapterFunction, LocalConfig } from '../types'
 import { FileNameEnum } from '../const'
@@ -99,28 +99,42 @@ class DeployLocal {
           const tocPath = post.catalog.map((item) => item.title).join('/')
           fileName = this.checkFileName(fileName + tocPath, fileName, post.doc_id)
           const outdir = path.join(outputDir, tocPath)
+          // 生成文件夹
           mkdirp.sync(outdir)
           postPath = path.join(outdir, `${fileName}.${this.fileExt}`)
-          // 生成文件夹
-          out.info('生成文档', `${fileName}.${this.fileExt}`)
         } else {
           out.warning('目录缺失', `${fileName}缺失目录信息，将生成在指定目录`)
           // 不存在则直接生成
           fileName = this.checkFileName(fileName, fileName, post.doc_id)
           postPath = path.join(outputDir, `${fileName}.${this.fileExt}`)
-          out.info('生成文档', `${fileName}.${this.fileExt}`)
+          // 生成文件夹
           mkdirp.sync(outputDir)
         }
       } else {
         // 直接生成
         fileName = this.checkFileName(fileName, fileName, post.doc_id)
         postPath = path.join(outputDir, `${fileName}.${this.fileExt}`)
-        out.info('生成文档', `${fileName}.${this.fileExt}`)
+        // 生成文件夹
         mkdirp.sync(outputDir)
       }
-      fs.writeFileSync(postPath, body, {
-        encoding: 'utf8',
-      })
+      try {
+        fs.writeFileSync(postPath, body, {
+          encoding: 'utf8',
+        })
+        out.info('生成文档', `${fileName}.${this.fileExt}`)
+      } catch (e: any) {
+        if (e.message?.includes('illegal byte sequence')) {
+          out.err(e)
+          out.err(
+            `生成文档错误，${postPath} 路径存在非法字符，请修改后重新同步。文档ID:${post.doc_id}`,
+          )
+        } else {
+          // eslint-disable-next-line no-console
+          console.error(e, `\n文档ID:${post.doc_id}`)
+        }
+        post.needUpdate = DocFail
+        continue
+      }
       // 真正的文件名
       post.realName = fileName
       // 删除outputDir之后的postPath
