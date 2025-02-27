@@ -21,10 +21,10 @@ export const getFileTypeFromUrl = (url: string, needError = true) => {
   let filename = ''
   let filetype = ''
   if (imgName) {
-    const imgL = imgName.split('.')
+    const imgL = imgName.split('?')[0].split('#')[0].split('.')
     if (imgL.length > 1) {
-      filename = imgName.split('.')[0]
-      filetype = imgName.split('.')[1].split('?')[0].split('#')[0]
+      filename = imgL.slice(0, -1).join('.')
+      filetype = imgL[imgL.length - 1].split('?')[0].split('#')[0]
       return {
         name: filename,
         type: filetype,
