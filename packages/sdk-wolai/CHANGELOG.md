@@ -1,5 +1,14 @@
 # @elog/sdk-wolai
 
+## 0.14.6
+
+### Patch Changes
+
+- 优化图片后缀提取问题
+- Updated dependencies
+  - @elog/shared@0.14.6
+  - @elog/types@0.14.6
+
 ## 0.14.5
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @elog/types
 
+## 0.14.6
+
+### Patch Changes
+
+- 优化图片后缀提取问题
+
 ## 0.14.5
 
 ### Patch Changes

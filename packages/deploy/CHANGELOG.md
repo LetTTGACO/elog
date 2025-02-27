@@ -1,5 +1,18 @@
 # @elog/deploy
 
+## 0.14.6
+
+### Patch Changes
+
+- 优化图片后缀提取问题
+- Updated dependencies
+  - @elog/plugin-adapter@0.14.6
+  - @elog/sdk-confluence@0.14.6
+  - @elog/sdk-wordpress@0.14.6
+  - @elog/sdk-halo@0.14.6
+  - @elog/shared@0.14.6
+  - @elog/types@0.14.6
+
 ## 0.14.5
 
 ### Patch Changes
