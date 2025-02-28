@@ -1,5 +1,18 @@
 # @elog/deploy
 
+## 0.14.7
+
+### Patch Changes
+
+- 重新发布版本
+- Updated dependencies
+  - @elog/plugin-adapter@0.14.7
+  - @elog/sdk-confluence@0.14.7
+  - @elog/sdk-wordpress@0.14.7
+  - @elog/sdk-halo@0.14.7
+  - @elog/shared@0.14.7
+  - @elog/types@0.14.7
+
 ## 0.14.6
 
 ### Patch Changes
