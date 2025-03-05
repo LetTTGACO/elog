@@ -24,6 +24,15 @@ class Outline {
   async getDocList(): Promise<BaseDoc[]> {
     out.info('正在获取文档列表，请稍等...')
     let pages = await this.ctx.getDocList()
+    pages = pages.filter((page) => {
+      if (this.config.isTemplate === true) {
+        return page.template === true
+      } else if (this.config.isTemplate === false) {
+        return !page.template
+      } else {
+        return true
+      }
+    })
     this.pages = pages
     out.info('文档总数', String(this.pages.length))
     return pages.map((page) => {

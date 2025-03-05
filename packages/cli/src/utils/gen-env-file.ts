@@ -45,6 +45,13 @@ const envStr =
   'WORDPRESS_PASSWORD=\n' +
   'WORDPRESS_ENDPOINT=\n' +
   '\n' +
+  '# Outline\n' +
+  'OUTLINE_BASE_URL=\n' +
+  'OUTLINE_TOKEN=\n' +
+  'OUTLINE_COLLECTION_ID=\n' +
+  'OUTLINE_USER_ID=\n' +
+  'OUTLINE_PARENT_DOCUMENT_ID=\n' +
+  '\n' +
   '# 腾讯云\n' +
   'COS_SECRET_ID=\n' +
   'COS_SECRET_KEY=\n' +

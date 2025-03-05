@@ -1,6 +1,6 @@
 import { out, request, RequestOptions, getFileType, requestAxios } from '@elog/shared'
 import { OutlineResponse, OutlineDoc, OutlineDocListResponse } from './types'
-import { DocDetail, YuqueCatalog } from '@elog/types'
+import { DocDetail } from '@elog/types'
 import { OutlineConfig } from './types'
 import { getProps } from './utils'
 
@@ -10,7 +10,8 @@ const DEFAULT_API_URL = 'https://app.getoutline.com/api'
 class OutlineClient {
   config: OutlineConfig
   api: this
-  catalog: YuqueCatalog[] = []
+  // TODO
+  catalog: Omit<OutlineDoc, 'properties'>[] = []
   docList: DocDetail[] = []
 
   constructor(config: OutlineConfig) {
@@ -73,7 +74,7 @@ class OutlineClient {
         userId: self.config.userId,
         backlinkDocumentId: self.config.backlinkDocumentId,
         parentDocumentId: self.config.parentDocumentId,
-        isTemplate: self.config.isTemplate,
+        template: self.config.isTemplate,
       }
       // 过滤空值
       Object.keys(data).forEach((key) => {
