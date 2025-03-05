@@ -1,5 +1,21 @@
 # @elog/deploy
 
+## 0.15.0-beta.0
+
+### Minor Changes
+
+- 支持 outline 写作平台
+
+### Patch Changes
+
+- Updated dependencies
+  - @elog/plugin-adapter@0.15.0-beta.0
+  - @elog/sdk-confluence@0.15.0-beta.0
+  - @elog/sdk-wordpress@0.15.0-beta.0
+  - @elog/sdk-halo@0.15.0-beta.0
+  - @elog/shared@0.15.0-beta.0
+  - @elog/types@0.15.0-beta.0
+
 ## 0.14.7
 
 ### Patch Changes

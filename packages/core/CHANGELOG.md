@@ -1,5 +1,25 @@
 # @elog/core
 
+## 0.15.0-beta.0
+
+### Minor Changes
+
+- 支持 outline 写作平台
+
+### Patch Changes
+
+- Updated dependencies
+  - @elog/plugin-image@0.15.0-beta.0
+  - @elog/sdk-outline@0.15.0-beta.0
+  - @elog/sdk-feishu@0.15.0-beta.0
+  - @elog/sdk-flowus@0.15.0-beta.0
+  - @elog/sdk-notion@0.15.0-beta.0
+  - @elog/sdk-wolai@0.15.0-beta.0
+  - @elog/sdk-yuque@0.15.0-beta.0
+  - @elog/deploy@0.15.0-beta.0
+  - @elog/shared@0.15.0-beta.0
+  - @elog/types@0.15.0-beta.0
+
 ## 0.14.7
 
 ### Patch Changes

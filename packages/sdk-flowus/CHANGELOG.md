@@ -1,5 +1,16 @@
 # @elog/sdk-flowus
 
+## 0.15.0-beta.0
+
+### Minor Changes
+
+- 支持 outline 写作平台
+
+### Patch Changes
+
+- Updated dependencies
+  - @elog/shared@0.15.0-beta.0
+
 ## 0.14.7
 
 ### Patch Changes
