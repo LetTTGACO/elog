@@ -291,11 +291,15 @@ class Elog {
    * 处理文章图片
    */
   async processImage(docDetailList: DocDetail[]) {
-    if (this.config.write.platform === WritePlatform.FEISHU) {
-      // 飞书的图片资源需要单独处理
-      return this.imageClient.replaceImagesFromFeiShu(
+    if (
+      this.config.write.platform === WritePlatform.FEISHU ||
+      this.config.write.platform === WritePlatform.OUTLINE
+    ) {
+      // 飞书/Outline的图片资源需要单独处理
+      return this.imageClient.replaceImagesFromToken(
         docDetailList,
-        (this.downloaderClient as FeiShuClient).ctx.feishu,
+        (this.downloaderClient as any).ctx.api,
+        this.config.write.platform === WritePlatform.FEISHU,
       )
     }
     return this.imageClient.replaceImages(docDetailList)

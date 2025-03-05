@@ -6,16 +6,16 @@ import { out, timeFormat } from '@elog/shared'
  * 生成元数据
  */
 export const getProps = (page: DocUnite): GetProps => {
-  let { body } = page
+  let { text: body } = page
   let properties = {
     // 注入title
     title: page.title,
     // urlname
-    urlname: page.slug,
+    urlname: page.urlId,
     // 创建时间
-    date: timeFormat(page.created_at),
+    date: timeFormat(page.createdAt),
     // 更新时间
-    updated: timeFormat(page.updated_at),
+    updated: timeFormat(page.updatedAt),
   } as any
 
   try {

@@ -155,18 +155,19 @@ class ImageUploader {
   /**
    * 从飞书下载图片
    * @param articleList
-   * @param feishuClient
+   * @param client
+   * @param cleanArgs
    */
 
-  async replaceImagesFromFeiShu(articleList: DocDetail[], feishuClient: any) {
+  async replaceImagesFromToken(articleList: DocDetail[], client: any, cleanArgs = true) {
     // 遍历文章列表
     for (let i = 0; i < articleList.length; i++) {
       const articleInfo = articleList[i]
       // 获取图片URL列表
-      const urlList = getUrlListFromContent(articleInfo.body)
+      const urlList = getUrlListFromContent(articleInfo.body, cleanArgs)
       if (urlList.length) {
         // 上传图片
-        const urls = await this.uploadFromFeiShu(urlList, feishuClient, articleInfo, () => {
+        const urls = await this.uploadFromToken(urlList, client, articleInfo, () => {
           articleInfo.needUpdate = ImageFail
         })
         if (urls?.length) {
@@ -184,13 +185,13 @@ class ImageUploader {
   /**
    * 从飞书上传图片
    * @param urlList
-   * @param feishuClient
+   * @param client
    * @param doc
    * @param failBack
    */
-  async uploadFromFeiShu(
+  async uploadFromToken(
     urlList: ImageUrl[],
-    feishuClient: any,
+    client: any,
     doc: DocDetail,
     failBack?: (image: ImageUrl) => void,
   ) {
@@ -198,7 +199,7 @@ class ImageUploader {
     const promise = async (image: ImageUrl) => {
       try {
         // 从飞书下载图片
-        const res = await feishuClient.getResourceItem(image.url)
+        const res = await client.getResourceItem(image.url)
         // 完整文件名
         const fullName = res.name
         // out.info('处理图片', `生成文件名: ${fullName}`)

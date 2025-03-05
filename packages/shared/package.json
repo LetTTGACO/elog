@@ -27,6 +27,7 @@
     "lodash": "^4.17.21",
     "shelljs": "^0.8.5",
     "urllib": "2.40.0",
+    "axios": "1.8.1",
     "image-size": "^1.0.2",
     "mime-types": "^2.1.35",
     "dayjs": "^1.11.10"

@@ -9,7 +9,7 @@ import { getProps } from './utils'
 
 class FeiShuClient {
   config: FeiShuConfig
-  feishu: FeiShuApi
+  api: FeiShuApi
   f2m: FeiShuToMarkdown
   catalog: Omit<FeiShuDoc, 'properties'>[] = []
 
@@ -29,7 +29,7 @@ class FeiShuClient {
       out.err('缺少参数', '缺少我的空间中文件夹 ID')
       process.exit(-1)
     }
-    this.feishu = new FeiShuApi({
+    this.api = new FeiShuApi({
       appId: this.config.appId,
       appSecret: this.config.appSecret,
       baseUrl: this.config.baseUrl,
@@ -51,7 +51,7 @@ class FeiShuClient {
    */
   async getWikiList(): Promise<FeiShuDoc[]> {
     // 获取知识库字节点
-    const tree = await this.feishu.getReposNodesTree(
+    const tree = await this.api.getReposNodesTree(
       this.config.wikiId as string,
       this.config.folderToken,
     )
@@ -98,7 +98,7 @@ class FeiShuClient {
    */
 
   async getSpaceList(): Promise<FeiShuDoc[]> {
-    const tree = await this.feishu.getFolderTree(this.config.folderToken as string)
+    const tree = await this.api.getFolderTree(this.config.folderToken as string)
     const self = this
 
     // 深度优先遍历tree
@@ -129,7 +129,7 @@ class FeiShuClient {
   async download(page: FeiShuDoc): Promise<DocDetail> {
     let body = ''
     try {
-      const pageBlocks = await this.feishu.getPageBlocks(page.id)
+      const pageBlocks = await this.api.getPageBlocks(page.id)
       body = this.f2m.toMarkdownString(pageBlocks)
     } catch (e: any) {
       out.warning(`${page.title} 下载出错: ${e.message}`)

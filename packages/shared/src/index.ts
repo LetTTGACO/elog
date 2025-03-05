@@ -7,4 +7,6 @@ export * from './utils/package'
 export * from './utils/time'
 export { out, delay, request, RequestOptions, HttpClientResponse }
 
+export { requestAxios } from './requestAxios'
+
 export { ImageFail, DocFail } from './const'

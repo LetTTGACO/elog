@@ -6,7 +6,6 @@ if (debugIndex > 0) {
 }
 
 const importLocal = require('import-local')
-
 if (importLocal(__filename)) {
   console.log('elog', '正在使用项目中的 elog cli')
 } else {

@@ -102,8 +102,9 @@ export const cleanParameter = (originalUrl: string) => {
 /**
  * 从 md 文档获取图片链接列表
  * @param content
+ * @param clean
  */
-export const getUrlListFromContent = (content: string) => {
+export const getUrlListFromContent = (content: string, clean = true) => {
   const markdownURLList = (content.match(/!\[[^\]]*\]\(([^)]+)\)/g) || [])
     .map((item: string) => {
       const res = item.match(/\!\[.*\]\((.*?)( ".*")?\)/)
@@ -114,7 +115,7 @@ export const getUrlListFromContent = (content: string) => {
         // 去除#?号
         return {
           original: url,
-          url: cleanParameter(url),
+          url: clean ? cleanParameter(url) : url,
         }
       }
       return undefined

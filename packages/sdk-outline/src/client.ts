@@ -1,4 +1,4 @@
-import { out, request, RequestOptions } from '@elog/shared'
+import { out, request, RequestOptions, getFileType, requestAxios } from '@elog/shared'
 import { OutlineResponse, OutlineDoc, OutlineDocListResponse } from './types'
 import { DocDetail, YuqueCatalog } from '@elog/types'
 import { OutlineConfig } from './types'
@@ -9,17 +9,19 @@ const DEFAULT_API_URL = 'https://app.getoutline.com/api'
 
 class OutlineClient {
   config: OutlineConfig
+  api: this
   catalog: YuqueCatalog[] = []
   docList: DocDetail[] = []
 
   constructor(config: OutlineConfig) {
     this.config = config
-    this.config.token = config.token || process.env.YUQUE_TOKEN!
+    this.config.token = config.token || process.env.OUTLINE_TOKEN!
     if (!this.config.token) {
       out.err('缺少参数', '缺少 API 密钥')
       out.info('请查阅Elog配置文档: https://elog.1874.cool/notion/write-platform')
       process.exit(-1)
     }
+    this.api = this
   }
 
   /**
@@ -80,9 +82,9 @@ class OutlineClient {
         }
       })
       const res = await self.request<OutlineDocListResponse>(
-        '/documents.list',
+        'documents.list',
         {
-          method: 'GET',
+          method: 'POST',
           data,
         },
         true,
@@ -95,13 +97,6 @@ class OutlineClient {
     await getList()
     this.docList = list as any
     return list
-  }
-
-  /**
-   * 获取文章详情
-   */
-  async getDocDetail(id: string) {
-    return this.docList.find((doc) => doc.id === id)
   }
 
   /**
@@ -148,6 +143,42 @@ class OutlineClient {
     })
     out.info('已下载数', String(articleList.length))
     return articleList
+  }
+
+  /**
+   * 获取资源
+   * @param imageUrl
+   */
+  async getResourceItem(imageUrl: string) {
+    if (!imageUrl) return imageUrl
+    const urlParams = new URLSearchParams(imageUrl?.split('?')[1])
+    const id = urlParams.get('id')
+    if (!id) {
+      return imageUrl
+    }
+    let baseUrl = this.config.baseUrl || DEFAULT_API_URL
+    if (baseUrl.endsWith('/')) {
+      // 删除最后一个斜杠
+      baseUrl = baseUrl.slice(0, -1)
+    }
+    const url = `${baseUrl}/attachments.redirect`
+    const res = await requestAxios<ArrayBuffer>(url, {
+      method: 'POST',
+      data: {
+        id,
+      },
+      headers: {
+        Authorization: `Bearer ${this.config.token}`,
+      },
+      responseType: 'arraybuffer',
+    })
+
+    const file = await getFileType(res.request.path || '')
+    return {
+      buffer: res.data,
+      type: file?.type,
+      name: id + '.' + file?.type,
+    }
   }
 }
 
