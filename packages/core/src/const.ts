@@ -16,4 +16,5 @@ export enum WritePlatform {
   FLOWUS = 'flowus',
   FEISHU = 'feishu',
   WOLAI = 'wolai',
+  OUTLINE = 'outline',
 }

@@ -9,6 +9,7 @@ import NotionClient, { NotionConfig } from '@elog/sdk-notion'
 import FlowUsClient, { FlowUsConfig } from '@elog/sdk-flowus'
 import FeiShuClient, { FeiShuConfig } from '@elog/sdk-feishu'
 import WoLaiClient, { WoLaiConfig } from '@elog/sdk-wolai'
+import OutlineClient, { OutlineConfig } from '@elog/sdk-outline'
 // deploy
 import DeployClient, { DeployConfig, DeployPlatformEnum } from '@elog/deploy'
 // imageClient
@@ -37,6 +38,7 @@ class Elog {
     | FlowUsClient
     | FeiShuClient
     | WoLaiClient
+    | OutlineClient
   /** 部署器 */
   deployClient: DeployClient
   /** 图片转CDN转换器 */
@@ -108,6 +110,9 @@ class Elog {
     } else if (config.write.platform === WritePlatform.WOLAI) {
       let woLaiConfig = config.write.wolai as WoLaiConfig
       return new WoLaiClient(woLaiConfig)
+    } else if (config.write.platform === WritePlatform.OUTLINE) {
+      let outlineConfig = config.write.outline as OutlineConfig
+      return new OutlineClient(outlineConfig)
     } else {
       out.err('错误', '未知的写作平台')
       process.exit(0)
