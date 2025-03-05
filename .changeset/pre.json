@@ -20,6 +20,7 @@
     "@elog/types": "0.14.7"
   },
   "changesets": [
-    "empty-words-act"
+    "empty-words-act",
+    "shaggy-rocks-walk"
   ]
 }

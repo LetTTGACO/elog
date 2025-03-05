@@ -1,5 +1,22 @@
 # @elog/core
 
+## 0.15.0-beta.1
+
+### Patch Changes
+
+- 初始化增加 outline 配置
+- Updated dependencies
+  - @elog/plugin-image@0.15.0-beta.1
+  - @elog/sdk-outline@0.15.0-beta.1
+  - @elog/sdk-feishu@0.15.0-beta.1
+  - @elog/sdk-flowus@0.15.0-beta.1
+  - @elog/sdk-notion@0.15.0-beta.1
+  - @elog/sdk-wolai@0.15.0-beta.1
+  - @elog/sdk-yuque@0.15.0-beta.1
+  - @elog/deploy@0.15.0-beta.1
+  - @elog/shared@0.15.0-beta.1
+  - @elog/types@0.15.0-beta.1
+
 ## 0.15.0-beta.0
 
 ### Minor Changes

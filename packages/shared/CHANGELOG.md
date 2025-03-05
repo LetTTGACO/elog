@@ -1,5 +1,11 @@
 # @elog/shared
 
+## 0.15.0-beta.1
+
+### Patch Changes
+
+- 初始化增加 outline 配置
+
 ## 0.15.0-beta.0
 
 ### Minor Changes
