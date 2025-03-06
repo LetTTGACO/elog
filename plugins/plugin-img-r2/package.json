@@ -21,6 +21,7 @@
     "build": "echo '@elog/plugin-img-r2'"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.445.0"
+    "@aws-sdk/client-s3": "3.445.0",
+    "mime-types": "^2.1.35"
   }
 }

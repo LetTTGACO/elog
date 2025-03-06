@@ -1,4 +1,5 @@
 const { S3Client, PutObjectCommand, HeadObjectCommand } = require('@aws-sdk/client-s3')
+const mimeTypes = require('mime-types')
 
 /**
  * 处理前缀，结尾自动加上/
@@ -61,6 +62,7 @@ class R2Uploader {
         Bucket: this.config.bucket,
         Key: this.config.prefixKey + fileName,
         Body: imgBuffer,
+        ContentType: mimeTypes.lookup(fileName),
       }
       await this.s3Client.send(new PutObjectCommand(params))
       return `https://${this.config.host}/${this.config.prefixKey + fileName}`
