@@ -45,6 +45,9 @@ export default class FeiShuApi extends ElogBaseContext {
         if (item.obj_type == 'doc' || item.obj_type == 'docx') {
           const doc: SortedDoc<FeiShuDoc & Partial<IWikiNode>> = {
             id: item.obj_token,
+            properties: {
+              title: item.title,
+            },
             title: item.title,
             createdAt: Number(item.obj_create_time + '000'),
             updated: Number(item.obj_edit_time + '000'),
@@ -89,9 +92,9 @@ export default class FeiShuApi extends ElogBaseContext {
     // 处理图片
     const imgList = this.ctx.imgUtil.getUrlListFromContent(newBody);
     for (let i = 0; i < imgList.length; i++) {
-      const token = imgList[i].url;
+      const token = imgList[i].data;
       const base64 = await this.bufferToBase64(token);
-      newBody = newBody.replace(imgList[i].url, base64);
+      newBody = newBody.replace(imgList[i].data, base64);
     }
     return {
       id: doc.id,

@@ -10,7 +10,7 @@ export interface ImageLocalConfig {
 }
 
 export interface ImageUrl {
-  url: string;
+  data: string;
   originalUrl: string;
 }
 

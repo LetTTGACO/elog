@@ -81,22 +81,18 @@ export default class Graph {
    * 开始同步
    */
   async sync(): Promise<void> {
-    // 执行插件的start钩子
-    await this.pluginDriver.executeVoidHooks('start', [this.elogConfig]);
     // 从写作平台下载文档
     let {
       docDetailList = [],
       sortedDocList = [],
       docStatusMap,
-    } = await this.pluginDriver.executeFromPluginHook('down', []);
+    } = await this.pluginDriver.executeFromPluginHook('download', []);
     // 执行插件的transform钩子，处理文档详情
     docDetailList = await this.pluginDriver.executeChainHooks('transform', [docDetailList]);
     // 更新缓存
     this.updateCache(docDetailList, docStatusMap);
     // 执行插件的upload钩子，上传文档到目标平台
     await this.pluginDriver.executeVoidHooks('deploy', [docDetailList]);
-    // 执行插件的end钩子
-    await this.pluginDriver.executeVoidHooks('end', []);
     // 写入缓存
     this.writeCache(sortedDocList);
   }

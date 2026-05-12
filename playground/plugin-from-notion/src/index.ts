@@ -5,7 +5,7 @@ import NotionClient from './NotionClient';
 export default function yuque(options: Partial<NotionConfig>): IPlugin {
   return {
     name: 'from-notion',
-    async down(this) {
+    async download(this) {
       const notion = new NotionClient(options as NotionConfig, this);
       return notion.getDocDetailList();
     },

@@ -47,6 +47,12 @@ export class PluginDriver {
     return sortedPlugins;
   }
 
+  /**
+   * 异步串行，把上一个hook的返回值作为下一个hook的参数
+   * @param hookName
+   * @param argument0
+   * @param rest
+   */
   async executeChainHooks<H extends FunctionReducePluginHooks>(
     hookName: H,
     [argument0, ...rest]: Parameters<ReducePluginHooks[H]>,
@@ -61,15 +67,27 @@ export class PluginDriver {
     return Promise.resolve(argument0);
   }
 
+  /**
+   * 异步并行，忽略返回值
+   * @param hookName
+   * @param args
+   */
   async executeVoidHooks<H extends FunctionVoidPluginHooks>(
     hookName: H,
     args: Parameters<VoidPluginHooks[H]>,
   ): Promise<void> {
+    const parallelPromises: Promise<unknown>[] = [];
     for (const plugin of this.getSortedPlugins(hookName)) {
-      await this.runHook(hookName, args, plugin);
+      parallelPromises.push(this.runHook(hookName, args, plugin));
     }
+    await Promise.all(parallelPromises);
   }
 
+  /**
+   * 异步串行，只执行 from 插件
+   * @param hookName
+   * @param parameters
+   */
   async executeFromPluginHook<H extends keyof FunctionPluginHooks>(
     hookName: H,
     parameters: Parameters<FunctionPluginHooks[H]>,

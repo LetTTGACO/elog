@@ -11,7 +11,6 @@ import {
   getFileTypeFromUrl,
   getUrlListFromContent,
 } from '../utils/image';
-import { InputOptions } from './common';
 
 interface ImageUtilContext {
   genUniqueIdFromUrl: typeof genUniqueIdFromUrl;
@@ -44,7 +43,7 @@ export interface PluginContext {
 type ObjectHook<T> = T | { handler: T };
 
 export type FunctionReducePluginHooks = 'transform';
-export type FunctionVoidPluginHooks = 'start' | 'end' | 'deploy';
+export type FunctionVoidPluginHooks = 'deploy';
 
 export type VoidPluginHooks = Pick<FunctionPluginHooks, FunctionVoidPluginHooks>;
 export type ReducePluginHooks = Pick<FunctionPluginHooks, FunctionReducePluginHooks>;
@@ -56,16 +55,12 @@ export interface FromPluginReturn {
 }
 
 export interface FunctionPluginHooks {
-  /** 当前插件流程开始前钩子 */
-  start: (this: PluginContext, inputOptions: InputOptions) => Promise<void> | void;
   /** 用于 From 插件的开始下载的钩子 */
-  down: (this: PluginContext) => Promise<FromPluginReturn> | FromPluginReturn;
+  download: (this: PluginContext) => Promise<FromPluginReturn>;
   /** 用于自定义处理文档信息 */
-  transform: (this: PluginContext, docs: DocDetail[]) => Promise<DocDetail[]> | DocDetail[];
+  transform: (this: PluginContext, docs: DocDetail[]) => Promise<DocDetail[]>;
   /** 用于 To 插件的开始部署的钩子 */
   deploy: (this: PluginContext, docs: DocDetail[]) => Promise<void> | void;
-  /** 当前插件流程结束后钩子 */
-  end: (this: PluginContext) => Promise<void> | void;
 }
 
 export interface IPlugin<A = any> extends Partial<PluginHooks> {

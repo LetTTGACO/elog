@@ -11,6 +11,9 @@ export interface FeiShuConfig extends FromPluginBaseConfig {
 export interface FeiShuDoc {
   id: string;
   title: string;
+  properties: {
+    title: string;
+  };
   updated: number;
   createdAt: number;
   updatedAt: number;

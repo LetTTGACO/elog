@@ -10,8 +10,8 @@ export interface LocalConfig {
   filename?: string;
   /** 文件后缀 */
   fileExt?: string;
-  /** 是否按目录结构部署 */
-  deployByStructure?: boolean;
+  /** 保持原有目录结构 */
+  keepToc?: boolean;
   /** 是否需要给文档头部添加 Front-Matter */
   frontMatter?: {
     enable: boolean;

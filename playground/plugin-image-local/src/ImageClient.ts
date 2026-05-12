@@ -91,8 +91,8 @@ export default class ImageClient {
         if (urls?.length) {
           // 替换文章中的图片
           urls.forEach((item) => {
-            this.ctx.info('图片替换', `${item.url}`);
-            articleInfo.body = articleInfo.body.replace(item.originalUrl, item.url);
+            this.ctx.info('图片替换', `${item.data}`);
+            articleInfo.body = articleInfo.body.replace(item.originalUrl, item.data);
           });
         }
       }
@@ -115,11 +115,11 @@ export default class ImageClient {
       return await new Promise<ImageSource | undefined>(async (resolve) => {
         try {
           // 生成文件名
-          const fileName = this.ctx.imgUtil.genUniqueIdFromUrl(image.url);
+          const fileName = this.ctx.imgUtil.genUniqueIdFromUrl(image.data);
           // 生成文件名后缀
-          const fileType = await this.ctx.imgUtil.getFileType(image.url);
+          const fileType = await this.ctx.imgUtil.getFileType(image.data);
           if (!fileType) {
-            this.ctx.warn(`${doc?.properties?.title} 存在获取图片类型失败，跳过：${image.url}`);
+            this.ctx.warn(`${doc?.properties?.title} 存在获取图片类型失败，跳过：${image.data}`);
             resolve(undefined);
             return;
           }
@@ -151,16 +151,16 @@ export default class ImageClient {
       let newUrl: string | undefined = '';
       newUrl = this.writeImageToLocal(img.buffer!, img.fileName, doc);
       if (newUrl) {
-        output.push({ originalUrl: img.originalUrl, url: newUrl });
+        output.push({ originalUrl: img.originalUrl, data: newUrl });
       }
     }
     if (output.length) {
       output
-        .filter((item) => item.url && item.url !== item.originalUrl)
+        .filter((item) => item.data && item.data !== item.originalUrl)
         .map((item) => {
           return {
             original: item.originalUrl,
-            url: item.url,
+            data: item.data,
           };
         });
       return output;

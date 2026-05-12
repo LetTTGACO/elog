@@ -1,13 +1,13 @@
 import { DocDetail, ElogImageContext, PluginContext } from '@elogx-test/elog';
 import { ImageQiniuConfig } from './types';
-import COSApi from './ImageApi';
+import QiniuApi from './ImageApi';
 
 export default class ImageClient extends ElogImageContext {
-  private readonly api: COSApi;
+  private readonly api: QiniuApi;
 
   constructor(config: ImageQiniuConfig, ctx: PluginContext) {
     super(ctx, config);
-    this.api = new COSApi(config, ctx);
+    this.api = new QiniuApi(config, ctx);
   }
 
   /**

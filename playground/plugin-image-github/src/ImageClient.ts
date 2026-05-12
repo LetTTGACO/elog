@@ -1,13 +1,13 @@
 import { DocDetail, ElogImageContext, PluginContext } from '@elogx-test/elog';
 import { ImageGithubConfig } from './types';
-import COSApi from './ImageApi';
+import GithubApi from './ImageApi';
 
 export default class ImageClient extends ElogImageContext {
-  private readonly api: COSApi;
+  private readonly api: GithubApi;
 
   constructor(config: ImageGithubConfig, ctx: PluginContext) {
     super(ctx, config);
-    this.api = new COSApi(config, ctx);
+    this.api = new GithubApi(config, ctx);
   }
 
   /**

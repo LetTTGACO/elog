@@ -36,6 +36,9 @@ export default class FeiShuApi extends ElogBaseContext {
         if (item.type === 'docx') {
           sortedDocList.push({
             id: item.token,
+            properties: {
+              title: item.name,
+            },
             title: item.name,
             updated: Number(item.modified_time + '000'),
             createdAt: Number(item.created_time + '000'),
@@ -72,9 +75,9 @@ export default class FeiShuApi extends ElogBaseContext {
     // 处理图片
     const imgList = this.ctx.imgUtil.getUrlListFromContent(newBody);
     for (let i = 0; i < imgList.length; i++) {
-      const token = imgList[i].url;
+      const token = imgList[i].data;
       const base64 = await this.bufferToBase64(token);
-      newBody = newBody.replace(imgList[i].url, base64);
+      newBody = newBody.replace(imgList[i].data, base64);
     }
     return {
       id: doc.id,

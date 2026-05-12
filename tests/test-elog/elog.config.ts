@@ -10,25 +10,25 @@ export default defineConfig({
     repo: process.env.YUQUE_REPO1,
     onlyPublic: false,
   }),
-  to: [
-    toLocal({
-      outputDir: './docs',
-      deployByStructure: true,
-      filename: 'title',
-      frontMatter: { enable: true },
-    }),
-    toLocal({
-      outputDir: './docs-new',
-      deployByStructure: true,
-      filename: 'title',
-      frontMatter: { enable: true },
-    }),
-  ],
   plugins: [
     imageLocal({
       outputDir: './images',
       prefixKey: '../../images',
       // pathFollowDoc: { enable: true, docOutputDir: './docs' },
+    }),
+  ],
+  to: [
+    toLocal({
+      outputDir: './docs',
+      keepToc: true,
+      filename: 'title',
+      frontMatter: { enable: true },
+    }),
+    toLocal({
+      outputDir: './docs-new',
+      keepToc: true,
+      filename: 'title',
+      frontMatter: { enable: true },
     }),
   ],
 });

@@ -1,13 +1,13 @@
 import { DocDetail, ElogImageContext, PluginContext } from '@elogx-test/elog';
 import { ImageUPYunConfig } from './types';
-import COSApi from './ImageApi';
+import UPYunApi from './ImageApi';
 
 export default class ImageClient extends ElogImageContext {
-  private readonly api: COSApi;
+  private readonly api: UPYunApi;
 
   constructor(config: ImageUPYunConfig, ctx: PluginContext) {
     super(ctx, config);
-    this.api = new COSApi(config, ctx);
+    this.api = new UPYunApi(config, ctx);
   }
 
   /**

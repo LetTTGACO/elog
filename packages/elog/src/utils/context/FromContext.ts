@@ -1,14 +1,21 @@
-import { PluginContext } from '../../types/plugin';
+import { FromPluginReturn, PluginContext } from '../../types/plugin';
 import asyncPool from 'tiny-async-pool';
-import { asyncPoolFunc, filterDocs } from '../doc/form';
+import {
+  asyncPoolFunc,
+  DocFrom,
+  filterDocs,
+  GetDocDetail,
+  getDocDetailList,
+  GetSortedDocList,
+} from '../doc/form';
 import { ElogBaseContext } from './BaseContext';
 import { SortedDoc } from '../../types/doc';
 
 /**
  * 适用于 From 写作平台的 Elog 工具类
  */
-export class ElogFromContext extends ElogBaseContext {
-  constructor(ctx: PluginContext) {
+export abstract class ElogFromContext extends ElogBaseContext {
+  protected constructor(ctx: PluginContext) {
     super(ctx);
   }
 
@@ -16,7 +23,7 @@ export class ElogFromContext extends ElogBaseContext {
    * 过滤需要更新的文章
    * @param docs
    */
-  filterDocs<T>(docs: SortedDoc<T>[]) {
+  protected filterDocs<T>(docs: SortedDoc<T>[]) {
     return filterDocs(this.ctx.cacheDocList, docs);
   }
 
@@ -24,7 +31,24 @@ export class ElogFromContext extends ElogBaseContext {
    * 批量下载
    * @param args
    */
-  async asyncPool<IN, OUT>(...args: Parameters<typeof asyncPool<IN, OUT>>) {
+  protected async asyncPool<IN, OUT>(...args: Parameters<typeof asyncPool<IN, OUT>>) {
     return asyncPoolFunc(...args);
   }
+
+  /**
+   * 下载文档详情列表
+   * @param option
+   */
+  protected async docDetailList<T extends DocFrom>(option: {
+    getSortedDocList: GetSortedDocList<T>;
+    getDocDetail: GetDocDetail<T>;
+    limit: number | undefined;
+  }) {
+    return getDocDetailList({
+      cachedDocList: this.ctx.cacheDocList,
+      ...option,
+    });
+  }
+
+  abstract getDocDetailList(): Promise<FromPluginReturn>;
 }

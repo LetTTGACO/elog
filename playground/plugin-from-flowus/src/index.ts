@@ -5,7 +5,7 @@ import FlowUsClient from './FlowUsClient';
 export default function yuque(options: Partial<FlowUsConfig>): IPlugin {
   return {
     name: 'from-flowus',
-    async down(this) {
+    async download(this) {
       const notion = new FlowUsClient(options as FlowUsConfig, this);
       return notion.getDocDetailList();
     },
