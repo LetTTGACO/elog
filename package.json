@@ -1,0 +1,20 @@
+{
+  "name": "elog-monorepo",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.1.2",
+  "devDependencies": {
+    "turbo": "^2.5.0",
+    "@changesets/cli": "^2.29.0",
+    "husky": "^9.1.0",
+    "lint-staged": "^15.5.0",
+    "prettier": "^2.7.1"
+  },
+  "lint-staged": {
+    "*.{ts,js,json,md}": "prettier --write"
+  },
+  "scripts": {
+    "build": "turbo build",
+    "prepare": "husky"
+  }
+}
