@@ -64,17 +64,11 @@ jspm_packages
 .idea/
 *.iml
 
-# Rush temporary files
-common/deploy/
-common/temp/
-common/autoinstallers/*/.npmrc
-**/.rush/temp/
-*.lock
+# Turborepo
+.turbo/
 
-# Heft temporary files
-.cache
-.heft
+# Build output
 dist
-.run
-.npmrc
+
+# npm
 .npmignore
