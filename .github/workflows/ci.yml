@@ -11,17 +11,16 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 2
-      - name: Git config user
-        uses: snow-actions/git-config-user@v1.0.0
+      - uses: pnpm/action-setup@v4
         with:
-          name: LetTTGACO
-          email: 1225751694@qq.com
+          version: 11
       - uses: actions/setup-node@v3
         with:
-          node-version: 18.16.0
+          node-version: 22
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
       - name: Verify Change Logs
-        run: node common/scripts/install-run-rush.js change --verify
-      - name: Rush Install
-        run: node common/scripts/install-run-rush.js install
-      - name: Rush rebuild
-        run: node common/scripts/install-run-rush.js rebuild --verbose --production
+        run: npx changeset status --since=origin/1.0-dev
+      - name: Build
+        run: pnpm turbo build --force
