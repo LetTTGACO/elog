@@ -15,6 +15,9 @@
   },
   "scripts": {
     "build": "turbo build",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "publish": "changeset publish",
     "prepare": "husky"
   }
 }

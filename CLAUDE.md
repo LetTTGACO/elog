@@ -4,19 +4,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Elog is a CLI tool and library for syncing documents from writing/note-taking platforms (Notion, Feishu, Yuque, FlowUs, Wolai) to blogging/CMS platforms (Halo, WordPress, Confluence, local filesystem), with optional image rehosting (COS, OSS, GitHub, Qiniu, Upyun, local). It is a **1.0 rewrite** on the `feat-elog-1.0` / `1.0-dev` branch. NPM scope during development is `@elogx-test/`.
+Elog is a CLI tool and library for syncing documents from writing/note-taking platforms (Notion, Feishu, Yuque, FlowUs, Wolai) to blogging/CMS platforms (Halo, WordPress, Confluence, local filesystem), with optional image rehosting (COS, OSS, GitHub, Qiniu, Upyun, local). This is a **1.0 rewrite**. NPM scope during development is `@elogx-test/`.
 
 ## Build Commands
 
-> Monorepo tooling is migrating from Rush to pnpm workspace + changesets + Turborepo. Commands below are per-package; monorepo-level commands will be updated after migration.
-
 ```bash
+# Install dependencies
+pnpm install
+
+# Build all packages (Turborepo, respects dependency order)
+pnpm build
+
 # Build single package (run from within the package directory)
-cd packages/elog && npm run build
-cd playground/plugin-from-notion && npm run build
+cd packages/elog && pnpm build
+cd playground/plugin-from-notion && pnpm build
 ```
 
-Build tool: **tsup** (esbuild-based). Output: ESM-only with `.d.ts` and sourcemaps.
+Build tool per package: **tsup** (esbuild-based). Output: ESM-only with `.d.ts` and sourcemaps.
 
 ## Monorepo Structure
 
@@ -113,12 +117,35 @@ Supports array of configs for multi-workflow setups. CLI entry: `src/cli.ts` (Co
 - Docs marked `NEW` or `UPDATE`; docs with previous `DOC_ERROR` or `IMAGE_ERROR` status are retried
 - Cache is read/written by the `Graph` class
 
+## Publishing
+
+Publish to npm via changesets:
+
+```bash
+# 1. Create changeset (interactive: select packages, version bump level, description)
+pnpm changeset
+
+# 2. Commit the changeset file
+git add .changeset/ && git commit -m "chore: add changeset"
+
+# 3. Bump versions + generate CHANGELOG (consumes .changeset/*.md files)
+pnpm version
+
+# 4. Build and publish
+pnpm build && pnpm publish
+
+# 5. Push code and git tags
+git push --follow-tags
+```
+
+CI enforces `changeset status` on PRs to `1.0-dev` — every PR must include a changeset file unless the change is trivial (docs, config).
+
 ## Key Conventions
 
 - **ESM-only**: `"type": "module"` in all packages, tsup outputs ESM format only
 - **TypeScript strict mode**: `strict: true` in tsconfig
-- **Prettier**: 2-space indent, single quotes, trailing commas, 100 char print width (enforced via pre-commit hook)
-- **No ESLint**: No eslint config found despite eslint being a devDependency
+- **Prettier**: 2-space indent, single quotes, trailing commas, 100 char print width (enforced via husky + lint-staged pre-commit hook)
+- **No ESLint**: No eslint config in the project
 - **No automated test framework**: Only manual integration testing in `tests/test-elog`
 - **NPM scope**: `@elogx-test/` during development (rename before production release)
 - **Plugin naming**: `@elogx-test/plugin-from-*`, `@elogx-test/plugin-image-*`, `@elogx-test/plugin-to-*`
