@@ -8,30 +8,17 @@ Elog is a CLI tool and library for syncing documents from writing/note-taking pl
 
 ## Build Commands
 
+> Monorepo tooling is migrating from Rush to pnpm workspace + changesets + Turborepo. Commands below are per-package; monorepo-level commands will be updated after migration.
+
 ```bash
-# Install dependencies (monorepo-wide)
-rush install
-rush update          # when package.json changed
-
-# Build all packages
-rush rebuild --verbose
-
 # Build single package (run from within the package directory)
-cd packages/elog && rushx build
-cd playground/plugin-from-notion && rushx build
-
-# Prettier (runs via pre-commit hook, also available as Rush custom command)
-rush prettier
-
-# CI verification
-rush change --verify
+cd packages/elog && npm run build
+cd playground/plugin-from-notion && npm run build
 ```
 
-Node version: **18.16.0** (see `.nvmrc`). Build tool: **tsup** (esbuild-based). Output: ESM-only with `.d.ts` and sourcemaps.
+Build tool: **tsup** (esbuild-based). Output: ESM-only with `.d.ts` and sourcemaps.
 
 ## Monorepo Structure
-
-Managed by **Rush 5.118.7** + **pnpm 8.7.6**. All projects registered in `rush.json`.
 
 | Directory | Purpose |
 |-----------|---------|
@@ -40,7 +27,6 @@ Managed by **Rush 5.118.7** + **pnpm 8.7.6**. All projects registered in `rush.j
 | `playground/plugin-image-*` | Image rehosting plugins (COS, OSS, GitHub, Qiniu, Upyun, local) |
 | `playground/plugin-to-*` | Deploy plugins (Halo, WordPress, Confluence, local) |
 | `tests/test-elog/` | Integration test (manual CLI invocation, no automated test framework) |
-| `common/` | Rush shared infrastructure (changes, config, git-hooks, scripts) |
 
 ## Architecture: Plugin-Driven Pipeline
 

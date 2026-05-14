@@ -67,6 +67,9 @@ jspm_packages
 # Turborepo
 .turbo/
 
+# Rush build cache (legacy)
+.rush/
+
 # Build output
 dist
 
