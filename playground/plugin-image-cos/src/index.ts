@@ -1,13 +1,14 @@
-import type { IPlugin } from '@elogx-test/elog';
+import type { TransformPlugin } from '@elogx-test/elog';
 import ImageClient from './ImageClient';
-import { ImageCOSConfig } from './types';
+import type { ImageCOSConfig } from './types';
 
-export default function imageLocal(options: Partial<ImageCOSConfig>): IPlugin {
+export default function imageCos(options: Partial<ImageCOSConfig>): TransformPlugin {
   return {
-    name: 'image-cos',
-    transform(docs) {
-      const imageLocal = new ImageClient(options as ImageCOSConfig, this);
-      return imageLocal.processImages(docs);
+    name: 'transform:image-cos',
+    kind: 'transform',
+    transform(docs, ctx) {
+      const imageCos = new ImageClient(options as ImageCOSConfig, ctx);
+      return imageCos.processImages(docs);
     },
   };
 }

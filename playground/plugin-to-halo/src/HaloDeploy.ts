@@ -18,11 +18,11 @@ export default class extends Context {
 
   async deploy(docs: DocDetail[]) {
     if (docs.length === 0) {
-      this.ctx.error('没有可部署的文档');
+      this.ctx.logger.error('没有可部署的文档');
     }
     const docDetailList = JSON.parse(JSON.stringify(docs)) as DocDetail[];
 
-    this.ctx.success('正在部署到 Halo...');
+    this.ctx.logger.success('正在部署到 Halo...');
     // 获取文章列表
     const postList = await this.api.getPostList();
 
@@ -86,9 +86,9 @@ export default class extends Context {
           };
           const newCategory = await this.api.createCategory(params);
           categoryMap[newCategory.spec.displayName] = newCategory;
-          this.ctx.info('新增分类', category);
+          this.ctx.logger.info('新增分类', category);
         } catch (e: any) {
-          this.ctx.warn(`创建 ${category} 分类失败: ${e.message}`);
+          this.ctx.logger.warn(`创建 ${category} 分类失败: ${e.message}`);
         }
       }
     }
@@ -115,28 +115,30 @@ export default class extends Context {
           };
           const newTag = await this.api.createTag(params);
           tagMap[newTag.spec.displayName] = newTag;
-          this.ctx.info('新增标签', tag);
+          this.ctx.logger.info('新增标签', tag);
         } catch (e: any) {
-          this.ctx.warn(`创建 ${tag} 标签失败: ${e.message}`);
+          this.ctx.logger.warn(`创建 ${tag} 标签失败: ${e.message}`);
         }
       }
     }
     for (let doc of docDetailList) {
       if (this.config.enableUploadImage) {
         // 收集文档图片
-        const urlList = this.ctx.imgUtil.getUrlListFromContent(doc.body);
+        const urlList = this.ctx.image.getUrlListFromContent(doc.body);
         // 封面图
         const cover = doc.properties.cover;
         if (cover) {
-          urlList.push(this.ctx.imgUtil.getBaseUrl(cover));
+          urlList.push(this.ctx.image.getBaseUrl(cover));
         }
         for (const image of urlList) {
           // 生成文件名
-          const fileName = this.ctx.imgUtil.genUniqueIdFromUrl(image.url, 28);
+          const fileName = this.ctx.image.genUniqueIdFromUrl(image.url, 28);
           // 生成文件名后缀
-          const fileType = await this.ctx.imgUtil.getFileType(image.url);
+          const fileType = await this.ctx.image.getFileType(image.url);
           if (!fileType) {
-            this.ctx.warn(`${doc?.properties?.title} 存在获取图片类型失败，跳过：${image.url}`);
+            this.ctx.logger.warn(
+              `${doc?.properties?.title} 存在获取图片类型失败，跳过：${image.url}`,
+            );
             continue;
           }
           // 完整文件名
@@ -146,15 +148,18 @@ export default class extends Context {
           if (!item) {
             // 上传
             // 获取 buffer
-            const buffer = await this.ctx.imgUtil.getBufferFromUrl(image.original);
+            const buffer = await this.ctx.image.getBufferFromUrl(image.original);
             if (!buffer) {
-              this.ctx.warn('跳过', `${doc?.properties?.title} 存在获取图片内容失败：${image.url}`);
+              this.ctx.logger.warn(
+                '跳过',
+                `${doc?.properties?.title} 存在获取图片内容失败：${image.url}`,
+              );
               continue;
             }
             try {
               const attachment = await this.api.uploadAttachment(buffer, fullName);
               const imageUrl = await this.api.getAttachmentPermalink(attachment.metadata.name);
-              this.ctx.info('上传成功', imageUrl);
+              this.ctx.logger.info('上传成功', imageUrl);
               // 记录最新的
               imageMap[fullName] = {
                 ...attachment,
@@ -170,11 +175,14 @@ export default class extends Context {
                 doc.properties.cover = imageUrl;
               }
             } catch (e: any) {
-              this.ctx.warn('跳过', `${doc?.properties?.title} 存在上传图片失败：${image.url}`);
-              this.ctx.debug(e);
+              this.ctx.logger.warn(
+                '跳过',
+                `${doc?.properties?.title} 存在上传图片失败：${image.url}`,
+              );
+              this.ctx.logger.debug(e);
             }
           } else {
-            this.ctx.info('忽略上传', `图片已存在: ${item.status.permalink}`);
+            this.ctx.logger.info('忽略上传', `图片已存在: ${item.status.permalink}`);
             // 替换文档中的图片路径
             doc.body = doc.body.replace(image.original, item.status.permalink);
             // 替换属性中的图片
@@ -279,9 +287,9 @@ export default class extends Context {
         // 不存在，走新增流程
         try {
           await this.api.createPost(params);
-          this.ctx.info('新增文档', doc.properties.title);
+          this.ctx.logger.info('新增文档', doc.properties.title);
         } catch (e: any) {
-          this.ctx.warn(`新增 ${doc.properties.title} 文档失败: ${e.message}`);
+          this.ctx.logger.warn(`新增 ${doc.properties.title} 文档失败: ${e.message}`);
         }
         // 发布
       } else {
@@ -293,10 +301,10 @@ export default class extends Context {
           await delay();
           // 更新内容信息
           await this.api.updatePostContent(doc.id, params.content);
-          this.ctx.info('更新文档', doc.properties.title);
+          this.ctx.logger.info('更新文档', doc.properties.title);
         } catch (e: any) {
-          this.ctx.warn(`更新 ${doc.properties.title} 文档失败: ${e.message}`);
-          this.ctx.debug(e);
+          this.ctx.logger.warn(`更新 ${doc.properties.title} 文档失败: ${e.message}`);
+          this.ctx.logger.debug(e);
         }
       }
       // 发布文档
@@ -307,10 +315,10 @@ export default class extends Context {
         (typeof publish === 'boolean' && publish)
       ) {
         await this.api.publishPost(doc.id);
-        this.ctx.info('发布文档', doc.properties.title);
+        this.ctx.logger.info('发布文档', doc.properties.title);
       } else {
         await this.api.unpublishPost(doc.id);
-        this.ctx.info('下架文档', doc.properties.title);
+        this.ctx.logger.info('下架文档', doc.properties.title);
       }
     }
   }

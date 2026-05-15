@@ -44,8 +44,8 @@ export const getProps = (doc: YuqueDoc, body: string, ctx: PluginContext) => {
       properties,
     };
   } catch (e: any) {
-    ctx.warn('front-matter解析失败，将返回预定义属性', e.message);
-    ctx.warn('预定义属性：https://elog.1874.cool/notion/raqyleng501h23p1#预定义属性');
+    ctx.logger.warn('front-matter解析失败，将返回预定义属性', e.message);
+    ctx.logger.warn('预定义属性：https://elog.1874.cool/notion/raqyleng501h23p1#预定义属性');
     return {
       body,
       properties,

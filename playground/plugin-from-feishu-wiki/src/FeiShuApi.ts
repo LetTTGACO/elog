@@ -13,10 +13,10 @@ export default class FeiShuApi extends ElogBaseContext {
     super(ctx);
     this.config = config;
     if (!config.appId || !config.appSecret) {
-      this.ctx.error('缺少文件夹Token或知识库 ID');
+      this.ctx.logger.error('缺少文件夹Token或知识库 ID');
     }
     if (!config.wikiId) {
-      this.ctx.error('缺少知识库 ID');
+      this.ctx.logger.error('缺少知识库 ID');
     }
     this.feishu = new FeiShuSDK({
       appId: this.config.appId,
@@ -84,13 +84,13 @@ export default class FeiShuApi extends ElogBaseContext {
       const pageBlocks = await this.feishu.getPageBlocks(doc.id);
       body = this.f2m.toMarkdownString(pageBlocks);
     } catch (e: any) {
-      this.ctx.warn(`${doc.title} 下载出错: ${e.message}`);
-      this.ctx.debug(e);
+      this.ctx.logger.warn(`${doc.title} 下载出错: ${e.message}`);
+      this.ctx.logger.debug(e);
     }
     // 解析出properties
     let { body: newBody, properties } = getProps(doc, body);
     // 处理图片
-    const imgList = this.ctx.imgUtil.getUrlListFromContent(newBody);
+    const imgList = this.ctx.image.getUrlListFromContent(newBody);
     for (let i = 0; i < imgList.length; i++) {
       const token = imgList[i].data;
       const base64 = await this.bufferToBase64(token);

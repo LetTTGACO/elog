@@ -1,13 +1,14 @@
-import type { IPlugin } from '@elogx-test/elog';
+import type { TransformPlugin } from '@elogx-test/elog';
 import ImageClient from './ImageClient';
-import { ImageOSSConfig } from './types';
+import type { ImageOSSConfig } from './types';
 
-export default function imageLocal(options: Partial<ImageOSSConfig>): IPlugin {
+export default function imageOss(options: Partial<ImageOSSConfig>): TransformPlugin {
   return {
-    name: 'image-oss',
-    transform(docs) {
-      const imageLocal = new ImageClient(options as ImageOSSConfig, this);
-      return imageLocal.processImages(docs);
+    name: 'transform:image-oss',
+    kind: 'transform',
+    transform(docs, ctx) {
+      const imageOss = new ImageClient(options as ImageOSSConfig, ctx);
+      return imageOss.processImages(docs);
     },
   };
 }

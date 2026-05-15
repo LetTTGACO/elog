@@ -22,9 +22,9 @@ export default class extends Context {
 
   async deploy(docs: DocDetail[]) {
     if (docs.length === 0) {
-      this.ctx.error('没有可部署的文档');
+      this.ctx.logger.error('没有可部署的文档');
     }
-    this.ctx.success('正在部署到 WordPress...');
+    this.ctx.logger.success('正在部署到 WordPress...');
     const articleList = JSON.parse(JSON.stringify(docs)) as DocDetail[];
     try {
       let tagsKey = 'tags';
@@ -69,7 +69,7 @@ export default class extends Context {
             const newTag = await this.api.createTag({ name: tag });
             wpTags.push(newTag);
           } catch (e: any) {
-            this.ctx.warn(`创建 ${tag} 标签失败: ${e.message}`);
+            this.ctx.logger.warn(`创建 ${tag} 标签失败: ${e.message}`);
           }
         }
       }
@@ -81,7 +81,7 @@ export default class extends Context {
             const newCategory = await this.api.createCategory({ name: category });
             wpCategories.push(newCategory);
           } catch (e: any) {
-            this.ctx.warn(`创建 ${category} 分类失败: ${e.message}`);
+            this.ctx.logger.warn(`创建 ${category} 分类失败: ${e.message}`);
           }
         }
       }
@@ -91,7 +91,7 @@ export default class extends Context {
       for (const articleInfo of sortArticleList) {
         // 重复文档跳过同步
         if (publishedPostMap[articleInfo.properties.title]) {
-          this.ctx.warn('跳过更新', `存在重复文档：${articleInfo.properties.title}`);
+          this.ctx.logger.warn('跳过更新', `存在重复文档：${articleInfo.properties.title}`);
           continue;
         }
         // 自定义处理md文档
@@ -129,24 +129,24 @@ export default class extends Context {
         // 处理封面图
         if (articleInfo.properties[coverKey]) {
           const picUrl = articleInfo.properties[coverKey];
-          const url = this.ctx.imgUtil.cleanUrlParam(picUrl);
-          const uuid = this.ctx.imgUtil.genUniqueIdFromUrl(url);
-          const fileType = await this.ctx.imgUtil.getFileType(picUrl);
+          const url = this.ctx.image.cleanUrlParam(picUrl);
+          const uuid = this.ctx.image.genUniqueIdFromUrl(url);
+          const fileType = await this.ctx.image.getFileType(picUrl);
           if (fileType) {
             const filename = `${uuid}.${fileType.type}`;
             // 检查是否已经存在图片
             const cacheMedia = wpMedias.find((item) => item.title?.rendered === filename);
             if (cacheMedia) {
-              this.ctx.info('忽略上传', `图片已存在: ${cacheMedia.guid.rendered}`);
+              this.ctx.logger.info('忽略上传', `图片已存在: ${cacheMedia.guid.rendered}`);
               post.featured_media = cacheMedia.id;
             } else {
-              const pic = await this.ctx.imgUtil.getBufferFromUrl(picUrl);
+              const pic = await this.ctx.image.getBufferFromUrl(picUrl);
               if (!pic) {
                 continue;
               }
               // 上传特色图片
               const media = await this.api.uploadMedia(pic, filename);
-              this.ctx.info('上传成功', media.guid.rendered);
+              this.ctx.logger.info('上传成功', media.guid.rendered);
               wpMedias.push(media);
               post.featured_media = media.id;
               // 替换属性中的图片
@@ -157,14 +157,14 @@ export default class extends Context {
         // 处理文档图片
         if (this.config.enableUploadImage) {
           // 收集文档图片
-          const urlList = this.ctx.imgUtil.getUrlListFromContent(articleInfo.body);
+          const urlList = this.ctx.image.getUrlListFromContent(articleInfo.body);
           for (const image of urlList) {
             // 生成文件名
-            const fileName = this.ctx.imgUtil.genUniqueIdFromUrl(image.url, 28);
+            const fileName = this.ctx.image.genUniqueIdFromUrl(image.url, 28);
             // 生成文件名后缀
-            const fileType = await this.ctx.imgUtil.getFileType(image.url);
+            const fileType = await this.ctx.image.getFileType(image.url);
             if (!fileType) {
-              this.ctx.warn(
+              this.ctx.logger.warn(
                 `${articleInfo?.properties?.title} 存在获取图片类型失败，跳过：${image.url}`,
               );
               continue;
@@ -176,9 +176,9 @@ export default class extends Context {
             if (!item) {
               // 上传
               // 获取 buffer
-              const buffer = await this.ctx.imgUtil.getBufferFromUrl(image.original);
+              const buffer = await this.ctx.image.getBufferFromUrl(image.original);
               if (!buffer) {
-                this.ctx.warn(
+                this.ctx.logger.warn(
                   '跳过',
                   `${articleInfo?.properties?.title} 存在获取图片内容失败：${image.url}`,
                 );
@@ -187,7 +187,7 @@ export default class extends Context {
               try {
                 const attachment = await this.api.uploadMedia(buffer, fullName);
                 // const imageUrl = await this.api.getAttachmentPermalink(attachment.metadata.name)
-                this.ctx.info('上传成功', attachment.guid.rendered);
+                this.ctx.logger.info('上传成功', attachment.guid.rendered);
                 wpMedias.push(attachment);
                 // 替换文档中的图片路径
                 articleInfo.body = articleInfo.body.replace(
@@ -195,14 +195,14 @@ export default class extends Context {
                   attachment.guid.rendered,
                 );
               } catch (e: any) {
-                this.ctx.warn(
+                this.ctx.logger.warn(
                   '跳过',
                   `${articleInfo?.properties?.title} 存在上传图片失败：${image.url}`,
                 );
-                this.ctx.debug(e);
+                this.ctx.logger.debug(e);
               }
             } else {
-              this.ctx.info('忽略上传', `图片已存在: ${item.guid.rendered}`);
+              this.ctx.logger.info('忽略上传', `图片已存在: ${item.guid.rendered}`);
               // 替换文档中的图片路径
               articleInfo.body = articleInfo.body.replace(image.original, item.guid.rendered);
             }
@@ -211,19 +211,19 @@ export default class extends Context {
         const cachePage = postMap[articleInfo.properties.title];
         if (cachePage) {
           await this.api.updatePost(cachePage.id, removeEmptyProperties(post));
-          this.ctx.info('更新成功', articleInfo.properties.title);
+          this.ctx.logger.info('更新成功', articleInfo.properties.title);
         } else {
           const newPost = await this.api.createPost(
             removeEmptyProperties(post) as CreateWordPressPost,
           );
           postMap[newPost.title.rendered] = newPost;
-          this.ctx.info('新增成功', articleInfo.properties.title);
+          this.ctx.logger.info('新增成功', articleInfo.properties.title);
         }
         publishedPostMap[articleInfo.properties.title] = cachePage;
       }
       return undefined;
     } catch (error: any) {
-      this.ctx.error(`部署到 WordPress 失败: ${error.message}`);
+      this.ctx.logger.error(`部署到 WordPress 失败: ${error.message}`);
     }
   }
 }

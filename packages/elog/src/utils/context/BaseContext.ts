@@ -1,4 +1,4 @@
-import { PluginContext } from '../../types/plugin';
+import type { PluginContext } from '../../plugins/types';
 
 export class ElogBaseContext {
   readonly ctx: PluginContext;

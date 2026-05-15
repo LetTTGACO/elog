@@ -1,4 +1,4 @@
-import { FromPluginReturn, PluginContext } from '../../types/plugin';
+import type { DownloadResult, PluginContext } from '../../plugins/types';
 import asyncPool from 'tiny-async-pool';
 import {
   asyncPoolFunc,
@@ -24,7 +24,7 @@ export abstract class ElogFromContext extends ElogBaseContext {
    * @param docs
    */
   protected filterDocs<T>(docs: SortedDoc<T>[]) {
-    return filterDocs(this.ctx.cacheDocList, docs);
+    return filterDocs(this.ctx.cache.docList, docs);
   }
 
   /**
@@ -45,10 +45,10 @@ export abstract class ElogFromContext extends ElogBaseContext {
     limit: number | undefined;
   }) {
     return getDocDetailList({
-      cachedDocList: this.ctx.cacheDocList,
+      cachedDocList: [...this.ctx.cache.docList],
       ...option,
     });
   }
 
-  abstract getDocDetailList(): Promise<FromPluginReturn>;
+  abstract getDocDetailList(): Promise<DownloadResult>;
 }

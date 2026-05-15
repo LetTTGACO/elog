@@ -12,10 +12,12 @@ export default class COSApi extends ElogBaseContext {
     this.config = config;
     // 如果没开拓展点，就从配置文件/环境变量中读取
     if (!this.config.user || !this.config.password || !this.config.bucket) {
-      this.ctx.error('缺少又拍云配置信息');
+      this.ctx.logger.error('缺少又拍云配置信息');
     }
     if (!this.config.host) {
-      this.ctx.warn(`未指定域名host，将使用测试域名：http://${this.config.bucket}.test.upcdn.net`);
+      this.ctx.logger.warn(
+        `未指定域名host，将使用测试域名：http://${this.config.bucket}.test.upcdn.net`,
+      );
       this.config.host = `http://${this.config.bucket}.test.upcdn.net`;
     }
     this.config.prefixKey = formattedPrefix(this.config.prefixKey);
@@ -37,7 +39,7 @@ export default class COSApi extends ElogBaseContext {
         return undefined;
       }
     } catch (e: any) {
-      this.ctx.debug(`图片不存在: ${e.message}`);
+      this.ctx.logger.debug(`图片不存在: ${e.message}`);
       return undefined;
     }
   }
@@ -56,8 +58,8 @@ export default class COSApi extends ElogBaseContext {
         return undefined;
       }
     } catch (e: any) {
-      this.ctx.warn(`上传图片失败，请检查: ${e.message}`);
-      this.ctx.debug(e);
+      this.ctx.logger.warn(`上传图片失败，请检查: ${e.message}`);
+      this.ctx.logger.debug(e);
       return undefined;
     }
   }

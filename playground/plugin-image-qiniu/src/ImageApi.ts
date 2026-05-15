@@ -14,10 +14,10 @@ export default class COSApi extends ElogBaseContext {
     // 校验Config
     this.config = config;
     if (!this.config.secretId || !this.config.secretKey) {
-      this.ctx.error('缺少七牛云密钥信息');
+      this.ctx.logger.error('缺少七牛云密钥信息');
     }
     if (!this.config.host) {
-      this.ctx.error('使用七牛云时，需要指定域名host');
+      this.ctx.logger.error('使用七牛云时，需要指定域名host');
     }
     this.config.prefixKey = formattedPrefix(this.config.prefixKey);
     const mac = new qiniu.auth.digest.Mac(this.config.secretId, this.config.secretKey);
@@ -43,14 +43,14 @@ export default class COSApi extends ElogBaseContext {
         `${this.config.prefixKey}${filename}`,
         (err, _respBody, respInfo) => {
           if (err) {
-            this.ctx.debug(`检查图片信息时出错: ${err.message}`);
+            this.ctx.logger.debug(`检查图片信息时出错: ${err.message}`);
             resolve(undefined);
           } else {
             if (respInfo.statusCode === 200) {
               resolve(`${this.config.host}/${this.config.prefixKey}${filename}`);
             } else {
-              this.ctx.debug('检查图片信息时出错');
-              this.ctx.debug(respInfo);
+              this.ctx.logger.debug('检查图片信息时出错');
+              this.ctx.logger.debug(respInfo);
               resolve(undefined);
             }
           }
@@ -73,12 +73,12 @@ export default class COSApi extends ElogBaseContext {
         this.putExtra!,
         (respErr, _respBody, respInfo) => {
           if (respErr) {
-            this.ctx.debug(`上传图片失败: ${respErr.message}`);
+            this.ctx.logger.debug(`上传图片失败: ${respErr.message}`);
           } else if (respInfo.statusCode === 200) {
             resolve(`${this.config.host}/${this.config.prefixKey}${fileName}`);
           } else {
-            this.ctx.debug('上传图片失败');
-            this.ctx.debug(respInfo);
+            this.ctx.logger.debug('上传图片失败');
+            this.ctx.logger.debug(respInfo);
             resolve(undefined);
           }
         },

@@ -27,13 +27,13 @@ export default class NotionApi extends ElogBaseContext {
     super(ctx);
     this.config = config;
     if (!this.config.token) {
-      this.ctx.error('缺少 Notion Token');
+      this.ctx.logger.error('缺少 Notion Token');
     }
     if (!this.config.databaseId) {
-      this.ctx.error('缺少Notion 数据库 ID');
+      this.ctx.logger.error('缺少Notion 数据库 ID');
     }
     if (this.config.imgToBase64) {
-      this.ctx.error(
+      this.ctx.logger.error(
         '已开启 Notion 文档图片转 Base64，博客平台的 Markdown 解析器/渲染器并未广泛支持 Base64 格式，请自行确认',
       );
     }
@@ -130,7 +130,7 @@ export default class NotionApi extends ElogBaseContext {
   getDocStructure(page: NotionDoc, property: string): DocStructure[] | undefined {
     const catalog = page.properties[property];
     if (!catalog) {
-      this.ctx.warn(`${page.properties.title} ${property} 属性缺失`);
+      this.ctx.logger.warn(`${page.properties.title} ${property} 属性缺失`);
       return undefined;
     } else if (typeof catalog === 'string') {
       // 单选
@@ -150,7 +150,7 @@ export default class NotionApi extends ElogBaseContext {
       });
     } else {
       // 没有值
-      this.ctx.warn(
+      this.ctx.logger.warn(
         `${page.properties.title} 文档分类信息提取失败，${property} 字段只能是（Select）单选/（Multi-select）多选`,
       );
       return undefined;
@@ -197,7 +197,7 @@ export default class NotionApi extends ElogBaseContext {
   async getDocDetail(page: NotionDoc): Promise<DocDetail> {
     const blocks = await this.n2m.pageToMarkdown(page.id);
     if (!blocks.length) {
-      this.ctx.warn(`${page.properties.title} 文档下载超时或无内容 `);
+      this.ctx.logger.warn(`${page.properties.title} 文档下载超时或无内容 `);
     }
     let body = this.n2m.toMarkdownString(blocks)?.parent || '';
     const timestamp = new Date(page.last_edited_time).getTime();

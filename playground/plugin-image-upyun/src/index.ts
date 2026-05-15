@@ -1,13 +1,14 @@
-import type { IPlugin } from '@elogx-test/elog';
+import type { TransformPlugin } from '@elogx-test/elog';
 import ImageClient from './ImageClient';
-import { ImageUPYunConfig } from './types';
+import type { ImageUPYunConfig } from './types';
 
-export default function imageLocal(options: Partial<ImageUPYunConfig>): IPlugin {
+export default function imageUpyun(options: Partial<ImageUPYunConfig>): TransformPlugin {
   return {
-    name: 'image-upyun',
-    transform(docs) {
-      const imageLocal = new ImageClient(options as ImageUPYunConfig, this);
-      return imageLocal.processImages(docs);
+    name: 'transform:image-upyun',
+    kind: 'transform',
+    transform(docs, ctx) {
+      const imageUpyun = new ImageClient(options as ImageUPYunConfig, ctx);
+      return imageUpyun.processImages(docs);
     },
   };
 }

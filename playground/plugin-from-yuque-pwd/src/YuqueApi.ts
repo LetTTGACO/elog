@@ -12,7 +12,7 @@ export default class YuqueApi extends ElogBaseContext {
     super(ctx);
     this.config = config;
     if (!this.config.username || !this.config.password || !this.config.login || !this.config.repo) {
-      this.ctx.error('缺少语雀配置信息');
+      this.ctx.logger.error('缺少语雀配置信息');
     }
     this.config.baseUrl = this.config.baseUrl || 'https://www.yuque.com';
     if (this.config.baseUrl.endsWith('/')) {
@@ -30,7 +30,7 @@ export default class YuqueApi extends ElogBaseContext {
       loginType: 'password',
     };
 
-    const res = await this.ctx.request<any>(
+    const res = await this.ctx.http<any>(
       `${this.config.baseUrl}/api/mobile_app/accounts/login?language=zh-cn`,
       {
         method: 'post',
@@ -44,7 +44,7 @@ export default class YuqueApi extends ElogBaseContext {
       },
     );
     if (res.status !== 200) {
-      this.ctx.error('语雀登陆失败');
+      this.ctx.logger.error('语雀登陆失败');
     }
     if (res.headers['set-cookie']) {
       // 保存cookie
@@ -53,7 +53,7 @@ export default class YuqueApi extends ElogBaseContext {
         data: res.headers['set-cookie'] as string,
       };
     }
-    this.ctx.success('语雀登陆成功');
+    this.ctx.logger.success('语雀登陆成功');
   }
 
   /**
@@ -71,19 +71,19 @@ export default class YuqueApi extends ElogBaseContext {
       ...reqOpts,
     };
     if (!opts.headers?.cookie) {
-      this.ctx.error('未登录语雀!');
+      this.ctx.logger.error('未登录语雀!');
     }
     if (custom) {
-      const res = await this.ctx.request<T>(url, opts);
+      const res = await this.ctx.http<T>(url, opts);
       return res.data;
     }
-    const res = await this.ctx.request<any>(url, opts);
+    const res = await this.ctx.http<any>(url, opts);
     if (res.status !== 200) {
       if (res.status === 404 && res.data?.message === 'book not found') {
-        this.ctx.info('请参考配置文档：https://elog.1874.cool/notion/write-platform');
-        this.ctx.error('知识库不存在，请检查配置');
+        this.ctx.logger.info('请参考配置文档：https://elog.1874.cool/notion/write-platform');
+        this.ctx.logger.error('知识库不存在，请检查配置');
       } else {
-        this.ctx.error(res.data?.message || res);
+        this.ctx.logger.error(res.data?.message || res);
       }
     }
     return res.data.data;
@@ -93,6 +93,7 @@ export default class YuqueApi extends ElogBaseContext {
    * 获取目录信息（已排序）
    */
   async getToc() {
+    const failureMessage = '爬取语雀目录失败，请稍后重试';
     try {
       const res = await this.requestInternal(
         `${this.config.login}/${this.config.repo}`,
@@ -103,14 +104,17 @@ export default class YuqueApi extends ElogBaseContext {
       const { book } = dom?.window?.appData || {};
       dom.window.close();
       if (!book) {
-        this.ctx.warn('爬取语雀目录失败，请稍后重试');
-        process.exit(-1);
+        this.ctx.logger.warn(failureMessage);
+        throw new Error(failureMessage);
       }
       this.bookId = book.id;
       return (book?.toc as YuqueCatalog[]) || [];
     } catch (e: any) {
-      console.error(e.message);
-      this.ctx.error('爬取语雀目录失败，请稍后重试');
+      if (e.message === failureMessage) {
+        throw e;
+      }
+      this.ctx.logger.warn(failureMessage, e.message);
+      throw new Error(failureMessage);
     }
   }
 

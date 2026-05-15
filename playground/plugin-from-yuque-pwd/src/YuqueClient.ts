@@ -26,7 +26,7 @@ export default class YuqueClient extends ElogFromContext {
   async getDocDetailList() {
     // 登录
     await this.api.login();
-    this.ctx.info('正在获取待更新文档，请稍等...');
+    this.ctx.logger.info('正在获取待更新文档，请稍等...');
     // 获取已排序目录信息
     const tocList = await this.api.getToc();
     // 获取文档列表
@@ -58,7 +58,7 @@ export default class YuqueClient extends ElogFromContext {
         // 过滤不支持的文档格式
         if (!page.format) return true;
         if (IllegalityDocFormat.some((item) => item === page.format)) {
-          this.ctx.warn('注意', `【${page.title}】为不支持的文档格式`);
+          this.ctx.logger.warn('注意', `【${page.title}】为不支持的文档格式`);
           return false;
         }
         return true;
@@ -71,12 +71,16 @@ export default class YuqueClient extends ElogFromContext {
     const { docList: needUpdateDocList, docStatusMap } = this.filterDocs(sortedDocList);
     // 没有则不需要更新
     if (!needUpdateDocList.length) {
-      this.ctx.success('任务结束', '没有需要同步的文档');
-      process.exit();
+      this.ctx.logger.success('任务结束', '没有需要同步的文档');
+      return {
+        docDetailList: [],
+        sortedDocList,
+        docStatusMap,
+      };
     }
-    this.ctx.info('待下载数', String(needUpdateDocList.length));
+    this.ctx.logger.info('待下载数', String(needUpdateDocList.length));
     const promise = async (doc: YuqueDoc) => {
-      this.ctx.info(`下载文档 ${doc._index}/${needUpdateDocList.length}   `, doc.title);
+      this.ctx.logger.info(`下载文档 ${doc._index}/${needUpdateDocList.length}   `, doc.title);
       let articleStr = await this.api.getDocString(doc.slug);
       // 处理文档 front-matter
       const { body, properties } = getProps(doc, articleStr, this.ctx);
@@ -93,7 +97,7 @@ export default class YuqueClient extends ElogFromContext {
       return docDetail;
     };
     const docDetailList = await this.asyncPool(this.config.limit || 10, needUpdateDocList, promise);
-    this.ctx.info('已下载数', String(needUpdateDocList.length));
+    this.ctx.logger.info('已下载数', String(needUpdateDocList.length));
     return {
       docDetailList,
       sortedDocList,

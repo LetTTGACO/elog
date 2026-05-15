@@ -17,7 +17,7 @@ export default class COSApi extends ElogBaseContext {
       SecretKey: this.config.secretKey,
     };
     if (!this.config.SecretId || !this.config.SecretKey) {
-      this.ctx.error('缺少腾讯云COS密钥信息');
+      this.ctx.logger.error('缺少腾讯云COS密钥信息');
     }
     this.config.prefixKey = formattedPrefix(this.config.prefixKey);
     this.api = new COS(this.config);
@@ -39,7 +39,7 @@ export default class COSApi extends ElogBaseContext {
       }
       return `https://${this.config.bucket}.cos.${this.config.region}.myqcloud.com/${this.config.prefixKey}${filename}`;
     } catch (e: any) {
-      this.ctx.debug(`图床检查出错: ${e.message}`);
+      this.ctx.logger.debug(`图床检查出错: ${e.message}`);
     }
   }
 
@@ -62,8 +62,8 @@ export default class COSApi extends ElogBaseContext {
       }
       return `https://${res.Location}`;
     } catch (e: any) {
-      this.ctx.warn('跳过上传', `上传图片失败，请检查: ${e.message}`);
-      this.ctx.debug(e);
+      this.ctx.logger.warn('跳过上传', `上传图片失败，请检查: ${e.message}`);
+      this.ctx.logger.debug(e);
     }
   }
 }

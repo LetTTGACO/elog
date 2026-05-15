@@ -16,10 +16,10 @@ export default class ConfluenceApi extends Context {
     super(ctx);
     this.config = config;
     if (!config.baseUrl) {
-      this.ctx.error('缺少Confluence baseUrl');
+      this.ctx.logger.error('缺少Confluence baseUrl');
     }
     if (!this.config.user || !this.config.password) {
-      this.ctx.error('缺少Confluence账号或密码');
+      this.ctx.logger.error('缺少Confluence账号或密码');
     }
     this.auth = `${this.config.user}:${this.config.password}`;
   }
@@ -40,7 +40,7 @@ export default class ConfluenceApi extends Context {
       auth: this.auth,
       ...reqOpts,
     };
-    const res = await this.ctx.request<T>(url, opts);
+    const res = await this.ctx.http<T>(url, opts);
     return res.data;
   }
   /**

@@ -1,13 +1,14 @@
-import type { IPlugin } from '@elogx-test/elog';
+import type { TransformPlugin } from '@elogx-test/elog';
 import ImageClient from './ImageClient';
-import { ImageGithubConfig } from './types';
+import type { ImageGithubConfig } from './types';
 
-export default function imageLocal(options: Partial<ImageGithubConfig>): IPlugin {
+export default function imageGithub(options: Partial<ImageGithubConfig>): TransformPlugin {
   return {
-    name: 'image-github',
-    transform(docs) {
-      const imageLocal = new ImageClient(options as ImageGithubConfig, this);
-      return imageLocal.processImages(docs);
+    name: 'transform:image-github',
+    kind: 'transform',
+    transform(docs, ctx) {
+      const imageGithub = new ImageClient(options as ImageGithubConfig, ctx);
+      return imageGithub.processImages(docs);
     },
   };
 }

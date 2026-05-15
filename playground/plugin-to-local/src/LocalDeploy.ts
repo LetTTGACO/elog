@@ -64,8 +64,8 @@ export default class LocalDeploy extends ElogBaseContext {
     let { filename = 'title', fileExt = 'md' } = this.config;
     const outputDir = path.join(process.cwd(), this.config.outputDir);
     if (!docDetailList?.length) {
-      this.ctx.success('任务结束', '没有需要部署的文档');
-      process.exit();
+      this.ctx.logger.success('任务结束', '没有需要部署的文档');
+      return;
     }
     const newDocDetailList = JSON.parse(JSON.stringify(docDetailList)) as DocDetail[];
 
@@ -78,7 +78,7 @@ export default class LocalDeploy extends ElogBaseContext {
       let fileName = doc.properties[filename];
       if (!doc.properties[filename]) {
         // 没有文件名的文档
-        this.ctx.warn(`存在未命名文档，将自动重命名为【未命名文档_${doc.id}】`);
+        this.ctx.logger.warn(`存在未命名文档，将自动重命名为【未命名文档_${doc.id}】`);
         fileName = `未命名文档_${doc.id}`;
       }
 
@@ -93,20 +93,20 @@ export default class LocalDeploy extends ElogBaseContext {
           mkdirp.sync(outDir);
           docPath = path.join(outDir, `${fileName}.${fileExt}`);
           // 生成文件夹
-          this.ctx.info('生成文档', `${fileName}.${fileExt}`);
+          this.ctx.logger.info('生成文档', `${fileName}.${fileExt}`);
         } else {
-          this.ctx.warn('目录缺失', `${fileName}缺失目录信息，将生成在指定目录`);
+          this.ctx.logger.warn('目录缺失', `${fileName}缺失目录信息，将生成在指定目录`);
           // 不存在则直接生成
           fileName = this.checkFileName(fileName, fileName, doc.id);
           docPath = path.join(outputDir, `${fileName}.${fileExt}`);
-          this.ctx.info('生成文档', `${fileName}.${fileExt}`);
+          this.ctx.logger.info('生成文档', `${fileName}.${fileExt}`);
           mkdirp.sync(outputDir);
         }
       } else {
         // 直接生成
         fileName = this.checkFileName(fileName, fileName, doc.id);
         docPath = path.join(outputDir, `${fileName}.${fileExt}`);
-        this.ctx.info('生成文档', `${fileName}.${fileExt}`);
+        this.ctx.logger.info('生成文档', `${fileName}.${fileExt}`);
         mkdirp.sync(outputDir);
       }
       fs.writeFileSync(docPath, doc.body, {
@@ -126,7 +126,7 @@ export default class LocalDeploy extends ElogBaseContext {
     let newName: string;
     if (this.cacheFileNames.includes(fileName)) {
       const newFileName = `${originName}_${docId}`;
-      this.ctx.warn(
+      this.ctx.logger.warn(
         '文档重复',
         `${originName}.${fileExt} 文档已存在，将为自动重命名为${newFileName}.${fileExt}`,
       );

@@ -23,7 +23,10 @@ export default class NotionClient extends ElogFromContext {
         this.config.catalog = { enable: false };
       } else {
         // 启用目录
-        this.ctx.success('开启分类', '默认按照 catalog 字段分类，请检查Notion数据库是否存在该属性');
+        this.ctx.logger.success(
+          '开启分类',
+          '默认按照 catalog 字段分类，请检查Notion数据库是否存在该属性',
+        );
         this.config.catalog = { enable: true, property: 'catalog' };
       }
     } else if (typeof this.config.catalog === 'object') {
@@ -31,7 +34,7 @@ export default class NotionClient extends ElogFromContext {
         // 检查分类字段是否存在
         if (!this.config.catalog.property) {
           this.config.catalog.property = 'catalog';
-          this.ctx.warn(
+          this.ctx.logger.warn(
             '未设置分类字段，默认按照 catalog 字段分类，请检查Notion数据库是否存在该属性',
           );
         }

@@ -22,13 +22,13 @@ export default class HaloApi extends Context {
     super(ctx);
     this.config = config;
     if (!config.endpoint) {
-      this.ctx.error('缺少Halo站点地址 endpoint');
+      this.ctx.logger.error('缺少Halo站点地址 endpoint');
     }
     if (!this.config.token) {
-      this.ctx.error('缺少Halo个人令牌 token');
+      this.ctx.logger.error('缺少Halo个人令牌 token');
     }
     if (!this.config.policyName) {
-      this.ctx.warn('注意', '未指定存储策略，将使用默认策略上传图片');
+      this.ctx.logger.warn('注意', '未指定存储策略，将使用默认策略上传图片');
       this.config.policyName = 'default-policy';
     }
   }
@@ -52,9 +52,9 @@ export default class HaloApi extends Context {
         ...reqOpts?.headers,
       },
     };
-    const res = await this.ctx.request<T>(url, opts);
+    const res = await this.ctx.http<T>(url, opts);
     if (res.status !== 200 && res.status !== 201) {
-      this.ctx.error(JSON.stringify(res.data));
+      this.ctx.logger.error(JSON.stringify(res.data));
     }
     return res.data;
   }

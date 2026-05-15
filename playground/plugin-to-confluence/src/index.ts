@@ -1,12 +1,13 @@
-import type { IPlugin } from '@elogx-test/elog';
+import type { ToPlugin } from '@elogx-test/elog';
 import ConfluenceDeploy from './ConfluenceDeploy';
 import type { ConfluenceConfig } from './types';
 
-export default function toLocal(options: Partial<ConfluenceConfig>): IPlugin {
+export default function toConfluence(options: Partial<ConfluenceConfig>): ToPlugin {
   return {
-    name: 'to-confluence',
-    async deploy(docs) {
-      const confluenceDeploy = new ConfluenceDeploy(options as ConfluenceConfig, this);
+    name: 'to:confluence',
+    kind: 'to',
+    async deploy(docs, ctx) {
+      const confluenceDeploy = new ConfluenceDeploy(options as ConfluenceConfig, ctx);
       await confluenceDeploy.deploy(docs);
     },
   };

@@ -35,7 +35,7 @@ export default class ImageClient {
         // 强行替换图片路径为Unix风格的路径，即 /
         prefixKey = prefixKey.split(path.sep).join('/');
       } else {
-        this.ctx.warn('文档不存在目录信息，请检查配置');
+        this.ctx.logger.warn('文档不存在目录信息，请检查配置');
         prefixKey = this.config.prefixKey || './';
       }
     } else {
@@ -68,7 +68,7 @@ export default class ImageClient {
       // 强行替换图片路径为Unix风格的路径，即 /
       return sysPath.split(path.sep).join('/');
     } catch (e: any) {
-      this.ctx.warn(e.message);
+      this.ctx.logger.warn(e.message);
     }
   }
 
@@ -81,7 +81,7 @@ export default class ImageClient {
     for (let i = 0; i < docDetailList.length; i++) {
       const articleInfo = docDetailList[i];
       // 获取图片URL列表
-      const urlList = this.ctx.imgUtil.getUrlListFromContent(articleInfo.body);
+      const urlList = this.ctx.image.getUrlListFromContent(articleInfo.body);
       if (urlList.length) {
         // 上传图片
         const urls = await this.transformImages(urlList, articleInfo, () => {
@@ -91,7 +91,7 @@ export default class ImageClient {
         if (urls?.length) {
           // 替换文章中的图片
           urls.forEach((item) => {
-            this.ctx.info('图片替换', `${item.data}`);
+            this.ctx.logger.info('图片替换', `${item.data}`);
             articleInfo.body = articleInfo.body.replace(item.originalUrl, item.data);
           });
         }
@@ -115,17 +115,19 @@ export default class ImageClient {
       return await new Promise<ImageSource | undefined>(async (resolve) => {
         try {
           // 生成文件名
-          const fileName = this.ctx.imgUtil.genUniqueIdFromUrl(image.data);
+          const fileName = this.ctx.image.genUniqueIdFromUrl(image.data);
           // 生成文件名后缀
-          const fileType = await this.ctx.imgUtil.getFileType(image.data);
+          const fileType = await this.ctx.image.getFileType(image.data);
           if (!fileType) {
-            this.ctx.warn(`${doc?.properties?.title} 存在获取图片类型失败，跳过：${image.data}`);
+            this.ctx.logger.warn(
+              `${doc?.properties?.title} 存在获取图片类型失败，跳过：${image.data}`,
+            );
             resolve(undefined);
             return;
           }
           // 完整文件名
           const fullName = `${fileName}.${fileType.type}`;
-          const buffer = await this.ctx.imgUtil.getBufferFromUrl(image.originalUrl);
+          const buffer = await this.ctx.image.getBufferFromUrl(image.originalUrl);
           if (!buffer) {
             failBack?.(image);
             resolve(undefined);

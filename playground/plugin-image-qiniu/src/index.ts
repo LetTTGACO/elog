@@ -1,13 +1,14 @@
-import type { IPlugin } from '@elogx-test/elog';
+import type { TransformPlugin } from '@elogx-test/elog';
 import ImageClient from './ImageClient';
-import { ImageQiniuConfig } from './types';
+import type { ImageQiniuConfig } from './types';
 
-export default function imageLocal(options: Partial<ImageQiniuConfig>): IPlugin {
+export default function imageQiniu(options: Partial<ImageQiniuConfig>): TransformPlugin {
   return {
-    name: 'image-qiniu',
-    transform(docs) {
-      const imageLocal = new ImageClient(options as ImageQiniuConfig, this);
-      return imageLocal.processImages(docs);
+    name: 'transform:image-qiniu',
+    kind: 'transform',
+    transform(docs, ctx) {
+      const imageQiniu = new ImageClient(options as ImageQiniuConfig, ctx);
+      return imageQiniu.processImages(docs);
     },
   };
 }

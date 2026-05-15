@@ -20,10 +20,10 @@ export default class WordPressApi extends Context {
     super(ctx);
     this.config = config;
     if (!config.endpoint) {
-      this.ctx.error('缺少WordPress endpoint');
+      this.ctx.logger.error('缺少WordPress endpoint');
     }
     if (!this.config.username || !this.config.password) {
-      this.ctx.error('缺少WordPress账号或密码');
+      this.ctx.logger.error('缺少WordPress账号或密码');
     }
     this.wpClient = new WPAPI({
       endpoint: config.endpoint,
@@ -66,7 +66,7 @@ export default class WordPressApi extends Context {
           // 请求页码超过总页数，直接返回所有文章
           return allPosts;
         } else {
-          this.ctx.error(`获取文章列表失败: ${err.message}`);
+          this.ctx.logger.error(`获取文章列表失败: ${err.message}`);
         }
       });
   }
@@ -121,7 +121,7 @@ export default class WordPressApi extends Context {
         }
       })
       .catch((err) => {
-        this.ctx.error(`获取标签列表失败${err.message}`);
+        this.ctx.logger.error(`获取标签列表失败${err.message}`);
       });
   }
 
@@ -164,7 +164,7 @@ export default class WordPressApi extends Context {
         }
       })
       .catch((err) => {
-        this.ctx.error(`获取分类列表失败: ${err.message}`);
+        this.ctx.logger.error(`获取分类列表失败: ${err.message}`);
       });
   }
 
@@ -209,7 +209,7 @@ export default class WordPressApi extends Context {
           // 请求页码超过总页数，直接返回所有媒体
           return allMedia;
         } else {
-          this.ctx.error(`获取图片列表失败: ${err.message}`);
+          this.ctx.logger.error(`获取图片列表失败: ${err.message}`);
         }
       });
   }

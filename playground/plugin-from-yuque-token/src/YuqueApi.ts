@@ -13,8 +13,8 @@ export default class YuqueApi extends ElogBaseContext {
     super(ctx);
     this.config = config;
     if (!this.config.token || !this.config.repo || !this.config.login) {
-      this.ctx.info('请查阅Elog配置文档: https://elog.1874.cool/notion/write-platform');
-      this.ctx.error('缺少语雀配置信息');
+      this.ctx.logger.info('请查阅Elog配置文档: https://elog.1874.cool/notion/write-platform');
+      this.ctx.logger.error('缺少语雀配置信息');
     }
     this.config.baseUrl = this.config.baseUrl || 'https://www.yuque.com';
     if (this.config.baseUrl.endsWith('/')) {
@@ -40,16 +40,16 @@ export default class YuqueApi extends ElogBaseContext {
       ...reqOpts,
     };
     if (custom) {
-      const res = await this.ctx.request<T>(url, opts);
+      const res = await this.ctx.http<T>(url, opts);
       return res.data;
     }
-    const res = await this.ctx.request<any>(url, opts);
+    const res = await this.ctx.http<any>(url, opts);
     if (res.status !== 200) {
       if (res.status === 404 && res.data?.message === 'book not found') {
-        this.ctx.info('请参考配置文档：https://elog.1874.cool/notion/write-platform');
-        this.ctx.error('知识库不存在，请检查配置');
+        this.ctx.logger.info('请参考配置文档：https://elog.1874.cool/notion/write-platform');
+        this.ctx.logger.error('知识库不存在，请检查配置');
       } else {
-        this.ctx.error(res.data?.message || res);
+        this.ctx.logger.error(res.data?.message || res);
       }
     }
     return res.data.data;

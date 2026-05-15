@@ -1,12 +1,13 @@
-import type { IPlugin } from '@elogx-test/elog';
+import type { ToPlugin } from '@elogx-test/elog';
 import LocalDeploy from './LocalDeploy';
-import { LocalConfig } from './types';
+import type { LocalConfig } from './types';
 
-export default function toLocal(options: Partial<LocalConfig>): IPlugin {
+export default function toLocal(options: Partial<LocalConfig>): ToPlugin {
   return {
-    name: 'to-local',
-    deploy(docs) {
-      const localDeploy = new LocalDeploy(options as LocalConfig, this);
+    name: 'to:local',
+    kind: 'to',
+    deploy(docs, ctx) {
+      const localDeploy = new LocalDeploy(options as LocalConfig, ctx);
       localDeploy.deploy(docs);
     },
   };

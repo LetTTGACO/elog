@@ -1,12 +1,13 @@
-import type { IPlugin } from '@elogx-test/elog';
+import type { ToPlugin } from '@elogx-test/elog';
 import HaloDeploy from './HaloDeploy';
-import { HaloConfig } from './types';
+import type { HaloConfig } from './types';
 
-export default function toLocal(options: Partial<HaloConfig>): IPlugin {
+export default function toHalo(options: Partial<HaloConfig>): ToPlugin {
   return {
-    name: 'to-halo',
-    async deploy(docs) {
-      const haloDeploy = new HaloDeploy(options as HaloConfig, this);
+    name: 'to:halo',
+    kind: 'to',
+    async deploy(docs, ctx) {
+      const haloDeploy = new HaloDeploy(options as HaloConfig, ctx);
       await haloDeploy.deploy(docs);
     },
   };

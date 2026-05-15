@@ -1,4 +1,4 @@
-import { PluginContext } from '../../types/plugin';
+import type { PluginContext } from '../../plugins/types';
 import { DocDetail } from '../../types/doc';
 
 import { ElogBaseContext } from './BaseContext';
@@ -23,7 +23,7 @@ export class ElogImageContext extends ElogBaseContext {
    */
   async replaceImages(docDetailList: DocDetail[], uploader: ImageUploader, limit?: number) {
     if (this.imageBaseConfig.disable) {
-      this.ctx.info('图片替换已禁用');
+      this.ctx.logger.info('图片替换已禁用');
       return docDetailList;
     }
     return replaceImagesFunc(docDetailList, uploader, limit || this.imageBaseConfig.limit || 10);

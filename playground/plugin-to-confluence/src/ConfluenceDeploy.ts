@@ -14,9 +14,9 @@ export default class ConfluenceDeploy extends Context {
 
   async deploy(docs: DocDetail[]) {
     if (docs.length === 0) {
-      this.ctx.error('没有可部署的文档');
+      this.ctx.logger.error('没有可部署的文档');
     }
-    this.ctx.success('正在部署到Confluence...');
+    this.ctx.logger.success('正在部署到Confluence...');
     const articleList = JSON.parse(JSON.stringify(docs)) as DocDetail[];
     // 重新排序articleList，按照层级更新文章
     // 先更新第一级，再更新第二级...
@@ -40,13 +40,13 @@ export default class ConfluenceDeploy extends Context {
       // 是否存在
       const cacheWikiPage = rootPageMap[articleInfo.properties.title];
       if (cacheWikiPage) {
-        this.ctx.info('更新文档', cacheWikiPage.title);
+        this.ctx.logger.info('更新文档', cacheWikiPage.title);
         // 获取版本信息
         const updatingPage = await this.api.getPageById(cacheWikiPage.id);
         const version = updatingPage.version.number + 1;
         await this.api.updatePage(articleInfo, cacheWikiPage.id, version);
       } else {
-        this.ctx.info('新增文档', articleInfo.properties.title);
+        this.ctx.logger.info('新增文档', articleInfo.properties.title);
         // 新增
         // 在rootPageMap中找到parent title
         let parentId = '';
@@ -64,9 +64,11 @@ export default class ConfluenceDeploy extends Context {
         } catch (e: any) {
           // 有可能是重名更新失败
           if (e.message.indexOf('A page with this title already exists') > -1) {
-            this.ctx.error(`文章标题已存在于confluence, 请检查: ${articleInfo.properties.title}`);
+            this.ctx.logger.error(
+              `文章标题已存在于confluence, 请检查: ${articleInfo.properties.title}`,
+            );
           } else {
-            this.ctx.error(e.message);
+            this.ctx.logger.error(e.message);
           }
         }
       }

@@ -1,13 +1,14 @@
-import type { IPlugin } from '@elogx-test/elog';
+import type { FromPlugin } from '@elogx-test/elog';
 import type { FlowUsConfig } from './types';
 import FlowUsClient from './FlowUsClient';
 
-export default function yuque(options: Partial<FlowUsConfig>): IPlugin {
+export default function flowus(options: Partial<FlowUsConfig>): FromPlugin {
   return {
-    name: 'from-flowus',
-    async download(this) {
-      const notion = new FlowUsClient(options as FlowUsConfig, this);
-      return notion.getDocDetailList();
+    name: 'from:flowus',
+    kind: 'from',
+    async download(ctx) {
+      const flowus = new FlowUsClient(options as FlowUsConfig, ctx);
+      return flowus.getDocDetailList();
     },
   };
 }

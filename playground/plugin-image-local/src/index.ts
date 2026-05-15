@@ -1,12 +1,13 @@
-import type { IPlugin } from '@elogx-test/elog';
+import type { TransformPlugin } from '@elogx-test/elog';
 import ImageClient from './ImageClient';
 import type { ImageLocalConfig } from './types';
 
-export default function imageLocal(options: Partial<ImageLocalConfig>): IPlugin {
+export default function imageLocal(options: Partial<ImageLocalConfig>): TransformPlugin {
   return {
-    name: 'image-local',
-    transform(docs) {
-      const imageLocal = new ImageClient(options as ImageLocalConfig, this);
+    name: 'transform:image-local',
+    kind: 'transform',
+    transform(docs, ctx) {
+      const imageLocal = new ImageClient(options as ImageLocalConfig, ctx);
       return imageLocal.replaceImages(docs);
     },
   };

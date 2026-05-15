@@ -1,13 +1,14 @@
-import type { IPlugin } from '@elogx-test/elog';
+import type { FromPlugin } from '@elogx-test/elog';
 import type { WoLaiConfig } from './types';
 import WolaiClient from './WolaiClient';
 
-export default function yuque(options: Partial<WoLaiConfig>): IPlugin {
+export default function wolai(options: Partial<WoLaiConfig>): FromPlugin {
   return {
-    name: 'from-wolai',
-    async download(this) {
-      const notion = new WolaiClient(options as WoLaiConfig, this);
-      return notion.getDocDetailList();
+    name: 'from:wolai',
+    kind: 'from',
+    async download(ctx) {
+      const wolai = new WolaiClient(options as WoLaiConfig, ctx);
+      return wolai.getDocDetailList();
     },
   };
 }

@@ -25,7 +25,7 @@ export default class WolaiApi extends ElogBaseContext {
     this.config = config;
     this.config.baseUrl = config.baseUrl || 'https://api.wolai.com/v1';
     if (!config.token || !config.pageId) {
-      this.ctx.error('缺少WoLai配置信息');
+      this.ctx.logger.error('缺少WoLai配置信息');
     }
     this.initCatalogConfig();
   }
@@ -40,7 +40,10 @@ export default class WolaiApi extends ElogBaseContext {
         this.config.catalog = { enable: false };
       } else {
         // 启用目录
-        this.ctx.success('开启分类', '默认按照 catalog 字段分类，请检查FlowUs多维表是否存在该属性');
+        this.ctx.logger.success(
+          '开启分类',
+          '默认按照 catalog 字段分类，请检查FlowUs多维表是否存在该属性',
+        );
         this.config.catalog = { enable: true, property: 'catalog' };
       }
     } else if (typeof this.config.catalog === 'object') {
@@ -48,7 +51,7 @@ export default class WolaiApi extends ElogBaseContext {
         // 检查分类字段是否存在
         if (!this.config.catalog.property) {
           this.config.catalog.property = 'catalog';
-          this.ctx.warn(
+          this.ctx.logger.warn(
             '未设置分类字段，默认按照 catalog 字段分类，请检查FlowUs多维表是否存在该属性',
           );
         }
@@ -154,17 +157,17 @@ export default class WolaiApi extends ElogBaseContext {
       ...reqOpts,
     };
     if (custom) {
-      const res = await this.ctx.request<T>(url, opts);
+      const res = await this.ctx.http<T>(url, opts);
       return res.data;
     }
-    const res = await this.ctx.request<any>(url, opts);
+    const res = await this.ctx.http<any>(url, opts);
     // TODO 校验数据库是否公开网络
     // if (res.status !== 200) {
     //   if (res.status === 404 && res.data?.message === 'book not found') {
-    //     this.ctx.info('请参考配置文档：https://elog.1874.cool/notion/write-platform');
-    //     this.ctx.error('知识库不存在，请检查配置');
+    //     this.ctx.logger.info('请参考配置文档：https://elog.1874.cool/notion/write-platform');
+    //     this.ctx.logger.error('知识库不存在，请检查配置');
     //   } else {
-    //     this.ctx.error(res.data?.message || res);
+    //     this.ctx.logger.error(res.data?.message || res);
     //   }
     // }
     return res.data.data;

@@ -9,13 +9,13 @@ export default class COSApi extends ElogBaseContext {
     // 校验Config
     this.config = config;
     if (!this.config.host) {
-      this.ctx.info('未指定加速域名，将使用默认域名：https://raw.githubusercontent.com');
+      this.ctx.logger.info('未指定加速域名，将使用默认域名：https://raw.githubusercontent.com');
     } else if (this.config.host?.includes('cdn.jsdelivr.net')) {
       // 如果指定了加速域名
       this.config.host = 'https://cdn.jsdelivr.net';
     }
     if (!this.config.token || !this.config.user || !this.config.repo) {
-      this.ctx.error('缺少Github 配置信息');
+      this.ctx.logger.error('缺少Github 配置信息');
     }
     this.config.prefixKey = formattedPrefix(this.config.prefixKey);
   }
@@ -29,7 +29,7 @@ export default class COSApi extends ElogBaseContext {
     };
     const method = options.method;
     try {
-      const result = await this.ctx.request<any>(path, {
+      const result = await this.ctx.http<any>(path, {
         data,
         headers: {
           Authorization: `Bearer ${this.config.token}`,
@@ -37,7 +37,7 @@ export default class COSApi extends ElogBaseContext {
         method,
       });
       if (result.status === 409) {
-        this.ctx.warn('图片上传失败', '由于github并发问题，图片上传失败');
+        this.ctx.logger.warn('图片上传失败', '由于github并发问题，图片上传失败');
       } else if (result.status === 200 || result.status === 201) {
         if (this.config.host) {
           return `${this.config.host}/gh/${this.config.user}/${this.config.repo}/${this.config.prefixKey}${fileName}`;
@@ -50,23 +50,23 @@ export default class COSApi extends ElogBaseContext {
         if (base64File) {
           if (result.data?.message === 'Bad credentials') {
             // token 配置错误
-            this.ctx.warn(
+            this.ctx.logger.warn(
               '请求失败',
               'Github Token 配置错误，配置文档：https://elog.1874.cool/notion/gvnxobqogetukays#github',
             );
           } else {
-            this.ctx.warn('请求失败', JSON.stringify(result.data));
+            this.ctx.logger.warn('请求失败', JSON.stringify(result.data));
           }
         } else {
-          this.ctx.debug('NOT FOUND', JSON.stringify(result.data));
+          this.ctx.logger.debug('NOT FOUND', JSON.stringify(result.data));
         }
       }
     } catch (e: any) {
       if (base64File) {
-        this.ctx.warn('请求失败', e.message);
-        this.ctx.debug(e);
+        this.ctx.logger.warn('请求失败', e.message);
+        this.ctx.logger.debug(e);
       } else {
-        this.ctx.debug(e);
+        this.ctx.logger.debug(e);
       }
     }
   }

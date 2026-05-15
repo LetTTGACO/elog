@@ -1,13 +1,14 @@
-import type { IPlugin } from '@elogx-test/elog';
+import type { ToPlugin } from '@elogx-test/elog';
 import WordPressDeploy from './WordPressDeploy';
-import { WordPressConfig } from './types';
+import type { WordPressConfig } from './types';
 
-export default function toLocal(options: Partial<WordPressConfig>): IPlugin {
+export default function toWordPress(options: Partial<WordPressConfig>): ToPlugin {
   return {
-    name: 'to-wordpress',
-    async deploy(docs) {
-      const haloDeploy = new WordPressDeploy(options as WordPressConfig, this);
-      await haloDeploy.deploy(docs);
+    name: 'to:wordpress',
+    kind: 'to',
+    async deploy(docs, ctx) {
+      const wordPressDeploy = new WordPressDeploy(options as WordPressConfig, ctx);
+      await wordPressDeploy.deploy(docs);
     },
   };
 }
