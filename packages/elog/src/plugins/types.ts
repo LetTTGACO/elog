@@ -26,7 +26,7 @@ export interface Logger {
 }
 
 export interface CacheReadonlyContext {
-  docList: DocDetail[];
+  readonly docList: readonly DocDetail[];
 }
 
 export interface ImageUtils {

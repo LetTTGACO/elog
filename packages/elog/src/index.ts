@@ -12,12 +12,25 @@ export type {
   FunctionReducePluginHooks,
   FunctionVoidPluginHooks,
   IPlugin,
-  PluginContext as LegacyPluginContext,
+  PluginContext,
   PluginHooks,
   ReducePluginHooks,
   VoidPluginHooks,
 } from './types/plugin';
-export * from './plugins/types';
+export type {
+  BasePlugin,
+  CacheReadonlyContext,
+  DeployResult,
+  DownloadResult,
+  ElogPlugin,
+  FromPlugin,
+  ImageUtils,
+  Logger,
+  PluginContext as RuntimePluginContext,
+  ToPlugin,
+  TransformPlugin,
+  WorkflowInfo,
+} from './plugins/types';
 export * from './plugins/errors';
 export * from './plugins/context';
 export * from './runtime/types';
