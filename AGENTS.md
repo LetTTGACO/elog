@@ -20,7 +20,7 @@ cd packages/elog && pnpm build
 cd playground/plugin-from-notion && pnpm build
 ```
 
-Build tool per package: **tsup** (esbuild-based). Output: ESM-only with `.d.ts` and sourcemaps.
+Build tool per package: **tsdown** (Rolldown-based). Output: ESM-only with `.d.ts` and sourcemaps.
 
 ## Monorepo Structure
 
@@ -142,7 +142,7 @@ CI enforces `changeset status` on PRs to `1.0-dev` — every PR must include a c
 
 ## Key Conventions
 
-- **ESM-only**: `"type": "module"` in all packages, tsup outputs ESM format only
+- **ESM-only**: `"type": "module"` in all packages, tsdown outputs ESM format only
 - **TypeScript strict mode**: `strict: true` in tsconfig
 - **Prettier**: 2-space indent, single quotes, trailing commas, 100 char print width (enforced via husky + lint-staged pre-commit hook)
 - **No ESLint**: No eslint config in the project
