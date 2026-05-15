@@ -75,3 +75,6 @@ dist
 
 # npm
 .npmignore
+
+# Codex local artifacts
+.superpowers/

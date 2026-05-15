@@ -1,151 +1,352 @@
 # AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code / Codex-style coding agents when working in this repository.
 
 ## Project Overview
 
-Elog is a CLI tool and library for syncing documents from writing/note-taking platforms (Notion, Feishu, Yuque, FlowUs, Wolai) to blogging/CMS platforms (Halo, WordPress, Confluence, local filesystem), with optional image rehosting (COS, OSS, GitHub, Qiniu, Upyun, local). This is a **1.0 rewrite**. NPM scope during development is `@elogx-test/`.
+Elog is a CLI tool and library for syncing documents from writing and note-taking
+platforms to blogging/CMS targets. The 1.0 rewrite is a pnpm/Turborepo monorepo
+under the temporary development scope `@elogx-test/`.
 
-## Build Commands
+The system is plugin-driven:
+
+```text
+download (from plugin) -> transform (middleware plugins) -> deploy (to plugins)
+```
+
+Supported plugin families in this repo:
+
+- `playground/plugin-from-*`: download from Notion, Feishu Wiki/Space, FlowUs, Yuque Token/Pwd, Wolai
+- `playground/plugin-image-*`: replace/rehost images via COS, OSS, GitHub, Qiniu, Upyun, local
+- `playground/plugin-to-*`: deploy to Halo, WordPress, Confluence, local filesystem
+
+## Common Commands
 
 ```bash
 # Install dependencies
 pnpm install
 
-# Build all packages (Turborepo, respects dependency order)
+# Build all workspace packages through Turbo
 pnpm build
 
-# Build single package (run from within the package directory)
+# Build a single package from that package directory
 cd packages/elog && pnpm build
 cd playground/plugin-from-notion && pnpm build
+
+# Manual integration smoke test
+cd tests/test-elog && pnpm elog:sync
+cd tests/test-elog && pnpm elog:sync-muti
 ```
 
-Build tool per package: **tsdown** (Rolldown-based). Output: ESM-only with `.d.ts` and sourcemaps.
+There is no automated test framework configured. The `tests/test-elog` package is
+a manual integration playground that invokes the built CLI and writes local docs,
+images, and cache files.
 
 ## Monorepo Structure
 
 | Directory | Purpose |
-|-----------|---------|
-| `packages/elog/` | Core engine — Graph orchestrator, PluginDriver, CLI, types |
-| `playground/plugin-from-*` | Download plugins (Notion, Feishu Wiki/Space, FlowUs, Yuque Token/Pwd, Wolai) |
-| `playground/plugin-image-*` | Image rehosting plugins (COS, OSS, GitHub, Qiniu, Upyun, local) |
-| `playground/plugin-to-*` | Deploy plugins (Halo, WordPress, Confluence, local) |
-| `tests/test-elog/` | Integration test (manual CLI invocation, no automated test framework) |
+| --- | --- |
+| `packages/elog/` | Core engine, CLI, config loading, plugin driver, shared types/context utilities |
+| `playground/plugin-from-*` | Source/download plugins |
+| `playground/plugin-image-*` | Transform plugins for image replacement/rehosting |
+| `playground/plugin-to-*` | Target/deploy plugins |
+| `tests/test-elog/` | Manual integration workspace and example configs |
 
-## Architecture: Plugin-Driven Pipeline
+Workspace membership is defined in `pnpm-workspace.yaml`:
 
-The core is a three-phase sync pipeline orchestrated by `Graph` (`packages/elog/src/Graph.ts`):
-
+```yaml
+packages:
+  - "packages/*"
+  - "playground/*"
+  - "tests/*"
 ```
-download (from plugin) → transform (chain hooks) → deploy (to plugin(s))
+
+## Build System
+
+- Root package manager: `pnpm@11.1.2`
+- Root build command: `turbo build`
+- Per-package build command: `tsdown`
+- Turbo build outputs: `dist/**`
+- Packages are ESM-only (`"type": "module"`)
+- `tsdown.config.ts` currently enables sourcemaps and leaves extensions unfixed:
+
+```ts
+export default defineConfig({
+  sourcemap: true,
+  fixedExtension: false,
+});
 ```
 
-### Key Classes
+TypeScript settings are strict across packages (`strict`, `noImplicitOverride`,
+`noUnusedLocals`, `moduleResolution: "Bundler"`, target `ES2022`).
 
-- **`Graph`** — Top-level orchestrator. Initializes cache, creates `PluginDriver`, runs `sync()`.
-- **`PluginDriver`** (`src/utils/PluginDriver.ts`) — Manages plugin lifecycle with three hook execution strategies:
-    - `executeFromPluginHook` — async serial, single handler (exactly one "from" plugin for `download`)
-    - `executeChainHooks` — async serial chain, each receives previous output (`transform` hooks)
-    - `executeVoidHooks` — async parallel, ignores return values (`deploy` hooks)
-- **`IPlugin`** (`src/types/plugin.ts`) — Plugin interface with optional `download`, `transform`, `deploy` hooks. Identified by `name`.
-- **`PluginContext`** — Injected into hook `this`. Provides: `request` (HTTP), `cacheDocList`, logging (`debug/success/error/info/warn`), `imgUtil` (image URL utilities).
+## Runtime Entry Points
 
-### Plugin Normalization Order
+- CLI binary: `packages/elog/bin/elog.js`
+- CLI setup: `packages/elog/src/cli.ts`
+- Library entry: `packages/elog/src/index.ts`
+- Programmatic runtime: `packages/elog/src/node-entry.ts`
+- Main orchestrator: `packages/elog/src/Graph.ts`
 
-`PluginDriver.normalizeOptions()` assembles: `[from, ...plugins, ...to]` — from plugin first, middleware plugins in declared order, to plugins last.
+The CLI exposes:
 
-### Base Context Classes
+- `elog init`
+- `elog sync`
+  - `-c, --config <string>`: custom config file
+  - `-e, --env <string>`: load dotenv file
+  - `--debug`: set `process.env.DEBUG = 'true'`
 
-Plugins extend from `src/utils/context/`:
-- **`ElogBaseContext`** — shared base
-- **`ElogFromContext`** — adds document filtering (`filterDocs`) and batch download helpers
-- **`ElogImageContext`** — adds image replacement helpers
+`elog sync` loads env first, then loads config, then calls the library runtime.
+
+## Configuration Loading
+
+Config discovery lives in `packages/elog/src/utils/load.ts` and uses JoyCon plus
+`bundle-require`.
+
+Default searched filenames:
+
+- `elog.config.ts`
+- `elog.config.js`
+- `elog.config.cjs`
+- `elog.config.mjs`
+
+The config shape is defined by `ElogConfig` in `packages/elog/src/types/common.ts`:
+
+```ts
+interface ElogConfig {
+  disable?: boolean;
+  disableCache?: boolean;
+  cacheFilePath?: string;
+  from: IPlugin;
+  to: IPlugin | IPlugin[];
+  plugins?: IPlugin[];
+}
+```
+
+The exported helper `defineConfig()` is only a type/identity helper.
+
+Important config behavior:
+
+- A single workflow defaults `cacheFilePath` to `elog.cache.json`.
+- Multiple workflows default to `elog.cache1.json`, `elog.cache2.json`, etc.
+- Workflows with `disable: true` are filtered out in `node-entry.ts`.
+- If every workflow is disabled, the runtime exits through `out.error()`.
+
+## Core Architecture
+
+### Graph
+
+`Graph` in `packages/elog/src/Graph.ts` owns one workflow execution.
+
+Construction:
+
+1. Stores the resolved `ElogConfig`.
+2. Initializes cache via `initCache()`.
+3. Creates a `PluginDriver` with the workflow config and cached docs.
+
+Sync flow:
+
+```text
+executeFromPluginHook('download')
+executeChainHooks('transform')
+updateCache()
+executeVoidHooks('deploy')
+writeCache()
+```
+
+Cache behavior:
+
+- Cache is loaded from `path.join(process.cwd(), cacheFilePath)`.
+- `disableCache` skips cache loading and forces a full sync.
+- Written cache contains `cachedDocList` with `body: undefined` and the latest `sortedDocList`.
+- `updateCache()` inserts docs with `DocStatus.NEW`; otherwise it updates by `_updateIndex`.
+
+### PluginDriver
+
+`PluginDriver` in `packages/elog/src/utils/PluginDriver.ts` normalizes plugin order:
+
+```text
+[from, ...plugins, ...to]
+```
+
+It supports three hook execution strategies:
+
+- `executeFromPluginHook`: serial, expects exactly one matching plugin hook, used for `download`
+- `executeChainHooks`: serial reducer, each `transform` receives the previous docs output
+- `executeVoidHooks`: parallel `Promise.all`, ignores deploy hook return values
+
+Each plugin instance gets its own `PluginContext` object created by
+`getPluginContext(cacheDocList)`.
+
+Current error behavior to be aware of: `runHook()` catches hook errors and returns
+`new Error(error_)` instead of rethrowing. When changing hook execution, verify
+whether callers expect fail-fast behavior or current best-effort behavior.
+
+### PluginContext
+
+`PluginContext` is injected as `this` for hook functions. It provides:
+
+- `request`: HTTP helper from `utils/request`
+- `cacheDocList`: docs loaded from cache for this workflow
+- logging helpers: `debug`, `success`, `error`, `info`, `warn`
+- `imgUtil`: image URL parsing, file-type detection, URL cleanup, buffer download, unique ID helpers
+
+Use function syntax for hooks when accessing `this`; arrow functions will not bind
+the plugin context.
+
+## Document Download And Incremental Sync
+
+Shared source-plugin helpers live in:
+
+- `packages/elog/src/utils/context/FromContext.ts`
+- `packages/elog/src/utils/doc/form.ts`
+
+Most source plugins extend `ElogFromContext` and call `this.docDetailList()`.
+That helper:
+
+1. Calls the source API's `getSortedDocList()`.
+2. Filters docs by `id` and `updateTime` against cached docs.
+3. Retries cached docs previously marked `DOC_ERROR` or `IMAGE_ERROR`.
+4. Downloads details through `tiny-async-pool` with `limit || 10`.
+5. Returns `{ docDetailList, sortedDocList, docStatusMap }`.
+
+If no documents need updating, the helper logs success and calls `process.exit()`.
+Local deploy also exits when there are no docs to deploy.
+
+## Image Transform Architecture
+
+Shared image helpers live in:
+
+- `packages/elog/src/utils/context/ImageContext.ts`
+- `packages/elog/src/utils/doc/image.ts`
+- `packages/elog/src/utils/image.ts`
+
+Image plugins are `transform` middleware. Two styles exist:
+
+- Cloud-style image plugins (`plugin-image-cos`, `oss`, `github`, `qiniu`, `upyun`) extend `ElogImageContext` and pass an `ImageUploader` with `hasImage()` and `uploadImage()`.
+- `plugin-image-local` currently implements its own `ImageClient` directly using `PluginContext` and filesystem writes.
+
+The shared replacement flow extracts image URLs from doc bodies, generates stable
+file names, checks existing uploads, uploads missing images, and replaces original
+URLs in `DocDetail.body`.
+
+## Deploy Architecture
+
+Deploy plugins implement `deploy(docs)`. Multiple `to` plugins are allowed and are
+run in parallel by `executeVoidHooks('deploy')`.
+
+Examples:
+
+- `plugin-to-local` writes Markdown files with optional front matter and optional directory-structure deployment.
+- `plugin-to-halo` and `plugin-to-confluence` wrap target-specific API and rendering/deployment classes.
+- `plugin-to-wordpress` targets WordPress.
+
+Because deploy hooks run in parallel, avoid relying on side effects from one target
+plugin being visible to another target plugin.
 
 ## Plugin Development Pattern
 
-Each plugin is a function that accepts config and returns an `IPlugin`:
+Each plugin exports a default function that accepts config and returns `IPlugin`.
+The npm package name is scoped (`@elogx-test/plugin-*`), but the internal
+`IPlugin.name` values in current code are short names like `from-notion`,
+`image-local`, and `to-local`.
 
-```typescript
-// from plugin — implements download hook
-export default function notionPlugin(config: NotionConfig): IPlugin {
-  return {
-    name: '@elogx-test/plugin-from-notion',
-    download: async function() { /* fetch docs */ },
-  };
-}
+Source plugin:
 
-// image plugin — implements transform hook
-export default function localImagePlugin(config: LocalImageConfig): IPlugin {
+```ts
+export default function notion(options: Partial<NotionConfig>): IPlugin {
   return {
-    name: '@elogx-test/plugin-image-local',
-    transform: async function(docs) { /* replace image URLs */ return docs; },
-  };
-}
-
-// to plugin — implements deploy hook
-export default function localPlugin(config: LocalConfig): IPlugin {
-  return {
-    name: '@elogx-test/plugin-to-local',
-    deploy: async function(docs) { /* write docs to filesystem */ },
+    name: 'from-notion',
+    async download(this) {
+      const notion = new NotionClient(options as NotionConfig, this);
+      return notion.getDocDetailList();
+    },
   };
 }
 ```
 
-Plugins declare `@elogx-test/elog` as a `peerDependency` (optional) and `devDependency` (`workspace:*`).
+Transform plugin:
 
-## Configuration
-
-User config file: `elog.config.ts` (or `.js/.cjs/.mjs`), discovered via JoyCon + loaded with `bundle-require` (esbuild). Shape defined in `ElogConfig` (`src/types/common.ts`):
-
-```typescript
-interface ElogConfig {
-  from: IPlugin;            // exactly one download source
-  to: IPlugin | IPlugin[];  // one or more deploy targets
-  plugins?: IPlugin[];      // optional transform middleware
-  disable?: boolean;        // skip this workflow
-  disableCache?: boolean;   // force full sync
-  cacheFilePath?: string;   // default: elog.cache.json
+```ts
+export default function imageLocal(options: Partial<ImageLocalConfig>): IPlugin {
+  return {
+    name: 'image-local',
+    transform(docs) {
+      const imageLocal = new ImageClient(options as ImageLocalConfig, this);
+      return imageLocal.replaceImages(docs);
+    },
+  };
 }
 ```
 
-Supports array of configs for multi-workflow setups. CLI entry: `src/cli.ts` (Commander.js) with `init` and `sync` commands.
+Deploy plugin:
 
-## Incremental Sync / Caching
+```ts
+export default function toLocal(options: Partial<LocalConfig>): IPlugin {
+  return {
+    name: 'to-local',
+    deploy(docs) {
+      const localDeploy = new LocalDeploy(options as LocalConfig, this);
+      localDeploy.deploy(docs);
+    },
+  };
+}
+```
 
-- Cache stored in `elog.cache.json` (configurable via `cacheFilePath`)
-- `filterDocs()` compares cached vs remote docs by `id` + `updateTime`
-- Docs marked `NEW` or `UPDATE`; docs with previous `DOC_ERROR` or `IMAGE_ERROR` status are retried
-- Cache is read/written by the `Graph` class
+Plugin package conventions:
 
-## Publishing
+- Declare `@elogx-test/elog` as a peer dependency.
+- Mark that peer optional via `peerDependenciesMeta`.
+- Add `@elogx-test/elog: "workspace:*"` as a dev dependency.
+- Keep plugin packages ESM-only.
 
-Publish to npm via changesets:
+## Publishing And CI
+
+Publishing uses Changesets:
 
 ```bash
-# 1. Create changeset (interactive: select packages, version bump level, description)
 pnpm changeset
-
-# 2. Commit the changeset file
 git add .changeset/ && git commit -m "chore: add changeset"
-
-# 3. Bump versions + generate CHANGELOG (consumes .changeset/*.md files)
 pnpm version
-
-# 4. Build and publish
 pnpm build && pnpm publish
-
-# 5. Push code and git tags
 git push --follow-tags
 ```
 
-CI enforces `changeset status` on PRs to `1.0-dev` — every PR must include a changeset file unless the change is trivial (docs, config).
+Changeset config:
 
-## Key Conventions
+- Base branch: `1.0-dev`
+- Public access
+- `test-elog` is ignored
+- Internal dependency bumps default to patch
 
-- **ESM-only**: `"type": "module"` in all packages, tsdown outputs ESM format only
-- **TypeScript strict mode**: `strict: true` in tsconfig
-- **Prettier**: 2-space indent, single quotes, trailing commas, 100 char print width (enforced via husky + lint-staged pre-commit hook)
-- **No ESLint**: No eslint config in the project
-- **No automated test framework**: Only manual integration testing in `tests/test-elog`
-- **NPM scope**: `@elogx-test/` during development (rename before production release)
-- **Plugin naming**: `@elogx-test/plugin-from-*`, `@elogx-test/plugin-image-*`, `@elogx-test/plugin-to-*`
+CI (`.github/workflows/ci.yml`) runs on pushes and PRs to `1.0-dev`:
+
+```bash
+pnpm install --frozen-lockfile
+npx changeset status --since=origin/1.0-dev
+pnpm turbo build --force
+```
+
+Every non-trivial PR to `1.0-dev` should include a changeset.
+
+## Coding Conventions
+
+- Use TypeScript strict mode.
+- Use ESM imports/exports.
+- Follow Prettier settings: 2-space indent, single quotes, trailing commas, 100 char print width.
+- There is lint-staged formatting for `*.{ts,js,json,md}`.
+- There is no repository ESLint config, even though `eslint` appears as a package dev dependency.
+- Prefer existing context helpers (`ElogFromContext`, `ElogImageContext`, `ElogBaseContext`) over duplicating orchestration logic.
+- Keep source plugins responsible for producing `DocDetail[]`; keep transform plugins responsible for mutating/returning docs; keep deploy plugins responsible for target side effects.
+- Do not commit generated `dist/**`, `.turbo/**`, `.rush/**`, build logs, local docs/images, or cache files unless explicitly requested.
+
+## Useful Files To Inspect
+
+- `packages/elog/src/Graph.ts`: workflow orchestration and cache writes
+- `packages/elog/src/utils/PluginDriver.ts`: plugin ordering and hook execution
+- `packages/elog/src/utils/PluginContext.ts`: hook `this` context
+- `packages/elog/src/utils/doc/form.ts`: incremental sync filtering and concurrent detail download
+- `packages/elog/src/utils/doc/image.ts`: shared image replacement pipeline
+- `packages/elog/src/utils/load.ts`: config resolution and cache path defaults
+- `packages/elog/src/node-entry.ts`: multi-workflow handling
+- `tests/test-elog/elog.config.ts`: manual integration example
