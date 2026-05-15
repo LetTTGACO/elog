@@ -29,6 +29,12 @@ pnpm install
 # Build all workspace packages through Turbo
 pnpm build
 
+# Run automated tests through Turbo
+pnpm test
+
+# Run core package tests only
+pnpm --filter @elogx-test/elog test
+
 # Build a single package from that package directory
 cd packages/elog && pnpm build
 cd playground/plugin-from-notion && pnpm build
@@ -38,9 +44,9 @@ cd tests/test-elog && pnpm elog:sync
 cd tests/test-elog && pnpm elog:sync-muti
 ```
 
-There is no automated test framework configured. The `tests/test-elog` package is
-a manual integration playground that invokes the built CLI and writes local docs,
-images, and cache files.
+Vitest is configured for the core `packages/elog` package. The `tests/test-elog`
+package remains a manual integration playground that invokes the built CLI and
+writes local docs, images, and cache files.
 
 ## Monorepo Structure
 
@@ -65,6 +71,7 @@ packages:
 
 - Root package manager: `pnpm@11.1.2`
 - Root build command: `turbo build`
+- Root test command: `turbo test`
 - Per-package build command: `tsdown`
 - Turbo build outputs: `dist/**`
 - Packages are ESM-only (`"type": "module"`)
@@ -86,7 +93,8 @@ TypeScript settings are strict across packages (`strict`, `noImplicitOverride`,
 - CLI setup: `packages/elog/src/cli.ts`
 - Library entry: `packages/elog/src/index.ts`
 - Programmatic runtime: `packages/elog/src/node-entry.ts`
-- Main orchestrator: `packages/elog/src/Graph.ts`
+- Runtime orchestrator: `packages/elog/src/runtime/Graph.ts`
+- Multi-workflow runner: `packages/elog/src/runtime/WorkflowRunner.ts`
 
 The CLI exposes:
 
@@ -96,12 +104,14 @@ The CLI exposes:
   - `-e, --env <string>`: load dotenv file
   - `--debug`: set `process.env.DEBUG = 'true'`
 
-`elog sync` loads env first, then loads config, then calls the library runtime.
+`elog sync` loads env first, loads raw config, resolves runtime workflows, then
+calls the awaitable library runtime and prints structured workflow results.
 
 ## Configuration Loading
 
-Config discovery lives in `packages/elog/src/utils/load.ts` and uses JoyCon plus
-`bundle-require`.
+Raw config discovery lives in `packages/elog/src/config/load.ts` and uses JoyCon
+plus `bundle-require`. `packages/elog/src/utils/load.ts` is only a compatibility
+re-export.
 
 Default searched filenames:
 
@@ -110,89 +120,107 @@ Default searched filenames:
 - `elog.config.cjs`
 - `elog.config.mjs`
 
-The config shape is defined by `ElogConfig` in `packages/elog/src/types/common.ts`:
+The current 1.0 config shape is defined by `ElogConfig` in
+`packages/elog/src/types/common.ts`:
 
 ```ts
 interface ElogConfig {
+  id?: string;
   disable?: boolean;
   disableCache?: boolean;
   cacheFilePath?: string;
-  from: IPlugin;
-  to: IPlugin | IPlugin[];
-  plugins?: IPlugin[];
+  from: FromPlugin;
+  to: ToPlugin | ToPlugin[];
+  plugins?: TransformPlugin[];
+  deployStrategy?: 'serial' | 'parallel';
 }
 ```
 
 The exported helper `defineConfig()` is only a type/identity helper.
 
-Important config behavior:
+Config resolution behavior:
 
 - A single workflow defaults `cacheFilePath` to `elog.cache.json`.
 - Multiple workflows default to `elog.cache1.json`, `elog.cache2.json`, etc.
-- Workflows with `disable: true` are filtered out in `node-entry.ts`.
-- If every workflow is disabled, the runtime exits through `out.error()`.
+- Workflows with `disable: true` are preserved and skipped by `WorkflowRunner`.
+- Likely Elog 0.x public configs are detected at the adapter boundary and return
+  diagnostics; full migration is intentionally not implemented yet.
+- Validation diagnostics are reported before runtime execution.
 
 ## Core Architecture
 
+Current sync architecture:
+
+```text
+Config load/resolve -> WorkflowRunner -> Graph -> PluginDriver -> CacheStore
+```
+
+### WorkflowRunner
+
+`WorkflowRunner` in `packages/elog/src/runtime/WorkflowRunner.ts` owns
+multi-workflow execution. It runs workflows serially, returns
+`WorkflowResult[]`, skips disabled workflows, and stops on the first failed
+workflow by default.
+
 ### Graph
 
-`Graph` in `packages/elog/src/Graph.ts` owns one workflow execution.
-
-Construction:
-
-1. Stores the resolved `ElogConfig`.
-2. Initializes cache via `initCache()`.
-3. Creates a `PluginDriver` with the workflow config and cached docs.
+`Graph` in `packages/elog/src/runtime/Graph.ts` owns one normalized workflow.
 
 Sync flow:
 
 ```text
-executeFromPluginHook('download')
-executeChainHooks('transform')
-updateCache()
-executeVoidHooks('deploy')
-writeCache()
+runDownloadHook()
+runTransformPipeline()
+cacheStore.update()
+runDeployHooks()
+cacheStore.write()
+return WorkflowResult
 ```
 
-Cache behavior:
+`Graph.sync()` returns structured results:
 
-- Cache is loaded from `path.join(process.cwd(), cacheFilePath)`.
+- `success`: includes `workflowId`, synced count, cache path, and `sortedDocList`.
+- `skipped`: currently used for disabled workflows and no-change workflows.
+- `failed`: includes an `ElogError`; plugin failures are wrapped with plugin and hook metadata.
+
+### CacheStore
+
+`CacheStore` in `packages/elog/src/cache/CacheStore.ts` handles cache loading,
+updating, and writing:
+
 - `disableCache` skips cache loading and forces a full sync.
-- Written cache contains `cachedDocList` with `body: undefined` and the latest `sortedDocList`.
-- `updateCache()` inserts docs with `DocStatus.NEW`; otherwise it updates by `_updateIndex`.
+- Missing cache files load as an empty cache.
+- `update()` inserts docs with `DocStatus.NEW`; otherwise it updates by `_updateIndex`.
+- `write()` stores the latest `sortedDocList` and omits document `body` content.
 
 ### PluginDriver
 
-`PluginDriver` in `packages/elog/src/utils/PluginDriver.ts` normalizes plugin order:
+`PluginDriver` in `packages/elog/src/runtime/PluginDriver.ts` is lifecycle-aware:
 
 ```text
-[from, ...plugins, ...to]
+from.download -> transforms in declaration order -> to.deploy
 ```
 
-It supports three hook execution strategies:
+It exposes:
 
-- `executeFromPluginHook`: serial, expects exactly one matching plugin hook, used for `download`
-- `executeChainHooks`: serial reducer, each `transform` receives the previous docs output
-- `executeVoidHooks`: parallel `Promise.all`, ignores deploy hook return values
+- `runDownloadHook()`: calls the single `from` plugin.
+- `runTransformPipeline()`: serial reducer; each transform receives the previous output.
+- `runDeployHooks()`: runs target deploy hooks with the configured `serial` or `parallel` strategy.
 
-Each plugin instance gets its own `PluginContext` object created by
-`getPluginContext(cacheDocList)`.
-
-Current error behavior to be aware of: `runHook()` catches hook errors and returns
-`new Error(error_)` instead of rethrowing. When changing hook execution, verify
-whether callers expect fail-fast behavior or current best-effort behavior.
+Hook errors are fail-fast and wrapped as `ElogPluginError`.
 
 ### PluginContext
 
-`PluginContext` is injected as `this` for hook functions. It provides:
+`PluginContext` is passed explicitly as the second hook parameter or first
+download parameter. It groups runtime capabilities:
 
-- `request`: HTTP helper from `utils/request`
-- `cacheDocList`: docs loaded from cache for this workflow
-- logging helpers: `debug`, `success`, `error`, `info`, `warn`
-- `imgUtil`: image URL parsing, file-type detection, URL cleanup, buffer download, unique ID helpers
+- `workflow`: workflow id and cache path.
+- `logger`: `debug`, `success`, `error`, `info`, `warn`.
+- `http`: HTTP helper from `utils/request`.
+- `cache.docList`: docs loaded from cache for this workflow.
+- `image`: image URL parsing, file-type detection, URL cleanup, buffer download, unique ID helpers.
 
-Use function syntax for hooks when accessing `this`; arrow functions will not bind
-the plugin context.
+Do not rely on hook `this` binding for new code.
 
 ## Document Download And Incremental Sync
 
@@ -210,8 +238,9 @@ That helper:
 4. Downloads details through `tiny-async-pool` with `limit || 10`.
 5. Returns `{ docDetailList, sortedDocList, docStatusMap }`.
 
-If no documents need updating, the helper logs success and calls `process.exit()`.
-Local deploy also exits when there are no docs to deploy.
+If no documents need updating, the helper logs success and returns an empty
+download result. Local deploy also returns without exiting when there are no docs
+to deploy.
 
 ## Image Transform Architecture
 
@@ -232,8 +261,9 @@ URLs in `DocDetail.body`.
 
 ## Deploy Architecture
 
-Deploy plugins implement `deploy(docs)`. Multiple `to` plugins are allowed and are
-run in parallel by `executeVoidHooks('deploy')`.
+Deploy plugins implement `deploy(docs, ctx)`. Multiple `to` plugins are allowed.
+Runtime configs default to serial deploy for debuggability; parallel deploy is an
+explicit strategy.
 
 Examples:
 
@@ -241,24 +271,25 @@ Examples:
 - `plugin-to-halo` and `plugin-to-confluence` wrap target-specific API and rendering/deployment classes.
 - `plugin-to-wordpress` targets WordPress.
 
-Because deploy hooks run in parallel, avoid relying on side effects from one target
-plugin being visible to another target plugin.
+Because deploy hooks may run in parallel when configured, avoid relying on side
+effects from one target plugin being visible to another target plugin.
 
 ## Plugin Development Pattern
 
-Each plugin exports a default function that accepts config and returns `IPlugin`.
-The npm package name is scoped (`@elogx-test/plugin-*`), but the internal
-`IPlugin.name` values in current code are short names like `from-notion`,
-`image-local`, and `to-local`.
+Each plugin exports a default function that accepts config and returns a
+discriminated plugin type. The npm package name is scoped
+(`@elogx-test/plugin-*`), and the internal plugin names use namespace-style names
+such as `from:notion`, `transform:image-local`, and `to:local`.
 
 Source plugin:
 
 ```ts
-export default function notion(options: Partial<NotionConfig>): IPlugin {
+export default function notion(options: Partial<NotionConfig>): FromPlugin {
   return {
-    name: 'from-notion',
-    async download(this) {
-      const notion = new NotionClient(options as NotionConfig, this);
+    name: 'from:notion',
+    kind: 'from',
+    async download(ctx) {
+      const notion = new NotionClient(options as NotionConfig, ctx);
       return notion.getDocDetailList();
     },
   };
@@ -268,11 +299,12 @@ export default function notion(options: Partial<NotionConfig>): IPlugin {
 Transform plugin:
 
 ```ts
-export default function imageLocal(options: Partial<ImageLocalConfig>): IPlugin {
+export default function imageLocal(options: Partial<ImageLocalConfig>): TransformPlugin {
   return {
-    name: 'image-local',
-    transform(docs) {
-      const imageLocal = new ImageClient(options as ImageLocalConfig, this);
+    name: 'transform:image-local',
+    kind: 'transform',
+    transform(docs, ctx) {
+      const imageLocal = new ImageClient(options as ImageLocalConfig, ctx);
       return imageLocal.replaceImages(docs);
     },
   };
@@ -282,11 +314,12 @@ export default function imageLocal(options: Partial<ImageLocalConfig>): IPlugin 
 Deploy plugin:
 
 ```ts
-export default function toLocal(options: Partial<LocalConfig>): IPlugin {
+export default function toLocal(options: Partial<LocalConfig>): ToPlugin {
   return {
-    name: 'to-local',
-    deploy(docs) {
-      const localDeploy = new LocalDeploy(options as LocalConfig, this);
+    name: 'to:local',
+    kind: 'to',
+    deploy(docs, ctx) {
+      const localDeploy = new LocalDeploy(options as LocalConfig, ctx);
       localDeploy.deploy(docs);
     },
   };
@@ -342,11 +375,16 @@ Every non-trivial PR to `1.0-dev` should include a changeset.
 
 ## Useful Files To Inspect
 
-- `packages/elog/src/Graph.ts`: workflow orchestration and cache writes
-- `packages/elog/src/utils/PluginDriver.ts`: plugin ordering and hook execution
-- `packages/elog/src/utils/PluginContext.ts`: hook `this` context
+- `packages/elog/src/runtime/WorkflowRunner.ts`: multi-workflow execution
+- `packages/elog/src/runtime/Graph.ts`: single workflow orchestration
+- `packages/elog/src/runtime/PluginDriver.ts`: lifecycle hook execution
+- `packages/elog/src/cache/CacheStore.ts`: cache load/update/write behavior
+- `packages/elog/src/plugins/context.ts`: grouped plugin context factory
+- `packages/elog/src/plugins/types.ts`: explicit plugin contract
+- `packages/elog/src/config/resolve.ts`: adapter orchestration, defaults, validation
 - `packages/elog/src/utils/doc/form.ts`: incremental sync filtering and concurrent detail download
 - `packages/elog/src/utils/doc/image.ts`: shared image replacement pipeline
-- `packages/elog/src/utils/load.ts`: config resolution and cache path defaults
+- `packages/elog/src/config/load.ts`: raw config file discovery and loading
 - `packages/elog/src/node-entry.ts`: multi-workflow handling
+- `tests/fixtures/basic-config/elog.config.ts`: automated fixture smoke config
 - `tests/test-elog/elog.config.ts`: manual integration example
