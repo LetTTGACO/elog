@@ -34,6 +34,7 @@ export type {
 export * from './plugins/errors';
 export * from './plugins/context';
 export * from './runtime/types';
+export { PluginDriver } from './runtime/PluginDriver';
 export * from './utils/context';
 export * from './utils/doc/form';
 export { run, defineConfig };
