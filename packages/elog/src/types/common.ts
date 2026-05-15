@@ -1,26 +1,40 @@
-import { IPlugin } from './plugin';
+import type { ElogPlugin, FromPlugin, ToPlugin, TransformPlugin } from '../plugins/types';
 
+export type RawUserConfig = unknown;
 export type InputOptions = ElogConfig | ElogConfig[];
-export interface NormalizeElogOption {
-  plugins: IPlugin[];
+
+export interface ConfigDiagnostic {
+  level: 'error' | 'warning';
+  code: string;
+  message: string;
+  path?: string;
+}
+
+export interface ResolveConfigResult {
+  workflows: import('../runtime/types').RuntimeWorkflowConfig[];
+  diagnostics: ConfigDiagnostic[];
 }
 
 export interface ElogCacheConfig {
-  /** 是否禁用缓存 */
+  /** Whether to disable cache for this workflow. */
   disableCache?: boolean;
-  /** 缓存文件目录 */
+  /** Cache file path. */
   cacheFilePath?: string;
 }
-/**
- * elog.config.ts 配置文件
- */
+
 export interface ElogConfig extends ElogCacheConfig {
-  /**是否禁用该同步流程 */
+  /** Optional workflow id. */
+  id?: string;
+  /** Whether to disable this workflow. */
   disable?: boolean;
-  /** 写作平台 */
-  from: IPlugin;
-  /** 博客平台 */
-  to: IPlugin | IPlugin[];
-  /** 处理插件 */
-  plugins?: IPlugin[];
+  /** Source plugin. */
+  from: FromPlugin;
+  /** Deploy target plugins. */
+  to: ToPlugin | ToPlugin[];
+  /** Transform plugins. */
+  plugins?: TransformPlugin[];
+  /** Deploy execution strategy. Defaults to serial. */
+  deployStrategy?: 'serial' | 'parallel';
 }
+
+export type AnyElogPlugin = ElogPlugin;
