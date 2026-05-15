@@ -58,6 +58,21 @@ describe('resolveConfig', () => {
     ]);
   });
 
+  it('preserves disabled workflows in resolved output', () => {
+    const result = resolveConfig({
+      disable: true,
+      from: fromPlugin,
+      to: toPlugin,
+    });
+
+    expect(result.diagnostics).toEqual([]);
+    expect(result.workflows).toHaveLength(1);
+    expect(result.workflows[0]).toMatchObject({
+      id: 'workflow-1',
+      disabled: true,
+    });
+  });
+
   it('reports missing from plugin', () => {
     const result = resolveConfig({ to: toPlugin });
 
@@ -65,6 +80,36 @@ describe('resolveConfig', () => {
     expect(result.diagnostics[0]).toMatchObject({
       level: 'error',
       code: 'CONFIG_MISSING_FROM',
+    });
+  });
+
+  it('rejects an empty workflow id', () => {
+    const result = resolveConfig({
+      id: '',
+      from: fromPlugin,
+      to: toPlugin,
+    });
+
+    expect(result.workflows).toEqual([]);
+    expect(result.diagnostics[0]).toMatchObject({
+      level: 'error',
+      code: 'CONFIG_INVALID_WORKFLOW_ID',
+      path: 'workflows[0].id',
+    });
+  });
+
+  it('rejects a non-string workflow id', () => {
+    const result = resolveConfig({
+      id: 123,
+      from: fromPlugin,
+      to: toPlugin,
+    });
+
+    expect(result.workflows).toEqual([]);
+    expect(result.diagnostics[0]).toMatchObject({
+      level: 'error',
+      code: 'CONFIG_INVALID_WORKFLOW_ID',
+      path: 'workflows[0].id',
     });
   });
 

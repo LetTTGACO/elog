@@ -8,7 +8,14 @@ export function validateRuntimeConfig(workflows: RuntimeWorkflowConfig[]): Confi
   workflows.forEach((workflow, index) => {
     const path = `workflows[${index}]`;
 
-    if (seenIds.has(workflow.id)) {
+    if (typeof workflow.id !== 'string' || workflow.id.trim() === '') {
+      diagnostics.push({
+        level: 'error',
+        code: 'CONFIG_INVALID_WORKFLOW_ID',
+        message: 'Workflow id must be a non-empty string.',
+        path: `${path}.id`,
+      });
+    } else if (seenIds.has(workflow.id)) {
       diagnostics.push({
         level: 'error',
         code: 'CONFIG_DUPLICATE_WORKFLOW_ID',
@@ -16,7 +23,9 @@ export function validateRuntimeConfig(workflows: RuntimeWorkflowConfig[]): Confi
         path: `${path}.id`,
       });
     }
-    seenIds.add(workflow.id);
+    if (typeof workflow.id === 'string' && workflow.id.trim() !== '') {
+      seenIds.add(workflow.id);
+    }
 
     if (!workflow.from || workflow.from.kind !== 'from') {
       diagnostics.push({

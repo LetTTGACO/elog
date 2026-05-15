@@ -23,7 +23,7 @@ export function resolveConfig(raw: RawUserConfig): ResolveConfigResult {
     };
   }
 
-  const workflows = normalizeV1Config(raw).filter((workflow) => !workflow.disabled);
+  const workflows = normalizeV1Config(raw);
   const diagnostics = validateRuntimeConfig(workflows);
 
   return {
