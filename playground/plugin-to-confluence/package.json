@@ -11,7 +11,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "build": "tsup"
+    "build": "tsdown"
   },
   "peerDependencies": {
     "@elogx-test/elog": "^1.0.0"
@@ -25,9 +25,9 @@
     "marked": "~12.0.1"
   },
   "devDependencies": {
-    "tsup": "^6.7.0",
     "@elogx-test/elog": "workspace:*",
     "typescript": "~5.2.2",
+    "tsdown": "^0.22.0",
     "@types/node": "~18.15.3"
   }
 }

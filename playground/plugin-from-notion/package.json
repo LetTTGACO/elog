@@ -11,7 +11,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "build": "tsup"
+    "build": "tsdown"
   },
   "author": "",
   "license": "MIT",
@@ -28,8 +28,8 @@
     "notion-to-md": "~3.1.1"
   },
   "devDependencies": {
-    "tsup": "^6.7.0",
     "typescript": "~5.2.2",
+    "tsdown": "^0.22.0",
     "@types/node": "~18.15.3",
     "@elogx-test/elog": "workspace:*"
   }
