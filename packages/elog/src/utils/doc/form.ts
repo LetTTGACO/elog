@@ -49,7 +49,11 @@ export const getDocDetailList = async <T extends DocFrom>(option: {
   // 没有则不需要更新
   if (!needUpdateDocList.length) {
     out.success('任务结束', '没有需要同步的文档');
-    process.exit();
+    return {
+      docDetailList: [],
+      sortedDocList,
+      docStatusMap,
+    };
   }
   out.info('待下载数', String(needUpdateDocList.length));
   const promise = async (doc: T) => {
