@@ -34,7 +34,9 @@ export type {
 export * from './plugins/errors';
 export * from './plugins/context';
 export * from './runtime/types';
+export { Graph } from './runtime/Graph';
 export { PluginDriver } from './runtime/PluginDriver';
+export { WorkflowRunner } from './runtime/WorkflowRunner';
 export * from './utils/context';
 export * from './utils/doc/form';
 export { run, defineConfig };
