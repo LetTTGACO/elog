@@ -15,6 +15,7 @@
   },
   "scripts": {
     "build": "turbo build",
+    "test": "turbo test",
     "changeset": "changeset",
     "version": "changeset version",
     "publish": "changeset publish",

@@ -11,7 +11,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "build": "tsdown"
+    "build": "tsdown",
+    "test": "vitest run --passWithNoTests"
   },
   "bin": {
     "elog": "bin/elog.js"
@@ -38,6 +39,7 @@
     "@types/node": "~18.15.3",
     "eslint": "~8.22.0",
     "@types/lodash": "^4.14.189",
-    "@types/shelljs": "^0.8.11"
+    "@types/shelljs": "^0.8.11",
+    "vitest": "^4.1.6"
   }
 }
