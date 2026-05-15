@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import { createPluginContext } from '../plugins/context';
 import { ElogPluginError } from '../plugins/errors';
 import type { FromPlugin, PluginContext, ToPlugin, TransformPlugin } from '../plugins/types';
 import { PluginDriver } from './PluginDriver';
@@ -77,6 +78,34 @@ describe('PluginDriver', () => {
       pluginName: 'transform:bad',
       hookName: 'transform',
     } as Partial<ElogPluginError>);
+  });
+
+  it('wraps plugin logger errors without exiting the process', async () => {
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation((() => {
+      throw new Error('process.exit called');
+    }) as never);
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+    const fatalFrom: FromPlugin = {
+      name: 'from:fatal',
+      kind: 'from',
+      async download(ctx) {
+        ctx.logger.error('missing token');
+      },
+    };
+    const driver = new PluginDriver(
+      { from: fatalFrom, transforms: [], to: [] },
+      createPluginContext({
+        workflow: { id: 'workflow-1', cacheFilePath: 'elog.cache.json' },
+        cachedDocList: [],
+      }),
+    );
+
+    await expect(driver.runDownloadHook()).rejects.toMatchObject({
+      name: 'ElogPluginError',
+      pluginName: 'from:fatal',
+      hookName: 'download',
+    } as Partial<ElogPluginError>);
+    expect(exitSpy).not.toHaveBeenCalled();
   });
 
   it('runs deploy hooks serially by default', async () => {

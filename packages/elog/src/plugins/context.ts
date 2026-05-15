@@ -1,5 +1,6 @@
 import type { DocDetail } from '../types/doc';
-import out from '../utils/logger';
+import { LOGLEVEL_ERROR } from '../utils/logging';
+import out, { println } from '../utils/logger';
 import request from '../utils/request';
 import {
   cleanUrlParam,
@@ -22,7 +23,10 @@ export function createPluginContext(options: {
     logger: {
       debug: out.debug,
       success: out.success,
-      error: out.error,
+      error(head) {
+        println(LOGLEVEL_ERROR, head);
+        throw new Error(head);
+      },
       info: out.info,
       warn: out.warn,
     },

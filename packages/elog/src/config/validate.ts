@@ -45,14 +45,15 @@ export function validateRuntimeConfig(workflows: RuntimeWorkflowConfig[]): Confi
       });
     }
 
-    const hasInvalidTransform = workflow.transforms.some(
-      (plugin) => !plugin || plugin.kind !== 'transform',
-    );
+    const hasInvalidTransform =
+      !Array.isArray(workflow.transforms) ||
+      workflow.transforms.some((plugin) => !plugin || plugin.kind !== 'transform');
     if (hasInvalidTransform) {
       diagnostics.push({
         level: 'error',
         code: 'CONFIG_INVALID_TRANSFORM',
-        message: 'Every transform plugin must declare kind "transform".',
+        message:
+          'Transform plugins must be an array and every entry must declare kind "transform".',
         path: `${path}.plugins`,
       });
     }
