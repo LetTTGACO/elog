@@ -5,7 +5,18 @@ export type * from './types/log';
 export * from './types/common';
 export * from './types/doc';
 export * from './types/image';
-export * from './types/plugin';
+export type {
+  FromPluginBaseConfig,
+  FromPluginReturn,
+  FunctionPluginHooks,
+  FunctionReducePluginHooks,
+  FunctionVoidPluginHooks,
+  IPlugin,
+  PluginContext as LegacyPluginContext,
+  PluginHooks,
+  ReducePluginHooks,
+  VoidPluginHooks,
+} from './types/plugin';
 export * from './plugins/types';
 export * from './plugins/errors';
 export * from './plugins/context';
