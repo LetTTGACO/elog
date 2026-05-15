@@ -113,6 +113,21 @@ describe('resolveConfig', () => {
     });
   });
 
+  it('rejects a nullish transform plugin entry', () => {
+    const result = resolveConfig({
+      from: fromPlugin,
+      plugins: [undefined],
+      to: toPlugin,
+    });
+
+    expect(result.workflows).toEqual([]);
+    expect(result.diagnostics[0]).toMatchObject({
+      level: 'error',
+      code: 'CONFIG_INVALID_TRANSFORM',
+      path: 'workflows[0].plugins',
+    });
+  });
+
   it('detects likely Elog 0.x config', () => {
     const result = resolveConfig({
       write: { platform: 'yuque' },

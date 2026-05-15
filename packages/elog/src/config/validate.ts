@@ -45,10 +45,10 @@ export function validateRuntimeConfig(workflows: RuntimeWorkflowConfig[]): Confi
       });
     }
 
-    const invalidTransform = workflow.transforms.find(
+    const hasInvalidTransform = workflow.transforms.some(
       (plugin) => !plugin || plugin.kind !== 'transform',
     );
-    if (invalidTransform) {
+    if (hasInvalidTransform) {
       diagnostics.push({
         level: 'error',
         code: 'CONFIG_INVALID_TRANSFORM',
