@@ -87,7 +87,7 @@ const out = {
   },
   error(head: string): never {
     println(LOGLEVEL_ERROR, head);
-    process.exit();
+    process.exit(1);
   },
   debug(head: string, content?: string) {
     process.env.DEBUG && println(LOGLEVEL_DEBUG, head, content);

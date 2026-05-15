@@ -25,9 +25,9 @@ export async function run() {
     .option('-e, --env <string>', 'use env with custom')
     .option('--debug', 'enable debug')
     .description('sync doc')
-    .action((options) => {
+    .action(async (options) => {
       try {
-        void sync(options.config, options.env, options.debug);
+        await sync(options.config, options.env, options.debug);
       } catch (error: any) {
         out.error(error.message);
       }
