@@ -6,32 +6,23 @@ export * from './types/common';
 export * from './types/doc';
 export * from './types/image';
 export type {
-  FromPluginBaseConfig,
-  FromPluginReturn,
-  FunctionPluginHooks,
-  FunctionReducePluginHooks,
-  FunctionVoidPluginHooks,
-  IPlugin,
-  PluginContext as LegacyPluginContext,
-  PluginHooks,
-  ReducePluginHooks,
-  VoidPluginHooks,
-} from './types/plugin';
-export type {
   BasePlugin,
   CacheReadonlyContext,
   DeployResult,
   DownloadResult,
   ElogPlugin,
   FromPlugin,
+  FromPluginBaseConfig,
+  FromPluginReturn,
   ImageUtils,
+  IPlugin,
   Logger,
   PluginContext,
   PluginContext as RuntimePluginContext,
   ToPlugin,
   TransformPlugin,
   WorkflowInfo,
-} from './plugins/types';
+} from './types/plugin';
 export * from './plugins/errors';
 export * from './plugins/context';
 export * from './runtime/types';

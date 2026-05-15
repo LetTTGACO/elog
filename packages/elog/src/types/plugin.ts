@@ -1,76 +1,19 @@
-import { DocDetail, SortedDoc } from './doc';
-import { LoggingFunction } from './log';
-import type request from '../utils/request';
-import {
-  cleanUrlParam,
-  genUniqueIdFromUrl,
-  getBaseUrl,
-  getBufferFromUrl,
-  getFileType,
-  getFileTypeFromBuffer,
-  getFileTypeFromUrl,
-  getUrlListFromContent,
-} from '../utils/image';
+export type {
+  BasePlugin,
+  CacheReadonlyContext,
+  DeployResult,
+  DownloadResult,
+  ElogPlugin,
+  FromPlugin,
+  ImageUtils,
+  Logger,
+  PluginContext,
+  ToPlugin,
+  TransformPlugin,
+  WorkflowInfo,
+} from '../plugins/types';
 
-interface ImageUtilContext {
-  genUniqueIdFromUrl: typeof genUniqueIdFromUrl;
-  getFileTypeFromUrl: typeof getFileTypeFromUrl;
-  getFileTypeFromBuffer: typeof getFileTypeFromBuffer;
-  cleanUrlParam: typeof cleanUrlParam;
-  getUrlListFromContent: typeof getUrlListFromContent;
-  getBaseUrl: typeof getBaseUrl;
-  getFileType: typeof getFileType;
-  getBufferFromUrl: typeof getBufferFromUrl;
-}
-
-export interface PluginContext {
-  request: typeof request;
-  cacheDocList: DocDetail[];
-  /** 注入日志输出模块 */
-  debug: LoggingFunction;
-  success: LoggingFunction;
-  error: (head: string) => never;
-  info: LoggingFunction;
-  warn: LoggingFunction;
-  imgUtil: ImageUtilContext;
-}
-
-/**
- * 用于插件注册配置参数，实现 CLI 命令行配置参数的上下文
- */
-// export interface RegisterContext {}
-
-type ObjectHook<T> = T | { handler: T };
-
-export type FunctionReducePluginHooks = 'transform';
-export type FunctionVoidPluginHooks = 'deploy';
-
-export type VoidPluginHooks = Pick<FunctionPluginHooks, FunctionVoidPluginHooks>;
-export type ReducePluginHooks = Pick<FunctionPluginHooks, FunctionReducePluginHooks>;
-
-export interface FromPluginReturn {
-  docDetailList: DocDetail[];
-  sortedDocList?: SortedDoc<any>[];
-  docStatusMap: any;
-}
-
-export interface FunctionPluginHooks {
-  /** 用于 From 插件的开始下载的钩子 */
-  download: (this: PluginContext) => Promise<FromPluginReturn>;
-  /** 用于自定义处理文档信息 */
-  transform: (this: PluginContext, docs: DocDetail[]) => Promise<DocDetail[]>;
-  /** 用于 To 插件的开始部署的钩子 */
-  deploy: (this: PluginContext, docs: DocDetail[]) => Promise<void> | void;
-}
-
-export interface IPlugin<A = any> extends Partial<PluginHooks> {
-  /**插件名称 以@elog/plugin开头 或 elog-plugin开头 */
-  name: string;
-}
-
-export type PluginHooks = {
-  [K in keyof FunctionPluginHooks]: ObjectHook<FunctionPluginHooks[K]>;
-};
+export type { DownloadResult as FromPluginReturn, ElogPlugin as IPlugin } from '../plugins/types';
 
 /**
  * 写作平台基础配置
