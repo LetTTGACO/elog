@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { formatWorkflowResults } from './sync/format';
-import type { WorkflowResult } from '../runtime/types';
-import { ElogError } from '../plugins/errors';
+import type { WorkflowResult } from '../../runtime/types';
+import { ElogError } from '../../plugins/errors';
+import { formatWorkflowResults } from './format';
 
 describe('formatWorkflowResults', () => {
   it('formats success, skipped, and failed results', () => {
