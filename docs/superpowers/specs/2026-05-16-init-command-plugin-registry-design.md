@@ -24,7 +24,7 @@ built-in plugins.json
   -> install selected plugin packages
   -> back up an existing config when overwriting
   -> write elog.config.ts
-  -> write or merge .env and .env.example
+  -> write .env and .env.example
 ```
 
 `elog sync` remains unchanged. It continues to load `elog.config.ts`, and that generated config
@@ -115,20 +115,28 @@ small makes the generator and wizard easier to test.
 6. Generate `elog.config.ts`, `.env`, and `.env.example`.
 7. Remind the user that `.env` contains secrets and must not be committed.
 
-If the target config file already exists, ask before overwriting:
+If any generated target file already exists, ask before overwriting:
 
 ```text
 检测到已有 elog.config.ts
 ? 是否覆写配置文件？旧文件会自动备份 (Y/n)
+
+检测到已有 .env
+? 是否覆写环境变量文件？旧文件会自动备份 (Y/n)
+
+检测到已有 .env.example
+? 是否覆写环境变量示例文件？旧文件会自动备份 (Y/n)
 ```
 
-When confirmed, back it up before writing:
+When confirmed, back the existing file up before writing:
 
 ```text
 elog.config.ts -> elog.config.backup.20260516-153012.ts
+.env -> .env.backup.20260516-153012
+.env.example -> .env.example.backup.20260516-153012
 ```
 
-If the user declines, exit without changing files.
+If the user declines any overwrite prompt, exit without changing files.
 
 ## Environment Files
 
@@ -142,7 +150,7 @@ from: fromYuque({
 });
 ```
 
-Generate or merge the real `.env` with values collected by the wizard:
+Generate the real `.env` with values collected by the wizard:
 
 ```env
 YUQUE_TOKEN=real-token
@@ -150,7 +158,7 @@ YUQUE_LOGIN=real-login
 YUQUE_REPO=real-repo
 ```
 
-Also generate or merge `.env.example` with empty placeholders:
+Also generate `.env.example` with empty placeholders:
 
 ```env
 YUQUE_TOKEN=
@@ -267,8 +275,7 @@ Add focused tests for:
 - config generator output
 - package manager detection
 - dependency install command construction
-- config backup and overwrite behavior
-- `.env` and `.env.example` merge behavior
+- config, `.env`, and `.env.example` backup and overwrite behavior
 - `.gitignore` detection and update behavior
 - `elog init --dry-run` smoke behavior
 
