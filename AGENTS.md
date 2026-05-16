@@ -143,6 +143,10 @@ Config resolution behavior:
 - A single workflow defaults `cacheFilePath` to `elog.cache.json`.
 - Multiple workflows default to `elog.cache1.json`, `elog.cache2.json`, etc.
 - Workflows with `disable: true` are preserved and skipped by `WorkflowRunner`.
+- Malformed 1.0 plugin fields should be reported as diagnostics before runtime
+  execution. For example, `plugins` must be an array of `TransformPlugin`
+  entries; a single transform plugin object is a config error, not a thrown
+  `TypeError`.
 - Likely Elog 0.x public configs are detected at the adapter boundary and return
   diagnostics; full migration is intentionally not implemented yet.
 - Validation diagnostics are reported before runtime execution.
@@ -209,6 +213,11 @@ It exposes:
 
 Hook errors are fail-fast and wrapped as `ElogPluginError`.
 
+Runtime code must not call `process.exit()`. The CLI remains the process-exit
+boundary: library/runtime failures should be returned as structured
+`WorkflowResult` values and only translated into terminal output or exit codes by
+commands such as `elog sync`.
+
 ### PluginContext
 
 `PluginContext` is passed explicitly as the second hook parameter or first
@@ -219,6 +228,10 @@ download parameter. It groups runtime capabilities:
 - `http`: HTTP helper from `utils/request`.
 - `cache.docList`: docs loaded from cache for this workflow.
 - `image`: image URL parsing, file-type detection, URL cleanup, buffer download, unique ID helpers.
+
+`ctx.logger.error(message)` is plugin-fatal: it prints the error and throws,
+allowing `PluginDriver` to wrap the failure as `ElogPluginError`. Plugin code
+should not call `process.exit()` or import the CLI fatal logger directly.
 
 Do not rely on hook `this` binding for new code.
 
