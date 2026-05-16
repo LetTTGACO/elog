@@ -1,28 +1,37 @@
-import { program } from 'commander';
+import { Command } from 'commander';
 import { runInitCommand } from './commands/init';
-import sync from './commands/sync';
+import { runSyncCommand } from './commands/sync';
 import out from './logging/logger';
 import packageJson from '../package.json' with { type: 'json' };
 
-export async function run() {
+async function handleAction(action: () => Promise<void> | void): Promise<void> {
+  try {
+    await action();
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    out.warn(message);
+  }
+}
+
+export function createProgram(): Command {
+  const program = new Command();
+
+  program.version(packageJson.version);
+
   program
-    .version(packageJson.version)
     .command('init')
-    .option('--template <string>', 'init with template')
     .option('--name <string>', 'custom config name')
+    .option('--dry-run', 'print generated output without installing or writing files')
     .description('init config')
-    .action(async (options) => {
-      try {
-        await runInitCommand({
+    .action((options: { name?: string; dryRun?: boolean }) =>
+      handleAction(() =>
+        runInitCommand({
           cwd: process.cwd(),
           configName: options.name ?? 'elog.config.ts',
-          dryRun: false,
-        });
-      } catch (error: unknown) {
-        const message = error instanceof Error ? error.message : String(error);
-        out.warn('初始化', message);
-      }
-    });
+          dryRun: options.dryRun ?? false,
+        }),
+      ),
+    );
 
   program
     .command('sync')
@@ -30,13 +39,13 @@ export async function run() {
     .option('-e, --env <string>', 'use env with custom')
     .option('--debug', 'enable debug')
     .description('sync doc')
-    .action(async (options) => {
-      try {
-        await sync(options.config, options.env, options.debug);
-      } catch (error: any) {
-        out.error(error.message);
-      }
-    });
+    .action((options: { config?: string; env?: string; debug?: boolean }) =>
+      handleAction(() => runSyncCommand(options.config, options.env, options.debug)),
+    );
 
-  program.parse();
+  return program;
+}
+
+export async function run(): Promise<void> {
+  createProgram().parse();
 }

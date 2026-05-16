@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatWorkflowResults } from './sync';
+import { formatWorkflowResults } from './sync/format';
 import type { WorkflowResult } from '../runtime/types';
 import { ElogError } from '../plugins/errors';
 
