@@ -23,6 +23,9 @@
     "@elogx-test/plugin-from-yuque-token": "workspace:*",
     "@elogx-test/plugin-image-local": "workspace:*",
     "@elogx-test/plugin-to-local": "workspace:*",
-    "@types/node": "~18.15.3"
+    "@types/node": "~22.19.19"
+  },
+  "devDependencies": {
+    "typescript": "~6.0.3"
   }
 }

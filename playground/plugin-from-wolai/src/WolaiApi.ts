@@ -16,7 +16,7 @@ import {
 } from '@elogx-test/elog';
 import { WolaiSortPresetEnum, WolaiSortDirectionEnum } from './const';
 import { filterDocs, genCatalog, props, sortDocs } from './utils';
-import buffer from 'buffer';
+import { Buffer } from 'node:buffer';
 
 export default class WolaiApi extends ElogBaseContext {
   config: WoLaiConfig;
@@ -254,7 +254,7 @@ export default class WolaiApi extends ElogBaseContext {
       true,
     );
     // Buffer 转字符串
-    const body = buffer.Buffer.from(res).toString('utf-8');
+    const body = Buffer.from(res).toString('utf-8');
     const doc: DocDetail = {
       id: row.block_id,
       properties: row.properties as DocProperties,

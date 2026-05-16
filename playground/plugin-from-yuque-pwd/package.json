@@ -29,9 +29,9 @@
     "jsdom": "^21.1.2"
   },
   "devDependencies": {
-    "typescript": "~5.2.2",
+    "typescript": "~6.0.3",
     "tsdown": "^0.22.0",
-    "@types/node": "~18.15.3",
+    "@types/node": "~22.19.19",
     "@elogx-test/elog": "workspace:*",
     "@types/jsdom": "21.1.2"
   }

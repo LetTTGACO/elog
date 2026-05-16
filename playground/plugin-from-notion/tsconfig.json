@@ -12,6 +12,7 @@
     "esModuleInterop": true,
     "useUnknownInCatchVariables": false,
     "outDir": "./dist",
-    "rootDir": "./"
+    "rootDir": "./",
+    "types": ["node"]
   }
 }

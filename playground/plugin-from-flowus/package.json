@@ -28,9 +28,9 @@
     "@flowusx/flowus-to-md": "^0.0.5-beta.4"
   },
   "devDependencies": {
-    "typescript": "~5.2.2",
+    "typescript": "~6.0.3",
     "tsdown": "^0.22.0",
-    "@types/node": "~18.15.3",
+    "@types/node": "~22.19.19",
     "@flowusx/flowus-types": "^0.0.5-beta.3",
     "@elogx-test/elog": "workspace:*"
   }

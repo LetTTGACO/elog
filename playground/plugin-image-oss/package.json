@@ -27,8 +27,8 @@
   "devDependencies": {
     "@types/ali-oss": "~6.16.11",
     "@elogx-test/elog": "workspace:*",
-    "typescript": "~5.2.2",
+    "typescript": "~6.0.3",
     "tsdown": "^0.22.0",
-    "@types/node": "~18.15.3"
+    "@types/node": "~22.19.19"
   }
 }
