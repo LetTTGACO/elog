@@ -159,8 +159,7 @@ YUQUE_REPO=
 ```
 
 The wizard must warn that `.env` contains secrets and should not be committed to GitHub. It should
-also inspect `.gitignore`; if `.env` is not already ignored, ask whether to add it. When running with
-`--force`, add `.env` to `.gitignore` automatically.
+also inspect `.gitignore`; if `.env` is not already ignored, ask whether to add it.
 
 Fields with `x-elog-env` should be prompted for their actual values in the first version. The
 generated config still uses `process.env.NAME`, while `.env` stores the real value and
@@ -202,13 +201,11 @@ packages/elog/src/commands/init/
 ```bash
 elog init
 elog init --name custom.config.ts
-elog init --force
 elog init --dry-run
 ```
 
-`--force` backs up and overwrites an existing config without asking. `--dry-run` skips installation
-and file writes, and prints the generated config, install command, `.env.example`, and redacted
-`.env` changes.
+`--dry-run` skips installation and file writes, and prints the generated config, install command,
+`.env.example`, and redacted `.env` changes.
 
 ## Package Installation
 
