@@ -24,7 +24,7 @@ built-in plugins.json
   -> install selected plugin packages
   -> back up an existing config when overwriting
   -> write elog.config.ts
-  -> write or merge .env.example
+  -> write or merge .env and .env.example
 ```
 
 `elog sync` remains unchanged. It continues to load `elog.config.ts`, and that generated config
@@ -93,9 +93,10 @@ Supported JSON Schema subset:
 
 Supported Elog extensions:
 
-- `x-elog-env`: generate `process.env.NAME` in `elog.config.ts` and add `NAME=` to `.env.example`.
-- `x-elog-secret`: mark a value as sensitive. The first version never writes the literal value into
-  config or `.env`.
+- `x-elog-env`: generate `process.env.NAME` in `elog.config.ts`, add `NAME=` to `.env.example`,
+  and write the collected value to the real `.env` file.
+- `x-elog-secret`: mark a value as sensitive. The wizard should use a password prompt and never
+  write the literal value into `elog.config.ts` or `.env.example`.
 - `x-elog-prompt`: define the prompt type and message used by the wizard.
 - `x-elog-hidden`: skip prompting and use the schema default.
 
@@ -109,9 +110,10 @@ small makes the generator and wizard easier to test.
 1. Choose a writing platform, such as Notion, Yuque, Feishu, FlowUs, or Wolai.
 2. Choose one or more deploy targets, such as local filesystem, WordPress, Halo, or Confluence.
 3. Choose image handling: no transform, local image download, or image hosting transform.
-4. Ask the selected plugins' key option questions for literal config values.
+4. Ask the selected plugins' key option questions, including env-backed values.
 5. Install the selected plugin packages.
-6. Generate `elog.config.ts` and `.env.example`.
+6. Generate `elog.config.ts`, `.env`, and `.env.example`.
+7. Remind the user that `.env` contains secrets and must not be committed.
 
 If the target config file already exists, ask before overwriting:
 
@@ -140,7 +142,15 @@ from: fromYuque({
 });
 ```
 
-Generate or merge `.env.example`:
+Generate or merge the real `.env` with values collected by the wizard:
+
+```env
+YUQUE_TOKEN=real-token
+YUQUE_LOGIN=real-login
+YUQUE_REPO=real-repo
+```
+
+Also generate or merge `.env.example` with empty placeholders:
 
 ```env
 YUQUE_TOKEN=
@@ -148,14 +158,13 @@ YUQUE_LOGIN=
 YUQUE_REPO=
 ```
 
-The first version should not write real secret values to `.env`. This avoids leaking secrets into a
-repository that may not have `.env` ignored. A future `--write-env` option can add that convenience
-after the safer default is established.
+The wizard must warn that `.env` contains secrets and should not be committed to GitHub. It should
+also inspect `.gitignore`; if `.env` is not already ignored, ask whether to add it. When running with
+`--force`, add `.env` to `.gitignore` automatically.
 
-Fields with `x-elog-env` are not prompted for their actual values in the first version. The wizard
-should generate the `process.env.NAME` reference, add the variable to `.env.example`, and print a
-short completion note telling the user to create or update their real env file before running
-`elog sync -e .env`.
+Fields with `x-elog-env` should be prompted for their actual values in the first version. The
+generated config still uses `process.env.NAME`, while `.env` stores the real value and
+`.env.example` stores only the empty example key.
 
 ## Command Architecture
 
@@ -181,6 +190,7 @@ packages/elog/src/commands/init/
   package-manager.ts
   file-writer.ts
   env.ts
+  gitignore.ts
   types.ts
 ```
 
@@ -197,7 +207,8 @@ elog init --dry-run
 ```
 
 `--force` backs up and overwrites an existing config without asking. `--dry-run` skips installation
-and file writes, and prints the generated config, env example, and install command.
+and file writes, and prints the generated config, install command, `.env.example`, and redacted
+`.env` changes.
 
 ## Package Installation
 
@@ -245,7 +256,8 @@ Use explicit init error codes so tests and CLI output can stay stable:
 - `PACKAGE_INSTALL_FAILED`: package manager command failed.
 - `CONFIG_EXISTS_ABORTED`: user declined to overwrite an existing config.
 - `CONFIG_WRITE_FAILED`: config write failed.
-- `ENV_WRITE_FAILED`: `.env.example` write failed.
+- `ENV_WRITE_FAILED`: `.env` or `.env.example` write failed.
+- `GITIGNORE_WRITE_FAILED`: `.gitignore` update failed.
 
 Errors should be reported at the CLI boundary. Runtime/library code should not call `process.exit()`.
 
@@ -259,7 +271,8 @@ Add focused tests for:
 - package manager detection
 - dependency install command construction
 - config backup and overwrite behavior
-- `.env.example` merge behavior
+- `.env` and `.env.example` merge behavior
+- `.gitignore` detection and update behavior
 - `elog init --dry-run` smoke behavior
 
 Run core package tests first:
@@ -288,4 +301,4 @@ pnpm test
 - Do not bundle official plugin runtime code into `@elogx-test/elog`.
 - Do not implement a remote plugin registry in the first version.
 - Do not expose every advanced plugin option in the init wizard.
-- Do not write real secrets to `.env` by default.
+- Do not write real secrets to `elog.config.ts` or `.env.example`.
