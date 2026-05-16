@@ -96,6 +96,14 @@ describe('createInitDryRunOutput', () => {
     expect(output).not.toContain('secret123');
     expect(output).not.toContain('myspace');
   });
+
+  it('uses custom configName in output label', () => {
+    const input = { ...sampleFiles, installCommand: 'pnpm add foo' };
+    const output = createInitDryRunOutput(input, 'custom.config.ts');
+
+    expect(output).toContain('custom.config.ts:');
+    expect(output).not.toContain('elog.config.ts:');
+  });
 });
 
 describe('selectedPackages', () => {
@@ -246,6 +254,24 @@ describe('runInitCommand', () => {
       expect.objectContaining({
         cwd: '/tmp/test-project',
         shouldAdd: expect.any(Function),
+      }),
+    );
+  });
+
+  it('without dryRun: uses injected overwriteExisting when provided', async () => {
+    const overwriteExisting = vi.fn(async () => true);
+    const writeGeneratedFiles = vi.fn(async () => []);
+
+    await runInitCommand({
+      ...baseOptions,
+      dryRun: false,
+      overwriteExisting,
+      writeGeneratedFiles,
+    });
+
+    expect(writeGeneratedFiles).toHaveBeenCalledWith(
+      expect.objectContaining({
+        overwriteExisting,
       }),
     );
   });

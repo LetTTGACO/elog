@@ -8,6 +8,7 @@ async function handleAction(action: () => Promise<void> | void): Promise<void> {
   try {
     await action();
   } catch (error: unknown) {
+    process.exitCode = 1;
     const message = error instanceof Error ? error.message : String(error);
     out.warn(message);
   }

@@ -19,6 +19,7 @@ export interface RunInitCommandOptions {
   runWizard?: (registry: PluginRegistry) => Promise<InitSelection>;
   installPackages?: (options: InstallPackagesOptions) => ReturnType<typeof installPackages>;
   writeGeneratedFiles?: (options: WriteGeneratedFilesOptions) => Promise<GeneratedFileWrite[]>;
+  overwriteExisting?: (filename: string) => Promise<boolean>;
   ensureEnvIgnored?: (options: EnsureEnvIgnoredOptions) => Promise<boolean>;
   log?: (message: string) => void;
 }
@@ -52,10 +53,11 @@ export function selectedPackages(selection: InitSelection): string[] {
 
 export function createInitDryRunOutput(
   files: GeneratedInitFiles & { installCommand: string },
+  configName = 'elog.config.ts',
 ): string {
   const sections = [
     `Install command:\n${files.installCommand}`,
-    `elog.config.ts:\n${files.configText}`,
+    `${configName}:\n${files.configText}`,
     `.env (redacted):\n${redactEnvText(files.envText)}`,
     `.env.example:\n${files.envExampleText}`,
   ];
@@ -78,13 +80,18 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
   const installCommand = buildInstallCommand(packageManager, packages);
 
   if (options.dryRun) {
-    log(createInitDryRunOutput({ ...files, installCommand: installCommand.display }));
+    log(
+      createInitDryRunOutput(
+        { ...files, installCommand: installCommand.display },
+        options.configName,
+      ),
+    );
     return;
   }
 
   doInstall({ cwd: options.cwd, packageManager, packages });
 
-  const confirmOverwrite = async (filename: string): Promise<boolean> => {
+  const defaultConfirmOverwrite = async (filename: string): Promise<boolean> => {
     const answer = (await inquirer.prompt([
       {
         type: 'confirm',
@@ -101,7 +108,7 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
     configName: options.configName,
     files,
     timestamp: createTimestamp(),
-    overwriteExisting: confirmOverwrite,
+    overwriteExisting: options.overwriteExisting ?? defaultConfirmOverwrite,
   });
 
   const shouldAdd = (): boolean => {

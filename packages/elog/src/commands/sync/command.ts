@@ -40,6 +40,6 @@ export async function runSyncCommand(
 
   const failed = results.find(isFailedWorkflowResult);
   if (failed) {
-    out.error(failed.error.message);
+    throw failed.error;
   }
 }
