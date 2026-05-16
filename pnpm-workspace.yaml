@@ -1,6 +1,8 @@
 packages:
-  - "packages/*"
-  - "playground/*"
-  - "tests/*"
+  - 'packages/*'
+  - 'plugins/from/*'
+  - 'plugins/transform/*'
+  - 'plugins/to/*'
+  - 'tests/*'
 allowBuilds:
   esbuild: true

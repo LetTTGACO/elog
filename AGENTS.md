@@ -16,9 +16,9 @@ download (from plugin) -> transform (middleware plugins) -> deploy (to plugins)
 
 Supported plugin families in this repo:
 
-- `playground/plugin-from-*`: download from Notion, Feishu Wiki/Space, FlowUs, Yuque Token/Pwd, Wolai
-- `playground/plugin-image-*`: replace/rehost images via COS, OSS, GitHub, Qiniu, Upyun, local
-- `playground/plugin-to-*`: deploy to Halo, WordPress, Confluence, local filesystem
+- `plugins/from/*`: download from Notion, Feishu Wiki/Space, FlowUs, Yuque Token/Pwd, Wolai
+- `plugins/transform/*`: replace/rehost images via COS, OSS, GitHub, Qiniu, Upyun, local
+- `plugins/to/*`: deploy to Halo, WordPress, Confluence, local filesystem
 
 ## Common Commands
 
@@ -37,7 +37,7 @@ pnpm --filter @elogx-test/elog test
 
 # Build a single package from that package directory
 cd packages/elog && pnpm build
-cd playground/plugin-from-notion && pnpm build
+cd plugins/from/notion && pnpm build
 
 # Manual integration smoke test
 cd tests/test-elog && pnpm elog:sync
@@ -53,9 +53,9 @@ writes local docs, images, and cache files.
 | Directory | Purpose |
 | --- | --- |
 | `packages/elog/` | Core engine, CLI, config loading, plugin driver, shared types/context utilities |
-| `playground/plugin-from-*` | Source/download plugins |
-| `playground/plugin-image-*` | Transform plugins for image replacement/rehosting |
-| `playground/plugin-to-*` | Target/deploy plugins |
+| `plugins/from/*` | Source/download plugins |
+| `plugins/transform/*` | Transform plugins for image replacement/rehosting |
+| `plugins/to/*` | Target/deploy plugins |
 | `tests/test-elog/` | Manual integration workspace and example configs |
 
 Workspace membership is defined in `pnpm-workspace.yaml`:
@@ -63,7 +63,9 @@ Workspace membership is defined in `pnpm-workspace.yaml`:
 ```yaml
 packages:
   - "packages/*"
-  - "playground/*"
+  - "plugins/from/*"
+  - "plugins/transform/*"
+  - "plugins/to/*"
   - "tests/*"
 ```
 
@@ -110,8 +112,7 @@ calls the awaitable library runtime and prints structured workflow results.
 ## Configuration Loading
 
 Raw config discovery lives in `packages/elog/src/config/load.ts` and uses JoyCon
-plus `bundle-require`. `packages/elog/src/utils/load.ts` is only a compatibility
-re-export.
+plus `bundle-require`.
 
 Default searched filenames:
 
