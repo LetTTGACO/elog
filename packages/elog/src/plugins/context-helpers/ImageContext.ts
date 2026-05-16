@@ -1,9 +1,9 @@
-import type { PluginContext } from '../../plugins/types';
+import type { PluginContext } from '../types';
 import { DocDetail } from '../../types/doc';
 
 import { ElogBaseContext } from './BaseContext';
 import { ImageBaseConfig, ImageUploader } from '../../types/image';
-import { replaceImagesFunc } from '../doc/image';
+import { replaceImagesFunc } from '../../image/replace';
 
 /**
  * 适用于图片替换工具类

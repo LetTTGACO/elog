@@ -1,8 +1,8 @@
-import { DocDetail } from '../../types/doc';
-import out from '../logger';
-import { genUniqueIdFromUrl, getBufferFromUrl, getFileType, getUrlListFromContent } from '../image';
-import { ImageSource, ImageUploader, ImageUrl } from '../../types/image';
-import { asyncPoolFunc } from './form';
+import { DocDetail } from '../types/doc';
+import out from '../logging/logger';
+import { genUniqueIdFromUrl, getBufferFromUrl, getFileType, getUrlListFromContent } from './index';
+import { ImageSource, ImageUploader, ImageUrl } from '../types/image';
+import { asyncPoolFunc } from '../doc/download';
 
 interface TransformImageOptions {
   urlList: ImageUrl[];

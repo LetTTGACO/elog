@@ -1,4 +1,4 @@
-import type { DownloadResult, PluginContext } from '../../plugins/types';
+import type { DownloadResult, PluginContext } from '../types';
 import asyncPool from 'tiny-async-pool';
 import {
   asyncPoolFunc,
@@ -7,7 +7,7 @@ import {
   GetDocDetail,
   getDocDetailList,
   GetSortedDocList,
-} from '../doc/form';
+} from '../../doc/download';
 import { ElogBaseContext } from './BaseContext';
 import { SortedDoc } from '../../types/doc';
 

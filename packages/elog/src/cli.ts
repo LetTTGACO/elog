@@ -1,7 +1,7 @@
 import { program } from 'commander';
 import init from './commands/init';
 import sync from './commands/sync';
-import out from './utils/logger';
+import out from './logging/logger';
 import packageJson from '../package.json' with { type: 'json' };
 
 export async function run() {

@@ -1,8 +1,8 @@
 import path from 'path';
 import dotenv from 'dotenv';
-import { findConfig } from '../utils/find-config';
+import { findConfig } from '../config/find';
 import elog from '../node-entry';
-import out from '../utils/logger';
+import out from '../logging/logger';
 import type { WorkflowResult } from '../runtime/types';
 
 type FailedWorkflowResult = Extract<WorkflowResult, { status: 'failed' }>;

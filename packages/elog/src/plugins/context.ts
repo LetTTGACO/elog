@@ -1,7 +1,7 @@
 import type { DocDetail } from '../types/doc';
-import { LOGLEVEL_ERROR } from '../utils/logging';
-import out, { println } from '../utils/logger';
-import request from '../utils/request';
+import { LOGLEVEL_ERROR } from '../logging/levels';
+import out, { println } from '../logging/logger';
+import request from '../http/request';
 import {
   cleanUrlParam,
   genUniqueIdFromUrl,
@@ -11,7 +11,7 @@ import {
   getFileTypeFromBuffer,
   getFileTypeFromUrl,
   getUrlListFromContent,
-} from '../utils/image';
+} from '../image';
 import type { PluginContext, WorkflowInfo } from './types';
 
 export function createPluginContext(options: {

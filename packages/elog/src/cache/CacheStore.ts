@@ -5,7 +5,7 @@ import { DocStatus } from '../const';
 import type { DocDetail, SortedDoc } from '../types/doc';
 import type { CacheConfig } from '../runtime/types';
 import type { DocStatusMap } from '../doc/filter';
-import out from '../utils/logger';
+import out from '../logging/logger';
 
 const require = createRequire(import.meta.url);
 

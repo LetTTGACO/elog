@@ -7,7 +7,7 @@ import {
   LOGLEVEL_INFO,
   LOGLEVEL_SUCCESS,
   LOGLEVEL_WARN,
-} from './logging';
+} from './levels';
 import * as process from 'process';
 
 export const __columns = process?.stdout?.columns ?? 120;

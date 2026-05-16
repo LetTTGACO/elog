@@ -1,5 +1,5 @@
 import { HttpClientResponse, request as req, RequestOptions } from 'urllib';
-import out from './logger';
+import out from '../logging/logger';
 
 /**
  * 网络请求封装

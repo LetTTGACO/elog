@@ -1,6 +1,6 @@
-import out from './logger';
+import out from '../logging/logger';
 import imgSize from 'image-size';
-import request from './request';
+import request from '../http/request';
 import { createHash } from 'node:crypto';
 import { ImageUrl } from '../types/image';
 

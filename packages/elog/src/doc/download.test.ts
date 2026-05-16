@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { getDocDetailList } from './form';
+import { getDocDetailList } from './download';
 
 describe('getDocDetailList', () => {
   afterEach(() => {

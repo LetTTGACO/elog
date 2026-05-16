@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { DocStatus } from '../const';
 import { filterDocs } from './filter';
-import out from '../utils/logger';
+import out from '../logging/logger';
 import type { DocDetail } from '../types/doc';
 
 const cachedDoc: DocDetail = {

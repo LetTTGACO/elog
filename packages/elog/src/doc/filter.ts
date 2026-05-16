@@ -1,6 +1,6 @@
 import { DocStatus } from '../const';
 import type { DocDetail, SortedDoc } from '../types/doc';
-import out from '../utils/logger';
+import out from '../logging/logger';
 
 export interface DocStatusEntry {
   _updateIndex: number;

@@ -1,6 +1,6 @@
 import inquirer from 'inquirer';
-import { genConfigByName } from '../utils/gen-config';
-import out from '../utils/logger';
+import { genConfigByName } from './init-config';
+import out from '../logging/logger';
 
 const templateList = [
   { name: 'yuque-local', value: 'from-yuque_image-local_to-local' },

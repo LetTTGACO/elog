@@ -1,5 +1,5 @@
 import { loadConfigFromFile } from '../config/load';
-import out from './logger';
+import out from '../logging/logger';
 
 export const findConfig = async (customConfigPath?: string) => {
   const config = await loadConfigFromFile(process.cwd(), customConfigPath);

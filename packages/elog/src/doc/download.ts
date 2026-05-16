@@ -1,10 +1,10 @@
-import type { DocDetail, SortedDoc } from '../../types/doc';
-import out from '../logger';
+import type { DocDetail, SortedDoc } from '../types/doc';
+import out from '../logging/logger';
 import asyncPool from 'tiny-async-pool';
-import { filterDocs } from '../../doc/filter';
+import { filterDocs } from './filter';
 
-export { filterDocs } from '../../doc/filter';
-export type { DocStatusMap } from '../../doc/filter';
+export { filterDocs } from './filter';
+export type { DocStatusMap } from './filter';
 
 /**
  * 批量执行请求（异步池）

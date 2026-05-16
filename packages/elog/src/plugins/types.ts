@@ -1,4 +1,4 @@
-import type request from '../utils/request';
+import type request from '../http/request';
 import type { DocDetail, SortedDoc } from '../types/doc';
 import type { LoggingFunction } from '../types/log';
 import type {
@@ -10,7 +10,7 @@ import type {
   getFileTypeFromBuffer,
   getFileTypeFromUrl,
   getUrlListFromContent,
-} from '../utils/image';
+} from '../image';
 
 export interface WorkflowInfo {
   id: string;

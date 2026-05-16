@@ -1,4 +1,4 @@
-import { defineConfig } from './utils/elog';
+import { defineConfig } from './config/defineConfig';
 import elog from './node-entry';
 import { run } from './cli';
 export type * from './types/log';
@@ -29,7 +29,6 @@ export * from './runtime/types';
 export { Graph } from './runtime/Graph';
 export { PluginDriver } from './runtime/PluginDriver';
 export { WorkflowRunner } from './runtime/WorkflowRunner';
-export * from './utils/context';
-export * from './utils/doc/form';
+export * from './plugins/context-helpers';
 export { run, defineConfig };
 export default elog;
