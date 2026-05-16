@@ -4,7 +4,7 @@ import { detectPackageManager, buildInstallCommand, installPackages } from './pa
 import type { InstallPackagesOptions } from './package-manager';
 import { loadBuiltInPluginRegistry } from './registry';
 import { generateInitFiles } from './generator';
-import { writeGeneratedFiles } from './file-writer';
+import { createTimestamp, writeGeneratedFiles } from './file-writer';
 import type { GeneratedFileWrite, WriteGeneratedFilesOptions } from './file-writer';
 import { ensureEnvIgnored } from './gitignore';
 import type { EnsureEnvIgnoredOptions } from './gitignore';
@@ -100,7 +100,7 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
     cwd: options.cwd,
     configName: options.configName,
     files,
-    timestamp: new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14),
+    timestamp: createTimestamp(),
     overwriteExisting: confirmOverwrite,
   });
 
