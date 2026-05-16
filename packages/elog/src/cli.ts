@@ -1,5 +1,5 @@
 import { program } from 'commander';
-import init from './commands/init';
+import { runInitCommand } from './commands/init';
 import sync from './commands/sync';
 import out from './logging/logger';
 import packageJson from '../package.json' with { type: 'json' };
@@ -11,11 +11,16 @@ export async function run() {
     .option('--template <string>', 'init with template')
     .option('--name <string>', 'custom config name')
     .description('init config')
-    .action((options) => {
+    .action(async (options) => {
       try {
-        void init(options.template, options.name);
-      } catch (error: any) {
-        out.error(error.message);
+        await runInitCommand({
+          cwd: process.cwd(),
+          configName: options.name ?? 'elog.config.ts',
+          dryRun: false,
+        });
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error);
+        out.warn('初始化', message);
       }
     });
 
