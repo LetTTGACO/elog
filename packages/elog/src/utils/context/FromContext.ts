@@ -45,7 +45,7 @@ export abstract class ElogFromContext extends ElogBaseContext {
     limit: number | undefined;
   }) {
     return getDocDetailList({
-      cachedDocList: [...this.ctx.cache.docList],
+      cachedDocList: this.ctx.cache.docList,
       ...option,
     });
   }

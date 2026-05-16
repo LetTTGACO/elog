@@ -58,6 +58,11 @@ export interface YuqueDoc {
   docStructure: DocStructure[];
 }
 
+export type NormalizedYuqueDoc = Omit<YuqueDoc, 'id'> & {
+  id: string;
+  updateTime: number;
+};
+
 export type YuqueInputConfig = Partial<YuqueWithPwdConfig>;
 
 export interface YuqueWithPwdConfig extends FromPluginBaseConfig {

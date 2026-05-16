@@ -89,7 +89,7 @@ describe('PluginDriver', () => {
       name: 'from:fatal',
       kind: 'from',
       async download(ctx) {
-        ctx.logger.error('missing token');
+        return ctx.logger.error('missing token');
       },
     };
     const driver = new PluginDriver(

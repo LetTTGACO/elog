@@ -8,6 +8,7 @@
     "declaration": false,
     "noImplicitOverride": true,
     "noUnusedLocals": true,
+    "skipLibCheck": true,
     "esModuleInterop": true,
     "useUnknownInCatchVariables": false,
     "outDir": "./dist",

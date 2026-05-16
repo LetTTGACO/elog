@@ -160,12 +160,12 @@ export default class extends Context {
           const urlList = this.ctx.image.getUrlListFromContent(articleInfo.body);
           for (const image of urlList) {
             // 生成文件名
-            const fileName = this.ctx.image.genUniqueIdFromUrl(image.url, 28);
+            const fileName = this.ctx.image.genUniqueIdFromUrl(image.data, 28);
             // 生成文件名后缀
-            const fileType = await this.ctx.image.getFileType(image.url);
+            const fileType = await this.ctx.image.getFileType(image.data);
             if (!fileType) {
               this.ctx.logger.warn(
-                `${articleInfo?.properties?.title} 存在获取图片类型失败，跳过：${image.url}`,
+                `${articleInfo?.properties?.title} 存在获取图片类型失败，跳过：${image.data}`,
               );
               continue;
             }
@@ -176,11 +176,11 @@ export default class extends Context {
             if (!item) {
               // 上传
               // 获取 buffer
-              const buffer = await this.ctx.image.getBufferFromUrl(image.original);
+              const buffer = await this.ctx.image.getBufferFromUrl(image.originalUrl);
               if (!buffer) {
                 this.ctx.logger.warn(
                   '跳过',
-                  `${articleInfo?.properties?.title} 存在获取图片内容失败：${image.url}`,
+                  `${articleInfo?.properties?.title} 存在获取图片内容失败：${image.data}`,
                 );
                 continue;
               }
@@ -191,20 +191,20 @@ export default class extends Context {
                 wpMedias.push(attachment);
                 // 替换文档中的图片路径
                 articleInfo.body = articleInfo.body.replace(
-                  image.original,
+                  image.originalUrl,
                   attachment.guid.rendered,
                 );
               } catch (e: any) {
                 this.ctx.logger.warn(
                   '跳过',
-                  `${articleInfo?.properties?.title} 存在上传图片失败：${image.url}`,
+                  `${articleInfo?.properties?.title} 存在上传图片失败：${image.data}`,
                 );
                 this.ctx.logger.debug(e);
               }
             } else {
               this.ctx.logger.info('忽略上传', `图片已存在: ${item.guid.rendered}`);
               // 替换文档中的图片路径
-              articleInfo.body = articleInfo.body.replace(image.original, item.guid.rendered);
+              articleInfo.body = articleInfo.body.replace(image.originalUrl, item.guid.rendered);
             }
           }
         }

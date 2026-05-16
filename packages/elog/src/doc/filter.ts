@@ -9,9 +9,17 @@ export interface DocStatusEntry {
 
 export type DocStatusMap = Record<string, DocStatusEntry>;
 
-export function filterDocs<T>(cachedDocList: DocDetail[], docs: SortedDoc<T>[]) {
+export interface FilterDocsResult<T> {
+  docList: Array<SortedDoc<T> & { _index: number }>;
+  docStatusMap: DocStatusMap;
+}
+
+export function filterDocs<T>(
+  cachedDocList: readonly DocDetail[],
+  docs: SortedDoc<T>[],
+): FilterDocsResult<T> {
   try {
-    const needUpdateDocList: Array<T & { _index: number }> = [];
+    const needUpdateDocList: Array<SortedDoc<T> & { _index: number }> = [];
     const docStatusMap: DocStatusMap = {};
 
     for (const doc of docs) {
@@ -47,7 +55,7 @@ export function filterDocs<T>(cachedDocList: DocDetail[], docs: SortedDoc<T>[]) 
     out.debug(error);
     out.warn(`增量更新失败，请检查文档，${error.message}`);
     return {
-      docList: [] as Array<T & { _index: number }>,
+      docList: [],
       docStatusMap: {},
     };
   }

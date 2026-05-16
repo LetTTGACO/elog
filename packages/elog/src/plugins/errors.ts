@@ -1,7 +1,7 @@
 export type ElogHookName = 'download' | 'transform' | 'deploy';
 
 export class ElogError extends Error {
-  readonly cause?: unknown;
+  override readonly cause?: unknown;
 
   constructor(message: string, cause?: unknown) {
     super(message);

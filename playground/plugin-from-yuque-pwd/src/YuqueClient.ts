@@ -1,11 +1,5 @@
-import { YuqueDoc, YuqueWithPwdConfig } from './types';
-import {
-  DocDetail,
-  DocStructure,
-  ElogFromContext,
-  PluginContext,
-  SortedDoc,
-} from '@elogx-test/elog';
+import { NormalizedYuqueDoc, YuqueWithPwdConfig } from './types';
+import { DocDetail, DocStructure, ElogFromContext, PluginContext } from '@elogx-test/elog';
 import YuqueApi from './YuqueApi';
 import { IllegalityDocFormat } from './const';
 import { getProps, processMarkdownRaw } from './utils';
@@ -30,14 +24,14 @@ export default class YuqueClient extends ElogFromContext {
     // 获取已排序目录信息
     const tocList = await this.api.getToc();
     // 获取文档列表
-    let sortedDocList = (await this.api.getDocList()) as SortedDoc<YuqueDoc>[];
+    const yuqueBaseDocList = await this.api.getDocList();
     // 根据目录排序文档顺序，处理文档目录
-    sortedDocList = tocList
+    const sortedDocList: NormalizedYuqueDoc[] = tocList
       .filter((item) => {
         return item.type === 'DOC';
       })
       .map((item) => {
-        const doc = sortedDocList.find((doc) => doc.slug === item.url)!;
+        const doc = yuqueBaseDocList.find((doc) => doc.slug === item.url)!;
         let catalogPath: DocStructure[] = [];
         let parentId = item.parent_uuid;
         for (let i = 0; i < item.level; i++) {
@@ -50,6 +44,7 @@ export default class YuqueClient extends ElogFromContext {
         }
         return {
           ...doc,
+          id: String(doc.id),
           docStructure: catalogPath.reverse(),
           updateTime: new Date(doc.updated_at).getTime(),
         };
@@ -79,7 +74,7 @@ export default class YuqueClient extends ElogFromContext {
       };
     }
     this.ctx.logger.info('待下载数', String(needUpdateDocList.length));
-    const promise = async (doc: YuqueDoc) => {
+    const promise = async (doc: NormalizedYuqueDoc & { _index: number }) => {
       this.ctx.logger.info(`下载文档 ${doc._index}/${needUpdateDocList.length}   `, doc.title);
       let articleStr = await this.api.getDocString(doc.slug);
       // 处理文档 front-matter
@@ -87,7 +82,7 @@ export default class YuqueClient extends ElogFromContext {
       // 处理语雀字符串
       let newBody = processMarkdownRaw(body);
       const docDetail: DocDetail = {
-        id: doc.id as unknown as string,
+        id: doc.id,
         title: doc.title,
         body: newBody,
         properties,

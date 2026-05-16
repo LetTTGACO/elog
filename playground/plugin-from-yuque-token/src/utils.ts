@@ -1,11 +1,11 @@
 import frontMatter from 'front-matter';
-import { YuqueDoc } from './types';
+import type { NormalizedYuqueDoc, YuqueDoc } from './types';
 import type { PluginContext, DocProperties } from '@elogx-test/elog';
 
 /**
  * 生成元数据
  */
-export const getProps = (doc: YuqueDoc, body: string, ctx: PluginContext) => {
+export const getProps = (doc: YuqueDoc | NormalizedYuqueDoc, body: string, ctx: PluginContext) => {
   let properties: DocProperties = {
     // 注入title
     title: doc.title,

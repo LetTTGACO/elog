@@ -33,7 +33,7 @@ export type GetDocDetail<T extends DocFrom> = (doc: T) => Promise<DocDetail>;
  * @param option
  */
 export const getDocDetailList = async <T extends DocFrom>(option: {
-  cachedDocList: DocDetail[];
+  cachedDocList: readonly DocDetail[];
   getSortedDocList: GetSortedDocList<T>;
   getDocDetail: GetDocDetail<T>;
   limit: number | undefined;

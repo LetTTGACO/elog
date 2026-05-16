@@ -83,7 +83,7 @@ export default class LocalDeploy extends ElogBaseContext {
       }
 
       let docPath: string;
-      if (this.config.deployByStructure) {
+      if (this.config.keepToc || this.config.deployByStructure) {
         // 开启按目录生成
         if (Array.isArray(doc.docStructure)) {
           // 是否存在目录

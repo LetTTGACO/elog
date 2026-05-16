@@ -12,6 +12,8 @@ export interface LocalConfig {
   fileExt?: string;
   /** 保持原有目录结构 */
   keepToc?: boolean;
+  /** @deprecated Use keepToc instead. */
+  deployByStructure?: boolean;
   /** 是否需要给文档头部添加 Front-Matter */
   frontMatter?: {
     enable: boolean;

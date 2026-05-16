@@ -180,6 +180,11 @@ export interface YuqueDoc {
   docStructure: DocStructure[];
 }
 
+export type NormalizedYuqueDoc = Omit<YuqueDoc, 'id'> & {
+  id: string;
+  updateTime: number;
+};
+
 /**
  * 写作平台基础配置
  */

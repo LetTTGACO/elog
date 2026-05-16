@@ -5,6 +5,12 @@ import elog from '../node-entry';
 import out from '../utils/logger';
 import type { WorkflowResult } from '../runtime/types';
 
+type FailedWorkflowResult = Extract<WorkflowResult, { status: 'failed' }>;
+
+function isFailedWorkflowResult(result: WorkflowResult): result is FailedWorkflowResult {
+  return result.status === 'failed';
+}
+
 export function formatWorkflowResults(results: WorkflowResult[]): string[] {
   return results.map((result) => {
     if (result.status === 'success') {
@@ -41,13 +47,13 @@ const sync = async (customConfigPath?: string, envPath?: string, enableDebug?: b
   }
 
   const userConfig = await findConfig(customConfigPath);
-  const results = await elog(userConfig!);
+  const results = await elog(userConfig);
 
   for (const line of formatWorkflowResults(results)) {
     out.info('同步结果', line);
   }
 
-  const failed = results.find((result) => result.status === 'failed');
+  const failed = results.find(isFailedWorkflowResult);
   if (failed) {
     out.error(failed.error.message);
   }

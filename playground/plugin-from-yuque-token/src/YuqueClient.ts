@@ -1,11 +1,5 @@
-import { YuqueDoc, YuqueWithTokenConfig } from './types';
-import {
-  DocDetail,
-  DocStructure,
-  ElogFromContext,
-  PluginContext,
-  SortedDoc,
-} from '@elogx-test/elog';
+import { NormalizedYuqueDoc, YuqueWithTokenConfig } from './types';
+import { DocDetail, DocStructure, ElogFromContext, PluginContext } from '@elogx-test/elog';
 import YuqueApi from './YuqueApi';
 import { IllegalityDocFormat } from './const';
 import { getProps, processMarkdownRaw } from './utils';
@@ -26,11 +20,11 @@ export default class YuqueClient extends ElogFromContext {
   async getDocDetailList() {
     this.ctx.logger.info('正在获取待更新文档，请稍等...');
     // 获取目录
-    const sortedDocList = await this.api.getSortedDocList();
+    const tocList = await this.api.getSortedDocList();
     // 获取文档列表
-    let yuqueBaseDocList = (await this.api.getDocList()) as SortedDoc<YuqueDoc>[];
+    const yuqueBaseDocList = await this.api.getDocList();
     // 根据目录排序文档顺序，处理文档目录
-    yuqueBaseDocList = sortedDocList
+    const sortedDocList: NormalizedYuqueDoc[] = tocList
       .filter((item) => {
         return item.type === 'DOC';
       })
@@ -39,7 +33,7 @@ export default class YuqueClient extends ElogFromContext {
         let catalogPath: DocStructure[] = [];
         let parentId = item.parent_uuid;
         for (let i = 0; i < item.level; i++) {
-          const current = sortedDocList.find((item) => item.uuid === parentId)!;
+          const current = tocList.find((item) => item.uuid === parentId)!;
           parentId = current.parent_uuid;
           catalogPath.push({
             id: item.slug,
@@ -48,6 +42,7 @@ export default class YuqueClient extends ElogFromContext {
         }
         return {
           ...doc,
+          id: String(doc.id),
           updateTime: new Date(doc.updated_at).getTime(),
           docStructure: catalogPath.reverse(),
         };
@@ -66,7 +61,7 @@ export default class YuqueClient extends ElogFromContext {
         return this.config.onlyPublic ? !!page.public : true;
       });
     // 过滤未更新的文档
-    const { docList: needUpdateDocList, docStatusMap } = this.filterDocs(yuqueBaseDocList);
+    const { docList: needUpdateDocList, docStatusMap } = this.filterDocs(sortedDocList);
     // 没有则不需要更新
     if (!needUpdateDocList.length) {
       this.ctx.logger.success('任务结束', '没有需要同步的文档');
@@ -77,7 +72,7 @@ export default class YuqueClient extends ElogFromContext {
       };
     }
     this.ctx.logger.info('待下载数', String(needUpdateDocList.length));
-    const promise = async (doc: YuqueDoc) => {
+    const promise = async (doc: NormalizedYuqueDoc & { _index: number }) => {
       this.ctx.logger.info(`下载文档 ${doc._index}/${needUpdateDocList.length}   `, doc.title);
       let article = await this.api.getDocDetail(doc.slug);
       // 处理文档 front-matter
@@ -85,7 +80,7 @@ export default class YuqueClient extends ElogFromContext {
       // 处理语雀字符串
       let newBody = processMarkdownRaw(body);
       const docDetail: DocDetail = {
-        id: doc.id as unknown as string,
+        id: doc.id,
         title: doc.title,
         body: newBody,
         properties,

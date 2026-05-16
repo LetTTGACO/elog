@@ -77,19 +77,19 @@ export const getUrlListFromContent = (content: string): ImageUrl[] => {
     .map((item: string) => {
       const res = item.match(/\!\[.*\]\((.*?)( ".*")?\)/);
       if (res) {
-        let url = res[1];
+        const originalUrl = res[1];
         // 过滤 Base64 图片
-        if (url.startsWith('data:')) {
+        if (originalUrl.startsWith('data:')) {
           return {
-            originalUrl: url,
-            data: url,
-            type: 'buffer',
+            originalUrl,
+            data: originalUrl,
+            type: 'base64',
           };
         }
         // 去除#?号
-        url = cleanUrlParam(url);
+        const url = cleanUrlParam(originalUrl);
         return {
-          originalUrl: url,
+          originalUrl,
           data: url,
           type: 'url',
         };
@@ -103,10 +103,11 @@ export const getUrlListFromContent = (content: string): ImageUrl[] => {
  * 从 URL 链接获取干净的 url
  * @param url
  */
-export const getBaseUrl = (url: string) => {
+export const getBaseUrl = (url: string): ImageUrl => {
   return {
-    original: url,
-    url: cleanUrlParam(url),
+    originalUrl: url,
+    data: cleanUrlParam(url),
+    type: 'url',
   };
 };
 
