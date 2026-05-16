@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elog.1874.cool/schemas/plugin-registry.schema.json",
+  "type": "object",
+  "required": ["schemaVersion", "plugins"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "plugins": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "type", "displayName", "packageName", "importName", "optionsSchema"],
+        "properties": {
+          "kind": { "enum": ["from", "to", "transform"] },
+          "type": { "type": "string" },
+          "displayName": { "type": "string" },
+          "packageName": { "type": "string" },
+          "importName": { "type": "string" },
+          "optionsSchema": { "type": "object" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

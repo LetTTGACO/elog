@@ -1,0 +1,121 @@
+{
+  "$schema": "./plugin-registry.schema.json",
+  "schemaVersion": 1,
+  "plugins": [
+    {
+      "kind": "from",
+      "type": "yuque-token",
+      "displayName": "语雀",
+      "packageName": "@elogx-test/plugin-from-yuque-token",
+      "importName": "fromYuque",
+      "optionsSchema": {
+        "type": "object",
+        "required": ["token", "login", "repo"],
+        "properties": {
+          "token": {
+            "type": "string",
+            "title": "语雀 Token",
+            "x-elog-env": "YUQUE_TOKEN",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入语雀 Token"
+            }
+          },
+          "login": {
+            "type": "string",
+            "title": "语雀用户名",
+            "x-elog-env": "YUQUE_LOGIN",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入语雀用户名"
+            }
+          },
+          "repo": {
+            "type": "string",
+            "title": "语雀知识库路径",
+            "x-elog-env": "YUQUE_REPO",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入语雀知识库路径"
+            }
+          },
+          "onlyPublic": {
+            "type": "boolean",
+            "title": "只同步公开文章",
+            "default": false,
+            "x-elog-prompt": {
+              "type": "confirm",
+              "message": "是否只同步公开文章？"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "kind": "transform",
+      "type": "image-local",
+      "displayName": "下载图片到本地",
+      "packageName": "@elogx-test/plugin-image-local",
+      "importName": "imageLocal",
+      "optionsSchema": {
+        "type": "object",
+        "required": ["outputDir"],
+        "properties": {
+          "outputDir": {
+            "type": "string",
+            "title": "图片输出目录",
+            "default": "./images",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入图片输出目录"
+            }
+          },
+          "prefixKey": {
+            "type": "string",
+            "title": "图片访问前缀",
+            "default": "../../images",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入图片访问前缀"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "kind": "to",
+      "type": "local",
+      "displayName": "本地目录",
+      "packageName": "@elogx-test/plugin-to-local",
+      "importName": "toLocal",
+      "optionsSchema": {
+        "type": "object",
+        "required": ["outputDir"],
+        "properties": {
+          "outputDir": {
+            "type": "string",
+            "title": "文档输出目录",
+            "default": "./docs",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入文档输出目录"
+            }
+          },
+          "keepToc": {
+            "type": "boolean",
+            "title": "保持目录结构",
+            "default": true,
+            "x-elog-prompt": {
+              "type": "confirm",
+              "message": "是否保持原有目录结构？"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  ]
+}
