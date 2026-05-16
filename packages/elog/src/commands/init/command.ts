@@ -111,9 +111,17 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
     overwriteExisting: options.overwriteExisting ?? defaultConfirmOverwrite,
   });
 
-  const shouldAdd = (): boolean => {
+  const shouldAdd = async (): Promise<boolean> => {
     out.warn('初始化', '.env 包含敏感信息，请不要提交到 GitHub');
-    return true;
+    const answer = (await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'addEnvToGitignore',
+        message: '是否将 .env 添加到 .gitignore？',
+        default: true,
+      },
+    ])) as { addEnvToGitignore: boolean };
+    return answer.addEnvToGitignore;
   };
 
   await doEnsureIgnored({ cwd: options.cwd, shouldAdd });

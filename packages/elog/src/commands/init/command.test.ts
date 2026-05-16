@@ -1,7 +1,15 @@
+import inquirer from 'inquirer';
 import { describe, expect, it, vi } from 'vitest';
 import { createInitDryRunOutput, redactEnvText, runInitCommand, selectedPackages } from './command';
 import type { RunInitCommandOptions } from './command';
+import type { EnsureEnvIgnoredOptions } from './gitignore';
 import type { GeneratedInitFiles, InitSelection, PluginRegistry } from './types';
+
+vi.mock('inquirer', () => ({
+  default: {
+    prompt: vi.fn(),
+  },
+}));
 
 const sampleRegistry: PluginRegistry = {
   schemaVersion: 1,
@@ -256,6 +264,27 @@ describe('runInitCommand', () => {
         shouldAdd: expect.any(Function),
       }),
     );
+  });
+
+  it('without dryRun: asks before adding .env to .gitignore', async () => {
+    const prompt = vi.mocked(inquirer.prompt);
+    prompt.mockResolvedValueOnce({ addEnvToGitignore: false });
+    const ensureEnvIgnored = vi.fn(async (options: EnsureEnvIgnoredOptions) => options.shouldAdd());
+
+    await runInitCommand({
+      ...baseOptions,
+      dryRun: false,
+      ensureEnvIgnored,
+    });
+
+    expect(prompt).toHaveBeenCalledWith([
+      expect.objectContaining({
+        type: 'confirm',
+        name: 'addEnvToGitignore',
+        message: '是否将 .env 添加到 .gitignore？',
+        default: true,
+      }),
+    ]);
   });
 
   it('without dryRun: uses injected overwriteExisting when provided', async () => {
