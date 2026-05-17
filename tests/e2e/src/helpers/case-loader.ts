@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import type { SyncCase } from './types';
 
 export async function loadSyncCases(repoRoot: string): Promise<SyncCase[]> {
@@ -14,7 +15,7 @@ export async function loadSyncCases(repoRoot: string): Promise<SyncCase[]> {
 
   for (const dir of caseDirs) {
     const modulePath = path.join(casesDir, dir, 'case.ts');
-    const loaded = (await import(pathToFileUrl(modulePath))) as { default: SyncCase };
+    const loaded = (await import(pathToFileURL(modulePath).href)) as { default: SyncCase };
     cases.push(loaded.default);
   }
 
@@ -33,8 +34,4 @@ export function filterSyncCases(cases: SyncCase[], selectedCase?: string): SyncC
   }
 
   return filtered;
-}
-
-function pathToFileUrl(filePath: string): string {
-  return new URL(`file://${filePath}`).href;
 }

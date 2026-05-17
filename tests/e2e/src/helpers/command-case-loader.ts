@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import type { CommandCase } from './types';
 
 export async function loadCommandCases(repoRoot: string): Promise<CommandCase[]> {
@@ -13,13 +14,9 @@ export async function loadCommandCases(repoRoot: string): Promise<CommandCase[]>
 
   for (const file of caseFiles) {
     const modulePath = path.join(casesDir, file);
-    const loaded = (await import(pathToFileUrl(modulePath))) as { default: CommandCase };
+    const loaded = (await import(pathToFileURL(modulePath).href)) as { default: CommandCase };
     cases.push(loaded.default);
   }
 
   return cases;
-}
-
-function pathToFileUrl(filePath: string): string {
-  return new URL(`file://${filePath}`).href;
 }

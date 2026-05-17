@@ -1,5 +1,3 @@
-import type { Assertion } from 'vitest';
-
 export interface CliResult {
   exitCode: number | null;
   signal: NodeJS.Signals | null;
@@ -10,7 +8,7 @@ export interface CliResult {
 
 export interface TempWorkspace {
   path: string;
-  cleanup: (force?: boolean) => void;
+  cleanup: (remove?: boolean) => void;
 }
 
 export interface CommandCaseContext {
@@ -57,5 +55,3 @@ export interface SyncCase {
   expected: SyncCaseExpected;
   assert?: (context: SyncCaseAssertContext) => Promise<void> | void;
 }
-
-export type VitestExpect = <T = unknown>(actual: T, message?: string) => Assertion<T>;

@@ -55,9 +55,6 @@ describe('elog sync e2e matrix', () => {
       } finally {
         if (!passed) {
           console.info(preserveWorkspaceMessage(workspace.path));
-          if (missingEnv.length > 0) {
-            console.info(`Missing env for ${syncCase.id}: ${missingEnv.join(', ')}`);
-          }
         }
         workspace.cleanup(passed);
       }
