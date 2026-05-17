@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { describe, it } from 'vitest';
 import { expectExitCode, expectOutputContains, expectSyncArtifacts } from './helpers/assertions';
-import { filterSyncCases, loadSyncCases } from './helpers/case-loader';
+import { filterSyncCases, loadSyncCases, syncCaseTitle } from './helpers/case-loader';
 import { repoRootFromE2e, runElog } from './helpers/run-cli';
 import {
   copyIntoWorkspace,
@@ -17,8 +17,13 @@ describe('elog sync e2e matrix', () => {
   for (const syncCase of syncCases) {
     const missingEnv = syncCase.requiredEnv.filter((name) => !process.env[name]);
     const runCase = missingEnv.length === 0 ? it : it.skip;
+    if (missingEnv.length > 0) {
+      console.info(
+        `Skipping e2e sync case ${syncCase.id}: missing required env ${missingEnv.join(', ')}`,
+      );
+    }
 
-    runCase(syncCase.title, async () => {
+    runCase(syncCaseTitle(syncCase, missingEnv), async () => {
       const workspace = createTempWorkspace(`elog-e2e-${syncCase.id}-`);
       let passed = false;
 

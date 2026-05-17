@@ -2,13 +2,13 @@ import inquirer from 'inquirer';
 import out from '../../logging/logger';
 import { detectPackageManager, buildInstallCommand, installPackages } from './package-manager';
 import type { InstallPackagesOptions } from './package-manager';
-import { loadBuiltInPluginRegistry } from './registry';
+import { getPluginsByKind, InitCommandError, loadBuiltInPluginRegistry } from './registry';
 import { generateInitFiles } from './generator';
 import { createTimestamp, writeGeneratedFiles } from './file-writer';
 import type { GeneratedFileWrite, WriteGeneratedFilesOptions } from './file-writer';
 import { ensureEnvIgnored } from './gitignore';
 import type { EnsureEnvIgnoredOptions } from './gitignore';
-import { runInitWizard } from './wizard';
+import { runInitWizard, withHiddenDefaults } from './wizard';
 import type { GeneratedInitFiles, InitSelection, PluginRegistry } from './types';
 
 export interface RunInitCommandOptions {
@@ -64,6 +64,24 @@ export function createInitDryRunOutput(
   return sections.join('\n\n');
 }
 
+export function createDefaultInitSelection(registry: PluginRegistry): InitSelection {
+  const fromEntry = getPluginsByKind(registry, 'from')[0];
+  const toEntry = getPluginsByKind(registry, 'to')[0];
+
+  if (!fromEntry || !toEntry) {
+    throw new InitCommandError(
+      'PLUGIN_SELECTION_EMPTY',
+      'Must have at least one source and one target plugin for init dry-run.',
+    );
+  }
+
+  return {
+    from: { entry: fromEntry, answers: withHiddenDefaults(fromEntry, {}) },
+    transforms: [],
+    to: [{ entry: toEntry, answers: withHiddenDefaults(toEntry, {}) }],
+  };
+}
+
 export async function runInitCommand(options: RunInitCommandOptions): Promise<void> {
   const loadRegistry = options.loadRegistry ?? loadBuiltInPluginRegistry;
   const runWizard = options.runWizard ?? runInitWizard;
@@ -73,7 +91,10 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
   const log = options.log ?? ((message: string) => out.info('初始化', message));
 
   const registry = loadRegistry();
-  const selection = await runWizard(registry);
+  const selection =
+    options.dryRun && !options.runWizard
+      ? createDefaultInitSelection(registry)
+      : await runWizard(registry);
   const files = generateInitFiles(selection);
   const packages = selectedPackages(selection);
   const packageManager = detectPackageManager(options.cwd);

@@ -15,12 +15,12 @@
   },
   "scripts": {
     "build": "turbo build",
-    "test": "turbo test",
+    "test": "turbo test --filter=!@elogx-test/e2e",
     "changeset": "changeset",
     "version": "changeset version",
     "publish": "changeset publish",
     "prepare": "husky",
-    "e2e": "pnpm --filter @elogx-test/e2e test",
+    "e2e": "pnpm --filter @elogx-test/e2e e2e",
     "e2e:cli": "pnpm --filter @elogx-test/e2e test:cli",
     "e2e:yuque-local": "pnpm --filter @elogx-test/e2e test:yuque-local"
   }

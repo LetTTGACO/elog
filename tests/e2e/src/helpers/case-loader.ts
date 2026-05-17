@@ -35,3 +35,11 @@ export function filterSyncCases(cases: SyncCase[], selectedCase?: string): SyncC
 
   return filtered;
 }
+
+export function syncCaseTitle(testCase: SyncCase, missingEnv: string[] = []): string {
+  if (missingEnv.length === 0) {
+    return testCase.title;
+  }
+
+  return `${testCase.title} (skipped: missing ${missingEnv.join(', ')})`;
+}

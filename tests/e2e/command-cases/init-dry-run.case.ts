@@ -7,7 +7,6 @@ import type { CommandCase } from '../src/helpers/types';
 const commandCase: CommandCase = {
   id: 'init-dry-run',
   command: ['init', '--dry-run', '--name', 'elog.config.ts'],
-  skip: 'init requires interactive wizard (inquirer) which cannot run in non-TTY spawned process',
   expect({ result, workspace }) {
     expectExitCode(result, 0);
     expectOutputContains(result, 'elog.config.ts');

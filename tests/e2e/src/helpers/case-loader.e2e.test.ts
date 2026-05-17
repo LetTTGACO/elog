@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { filterSyncCases } from './case-loader';
+import { filterSyncCases, syncCaseTitle } from './case-loader';
 import type { SyncCase } from './types';
 
 const cases: SyncCase[] = [
@@ -42,6 +42,14 @@ describe('filterSyncCases', () => {
   it('throws a readable error for an unknown filter', () => {
     expect(() => filterSyncCases(cases, 'missing')).toThrow(
       'No e2e sync case matched ELOG_E2E_CASE=missing',
+    );
+  });
+});
+
+describe('syncCaseTitle', () => {
+  it('includes missing required env names in skipped case titles', () => {
+    expect(syncCaseTitle(cases[0]!, ['ELOG_E2E_TOKEN', 'ELOG_E2E_REPO'])).toBe(
+      'One (skipped: missing ELOG_E2E_TOKEN, ELOG_E2E_REPO)',
     );
   });
 });
