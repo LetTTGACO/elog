@@ -19,6 +19,9 @@
     "changeset": "changeset",
     "version": "changeset version",
     "publish": "changeset publish",
-    "prepare": "husky"
+    "prepare": "husky",
+    "e2e": "pnpm --filter @elogx-test/e2e test",
+    "e2e:cli": "pnpm --filter @elogx-test/e2e test:cli",
+    "e2e:yuque-local": "pnpm --filter @elogx-test/e2e test:yuque-local"
   }
 }

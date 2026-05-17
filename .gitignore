@@ -78,3 +78,6 @@ dist
 
 # Codex local artifacts
 .superpowers/
+
+# E2E local workspaces
+tests/e2e/.tmp/
