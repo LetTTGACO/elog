@@ -38,6 +38,7 @@ This combines two properties:
 tests/e2e/
   package.json
   vitest.config.ts
+  .tmp/                  # ignored local e2e workspaces and artifacts
   command-cases/
     version.case.ts
     init-dry-run.case.ts
@@ -214,13 +215,14 @@ This covers full sync and the incremental no-change path.
 
 ## Temporary Workspace Behavior
 
-Each test case gets its own temporary workspace. The runner copies only the files
-declared by the case into that directory and runs the real CLI with the temporary
-workspace as `cwd`.
+Each test case gets its own temporary workspace under `tests/e2e/.tmp/`. The
+runner copies only the files declared by the case into that directory and runs
+the real CLI with the temporary workspace as `cwd`.
 
-By default, temporary workspaces are removed after successful tests. When a case
-fails, or when `ELOG_E2E_KEEP_TMP=1` is set, the runner should print the
-workspace path and preserve it for inspection.
+`tests/e2e/.tmp/` should be ignored by git. By default, temporary workspaces are
+removed after successful tests. When a case fails, or when `ELOG_E2E_KEEP_TMP=1`
+is set, the runner should print the workspace path and preserve it for
+inspection.
 
 ## Stability Rules
 
