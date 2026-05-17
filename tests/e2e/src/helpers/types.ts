@@ -26,6 +26,7 @@ export interface CommandCase {
   id: string;
   command: string[];
   env?: NodeJS.ProcessEnv;
+  skip?: boolean | string;
   setup?: (context: CommandCaseContext) => Promise<void> | void;
   expect: (context: CommandCaseExpectContext) => Promise<void> | void;
 }
