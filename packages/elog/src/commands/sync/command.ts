@@ -3,14 +3,7 @@ import dotenv from 'dotenv';
 import { findConfig } from '../../config/find';
 import elog from '../../node-entry';
 import out from '../../logging/logger';
-import type { WorkflowResult } from '../../runtime/types';
-import { formatWorkflowResults } from './format';
-
-type FailedWorkflowResult = Extract<WorkflowResult, { status: 'failed' }>;
-
-function isFailedWorkflowResult(result: WorkflowResult): result is FailedWorkflowResult {
-  return result.status === 'failed';
-}
+import { reportWorkflowResults, throwOnFailedWorkflow } from './results';
 
 export async function runSyncCommand(
   customConfigPath?: string,
@@ -34,12 +27,6 @@ export async function runSyncCommand(
   const userConfig = await findConfig(customConfigPath);
   const results = await elog(userConfig);
 
-  for (const line of formatWorkflowResults(results)) {
-    out.info('同步结果', line);
-  }
-
-  const failed = results.find(isFailedWorkflowResult);
-  if (failed) {
-    throw failed.error;
-  }
+  reportWorkflowResults(results);
+  throwOnFailedWorkflow(results);
 }
