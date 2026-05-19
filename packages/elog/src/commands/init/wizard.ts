@@ -5,6 +5,7 @@ import type {
   InitSelection,
   PluginRegistry,
   PluginRegistryEntry,
+  PluginSelection,
   SelectedPlugin,
 } from './types';
 
@@ -73,7 +74,7 @@ async function askPluginOptions(entry: PluginRegistryEntry): Promise<SelectedPlu
   return { entry, answers: withHiddenDefaults(entry, answers) };
 }
 
-export async function runInitWizard(registry: PluginRegistry): Promise<InitSelection> {
+export async function runPluginSelectionWizard(registry: PluginRegistry): Promise<PluginSelection> {
   const fromAnswer = (await inquirer.prompt([
     {
       type: 'list',
@@ -118,8 +119,20 @@ export async function runInitWizard(registry: PluginRegistry): Promise<InitSelec
   }
 
   return {
-    from: await askPluginOptions(fromEntry),
-    transforms: await Promise.all(transformEntries.map(askPluginOptions)),
-    to: await Promise.all(toEntries.map(askPluginOptions)),
+    from: fromEntry,
+    transforms: transformEntries,
+    to: toEntries,
   };
 }
+
+export async function runExportWizard(registry: PluginRegistry): Promise<InitSelection> {
+  const selection = await runPluginSelectionWizard(registry);
+
+  return {
+    from: await askPluginOptions(selection.from),
+    transforms: await Promise.all(selection.transforms.map(askPluginOptions)),
+    to: await Promise.all(selection.to.map(askPluginOptions)),
+  };
+}
+
+export const runInitWizard = runExportWizard;

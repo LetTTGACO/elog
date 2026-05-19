@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
+import inquirer from 'inquirer';
 import { buildOptionQuestions, buildPluginChoice, withHiddenDefaults } from './wizard';
 import { InitCommandError } from './registry';
-import type { PluginRegistryEntry } from './types';
+import type { PluginRegistry, PluginRegistryEntry } from './types';
 
 vi.mock('inquirer', () => ({
   default: {
@@ -39,6 +40,49 @@ const yuque: PluginRegistryEntry = {
     },
     additionalProperties: false,
   },
+};
+
+const localTarget: PluginRegistryEntry = {
+  kind: 'to',
+  type: 'local',
+  displayName: '本地目录',
+  packageName: '@elogx-test/plugin-to-local',
+  importName: 'toLocal',
+  optionsSchema: {
+    type: 'object',
+    properties: {
+      outputDir: {
+        type: 'string',
+        default: './docs',
+        'x-elog-prompt': { type: 'input', message: '请输入文档输出目录' },
+      },
+    },
+    additionalProperties: false,
+  },
+};
+
+const imageLocal: PluginRegistryEntry = {
+  kind: 'transform',
+  type: 'image-local',
+  displayName: '下载图片到本地',
+  packageName: '@elogx-test/plugin-image-local',
+  importName: 'imageLocal',
+  optionsSchema: {
+    type: 'object',
+    properties: {
+      outputDir: {
+        type: 'string',
+        default: './images',
+        'x-elog-prompt': { type: 'input', message: '请输入图片输出目录' },
+      },
+    },
+    additionalProperties: false,
+  },
+};
+
+const registry: PluginRegistry = {
+  schemaVersion: 1,
+  plugins: [yuque, imageLocal, localTarget],
 };
 
 describe('buildPluginChoice', () => {
@@ -228,5 +272,66 @@ describe('InitCommandError for PLUGIN_SELECTION_EMPTY', () => {
     }
 
     vi.restoreAllMocks();
+  });
+});
+
+describe('runPluginSelectionWizard', () => {
+  it('asks only plugin selection questions and returns selected entries', async () => {
+    const prompt = vi.mocked(inquirer.prompt);
+    prompt
+      .mockResolvedValueOnce({ from: 'yuque-token' })
+      .mockResolvedValueOnce({ to: ['local'] })
+      .mockResolvedValueOnce({ transforms: ['image-local'] });
+
+    const { runPluginSelectionWizard } = await import('./wizard');
+    const selection = await runPluginSelectionWizard(registry);
+
+    expect(selection.from).toBe(yuque);
+    expect(selection.transforms).toEqual([imageLocal]);
+    expect(selection.to).toEqual([localTarget]);
+    expect(prompt).toHaveBeenCalledTimes(3);
+    expect(prompt.mock.calls.flatMap((call) => call[0] as unknown[])).not.toContainEqual(
+      expect.objectContaining({ name: 'token' }),
+    );
+  });
+
+  it('throws PLUGIN_SELECTION_EMPTY when no target is selected', async () => {
+    const prompt = vi.mocked(inquirer.prompt);
+    prompt
+      .mockResolvedValueOnce({ from: 'yuque-token' })
+      .mockResolvedValueOnce({ to: [] })
+      .mockResolvedValueOnce({ transforms: [] });
+
+    const { runPluginSelectionWizard } = await import('./wizard');
+
+    await expect(runPluginSelectionWizard(registry)).rejects.toMatchObject({
+      code: 'PLUGIN_SELECTION_EMPTY',
+    });
+  });
+});
+
+describe('runExportWizard', () => {
+  it('selects plugins and then asks selected plugin option questions', async () => {
+    const prompt = vi.mocked(inquirer.prompt);
+    prompt
+      .mockResolvedValueOnce({ from: 'yuque-token' })
+      .mockResolvedValueOnce({ to: ['local'] })
+      .mockResolvedValueOnce({ transforms: [] })
+      .mockResolvedValueOnce({ token: 'secret-token', onlyPublic: true })
+      .mockResolvedValueOnce({ outputDir: './exported-docs' });
+
+    const { runExportWizard } = await import('./wizard');
+    const selection = await runExportWizard(registry);
+
+    expect(selection.from.entry).toBe(yuque);
+    expect(selection.from.answers).toMatchObject({
+      token: 'secret-token',
+      onlyPublic: true,
+      hiddenValue: 'hidden',
+    });
+    expect(selection.transforms).toEqual([]);
+    expect(selection.to[0]?.entry).toBe(localTarget);
+    expect(selection.to[0]?.answers).toEqual({ outputDir: './exported-docs' });
+    expect(prompt).toHaveBeenCalledTimes(5);
   });
 });

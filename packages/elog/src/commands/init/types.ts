@@ -43,6 +43,12 @@ export interface SelectedPlugin {
   answers: Record<string, unknown>;
 }
 
+export interface PluginSelection {
+  from: PluginRegistryEntry;
+  transforms: PluginRegistryEntry[];
+  to: PluginRegistryEntry[];
+}
+
 export interface InitSelection {
   from: SelectedPlugin;
   transforms: SelectedPlugin[];
