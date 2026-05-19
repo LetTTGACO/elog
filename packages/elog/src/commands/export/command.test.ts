@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { runExportCommand, selectedPackages } from './command';
 import type { ElogConfig } from '../../types/common';
 import type { WorkflowResult } from '../../runtime/types';
-import type { InitSelection, PluginRegistry, PluginRegistryEntry } from '../init/types';
+import type { ExportSelection, PluginRegistry, PluginRegistryEntry } from '../init/types';
 
 const fromEntry: PluginRegistryEntry = {
   kind: 'from',
@@ -36,10 +36,10 @@ const registry: PluginRegistry = {
   plugins: [fromEntry, transformEntry, toEntry],
 };
 
-const selection: InitSelection = {
+const selection: ExportSelection = {
   from: { entry: fromEntry, answers: { token: 'secret-token' } },
   transforms: [{ entry: transformEntry, answers: { outputDir: './images' } }],
-  to: [{ entry: toEntry, answers: { outputDir: './docs' } }],
+  to: { entry: toEntry, answers: { outputDir: './docs' } },
 };
 
 describe('selectedPackages', () => {

@@ -4,7 +4,7 @@ import type { WorkflowResult } from '../../runtime/types';
 import { detectPackageManager, installPackages } from '../init/package-manager';
 import type { InstallPackagesOptions } from '../init/package-manager';
 import { loadBuiltInPluginRegistry } from '../init/registry';
-import type { InitSelection, PluginRegistry } from '../init/types';
+import type { ExportSelection, PluginRegistry } from '../init/types';
 import { runExportWizard } from '../init/wizard';
 import { reportWorkflowResults, throwOnFailedWorkflow } from '../sync/results';
 import { buildExportRuntimeConfig } from './runtime-config';
@@ -12,16 +12,16 @@ import { buildExportRuntimeConfig } from './runtime-config';
 export interface RunExportCommandOptions {
   cwd: string;
   loadRegistry?: () => PluginRegistry;
-  runWizard?: (registry: PluginRegistry) => Promise<InitSelection>;
+  runWizard?: (registry: PluginRegistry) => Promise<ExportSelection>;
   installPackages?: (options: InstallPackagesOptions) => ReturnType<typeof installPackages>;
-  buildRuntimeConfig?: (selection: InitSelection) => Promise<ElogConfig>;
+  buildRuntimeConfig?: (selection: ExportSelection) => Promise<ElogConfig>;
   runRuntime?: (config: ElogConfig) => Promise<WorkflowResult[]>;
   reportResults?: (results: WorkflowResult[]) => void;
   throwOnFailed?: (results: WorkflowResult[]) => void;
 }
 
-export function selectedPackages(selection: InitSelection): string[] {
-  const allPlugins = [selection.from, ...selection.transforms, ...selection.to];
+export function selectedPackages(selection: ExportSelection): string[] {
+  const allPlugins = [selection.from, ...selection.transforms, selection.to];
   const seen = new Set<string>();
   return allPlugins
     .map((plugin) => plugin.entry.packageName)

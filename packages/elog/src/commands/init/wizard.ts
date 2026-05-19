@@ -2,7 +2,7 @@ import inquirer from 'inquirer';
 import { getPluginsByKind, InitCommandError } from './registry';
 import type {
   ElogOptionSchema,
-  InitSelection,
+  ExportSelection,
   PluginRegistry,
   PluginRegistryEntry,
   PluginSelection,
@@ -15,6 +15,10 @@ export interface InquirerQuestion {
   message: string;
   default?: unknown;
   choices?: Array<{ name: string; value: string }> | string[];
+}
+
+export interface PluginSelectionWizardOptions {
+  targetSelection?: 'single' | 'multiple';
 }
 
 export function buildPluginChoice(entry: PluginRegistryEntry): { name: string; value: string } {
@@ -74,7 +78,26 @@ async function askPluginOptions(entry: PluginRegistryEntry): Promise<SelectedPlu
   return { entry, answers: withHiddenDefaults(entry, answers) };
 }
 
-export async function runPluginSelectionWizard(registry: PluginRegistry): Promise<PluginSelection> {
+async function askSelectedPluginOptions(entries: PluginRegistryEntry[]): Promise<SelectedPlugin[]> {
+  const selected: SelectedPlugin[] = [];
+  for (const entry of entries) {
+    selected.push(await askPluginOptions(entry));
+  }
+  return selected;
+}
+
+function toSelectedTypes(answer: string | string[] | undefined): string[] {
+  if (Array.isArray(answer)) {
+    return answer;
+  }
+  return answer ? [answer] : [];
+}
+
+export async function runPluginSelectionWizard(
+  registry: PluginRegistry,
+  options: PluginSelectionWizardOptions = {},
+): Promise<PluginSelection> {
+  const targetSelection = options.targetSelection ?? 'multiple';
   const fromAnswer = (await inquirer.prompt([
     {
       type: 'list',
@@ -87,13 +110,13 @@ export async function runPluginSelectionWizard(registry: PluginRegistry): Promis
 
   const toAnswer = (await inquirer.prompt([
     {
-      type: 'checkbox',
+      type: targetSelection === 'single' ? 'list' : 'checkbox',
       name: 'to',
       message: '你要发布到哪里？',
       choices: getPluginsByKind(registry, 'to').map(buildPluginChoice),
     },
-  ])) as { to: string[] };
-  const toEntries = toAnswer.to.flatMap((type) => {
+  ])) as { to: string | string[] | undefined };
+  const toEntries = toSelectedTypes(toAnswer.to).flatMap((type) => {
     const entry = findPlugin(registry, 'to', type);
     return entry ? [entry] : [];
   });
@@ -125,14 +148,22 @@ export async function runPluginSelectionWizard(registry: PluginRegistry): Promis
   };
 }
 
-export async function runExportWizard(registry: PluginRegistry): Promise<InitSelection> {
-  const selection = await runPluginSelectionWizard(registry);
+export async function runExportWizard(registry: PluginRegistry): Promise<ExportSelection> {
+  const selection = await runPluginSelectionWizard(registry, { targetSelection: 'single' });
+  const target = selection.to[0];
+
+  if (!target) {
+    throw new InitCommandError(
+      'PLUGIN_SELECTION_EMPTY',
+      'Must select at least one source and one target plugin.',
+    );
+  }
 
   return {
     from: await askPluginOptions(selection.from),
-    transforms: await Promise.all(selection.transforms.map(askPluginOptions)),
-    to: await Promise.all(selection.to.map(askPluginOptions)),
+    transforms: await askSelectedPluginOptions(selection.transforms),
+    to: await askPluginOptions(target),
   };
 }
 
-export const runInitWizard = runExportWizard;
+export const runInitWizard = runPluginSelectionWizard;

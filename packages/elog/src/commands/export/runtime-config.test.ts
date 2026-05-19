@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { ExportCommandError, buildExportRuntimeConfig } from './runtime-config';
-import type { InitSelection, PluginRegistryEntry } from '../init/types';
+import type { ExportSelection, PluginRegistryEntry } from '../init/types';
 
 const fromEntry: PluginRegistryEntry = {
   kind: 'from',
@@ -29,7 +29,7 @@ const toEntry: PluginRegistryEntry = {
   optionsSchema: { type: 'object', properties: {}, additionalProperties: false },
 };
 
-function createSelection(): InitSelection {
+function createSelection(): ExportSelection {
   return {
     from: {
       entry: fromEntry,
@@ -41,12 +41,10 @@ function createSelection(): InitSelection {
         answers: { outputDir: './images' },
       },
     ],
-    to: [
-      {
-        entry: toEntry,
-        answers: { outputDir: './docs' },
-      },
-    ],
+    to: {
+      entry: toEntry,
+      answers: { outputDir: './docs' },
+    },
   };
 }
 
@@ -85,40 +83,6 @@ describe('buildExportRuntimeConfig', () => {
       repo: 'docs',
     });
     expect(process.env.YUQUE_TOKEN).toBeUndefined();
-  });
-
-  it('keeps multiple targets as an array', async () => {
-    const firstTarget = { name: 'to:local-1', kind: 'to' as const, deploy: vi.fn() };
-    const secondTarget = { name: 'to:local-2', kind: 'to' as const, deploy: vi.fn() };
-    const targetFactories = [vi.fn(() => firstTarget), vi.fn(() => secondTarget)];
-    const selection = createSelection();
-    selection.to = [
-      {
-        entry: { ...toEntry, packageName: '@elogx-test/plugin-to-local-a' },
-        answers: { outputDir: './a' },
-      },
-      {
-        entry: { ...toEntry, packageName: '@elogx-test/plugin-to-local-b' },
-        answers: { outputDir: './b' },
-      },
-    ];
-    const loadPlugin = vi.fn(async (packageName: string) => {
-      if (packageName === fromEntry.packageName) {
-        return vi.fn(() => ({ name: 'from:yuque', kind: 'from' as const, download: vi.fn() }));
-      }
-      if (packageName === transformEntry.packageName) {
-        return vi.fn(() => ({
-          name: 'transform:image-local',
-          kind: 'transform' as const,
-          transform: vi.fn(),
-        }));
-      }
-      return packageName.endsWith('-a') ? targetFactories[0]! : targetFactories[1]!;
-    });
-
-    const config = await buildExportRuntimeConfig(selection, { loadPlugin });
-
-    expect(config.to).toEqual([firstTarget, secondTarget]);
   });
 
   it('wraps import failures as ExportCommandError', async () => {

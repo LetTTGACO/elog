@@ -11,11 +11,17 @@ export interface InstallCommand {
   display: string;
 }
 
+export type PackageSpawnSync = (
+  command: string,
+  args: string[],
+  options: { cwd: string; stdio: 'inherit' },
+) => { status: number | null; error?: Error };
+
 export interface InstallPackagesOptions {
   cwd: string;
   packageManager: PackageManager;
   packages: string[];
-  spawnSync?: typeof nodeSpawnSync;
+  spawnSync?: PackageSpawnSync;
 }
 
 function hasFile(cwd: string, filename: string): boolean {
@@ -74,7 +80,7 @@ export function buildInstallCommand(
 
 export function installPackages(options: InstallPackagesOptions): InstallCommand {
   const installCommand = buildInstallCommand(options.packageManager, options.packages);
-  const spawnSync = options.spawnSync ?? nodeSpawnSync;
+  const spawnSync: PackageSpawnSync = options.spawnSync ?? nodeSpawnSync;
   const result = spawnSync(installCommand.command, installCommand.args, {
     cwd: options.cwd,
     stdio: 'inherit',

@@ -49,40 +49,44 @@ function collectProperties(schema: ElogOptionSchema): Record<string, ElogOptionS
 
 function defaultAnswersForEntry(entry: PluginRegistryEntry): Record<string, unknown> {
   const properties = collectProperties(entry.optionsSchema);
-  return Object.fromEntries(
-    Object.entries(properties)
-      .flatMap(([key, property]) => {
-        if (property['x-elog-env']) {
-          return [[key, undefined]];
-        }
-        if ('default' in property) {
-          return [[key, property.default]];
-        }
-        return [];
-      })
-      .filter(([key, value]) => {
-        const property = properties[key];
-        return property?.['x-elog-env'] || value !== undefined;
-      }),
-  );
+  const entries = Object.entries(properties)
+    .flatMap(([key, property]): Array<[string, unknown]> => {
+      if (property['x-elog-env']) {
+        return [[key, undefined]];
+      }
+      if ('default' in property) {
+        return [[key, property.default]];
+      }
+      return [];
+    })
+    .filter(([key, value]) => {
+      const property = properties[key];
+      return property?.['x-elog-env'] || value !== undefined;
+    });
+
+  return Object.fromEntries(entries);
+}
+
+function isInitSelection(selection: InitSelection | PluginSelection): selection is InitSelection {
+  return 'entry' in selection.from;
+}
+
+function normalizeSelection(selection: InitSelection | PluginSelection): InitSelection {
+  if (isInitSelection(selection)) {
+    return selection;
+  }
+
+  return {
+    from: selectedPluginFromEntry(selection.from),
+    transforms: selection.transforms.map((entry) => selectedPluginFromEntry(entry)),
+    to: selection.to.map((entry) => selectedPluginFromEntry(entry)),
+  };
 }
 
 function selectedPluginFromEntry(entry: PluginRegistryEntry): SelectedPlugin {
   return {
     entry,
     answers: defaultAnswersForEntry(entry),
-  };
-}
-
-function normalizeSelection(selection: InitSelection | PluginSelection): InitSelection {
-  if ('entry' in selection.from) {
-    return selection as InitSelection;
-  }
-
-  return {
-    from: selectedPluginFromEntry(selection.from),
-    transforms: selection.transforms.map(selectedPluginFromEntry),
-    to: selection.to.map(selectedPluginFromEntry),
   };
 }
 

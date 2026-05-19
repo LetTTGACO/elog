@@ -55,6 +55,12 @@ export interface InitSelection {
   to: SelectedPlugin[];
 }
 
+export interface ExportSelection {
+  from: SelectedPlugin;
+  transforms: SelectedPlugin[];
+  to: SelectedPlugin;
+}
+
 export interface GeneratedInitFiles {
   configText: string;
 }

@@ -1,6 +1,6 @@
 import type { ElogConfig } from '../../types/common';
 import type { FromPlugin, ToPlugin, TransformPlugin } from '../../plugins/types';
-import type { InitSelection, SelectedPlugin } from '../init/types';
+import type { ExportSelection, SelectedPlugin } from '../init/types';
 
 type ExportCommandErrorCode = 'EXPORT_PLUGIN_IMPORT_FAILED' | 'EXPORT_PLUGIN_FACTORY_FAILED';
 
@@ -72,7 +72,7 @@ async function createPlugin(
 }
 
 export async function buildExportRuntimeConfig(
-  selection: InitSelection,
+  selection: ExportSelection,
   options: BuildExportRuntimeConfigOptions = {},
 ): Promise<ElogConfig> {
   const loadPlugin = options.loadPlugin ?? defaultLoadPlugin;
@@ -80,15 +80,13 @@ export async function buildExportRuntimeConfig(
   const plugins = (await Promise.all(
     selection.transforms.map((plugin) => createPlugin(plugin, loadPlugin)),
   )) as TransformPlugin[];
-  const targets = (await Promise.all(
-    selection.to.map((plugin) => createPlugin(plugin, loadPlugin)),
-  )) as ToPlugin[];
+  const target = (await createPlugin(selection.to, loadPlugin)) as ToPlugin;
 
   return {
     disableCache: true,
     disableCacheWrite: true,
     from,
     ...(plugins.length ? { plugins } : {}),
-    to: targets.length === 1 ? targets[0]! : targets,
+    to: target,
   };
 }

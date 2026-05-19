@@ -275,6 +275,24 @@ describe('InitCommandError for PLUGIN_SELECTION_EMPTY', () => {
   });
 });
 
+describe('runInitWizard', () => {
+  it('uses the multi-target plugin selection flow', async () => {
+    const prompt = vi.mocked(inquirer.prompt);
+    prompt
+      .mockResolvedValueOnce({ from: 'yuque-token' })
+      .mockResolvedValueOnce({ to: ['local'] })
+      .mockResolvedValueOnce({ transforms: [] });
+
+    const { runInitWizard } = await import('./wizard');
+    const selection = await runInitWizard(registry);
+
+    expect(selection.to).toEqual([localTarget]);
+    expect(prompt.mock.calls[1]?.[0]).toEqual([
+      expect.objectContaining({ type: 'checkbox', name: 'to' }),
+    ]);
+  });
+});
+
 describe('runPluginSelectionWizard', () => {
   it('asks only plugin selection questions and returns selected entries', async () => {
     const prompt = vi.mocked(inquirer.prompt);
@@ -308,14 +326,32 @@ describe('runPluginSelectionWizard', () => {
       code: 'PLUGIN_SELECTION_EMPTY',
     });
   });
-});
 
-describe('runExportWizard', () => {
-  it('selects plugins and then asks selected plugin option questions', async () => {
+  it('can select a single target through the shared plugin selection flow', async () => {
     const prompt = vi.mocked(inquirer.prompt);
     prompt
       .mockResolvedValueOnce({ from: 'yuque-token' })
-      .mockResolvedValueOnce({ to: ['local'] })
+      .mockResolvedValueOnce({ to: 'local' })
+      .mockResolvedValueOnce({ transforms: [] });
+
+    const { runPluginSelectionWizard } = await import('./wizard');
+    const selection = await runPluginSelectionWizard(registry, { targetSelection: 'single' });
+
+    expect(selection.from).toBe(yuque);
+    expect(selection.to).toEqual([localTarget]);
+    expect(selection.transforms).toEqual([]);
+    expect(prompt.mock.calls[1]?.[0]).toEqual([
+      expect.objectContaining({ type: 'list', name: 'to' }),
+    ]);
+  });
+});
+
+describe('runExportWizard', () => {
+  it('selects a single target and then asks selected plugin option questions', async () => {
+    const prompt = vi.mocked(inquirer.prompt);
+    prompt
+      .mockResolvedValueOnce({ from: 'yuque-token' })
+      .mockResolvedValueOnce({ to: 'local' })
       .mockResolvedValueOnce({ transforms: [] })
       .mockResolvedValueOnce({ token: 'secret-token', onlyPublic: true })
       .mockResolvedValueOnce({ outputDir: './exported-docs' });
@@ -330,8 +366,11 @@ describe('runExportWizard', () => {
       hiddenValue: 'hidden',
     });
     expect(selection.transforms).toEqual([]);
-    expect(selection.to[0]?.entry).toBe(localTarget);
-    expect(selection.to[0]?.answers).toEqual({ outputDir: './exported-docs' });
+    expect(selection.to.entry).toBe(localTarget);
+    expect(selection.to.answers).toEqual({ outputDir: './exported-docs' });
     expect(prompt).toHaveBeenCalledTimes(5);
+    expect(prompt.mock.calls[1]?.[0]).toEqual([
+      expect.objectContaining({ type: 'list', name: 'to' }),
+    ]);
   });
 });
