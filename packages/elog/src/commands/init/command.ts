@@ -112,4 +112,8 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
     timestamp: createTimestamp(),
     overwriteExisting: options.overwriteExisting ?? defaultConfirmOverwrite,
   });
+
+  log(
+    `已生成配置文件 ${options.configName}；推荐将 Token 等隐私参数写入 .env 文件，并将 .env 加入 .gitignore。`,
+  );
 }

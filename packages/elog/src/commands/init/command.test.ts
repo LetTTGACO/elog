@@ -149,6 +149,20 @@ describe('runInitCommand', () => {
     expect(writeGeneratedFiles).toHaveBeenCalledTimes(1);
   });
 
+  it('without dryRun: logs a config generated security reminder', async () => {
+    const log = vi.fn();
+
+    await runInitCommand({
+      ...baseOptions,
+      dryRun: false,
+      log,
+    });
+
+    expect(log).toHaveBeenCalledWith(
+      '已生成配置文件 elog.config.ts；推荐将 Token 等隐私参数写入 .env 文件，并将 .env 加入 .gitignore。',
+    );
+  });
+
   it('without dryRun: passes correct cwd to installPackages', async () => {
     const installPackages = vi.fn(() => ({
       command: 'pnpm',
