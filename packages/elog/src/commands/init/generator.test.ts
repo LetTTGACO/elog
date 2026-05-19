@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { generateInitFiles, renderEnvText, renderObjectLiteral } from './generator';
-import type { InitSelection, PluginRegistryEntry } from './types';
+import { generateInitFiles, renderObjectLiteral } from './generator';
+import type { PluginRegistryEntry, PluginSelection } from './types';
 
 const fromYuque: PluginRegistryEntry = {
   kind: 'from',
@@ -13,7 +13,9 @@ const fromYuque: PluginRegistryEntry = {
     properties: {
       token: { type: 'string', 'x-elog-env': 'YUQUE_TOKEN', 'x-elog-secret': true },
       login: { type: 'string', 'x-elog-env': 'YUQUE_LOGIN' },
+      repo: { type: 'string', 'x-elog-env': 'YUQUE_REPO' },
       onlyPublic: { type: 'boolean', default: false },
+      space: { type: 'string' },
     },
     additionalProperties: false,
   },
@@ -57,6 +59,7 @@ describe('renderObjectLiteral', () => {
         {
           token: 'secret',
           login: '1874',
+          repo: 'my-repo',
           onlyPublic: false,
         },
         fromYuque.optionsSchema,
@@ -64,63 +67,24 @@ describe('renderObjectLiteral', () => {
     ).toBe(`{
   token: process.env.YUQUE_TOKEN,
   login: process.env.YUQUE_LOGIN,
+  repo: process.env.YUQUE_REPO,
   onlyPublic: false,
 }`);
   });
 });
 
-describe('renderEnvText', () => {
-  it('renders env values and examples with stable ordering', () => {
-    expect(
-      renderEnvText([
-        { name: 'YUQUE_TOKEN', value: 'secret' },
-        { name: 'YUQUE_LOGIN', value: '1874' },
-      ]),
-    ).toBe('YUQUE_TOKEN=secret\nYUQUE_LOGIN=1874\n');
-  });
-
-  it('returns empty string for empty array', () => {
-    expect(renderEnvText([])).toBe('');
-    expect(renderEnvText([], false)).toBe('');
-  });
-});
-
 describe('generateInitFiles', () => {
-  it('generates config, env, and env example text', () => {
-    const selection: InitSelection = {
-      from: {
-        entry: fromYuque,
-        answers: { token: 'secret', login: '1874', onlyPublic: false },
-      },
-      transforms: [{ entry: imageLocal, answers: { outputDir: './images' } }],
-      to: [{ entry: toLocal, answers: { outputDir: './docs', keepToc: true } }],
+  it('generates config text from selected plugins and schema defaults', () => {
+    const selection: PluginSelection = {
+      from: fromYuque,
+      transforms: [imageLocal],
+      to: [toLocal],
     };
 
     const files = generateInitFiles(selection);
 
-    expect(files.configText).toContain(
-      "import fromYuque from '@elogx-test/plugin-from-yuque-token';",
-    );
-    expect(files.configText).toContain('token: process.env.YUQUE_TOKEN');
-    expect(files.configText).toContain('plugins: [');
-    expect(files.configText).toContain('to: toLocal(');
-    expect(files.envText).toBe('YUQUE_TOKEN=secret\nYUQUE_LOGIN=1874\n');
-    expect(files.envExampleText).toBe('YUQUE_TOKEN=\nYUQUE_LOGIN=\n');
-  });
-
-  it('formats generated config with nested plugin options indented cleanly', () => {
-    const selection: InitSelection = {
-      from: {
-        entry: fromYuque,
-        answers: { token: 'secret', login: '1874', onlyPublic: false },
-      },
-      transforms: [{ entry: imageLocal, answers: { outputDir: './images' } }],
-      to: [{ entry: toLocal, answers: { outputDir: './docs', keepToc: true } }],
-    };
-
-    const files = generateInitFiles(selection);
-
-    expect(files.configText).toBe(`import { defineConfig } from '@elogx-test/elog';
+    expect(files).toEqual({
+      configText: `import { defineConfig } from '@elogx-test/elog';
 import fromYuque from '@elogx-test/plugin-from-yuque-token';
 import imageLocal from '@elogx-test/plugin-image-local';
 import toLocal from '@elogx-test/plugin-to-local';
@@ -129,6 +93,7 @@ export default defineConfig({
   from: fromYuque({
     token: process.env.YUQUE_TOKEN,
     login: process.env.YUQUE_LOGIN,
+    repo: process.env.YUQUE_REPO,
     onlyPublic: false,
   }),
   plugins: [
@@ -141,23 +106,21 @@ export default defineConfig({
     keepToc: true,
   }),
 });
-`);
+`,
+    });
+    expect(files.configText).not.toContain('space:');
   });
 
   it('omits plugins key when there are zero transforms', () => {
-    const selection: InitSelection = {
-      from: {
-        entry: fromYuque,
-        answers: { token: 'secret', login: '1874', onlyPublic: false },
-      },
+    const selection: PluginSelection = {
+      from: fromYuque,
       transforms: [],
-      to: [{ entry: toLocal, answers: { outputDir: './docs', keepToc: true } }],
+      to: [toLocal],
     };
 
     const files = generateInitFiles(selection);
 
     expect(files.configText).not.toContain('plugins:');
-    expect(files.configText).not.toContain('plugins: [');
     expect(files.configText).toContain('from:');
     expect(files.configText).toContain('to:');
   });
@@ -178,16 +141,10 @@ export default defineConfig({
       },
     };
 
-    const selection: InitSelection = {
-      from: {
-        entry: fromYuque,
-        answers: { token: 'secret', login: '1874', onlyPublic: false },
-      },
+    const selection: PluginSelection = {
+      from: fromYuque,
       transforms: [],
-      to: [
-        { entry: toLocal, answers: { outputDir: './docs', keepToc: true } },
-        { entry: toHalo, answers: { apiUrl: 'https://example.com' } },
-      ],
+      to: [toLocal, toHalo],
     };
 
     const files = generateInitFiles(selection);
@@ -195,35 +152,6 @@ export default defineConfig({
     expect(files.configText).toContain('to: [');
     expect(files.configText).toContain('toLocal(');
     expect(files.configText).toContain('toHalo(');
-    expect(files.configText).toContain('HALO_API_URL');
-    expect(files.configText).toContain(']');
-  });
-
-  it('returns empty env text when there are no env values', () => {
-    const fromNoEnv: PluginRegistryEntry = {
-      kind: 'from',
-      type: 'local',
-      displayName: 'Local',
-      packageName: '@elogx-test/plugin-from-local',
-      importName: 'fromLocal',
-      optionsSchema: {
-        type: 'object',
-        properties: {
-          dir: { type: 'string', default: './notes' },
-        },
-        additionalProperties: false,
-      },
-    };
-
-    const selection: InitSelection = {
-      from: { entry: fromNoEnv, answers: { dir: './notes' } },
-      transforms: [],
-      to: [{ entry: toLocal, answers: { outputDir: './docs', keepToc: true } }],
-    };
-
-    const files = generateInitFiles(selection);
-
-    expect(files.envText).toBe('');
-    expect(files.envExampleText).toBe('');
+    expect(files.configText).toContain('apiUrl: process.env.HALO_API_URL');
   });
 });

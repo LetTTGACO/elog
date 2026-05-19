@@ -57,6 +57,4 @@ export interface InitSelection {
 
 export interface GeneratedInitFiles {
   configText: string;
-  envText: string;
-  envExampleText: string;
 }

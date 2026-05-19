@@ -3,6 +3,7 @@ import type {
   GeneratedInitFiles,
   InitSelection,
   PluginRegistryEntry,
+  PluginSelection,
   SelectedPlugin,
 } from './types';
 
@@ -46,18 +47,57 @@ function collectProperties(schema: ElogOptionSchema): Record<string, ElogOptionS
   return schema.type === 'object' && schema.properties ? schema.properties : {};
 }
 
+function defaultAnswersForEntry(entry: PluginRegistryEntry): Record<string, unknown> {
+  const properties = collectProperties(entry.optionsSchema);
+  return Object.fromEntries(
+    Object.entries(properties)
+      .flatMap(([key, property]) => {
+        if (property['x-elog-env']) {
+          return [[key, undefined]];
+        }
+        if ('default' in property) {
+          return [[key, property.default]];
+        }
+        return [];
+      })
+      .filter(([key, value]) => {
+        const property = properties[key];
+        return property?.['x-elog-env'] || value !== undefined;
+      }),
+  );
+}
+
+function selectedPluginFromEntry(entry: PluginRegistryEntry): SelectedPlugin {
+  return {
+    entry,
+    answers: defaultAnswersForEntry(entry),
+  };
+}
+
+function normalizeSelection(selection: InitSelection | PluginSelection): InitSelection {
+  if ('entry' in selection.from) {
+    return selection as InitSelection;
+  }
+
+  return {
+    from: selectedPluginFromEntry(selection.from),
+    transforms: selection.transforms.map(selectedPluginFromEntry),
+    to: selection.to.map(selectedPluginFromEntry),
+  };
+}
+
 export function renderObjectLiteral(
   answers: Record<string, unknown>,
   schema: ElogOptionSchema,
 ): string {
   const properties = collectProperties(schema);
   const lines = Object.entries(properties).flatMap(([key, property]) => {
+    if (property['x-elog-env']) {
+      return [`  ${key}: process.env.${property['x-elog-env']},`];
+    }
     const value = answers[key] ?? property.default;
     if (value === undefined) {
       return [];
-    }
-    if (property['x-elog-env']) {
-      return [`  ${key}: process.env.${property['x-elog-env']},`];
     }
     return [`  ${key}: ${renderLiteral(value)},`];
   });
@@ -133,7 +173,10 @@ export function renderEnvText(values: EnvValue[], includeValues = true): string 
     .concat(values.length ? '\n' : '');
 }
 
-export function generateInitFiles(selection: InitSelection): GeneratedInitFiles {
+export function generateInitFiles(
+  selectionInput: InitSelection | PluginSelection,
+): GeneratedInitFiles {
+  const selection = normalizeSelection(selectionInput);
   const imports = [
     "import { defineConfig } from '@elogx-test/elog';",
     ...uniquePlugins(selection).map(
@@ -157,11 +200,7 @@ export function generateInitFiles(selection: InitSelection): GeneratedInitFiles 
       : renderPluginArray(selection.to);
   configLines.push(renderConfigProperty('to', toValue), '});', '');
 
-  const envValues = collectEnvValues(selection);
-
   return {
     configText: configLines.join('\n'),
-    envText: renderEnvText(envValues),
-    envExampleText: renderEnvText(envValues, false),
   };
 }
