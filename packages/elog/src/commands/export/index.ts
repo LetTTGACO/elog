@@ -1,0 +1,1 @@
+export { runExportCommand } from './command';
