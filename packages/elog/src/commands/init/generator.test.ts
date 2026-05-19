@@ -108,6 +108,42 @@ describe('generateInitFiles', () => {
     expect(files.envExampleText).toBe('YUQUE_TOKEN=\nYUQUE_LOGIN=\n');
   });
 
+  it('formats generated config with nested plugin options indented cleanly', () => {
+    const selection: InitSelection = {
+      from: {
+        entry: fromYuque,
+        answers: { token: 'secret', login: '1874', onlyPublic: false },
+      },
+      transforms: [{ entry: imageLocal, answers: { outputDir: './images' } }],
+      to: [{ entry: toLocal, answers: { outputDir: './docs', keepToc: true } }],
+    };
+
+    const files = generateInitFiles(selection);
+
+    expect(files.configText).toBe(`import { defineConfig } from '@elogx-test/elog';
+import fromYuque from '@elogx-test/plugin-from-yuque-token';
+import imageLocal from '@elogx-test/plugin-image-local';
+import toLocal from '@elogx-test/plugin-to-local';
+
+export default defineConfig({
+  from: fromYuque({
+    token: process.env.YUQUE_TOKEN,
+    login: process.env.YUQUE_LOGIN,
+    onlyPublic: false,
+  }),
+  plugins: [
+    imageLocal({
+      outputDir: './images',
+    }),
+  ],
+  to: toLocal({
+    outputDir: './docs',
+    keepToc: true,
+  }),
+});
+`);
+  });
+
   it('omits plugins key when there are zero transforms', () => {
     const selection: InitSelection = {
       from: {

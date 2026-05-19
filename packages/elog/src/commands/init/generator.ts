@@ -73,6 +73,27 @@ function renderPluginCall(plugin: SelectedPlugin): string {
   return `${plugin.entry.importName}(${renderObjectLiteral(plugin.answers, plugin.entry.optionsSchema)})`;
 }
 
+function addTrailingComma(text: string): string {
+  const lines = text.split('\n');
+  const lastIndex = lines.length - 1;
+  lines[lastIndex] = `${lines[lastIndex]},`;
+  return lines.join('\n');
+}
+
+function renderPluginArray(plugins: SelectedPlugin[]): string {
+  return [
+    '[',
+    plugins.map((plugin) => addTrailingComma(indent(renderPluginCall(plugin), 2))).join('\n'),
+    ']',
+  ].join('\n');
+}
+
+function renderConfigProperty(name: string, value: string): string {
+  const lines = indent(value, 2).split('\n');
+  const [firstLine, ...restLines] = lines;
+  return [`  ${name}: ${firstLine!.trimStart()}`, ...restLines].join('\n').concat(',');
+}
+
 function uniquePlugins(selection: InitSelection): PluginRegistryEntry[] {
   const plugins = [selection.from, ...selection.transforms, ...selection.to].map(
     (plugin) => plugin.entry,
@@ -119,23 +140,22 @@ export function generateInitFiles(selection: InitSelection): GeneratedInitFiles 
       (plugin) => `import ${plugin.importName} from '${plugin.packageName}';`,
     ),
   ];
-  const transformLines = selection.transforms.map((plugin) => indent(renderPluginCall(plugin), 4));
-  const toValue =
-    selection.to.length === 1
-      ? renderPluginCall(selection.to[0]!)
-      : `[\n${selection.to.map((plugin) => indent(renderPluginCall(plugin), 4)).join(',\n')}\n  ]`;
   const configLines = [
     ...imports,
     '',
     'export default defineConfig({',
-    `  from: ${renderPluginCall(selection.from)},`,
+    renderConfigProperty('from', renderPluginCall(selection.from)),
   ];
 
-  if (transformLines.length) {
-    configLines.push('  plugins: [', transformLines.join(',\n'), '  ],');
+  if (selection.transforms.length) {
+    configLines.push(renderConfigProperty('plugins', renderPluginArray(selection.transforms)));
   }
 
-  configLines.push(`  to: ${toValue},`, '});', '');
+  const toValue =
+    selection.to.length === 1
+      ? renderPluginCall(selection.to[0]!)
+      : renderPluginArray(selection.to);
+  configLines.push(renderConfigProperty('to', toValue), '});', '');
 
   const envValues = collectEnvValues(selection);
 
