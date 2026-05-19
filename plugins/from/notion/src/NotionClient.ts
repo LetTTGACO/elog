@@ -1,5 +1,5 @@
 import { NotionConfig } from './types';
-import { ElogFromContext, PluginContext } from '@elogx-test/elog';
+import { DownloadResult, ElogFromContext, PluginContext } from '@elogx-test/elog';
 import NotionApi from './NotionApi';
 
 export default class NotionClient extends ElogFromContext {
@@ -44,10 +44,11 @@ export default class NotionClient extends ElogFromContext {
   /**
    * 获取文章列表
    */
-  async getDocDetailList() {
+  async getDocDetailList(): Promise<DownloadResult> {
     return this.docDetailList({
-      getSortedDocList: this.api.getSortedDocList,
-      getDocDetail: this.api.getDocDetail,
+      // 通过闭包保留 NotionApi 实例上下文，避免通用下载器调用裸方法时丢失 this。
+      getSortedDocList: () => this.api.getSortedDocList(),
+      getDocDetail: (doc) => this.api.getDocDetail(doc),
       limit: this.config.limit,
     });
   }

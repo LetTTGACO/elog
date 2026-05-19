@@ -33,7 +33,7 @@ export default class NotionApi extends ElogBaseContext {
       this.ctx.logger.error('缺少Notion 数据库 ID');
     }
     if (this.config.imgToBase64) {
-      this.ctx.logger.error(
+      this.ctx.logger.warn(
         '已开启 Notion 文档图片转 Base64，博客平台的 Markdown 解析器/渲染器并未广泛支持 Base64 格式，请自行确认',
       );
     }
@@ -162,9 +162,13 @@ export default class NotionApi extends ElogBaseContext {
    */
   async getSortedDocList() {
     const docList: SortedDoc<NotionDoc>[] = [];
-    const getList = async () => {
+    let startCursor: string | undefined;
+
+    // Notion 数据库分页结果需要累积到同一个数组，避免递归创建局部数组导致后续页丢失。
+    do {
       let resp = await this.notion.databases.query({
         ...this.requestQueryParams,
+        ...(startCursor ? { start_cursor: startCursor } : {}),
       });
       let docs = resp.results as SortedDoc<NotionDoc>[];
       docs = docs.map((doc) => {
@@ -176,17 +180,11 @@ export default class NotionApi extends ElogBaseContext {
         };
       });
       docList.push(...docs);
-      // 分页查询
-      if (resp.has_more && resp.next_cursor) {
-        // 有更多数据
-        this.requestQueryParams = {
-          ...this.requestQueryParams,
-          start_cursor: resp.next_cursor,
-        };
-        await this.getSortedDocList();
-      }
-    };
-    await getList();
+
+      // 游标只用于本轮列表拉取，不写回实例配置，避免下一次同步从中间页开始。
+      startCursor = resp.has_more && resp.next_cursor ? resp.next_cursor : undefined;
+    } while (startCursor);
+
     return docList;
   }
 
