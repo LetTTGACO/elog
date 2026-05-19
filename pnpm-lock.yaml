@@ -486,9 +486,9 @@ importers:
       '@elogx-test/elog':
         specifier: workspace:*
         version: link:../../packages/elog
-      '@elogx-test/plugin-from-yuque-token':
+      '@elogx-test/plugin-from-yuque-pwd':
         specifier: workspace:*
-        version: link:../../plugins/from/yuque-token
+        version: link:../../plugins/from/yuque-pwd
       '@elogx-test/plugin-image-local':
         specifier: workspace:*
         version: link:../../plugins/transform/image-local

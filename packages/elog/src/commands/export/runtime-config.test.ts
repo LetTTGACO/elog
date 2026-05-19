@@ -7,9 +7,9 @@ import type { ExportSelection, PluginRegistryEntry } from '../init/types';
 
 const fromEntry: PluginRegistryEntry = {
   kind: 'from',
-  type: 'yuque-token',
+  type: 'yuque-pwd',
   displayName: '语雀',
-  packageName: '@elogx-test/plugin-from-yuque-token',
+  packageName: '@elogx-test/plugin-from-yuque-pwd',
   importName: 'fromYuque',
   optionsSchema: { type: 'object', properties: {}, additionalProperties: false },
 };
@@ -36,7 +36,12 @@ function createSelection(): ExportSelection {
   return {
     from: {
       entry: fromEntry,
-      answers: { token: 'secret-token', login: '1874', repo: 'docs' },
+      answers: {
+        username: '1874@example.com',
+        password: 'secret-password',
+        login: '1874',
+        repo: 'docs',
+      },
     },
     transforms: [
       {
@@ -103,22 +108,23 @@ describe('buildExportRuntimeConfig', () => {
     expect(config.plugins).toEqual([transformPlugin]);
     expect(config.to).toBe(toPlugin);
     expect(fromFactory).toHaveBeenCalledWith({
-      token: 'secret-token',
+      username: '1874@example.com',
+      password: 'secret-password',
       login: '1874',
       repo: 'docs',
     });
-    expect(process.env.YUQUE_TOKEN).toBeUndefined();
+    expect(process.env.YUQUE_PWD).toBeUndefined();
   });
 
   it('resolves default plugin imports from the provided cwd', async () => {
     const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'elog-export-runtime-'));
-    writePluginPackage(cwd, fromEntry.packageName, 'from:yuque-token', 'from');
+    writePluginPackage(cwd, fromEntry.packageName, 'from:yuque-pwd', 'from');
     writePluginPackage(cwd, transformEntry.packageName, 'transform:image-local', 'transform');
     writePluginPackage(cwd, toEntry.packageName, 'to:local', 'to');
 
     const config = await buildExportRuntimeConfig(createSelection(), { cwd });
 
-    expect(config.from.name).toBe('from:yuque-token');
+    expect(config.from.name).toBe('from:yuque-pwd');
     expect(config.plugins?.[0]?.name).toBe('transform:image-local');
     expect(Array.isArray(config.to)).toBe(false);
     expect(config.to).toMatchObject({ name: 'to:local' });

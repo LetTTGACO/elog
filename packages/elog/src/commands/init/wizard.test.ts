@@ -12,20 +12,26 @@ vi.mock('inquirer', () => ({
 
 const yuque: PluginRegistryEntry = {
   kind: 'from',
-  type: 'yuque-token',
+  type: 'yuque-pwd',
   displayName: '语雀',
-  packageName: '@elogx-test/plugin-from-yuque-token',
+  packageName: '@elogx-test/plugin-from-yuque-pwd',
   importName: 'fromYuque',
   optionsSchema: {
     type: 'object',
-    required: ['token'],
+    required: ['username', 'password'],
     properties: {
-      token: {
+      username: {
         type: 'string',
-        title: '语雀 Token',
-        'x-elog-env': 'YUQUE_TOKEN',
+        title: '语雀账号',
+        'x-elog-env': 'YUQUE_USERNAME',
+        'x-elog-prompt': { type: 'input', message: '请输入语雀账号' },
+      },
+      password: {
+        type: 'string',
+        title: '语雀密码',
+        'x-elog-env': 'YUQUE_PWD',
         'x-elog-secret': true,
-        'x-elog-prompt': { type: 'password', message: '请输入语雀 Token' },
+        'x-elog-prompt': { type: 'password', message: '请输入语雀密码' },
       },
       onlyPublic: {
         type: 'boolean',
@@ -89,7 +95,7 @@ describe('buildPluginChoice', () => {
   it('builds an inquirer choice from a plugin entry', () => {
     expect(buildPluginChoice(yuque)).toEqual({
       name: '语雀',
-      value: 'yuque-token',
+      value: 'yuque-pwd',
     });
   });
 });
@@ -98,9 +104,15 @@ describe('buildOptionQuestions', () => {
   it('builds questions from schema properties', () => {
     expect(buildOptionQuestions(yuque)).toEqual([
       {
+        type: 'input',
+        name: 'username',
+        message: '请输入语雀账号',
+        default: undefined,
+      },
+      {
         type: 'password',
-        name: 'token',
-        message: '请输入语雀 Token',
+        name: 'password',
+        message: '请输入语雀密码',
         default: undefined,
       },
       {
@@ -231,20 +243,24 @@ describe('buildOptionQuestions', () => {
 
 describe('withHiddenDefaults', () => {
   it('merges hidden property defaults into answers', () => {
-    const answers = { token: 'my-token' };
+    const answers = { username: '1874@example.com', password: 'my-password' };
     const result = withHiddenDefaults(yuque, answers);
-    expect(result.token).toBe('my-token');
+    expect(result.password).toBe('my-password');
     expect(result.hiddenValue).toBe('hidden');
   });
 
   it('gives user-provided answers priority over hidden defaults', () => {
-    const answers = { token: 'my-token', hiddenValue: 'custom' };
+    const answers = {
+      username: '1874@example.com',
+      password: 'my-password',
+      hiddenValue: 'custom',
+    };
     const result = withHiddenDefaults(yuque, answers);
     expect(result.hiddenValue).toBe('custom');
   });
 
   it('does not affect non-hidden properties', () => {
-    const answers = { token: 'my-token' };
+    const answers = { username: '1874@example.com', password: 'my-password' };
     const result = withHiddenDefaults(yuque, answers);
     expect(result.onlyPublic).toBe(false);
   });
@@ -279,7 +295,7 @@ describe('runInitWizard', () => {
   it('uses the multi-target plugin selection flow', async () => {
     const prompt = vi.mocked(inquirer.prompt);
     prompt
-      .mockResolvedValueOnce({ from: 'yuque-token' })
+      .mockResolvedValueOnce({ from: 'yuque-pwd' })
       .mockResolvedValueOnce({ to: ['local'] })
       .mockResolvedValueOnce({ transforms: [] });
 
@@ -297,7 +313,7 @@ describe('runPluginSelectionWizard', () => {
   it('asks only plugin selection questions and returns selected entries', async () => {
     const prompt = vi.mocked(inquirer.prompt);
     prompt
-      .mockResolvedValueOnce({ from: 'yuque-token' })
+      .mockResolvedValueOnce({ from: 'yuque-pwd' })
       .mockResolvedValueOnce({ to: ['local'] })
       .mockResolvedValueOnce({ transforms: ['image-local'] });
 
@@ -309,14 +325,14 @@ describe('runPluginSelectionWizard', () => {
     expect(selection.to).toEqual([localTarget]);
     expect(prompt).toHaveBeenCalledTimes(3);
     expect(prompt.mock.calls.flatMap((call) => call[0] as unknown[])).not.toContainEqual(
-      expect.objectContaining({ name: 'token' }),
+      expect.objectContaining({ name: 'password' }),
     );
   });
 
   it('throws PLUGIN_SELECTION_EMPTY when no target is selected', async () => {
     const prompt = vi.mocked(inquirer.prompt);
     prompt
-      .mockResolvedValueOnce({ from: 'yuque-token' })
+      .mockResolvedValueOnce({ from: 'yuque-pwd' })
       .mockResolvedValueOnce({ to: [] })
       .mockResolvedValueOnce({ transforms: [] });
 
@@ -330,7 +346,7 @@ describe('runPluginSelectionWizard', () => {
   it('can select a single target through the shared plugin selection flow', async () => {
     const prompt = vi.mocked(inquirer.prompt);
     prompt
-      .mockResolvedValueOnce({ from: 'yuque-token' })
+      .mockResolvedValueOnce({ from: 'yuque-pwd' })
       .mockResolvedValueOnce({ to: 'local' })
       .mockResolvedValueOnce({ transforms: [] });
 
@@ -350,10 +366,14 @@ describe('runExportWizard', () => {
   it('selects a single target and then asks selected plugin option questions', async () => {
     const prompt = vi.mocked(inquirer.prompt);
     prompt
-      .mockResolvedValueOnce({ from: 'yuque-token' })
+      .mockResolvedValueOnce({ from: 'yuque-pwd' })
       .mockResolvedValueOnce({ to: 'local' })
       .mockResolvedValueOnce({ transforms: [] })
-      .mockResolvedValueOnce({ token: 'secret-token', onlyPublic: true })
+      .mockResolvedValueOnce({
+        username: '1874@example.com',
+        password: 'secret-password',
+        onlyPublic: true,
+      })
       .mockResolvedValueOnce({ outputDir: './exported-docs' });
 
     const { runExportWizard } = await import('./wizard');
@@ -361,7 +381,8 @@ describe('runExportWizard', () => {
 
     expect(selection.from.entry).toBe(yuque);
     expect(selection.from.answers).toMatchObject({
-      token: 'secret-token',
+      username: '1874@example.com',
+      password: 'secret-password',
       onlyPublic: true,
       hiddenValue: 'hidden',
     });

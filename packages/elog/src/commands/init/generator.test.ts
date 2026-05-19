@@ -4,14 +4,15 @@ import type { PluginRegistryEntry, PluginSelection } from './types';
 
 const fromYuque: PluginRegistryEntry = {
   kind: 'from',
-  type: 'yuque-token',
+  type: 'yuque-pwd',
   displayName: '语雀',
-  packageName: '@elogx-test/plugin-from-yuque-token',
+  packageName: '@elogx-test/plugin-from-yuque-pwd',
   importName: 'fromYuque',
   optionsSchema: {
     type: 'object',
     properties: {
-      token: { type: 'string', 'x-elog-env': 'YUQUE_TOKEN', 'x-elog-secret': true },
+      username: { type: 'string', 'x-elog-env': 'YUQUE_USERNAME' },
+      password: { type: 'string', 'x-elog-env': 'YUQUE_PWD', 'x-elog-secret': true },
       login: { type: 'string', 'x-elog-env': 'YUQUE_LOGIN' },
       repo: { type: 'string', 'x-elog-env': 'YUQUE_REPO' },
       onlyPublic: { type: 'boolean', default: false },
@@ -57,7 +58,8 @@ describe('renderObjectLiteral', () => {
     expect(
       renderObjectLiteral(
         {
-          token: 'secret',
+          username: '1874@example.com',
+          password: 'secret',
           login: '1874',
           repo: 'my-repo',
           onlyPublic: false,
@@ -65,7 +67,8 @@ describe('renderObjectLiteral', () => {
         fromYuque.optionsSchema,
       ),
     ).toBe(`{
-  token: process.env.YUQUE_TOKEN,
+  username: process.env.YUQUE_USERNAME,
+  password: process.env.YUQUE_PWD,
   login: process.env.YUQUE_LOGIN,
   repo: process.env.YUQUE_REPO,
   onlyPublic: false,
@@ -85,13 +88,14 @@ describe('generateInitFiles', () => {
 
     expect(files).toEqual({
       configText: `import { defineConfig } from '@elogx-test/elog';
-import fromYuque from '@elogx-test/plugin-from-yuque-token';
+import fromYuque from '@elogx-test/plugin-from-yuque-pwd';
 import imageLocal from '@elogx-test/plugin-image-local';
 import toLocal from '@elogx-test/plugin-to-local';
 
 export default defineConfig({
   from: fromYuque({
-    token: process.env.YUQUE_TOKEN,
+    username: process.env.YUQUE_USERNAME,
+    password: process.env.YUQUE_PWD,
     login: process.env.YUQUE_LOGIN,
     repo: process.env.YUQUE_REPO,
     onlyPublic: false,

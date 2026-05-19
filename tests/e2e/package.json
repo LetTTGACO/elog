@@ -6,13 +6,14 @@
   "scripts": {
     "build:repo": "pnpm --dir ../.. build",
     "elog:init": "elog init",
+    "elog:sync": "elog sync -e .env",
     "e2e": "pnpm run build:repo && vitest run",
     "test:cli": "pnpm run build:repo && vitest run src/cli-command.e2e.test.ts",
     "test:yuque-local": "pnpm run build:repo && ELOG_E2E_CASE=yuque-image-local-to-local vitest run src/sync-matrix.e2e.test.ts"
   },
   "dependencies": {
     "@elogx-test/elog": "workspace:*",
-    "@elogx-test/plugin-from-yuque-token": "workspace:*",
+    "@elogx-test/plugin-from-yuque-pwd": "workspace:*",
     "@elogx-test/plugin-image-local": "workspace:*",
     "@elogx-test/plugin-to-local": "workspace:*"
   },

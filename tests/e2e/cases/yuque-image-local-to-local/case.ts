@@ -3,8 +3,13 @@ import type { SyncCase } from '../../src/helpers/types';
 
 const syncCase: SyncCase = {
   id: 'yuque-image-local-to-local',
-  title: 'Yuque token source -> local images -> local deploy',
-  requiredEnv: ['ELOG_E2E_YUQUE_TOKEN', 'ELOG_E2E_YUQUE_LOGIN', 'ELOG_E2E_YUQUE_REPO'],
+  title: 'Yuque password source -> local images -> local deploy',
+  requiredEnv: [
+    'ELOG_E2E_YUQUE_USERNAME',
+    'ELOG_E2E_YUQUE_PWD',
+    'ELOG_E2E_YUQUE_LOGIN',
+    'ELOG_E2E_YUQUE_REPO',
+  ],
   configFile: 'elog.config.ts',
   expected: {
     cacheFile: 'elog.cache.json',

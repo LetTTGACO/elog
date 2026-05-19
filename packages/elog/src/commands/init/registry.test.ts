@@ -8,6 +8,18 @@ describe('loadBuiltInPluginRegistry', () => {
     expect(registry.schemaVersion).toBe(1);
     expect(registry.plugins.length).toBeGreaterThan(0);
   });
+
+  it('uses Yuque password mode as the built-in Yuque source', () => {
+    const registry = loadBuiltInPluginRegistry();
+    const yuque = registry.plugins.find((plugin) => plugin.type === 'yuque-pwd');
+
+    expect(yuque).toMatchObject({
+      kind: 'from',
+      type: 'yuque-pwd',
+      displayName: '语雀（账号密码模式）',
+      packageName: '@elogx-test/plugin-from-yuque-pwd',
+    });
+  });
 });
 
 describe('parsePluginRegistry', () => {
@@ -17,22 +29,31 @@ describe('parsePluginRegistry', () => {
       plugins: [
         {
           kind: 'from',
-          type: 'yuque-token',
+          type: 'yuque-pwd',
           displayName: '语雀',
-          packageName: '@elogx-test/plugin-from-yuque-token',
+          packageName: '@elogx-test/plugin-from-yuque-pwd',
           importName: 'fromYuque',
           optionsSchema: {
             type: 'object',
-            required: ['token'],
+            required: ['username', 'password'],
             properties: {
-              token: {
+              username: {
                 type: 'string',
-                title: '语雀 Token',
-                'x-elog-env': 'YUQUE_TOKEN',
+                title: '语雀账号',
+                'x-elog-env': 'YUQUE_USERNAME',
+                'x-elog-prompt': {
+                  type: 'input',
+                  message: '请输入语雀账号',
+                },
+              },
+              password: {
+                type: 'string',
+                title: '语雀密码',
+                'x-elog-env': 'YUQUE_PWD',
                 'x-elog-secret': true,
                 'x-elog-prompt': {
                   type: 'password',
-                  message: '请输入语雀 Token',
+                  message: '请输入语雀密码',
                 },
               },
             },
@@ -44,8 +65,8 @@ describe('parsePluginRegistry', () => {
 
     expect(registry.plugins[0]).toMatchObject({
       kind: 'from',
-      type: 'yuque-token',
-      packageName: '@elogx-test/plugin-from-yuque-token',
+      type: 'yuque-pwd',
+      packageName: '@elogx-test/plugin-from-yuque-pwd',
     });
   });
 

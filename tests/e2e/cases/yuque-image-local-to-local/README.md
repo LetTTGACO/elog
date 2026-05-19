@@ -6,7 +6,8 @@ images to a local `images/` directory, and deploys markdown files to `docs/`.
 Required environment variables:
 
 ```bash
-export ELOG_E2E_YUQUE_TOKEN=""
+export ELOG_E2E_YUQUE_USERNAME=""
+export ELOG_E2E_YUQUE_PWD=""
 export ELOG_E2E_YUQUE_LOGIN=""
 export ELOG_E2E_YUQUE_REPO=""
 ```

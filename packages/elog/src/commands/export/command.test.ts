@@ -6,9 +6,9 @@ import type { ExportSelection, PluginRegistry, PluginRegistryEntry } from '../in
 
 const fromEntry: PluginRegistryEntry = {
   kind: 'from',
-  type: 'yuque-token',
+  type: 'yuque-pwd',
   displayName: '语雀',
-  packageName: '@elogx-test/plugin-from-yuque-token',
+  packageName: '@elogx-test/plugin-from-yuque-pwd',
   importName: 'fromYuque',
   optionsSchema: { type: 'object', properties: {}, additionalProperties: false },
 };
@@ -37,7 +37,10 @@ const registry: PluginRegistry = {
 };
 
 const selection: ExportSelection = {
-  from: { entry: fromEntry, answers: { token: 'secret-token' } },
+  from: {
+    entry: fromEntry,
+    answers: { username: '1874@example.com', password: 'secret-password' },
+  },
   transforms: [{ entry: transformEntry, answers: { outputDir: './images' } }],
   to: { entry: toEntry, answers: { outputDir: './docs' } },
 };
@@ -45,7 +48,7 @@ const selection: ExportSelection = {
 describe('selectedPackages', () => {
   it('extracts unique package names from export selection', () => {
     expect(selectedPackages(selection)).toEqual([
-      '@elogx-test/plugin-from-yuque-token',
+      '@elogx-test/plugin-from-yuque-pwd',
       '@elogx-test/plugin-image-local',
       '@elogx-test/plugin-to-local',
     ]);
@@ -89,7 +92,7 @@ describe('runExportCommand', () => {
       expect.objectContaining({
         cwd: '/tmp/project',
         packages: [
-          '@elogx-test/plugin-from-yuque-token',
+          '@elogx-test/plugin-from-yuque-pwd',
           '@elogx-test/plugin-image-local',
           '@elogx-test/plugin-to-local',
         ],
