@@ -1,6 +1,7 @@
 import { defineConfig } from './config/defineConfig';
 import elog from './node-entry';
 import { run } from './cli';
+// 公共入口集中转出运行时、插件和类型能力，插件包只需要依赖 @elogx-test/elog。
 export type * from './types/log';
 export * from './types/common';
 export * from './types/doc';

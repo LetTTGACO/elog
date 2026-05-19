@@ -1,8 +1,10 @@
 import type { RuntimeWorkflowConfig } from '../runtime/types';
 import type { ElogConfig } from '../types/common';
 
+/** 将用户配置统一成运行时工作流数组，集中处理默认值和单/多工作流差异。 */
 export function normalizeV1Config(raw: ElogConfig | ElogConfig[]): RuntimeWorkflowConfig[] {
   const configs = Array.isArray(raw) ? raw : [raw];
+  // 多工作流默认使用带序号的缓存名，避免默认缓存文件互相覆盖。
   const useIndexedCacheNames = configs.length > 1;
 
   return configs.map((config, index) => {

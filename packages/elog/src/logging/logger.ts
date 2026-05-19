@@ -10,10 +10,11 @@ import {
 } from './levels';
 import * as process from 'process';
 
+/** 当前终端宽度，用于把长内容分片输出并保持日志头对齐。 */
 export const __columns = process?.stdout?.columns ?? 120;
 
 /**
- * 辅助输出过程日志
+ * 辅助输出过程日志，兼顾中文字符宽度和多行内容对齐。
  *
  * @export
  * @param {LogLevel} level
@@ -32,6 +33,7 @@ export function println(level: LogLevel, head: string, content?: string) {
     try {
       head = JSON.stringify(head);
     } catch (e) {
+      // 无法 JSON 化时直接输出原对象，避免日志工具本身掩盖真实错误。
       console.log(head);
       return;
     }
@@ -51,7 +53,6 @@ export function println(level: LogLevel, head: string, content?: string) {
   const fillLength = Math.max(MIN_HEAD_LENGTH - emptyHead.length, 0);
 
   if (!content) {
-    // shell.echo(color[level](head))
     console.log(color[level](head));
     return;
   }
@@ -59,8 +60,6 @@ export function println(level: LogLevel, head: string, content?: string) {
   if (content && typeof content !== 'string') {
     console.log(color[level](head));
     console.log(content);
-    // shell.echo(color[level](head))
-    // shell.echo(content)
     return;
   }
 
@@ -75,6 +74,7 @@ export function println(level: LogLevel, head: string, content?: string) {
     });
 }
 
+/** 面向业务代码的日志门面，CLI fatal 行为只保留在 error 方法里。 */
 const out = {
   success(head: string, content?: string) {
     println(LOGLEVEL_SUCCESS, head, content);

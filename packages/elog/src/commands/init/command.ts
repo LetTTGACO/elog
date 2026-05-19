@@ -9,6 +9,7 @@ import type { GeneratedFileWrite, WriteGeneratedFilesOptions } from './file-writ
 import { runPluginSelectionWizard } from './wizard';
 import type { GeneratedInitFiles, PluginRegistry, PluginSelection } from './types';
 
+/** init 命令依赖注入边界，测试可替换交互、安装和写文件副作用。 */
 export interface RunInitCommandOptions {
   cwd: string;
   configName: string;
@@ -21,6 +22,7 @@ export interface RunInitCommandOptions {
   log?: (message: string) => void;
 }
 
+/** 从选择结果中提取待安装包，并去重避免同一插件包被重复安装。 */
 export function selectedPackages(selection: PluginSelection): string[] {
   const allPlugins = [selection.from, ...selection.transforms, ...selection.to];
   const seen = new Set<string>();
@@ -35,6 +37,7 @@ export function selectedPackages(selection: PluginSelection): string[] {
     });
 }
 
+/** dry-run 输出保持可读文本，方便用户预览安装命令和配置内容。 */
 export function createInitDryRunOutput(
   files: GeneratedInitFiles & { installCommand: string },
   configName = 'elog.config.ts',
@@ -46,6 +49,7 @@ export function createInitDryRunOutput(
   return sections.join('\n\n');
 }
 
+/** dry-run 无交互时使用注册表首个 from/to，保证命令可在 CI 中预览。 */
 export function createDefaultInitSelection(registry: PluginRegistry): PluginSelection {
   const fromEntry = getPluginsByKind(registry, 'from')[0];
   const toEntry = getPluginsByKind(registry, 'to')[0];
@@ -64,6 +68,7 @@ export function createDefaultInitSelection(registry: PluginRegistry): PluginSele
   };
 }
 
+/** 执行 init：选择插件、安装依赖、生成配置，并在必要时备份旧文件。 */
 export async function runInitCommand(options: RunInitCommandOptions): Promise<void> {
   const loadRegistry = options.loadRegistry ?? loadBuiltInPluginRegistry;
   const runWizard = options.runWizard ?? runPluginSelectionWizard;
@@ -72,6 +77,7 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
   const log = options.log ?? ((message: string) => out.info('初始化', message));
 
   const registry = loadRegistry();
+  // dry-run 且未注入 wizard 时走默认选择，避免非交互环境被 prompt 阻塞。
   const selection =
     options.dryRun && !options.runWizard
       ? createDefaultInitSelection(registry)
@@ -82,6 +88,7 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
   const installCommand = buildInstallCommand(packageManager, packages);
 
   if (options.dryRun) {
+    // dry-run 不安装依赖也不写文件，只输出可人工检查的结果。
     log(
       createInitDryRunOutput(
         { ...files, installCommand: installCommand.display },
@@ -93,6 +100,7 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
 
   doInstall({ cwd: options.cwd, packageManager, packages });
 
+  // 默认覆写前确认并备份，降低 init 对已有项目配置的破坏性。
   const defaultConfirmOverwrite = async (filename: string): Promise<boolean> => {
     const answer = (await inquirer.prompt([
       {

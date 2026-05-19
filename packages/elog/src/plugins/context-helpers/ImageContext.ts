@@ -6,7 +6,7 @@ import { ImageBaseConfig, ImageUploader } from '../../types/image';
 import { replaceImagesFunc } from '../../image/replace';
 
 /**
- * 适用于图片替换工具类
+ * 适用于图片替换工具类，负责把插件配置转换为共享图片替换流程参数。
  */
 export class ElogImageContext extends ElogBaseContext {
   private readonly imageBaseConfig: ImageBaseConfig;
@@ -16,7 +16,7 @@ export class ElogImageContext extends ElogBaseContext {
   }
 
   /**
-   * 替换图片
+   * 替换图片，禁用时直接返回原文档列表以保持 transform 管线连续。
    * @param docDetailList
    * @param uploader
    * @param limit

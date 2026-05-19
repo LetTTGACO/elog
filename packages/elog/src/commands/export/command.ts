@@ -10,6 +10,7 @@ import { reportWorkflowResults, throwOnFailedWorkflow } from '../sync/results';
 import { buildExportRuntimeConfig } from './runtime-config';
 import type { BuildExportRuntimeConfigOptions } from './runtime-config';
 
+/** export 命令依赖注入边界，测试可替换安装、向导、运行时和结果处理。 */
 export interface RunExportCommandOptions {
   cwd: string;
   loadRegistry?: () => PluginRegistry;
@@ -24,6 +25,7 @@ export interface RunExportCommandOptions {
   throwOnFailed?: (results: WorkflowResult[]) => void;
 }
 
+/** 从 export 选择结果中收集需要安装的插件包，并按包名去重。 */
 export function selectedPackages(selection: ExportSelection): string[] {
   const allPlugins = [selection.from, ...selection.transforms, selection.to];
   const seen = new Set<string>();
@@ -38,6 +40,7 @@ export function selectedPackages(selection: ExportSelection): string[] {
     });
 }
 
+/** 执行一次性导出：安装所选插件、构造临时运行时配置并立即同步。 */
 export async function runExportCommand(options: RunExportCommandOptions): Promise<void> {
   const loadRegistry = options.loadRegistry ?? loadBuiltInPluginRegistry;
   const runWizard = options.runWizard ?? runExportWizard;

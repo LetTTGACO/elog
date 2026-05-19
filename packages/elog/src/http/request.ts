@@ -2,7 +2,7 @@ import { HttpClientResponse, request as req, RequestOptions } from 'urllib';
 import out from '../logging/logger';
 
 /**
- * 网络请求封装
+ * 网络请求封装，集中设置 Elog 的默认请求头、JSON 行为和超时约束。
  * @param url
  * @param reqOpts
  */
@@ -21,7 +21,7 @@ export default async <T>(url: string, reqOpts?: RequestOptions): Promise<HttpCli
   };
   out.debug(`API请求URL: ${url}`);
   if (url.includes('api.github.com')) {
-    // Github Base64 输出太多，只输出headers
+    // GitHub Base64 响应和请求体常很大，只输出 headers 避免 debug 日志刷屏。
     out.debug(`API请求Header参数: ${JSON.stringify(reqOpts?.headers || {})}`);
   } else {
     out.debug(`API请求参数: ${JSON.stringify(opts)}`);

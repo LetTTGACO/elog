@@ -10,7 +10,7 @@ interface FileType {
 }
 
 /**
- * 通过图片url获取文件type, 不含"."
+ * 通过图片 url 获取文件 type（不含 "."），优先使用 URL 文件名避免额外下载。
  * @param url
  * @param needError
  */
@@ -33,6 +33,7 @@ export const getFileTypeFromUrl = (url: string, needError = true) => {
         type: filetype,
       };
     } else {
+      // needError 用于探测式调用，避免降级到 buffer 识别前产生噪声日志。
       needError && out.warn(`获取文件名失败，跳过: ${url}`);
     }
   } else {
@@ -40,6 +41,7 @@ export const getFileTypeFromUrl = (url: string, needError = true) => {
   }
 };
 
+/** 从图片二进制中识别类型，作为 URL 后缀缺失时的兜底方案。 */
 export const getFileTypeFromBuffer = (buffer: Buffer): FileType | undefined => {
   const fileType = imgSize(buffer).type;
   if (fileType) {
@@ -50,7 +52,7 @@ export const getFileTypeFromBuffer = (buffer: Buffer): FileType | undefined => {
 };
 
 /**
- * 去除图片链接中多余的参数
+ * 去除图片链接中多余的参数，用于生成稳定文件名和去重键。
  * @param originalUrl
  */
 export const cleanUrlParam = (originalUrl: string) => {
@@ -69,7 +71,7 @@ export const cleanUrlParam = (originalUrl: string) => {
 };
 
 /**
- * 从 md 文档获取图片链接列表
+ * 从 md 文档获取图片链接列表，保留原始链接用于最终替换正文。
  * @param content
  */
 export const getUrlListFromContent = (content: string): ImageUrl[] => {
@@ -86,7 +88,7 @@ export const getUrlListFromContent = (content: string): ImageUrl[] => {
             type: 'base64',
           };
         }
-        // 去除#?号
+        // data 保持干净链接，originalUrl 保持 Markdown 中的原文以便精准替换。
         const url = cleanUrlParam(originalUrl);
         return {
           originalUrl,
@@ -100,7 +102,7 @@ export const getUrlListFromContent = (content: string): ImageUrl[] => {
 };
 
 /**
- * 从 URL 链接获取干净的 url
+ * 从 URL 链接获取干净的 url，给插件直接处理单图时复用同一结构。
  * @param url
  */
 export const getBaseUrl = (url: string): ImageUrl => {
@@ -112,7 +114,7 @@ export const getBaseUrl = (url: string): ImageUrl => {
 };
 
 /**
- * 根据url生成唯一文件名
+ * 根据 url 生成唯一文件名，保证不同图床插件使用同一套命名规则。
  * @param url
  * @param length 长度截取
  */
@@ -125,7 +127,7 @@ export const genUniqueIdFromUrl = (url: string, length?: number) => {
 };
 
 /**
- * 获取文件类型
+ * 获取文件类型，按 base64、URL 后缀、下载 buffer 的顺序逐级兜底。
  * @param url
  */
 export const getFileType = async (url: string) => {
@@ -141,7 +143,7 @@ export const getFileType = async (url: string) => {
   }
   let fileType: FileType | undefined = getFileTypeFromUrl(url, false);
   if (!fileType) {
-    // 尝试从 buffer 中获取
+    // URL 无后缀时才下载图片探测类型，控制不必要的网络开销。
     const buffer = await getBufferFromUrl(url);
     if (buffer) {
       fileType = getFileTypeFromBuffer(buffer);
@@ -152,7 +154,7 @@ export const getFileType = async (url: string) => {
 };
 
 /**
- * 获取图片buffer
+ * 获取图片 buffer，下载失败只告警并返回 undefined，让上层决定文档状态。
  */
 export const getBufferFromUrl = async (url: string, options?: any) => {
   try {

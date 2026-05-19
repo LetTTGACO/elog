@@ -1,6 +1,7 @@
 import type { RuntimeWorkflowConfig } from '../runtime/types';
 import type { ConfigDiagnostic } from '../types/common';
 
+/** 对已归一化配置做运行前校验，输出可展示的诊断而不是直接抛错。 */
 export function validateRuntimeConfig(workflows: RuntimeWorkflowConfig[]): ConfigDiagnostic[] {
   const diagnostics: ConfigDiagnostic[] = [];
   const seenIds = new Set<string>();
@@ -16,6 +17,7 @@ export function validateRuntimeConfig(workflows: RuntimeWorkflowConfig[]): Confi
         path: `${path}.id`,
       });
     } else if (seenIds.has(workflow.id)) {
+      // 工作流 ID 会出现在结果和缓存上下文里，因此必须在运行前保证唯一。
       diagnostics.push({
         level: 'error',
         code: 'CONFIG_DUPLICATE_WORKFLOW_ID',
@@ -49,6 +51,7 @@ export function validateRuntimeConfig(workflows: RuntimeWorkflowConfig[]): Confi
       !Array.isArray(workflow.transforms) ||
       workflow.transforms.some((plugin) => !plugin || plugin.kind !== 'transform');
     if (hasInvalidTransform) {
+      // plugins 必须是 transform 数组，常见的单对象误配在这里给出明确诊断。
       diagnostics.push({
         level: 'error',
         code: 'CONFIG_INVALID_TRANSFORM',

@@ -4,6 +4,7 @@ import { ElogError } from '../plugins/errors';
 import { PluginDriver } from './PluginDriver';
 import type { RuntimeWorkflowConfig, WorkflowResult } from './types';
 
+/** 编排单个工作流的下载、转换、部署与缓存写入。 */
 export class Graph {
   private readonly workflow: RuntimeWorkflowConfig;
 
@@ -11,6 +12,7 @@ export class Graph {
     this.workflow = workflow;
   }
 
+  /** 将插件异常收敛成结构化结果，让 CLI 之外的调用方无需处理进程退出。 */
   async sync(): Promise<WorkflowResult> {
     try {
       const cacheStore = new CacheStore(this.workflow.cache);
@@ -31,6 +33,7 @@ export class Graph {
       );
 
       const downloadResult = await driver.runDownloadHook();
+      // 没有待更新文档时不执行转换和部署，保证增量同步的空跑成本最低。
       if (downloadResult.docDetailList.length === 0) {
         return {
           status: 'skipped',

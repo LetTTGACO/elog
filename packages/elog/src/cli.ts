@@ -5,6 +5,7 @@ import { runSyncCommand } from './commands/sync';
 import out from './logging/logger';
 import packageJson from '../package.json' with { type: 'json' };
 
+/** commander action 的统一错误边界，设置退出码但不让库代码直接退出进程。 */
 async function handleAction(action: () => Promise<void> | void): Promise<void> {
   try {
     await action();
@@ -15,6 +16,7 @@ async function handleAction(action: () => Promise<void> | void): Promise<void> {
   }
 }
 
+/** 创建 CLI 程序并注册 init/export/sync 命令。 */
 export function createProgram(): Command {
   const program = new Command();
 
@@ -59,6 +61,7 @@ export function createProgram(): Command {
   return program;
 }
 
+/** CLI 二进制入口，实际命令注册逻辑放在 createProgram 便于测试。 */
 export async function run(): Promise<void> {
   createProgram().parse();
 }

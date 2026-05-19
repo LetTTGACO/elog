@@ -21,12 +21,14 @@ export interface DocStructure {
   [key: string]: any;
 }
 
+/** 缓存内部扩展字段，记录文档同步状态和更新位置。 */
 export interface DocExt {
   _index: number;
   _status: DocStatus;
   _updateIndex: number;
 }
 
+/** 文档详情是 transform 和 deploy 阶段共享的核心数据结构。 */
 export interface DocDetail {
   /** 文档唯一 ID */
   id: string;
@@ -43,4 +45,5 @@ export interface DocDetail {
   [key: string]: any;
 }
 
+/** 来源平台列表项只要求具备稳定 id 和更新时间以支持增量同步。 */
 export type SortedDoc<T> = T & { id: string; updateTime: number };

@@ -9,6 +9,7 @@ import out from '../logging/logger';
 
 const require = createRequire(import.meta.url);
 
+/** 负责单个工作流的缓存读写，运行时只通过这里理解缓存文件结构。 */
 export class CacheStore {
   readonly config: CacheConfig;
   readonly cachedDocList: DocDetail[];
@@ -18,6 +19,7 @@ export class CacheStore {
     this.cachedDocList = this.load();
   }
 
+  /** 加载缓存失败时按全量同步处理，避免缓存缺失阻断首次运行。 */
   private load(): DocDetail[] {
     if (this.config.disabled) {
       out.success('全量更新', '已禁用缓存，将全量更新文档');
@@ -35,9 +37,11 @@ export class CacheStore {
     }
   }
 
+  /** 根据增量判定结果更新内存缓存，新增和更新文档复用同一批下载结果。 */
   update(docList: DocDetail[], docStatusMap: DocStatusMap) {
     for (const doc of docList) {
       const status = docStatusMap[doc.id];
+      // 来源插件可能返回不参与缓存更新的文档，这里保持跳过而不是报错。
       if (!status) {
         continue;
       }
@@ -50,6 +54,7 @@ export class CacheStore {
     }
   }
 
+  /** 写入缓存时剥离正文，避免缓存文件过大并减少敏感内容落盘。 */
   write<T>(sortedDocList: SortedDoc<T>[] = []) {
     if (this.config.writeDisabled) {
       return;
