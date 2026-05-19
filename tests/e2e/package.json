@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build:repo": "pnpm --dir ../.. build",
+    "elog:init": "elog init",
     "e2e": "pnpm run build:repo && vitest run",
     "test:cli": "pnpm run build:repo && vitest run src/cli-command.e2e.test.ts",
     "test:yuque-local": "pnpm run build:repo && ELOG_E2E_CASE=yuque-image-local-to-local vitest run src/sync-matrix.e2e.test.ts"
