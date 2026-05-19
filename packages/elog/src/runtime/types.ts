@@ -4,6 +4,7 @@ import type { FromPlugin, ToPlugin, TransformPlugin } from '../plugins/types';
 
 export interface CacheConfig {
   disabled: boolean;
+  writeDisabled: boolean;
   filePath: string;
 }
 

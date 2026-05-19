@@ -75,6 +75,7 @@ describe('buildExportRuntimeConfig', () => {
     const config = await buildExportRuntimeConfig(createSelection(), { loadPlugin });
 
     expect(config.disableCache).toBe(true);
+    expect(config.disableCacheWrite).toBe(true);
     expect(config.from).toBe(fromPlugin);
     expect(config.plugins).toEqual([transformPlugin]);
     expect(config.to).toBe(toPlugin);

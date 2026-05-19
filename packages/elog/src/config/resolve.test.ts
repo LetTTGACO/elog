@@ -37,11 +37,27 @@ describe('resolveConfig', () => {
     expect(result.workflows[0]).toMatchObject({
       id: 'workflow-1',
       disabled: false,
-      cache: { disabled: false, filePath: 'elog.cache.json' },
+      cache: { disabled: false, writeDisabled: false, filePath: 'elog.cache.json' },
       from: fromPlugin,
       transforms: [transformPlugin],
       to: [toPlugin],
       deployStrategy: 'serial',
+    });
+  });
+
+  it('normalizes internal cache write disabling separately from cache reads', () => {
+    const result = resolveConfig({
+      disableCache: true,
+      disableCacheWrite: true,
+      from: fromPlugin,
+      to: toPlugin,
+    });
+
+    expect(result.diagnostics).toEqual([]);
+    expect(result.workflows[0]?.cache).toEqual({
+      disabled: true,
+      writeDisabled: true,
+      filePath: 'elog.cache.json',
     });
   });
 

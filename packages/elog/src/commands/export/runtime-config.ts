@@ -86,6 +86,7 @@ export async function buildExportRuntimeConfig(
 
   return {
     disableCache: true,
+    disableCacheWrite: true,
     from,
     ...(plugins.length ? { plugins } : {}),
     to: targets.length === 1 ? targets[0]! : targets,

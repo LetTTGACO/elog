@@ -18,6 +18,8 @@ export interface ResolveConfigResult {
 export interface ElogCacheConfig {
   /** Whether to disable cache for this workflow. */
   disableCache?: boolean;
+  /** @internal Export command only. Prevents writing cache after sync. */
+  disableCacheWrite?: boolean;
   /** Cache file path. */
   cacheFilePath?: string;
 }

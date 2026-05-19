@@ -48,7 +48,11 @@ function makeWorkflow(
   return {
     id,
     disabled: options.disabled ?? false,
-    cache: { disabled: true, filePath: path.join(tempDir, `${id}.cache.json`) },
+    cache: {
+      disabled: true,
+      writeDisabled: false,
+      filePath: path.join(tempDir, `${id}.cache.json`),
+    },
     from,
     transforms: [],
     to: [to],

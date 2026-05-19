@@ -26,7 +26,11 @@ afterEach(() => {
 
 describe('CacheStore', () => {
   it('loads empty cache when disabled', () => {
-    const store = new CacheStore({ disabled: true, filePath: 'missing.json' });
+    const store = new CacheStore({
+      disabled: true,
+      writeDisabled: false,
+      filePath: 'missing.json',
+    });
 
     expect(store.cachedDocList).toEqual([]);
   });
@@ -34,7 +38,7 @@ describe('CacheStore', () => {
   it('updates and writes cache without body', () => {
     tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'elog-cache-'));
     const cacheFile = path.join(tempDir, 'elog.cache.json');
-    const store = new CacheStore({ disabled: false, filePath: cacheFile });
+    const store = new CacheStore({ disabled: false, writeDisabled: false, filePath: cacheFile });
 
     store.update([makeDoc('a')], {
       a: { _updateIndex: -1, _status: DocStatus.NEW },
@@ -58,7 +62,7 @@ describe('CacheStore', () => {
       }),
       { encoding: 'utf8' },
     );
-    const store = new CacheStore({ disabled: false, filePath: cacheFile });
+    const store = new CacheStore({ disabled: false, writeDisabled: false, filePath: cacheFile });
 
     expect(store.cachedDocList).toHaveLength(1);
     expect(store.cachedDocList[0].id).toBe('existing');

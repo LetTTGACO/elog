@@ -42,7 +42,11 @@ function makeWorkflow(overrides: Partial<RuntimeWorkflowConfig> = {}): RuntimeWo
   return {
     id: 'workflow-1',
     disabled: false,
-    cache: { disabled: false, filePath: path.join(tempDir, 'elog.cache.json') },
+    cache: {
+      disabled: false,
+      writeDisabled: false,
+      filePath: path.join(tempDir, 'elog.cache.json'),
+    },
     from,
     transforms: [],
     to: [to],
@@ -98,6 +102,27 @@ describe('Graph', () => {
     });
     expect(cache.cachedDocList[0]).not.toHaveProperty('body');
     expect(cache.sortedDocList).toEqual([{ id: 'a', updateTime: 1 }]);
+  });
+
+  it('returns success result without writing cache when cache writes are disabled', async () => {
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'elog-graph-'));
+    const workflow = makeWorkflow({
+      cache: {
+        disabled: true,
+        writeDisabled: true,
+        filePath: path.join(tempDir, 'elog.cache.json'),
+      },
+    });
+
+    const result = await new Graph(workflow).sync();
+
+    expect(result).toMatchObject({
+      status: 'success',
+      workflowId: 'workflow-1',
+      syncedCount: 1,
+      cacheFilePath: workflow.cache.filePath,
+    });
+    expect(fs.existsSync(workflow.cache.filePath)).toBe(false);
   });
 
   it('returns failed result and prevents deploy when transform fails', async () => {

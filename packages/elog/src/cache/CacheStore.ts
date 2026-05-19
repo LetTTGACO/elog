@@ -51,6 +51,10 @@ export class CacheStore {
   }
 
   write<T>(sortedDocList: SortedDoc<T>[] = []) {
+    if (this.config.writeDisabled) {
+      return;
+    }
+
     const cacheJson = {
       cachedDocList: this.cachedDocList.map((item) => {
         const { body: _body, ...docWithoutBody } = item;

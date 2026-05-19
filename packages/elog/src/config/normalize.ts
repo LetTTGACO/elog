@@ -16,6 +16,7 @@ export function normalizeV1Config(raw: ElogConfig | ElogConfig[]): RuntimeWorkfl
       disabled: config.disable ?? false,
       cache: {
         disabled: config.disableCache ?? false,
+        writeDisabled: config.disableCacheWrite ?? false,
         filePath: cacheFilePath,
       },
       from: config.from,
