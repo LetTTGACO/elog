@@ -1,4 +1,5 @@
 import { Command } from 'commander';
+import { runExportCommand } from './commands/export';
 import { runInitCommand } from './commands/init';
 import { runSyncCommand } from './commands/sync';
 import out from './logging/logger';
@@ -30,6 +31,17 @@ export function createProgram(): Command {
           cwd: process.cwd(),
           configName: options.name ?? 'elog.config.ts',
           dryRun: options.dryRun ?? false,
+        }),
+      ),
+    );
+
+  program
+    .command('export')
+    .description('export docs once without writing config files')
+    .action(() =>
+      handleAction(() =>
+        runExportCommand({
+          cwd: process.cwd(),
         }),
       ),
     );

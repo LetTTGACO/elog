@@ -1,8 +1,18 @@
 import fs from 'fs';
 import path from 'path';
 import { describe, expect, it } from 'vitest';
+import { createProgram } from './cli';
 import { loadConfigFromFile } from './config/load';
 import elog from './node-entry';
+
+describe('CLI command registration', () => {
+  it('registers the export command', () => {
+    const program = createProgram();
+    const commandNames = program.commands.map((command) => command.name());
+
+    expect(commandNames).toContain('export');
+  });
+});
 
 describe('fixture sync smoke', () => {
   it('loads fixture config and runs sync through runtime', async () => {
