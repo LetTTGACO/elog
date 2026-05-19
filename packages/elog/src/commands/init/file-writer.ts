@@ -31,11 +31,7 @@ function backupName(filename: string, timestamp: string, configName: string): st
 export function planGeneratedFileWrites(
   options: PlanGeneratedFileWritesOptions,
 ): GeneratedFileWrite[] {
-  const targets = [
-    { filename: options.configName, content: options.files.configText },
-    { filename: '.env', content: options.files.envText },
-    { filename: '.env.example', content: options.files.envExampleText },
-  ];
+  const targets = [{ filename: options.configName, content: options.files.configText }];
 
   return targets.map((target) => {
     const targetPath = path.join(options.cwd, target.filename);

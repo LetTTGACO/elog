@@ -6,42 +6,26 @@ import { getPluginsByKind, InitCommandError, loadBuiltInPluginRegistry } from '.
 import { generateInitFiles } from './generator';
 import { createTimestamp, writeGeneratedFiles } from './file-writer';
 import type { GeneratedFileWrite, WriteGeneratedFilesOptions } from './file-writer';
-import { ensureEnvIgnored } from './gitignore';
-import type { EnsureEnvIgnoredOptions } from './gitignore';
-import { runInitWizard, withHiddenDefaults } from './wizard';
-import type { GeneratedInitFiles, InitSelection, PluginRegistry } from './types';
+import { runPluginSelectionWizard } from './wizard';
+import type { GeneratedInitFiles, PluginRegistry, PluginSelection } from './types';
 
 export interface RunInitCommandOptions {
   cwd: string;
   configName: string;
   dryRun: boolean;
   loadRegistry?: () => PluginRegistry;
-  runWizard?: (registry: PluginRegistry) => Promise<InitSelection>;
+  runWizard?: (registry: PluginRegistry) => Promise<PluginSelection>;
   installPackages?: (options: InstallPackagesOptions) => ReturnType<typeof installPackages>;
   writeGeneratedFiles?: (options: WriteGeneratedFilesOptions) => Promise<GeneratedFileWrite[]>;
   overwriteExisting?: (filename: string) => Promise<boolean>;
-  ensureEnvIgnored?: (options: EnsureEnvIgnoredOptions) => Promise<boolean>;
   log?: (message: string) => void;
 }
 
-export function redactEnvText(envText: string): string {
-  return envText
-    .split('\n')
-    .map((line) => {
-      const eqIndex = line.indexOf('=');
-      if (eqIndex === -1) {
-        return line;
-      }
-      return `${line.slice(0, eqIndex + 1)}<redacted>`;
-    })
-    .join('\n');
-}
-
-export function selectedPackages(selection: InitSelection): string[] {
+export function selectedPackages(selection: PluginSelection): string[] {
   const allPlugins = [selection.from, ...selection.transforms, ...selection.to];
   const seen = new Set<string>();
   return allPlugins
-    .map((plugin) => plugin.entry.packageName)
+    .map((plugin) => plugin.packageName)
     .filter((name) => {
       if (seen.has(name)) {
         return false;
@@ -58,13 +42,11 @@ export function createInitDryRunOutput(
   const sections = [
     `Install command:\n${files.installCommand}`,
     `${configName}:\n${files.configText}`,
-    `.env (redacted):\n${redactEnvText(files.envText)}`,
-    `.env.example:\n${files.envExampleText}`,
   ];
   return sections.join('\n\n');
 }
 
-export function createDefaultInitSelection(registry: PluginRegistry): InitSelection {
+export function createDefaultInitSelection(registry: PluginRegistry): PluginSelection {
   const fromEntry = getPluginsByKind(registry, 'from')[0];
   const toEntry = getPluginsByKind(registry, 'to')[0];
 
@@ -76,18 +58,17 @@ export function createDefaultInitSelection(registry: PluginRegistry): InitSelect
   }
 
   return {
-    from: { entry: fromEntry, answers: withHiddenDefaults(fromEntry, {}) },
+    from: fromEntry,
     transforms: [],
-    to: [{ entry: toEntry, answers: withHiddenDefaults(toEntry, {}) }],
+    to: [toEntry],
   };
 }
 
 export async function runInitCommand(options: RunInitCommandOptions): Promise<void> {
   const loadRegistry = options.loadRegistry ?? loadBuiltInPluginRegistry;
-  const runWizard = options.runWizard ?? runInitWizard;
+  const runWizard = options.runWizard ?? runPluginSelectionWizard;
   const doInstall = options.installPackages ?? installPackages;
   const doWrite = options.writeGeneratedFiles ?? writeGeneratedFiles;
-  const doEnsureIgnored = options.ensureEnvIgnored ?? ensureEnvIgnored;
   const log = options.log ?? ((message: string) => out.info('初始化', message));
 
   const registry = loadRegistry();
@@ -131,19 +112,4 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
     timestamp: createTimestamp(),
     overwriteExisting: options.overwriteExisting ?? defaultConfirmOverwrite,
   });
-
-  const shouldAdd = async (): Promise<boolean> => {
-    out.warn('初始化', '.env 包含敏感信息，请不要提交到 GitHub');
-    const answer = (await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'addEnvToGitignore',
-        message: '是否将 .env 添加到 .gitignore？',
-        default: true,
-      },
-    ])) as { addEnvToGitignore: boolean };
-    return answer.addEnvToGitignore;
-  };
-
-  await doEnsureIgnored({ cwd: options.cwd, shouldAdd });
 }

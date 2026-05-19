@@ -10,7 +10,7 @@ function makeTempDir() {
 }
 
 describe('planGeneratedFileWrites', () => {
-  it('plans backup paths for existing generated files', () => {
+  it('plans backup paths only for the generated config file', () => {
     const cwd = makeTempDir();
     fs.writeFileSync(path.join(cwd, 'elog.config.ts'), 'old config');
     fs.writeFileSync(path.join(cwd, '.env'), 'OLD=1');
@@ -20,20 +20,12 @@ describe('planGeneratedFileWrites', () => {
       configName: 'elog.config.ts',
       files: {
         configText: 'new config',
-        envText: 'NEW=1\n',
-        envExampleText: 'NEW=\n',
       },
       timestamp: '20260516-153012',
     });
 
-    expect(plan.map((item) => path.basename(item.targetPath))).toEqual([
-      'elog.config.ts',
-      '.env',
-      '.env.example',
-    ]);
+    expect(plan.map((item) => path.basename(item.targetPath))).toEqual(['elog.config.ts']);
     expect(plan[0]?.backupPath?.endsWith('elog.config.backup.20260516-153012.ts')).toBe(true);
-    expect(plan[1]?.backupPath?.endsWith('.env.backup.20260516-153012')).toBe(true);
-    expect(plan[2]?.backupPath).toBeUndefined();
   });
 
   it('uses configName for backup pattern instead of hardcoding elog.config.ts', () => {
@@ -45,8 +37,6 @@ describe('planGeneratedFileWrites', () => {
       configName: 'custom.config.ts',
       files: {
         configText: 'new config',
-        envText: 'NEW=1\n',
-        envExampleText: 'NEW=\n',
       },
       timestamp: '20260516-153012',
     });
@@ -73,24 +63,26 @@ describe('createTimestamp', () => {
 });
 
 describe('writeGeneratedFiles', () => {
-  it('backs up existing files before writing new files', async () => {
+  it('backs up existing config before writing new config', async () => {
     const cwd = makeTempDir();
-    fs.writeFileSync(path.join(cwd, '.env'), 'OLD=1\n');
+    fs.writeFileSync(path.join(cwd, 'elog.config.ts'), 'old config');
 
     await writeGeneratedFiles({
       cwd,
       configName: 'elog.config.ts',
       files: {
-        configText: 'config',
-        envText: 'NEW=1\n',
-        envExampleText: 'NEW=\n',
+        configText: 'new config',
       },
       timestamp: '20260516-153012',
       overwriteExisting: () => true,
     });
 
-    expect(fs.readFileSync(path.join(cwd, '.env'), 'utf8')).toBe('NEW=1\n');
-    expect(fs.readFileSync(path.join(cwd, '.env.backup.20260516-153012'), 'utf8')).toBe('OLD=1\n');
+    expect(fs.readFileSync(path.join(cwd, 'elog.config.ts'), 'utf8')).toBe('new config');
+    expect(fs.readFileSync(path.join(cwd, 'elog.config.backup.20260516-153012.ts'), 'utf8')).toBe(
+      'old config',
+    );
+    expect(fs.existsSync(path.join(cwd, '.env'))).toBe(false);
+    expect(fs.existsSync(path.join(cwd, '.env.example'))).toBe(false);
   });
 
   it('aborts without writing when overwrite is declined', async () => {
@@ -103,8 +95,6 @@ describe('writeGeneratedFiles', () => {
         configName: 'elog.config.ts',
         files: {
           configText: 'new config',
-          envText: 'NEW=1\n',
-          envExampleText: 'NEW=\n',
         },
         timestamp: '20260516-153012',
         overwriteExisting: () => false,
@@ -127,8 +117,6 @@ describe('writeGeneratedFiles', () => {
         configName: 'elog.config.ts',
         files: {
           configText: 'config',
-          envText: 'NEW=1\n',
-          envExampleText: 'NEW=\n',
         },
         timestamp: '20260516-153012',
         overwriteExisting: () => true,
