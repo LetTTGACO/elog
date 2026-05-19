@@ -1,5 +1,6 @@
 import { NormalizedYuqueDoc, YuqueWithTokenConfig } from './types';
-import { DocDetail, DocStructure, ElogFromContext, PluginContext } from '@elogx-test/elog';
+import { ElogFromContext } from '@elogx-test/elog';
+import type { DocDetail, DocStructure, DownloadResult, PluginContext } from '@elogx-test/elog';
 import YuqueApi from './YuqueApi';
 import { IllegalityDocFormat } from './const';
 import { getProps, processMarkdownRaw } from './utils';
@@ -17,7 +18,8 @@ export default class YuqueClient extends ElogFromContext {
   /**
    * 获取文章详情列表
    */
-  async getDocDetailList() {
+  // 显式使用公共返回类型，避免声明文件泄露 core 内部的 docStatusMap 条目类型。
+  override async getDocDetailList(): Promise<DownloadResult> {
     this.ctx.logger.info('正在获取待更新文档，请稍等...');
     // 获取目录
     const tocList = await this.api.getSortedDocList();
