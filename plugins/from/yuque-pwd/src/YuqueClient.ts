@@ -63,6 +63,9 @@ export default class YuqueClient extends ElogFromContext {
       .filter((page) => {
         // 过滤用户配置
         return this.config.onlyPublic ? !!page.public : true;
+      })
+      .filter((page) => {
+        return this.config.onlyPublished ? !!page.status : true;
       });
 
     const { docList: needUpdateDocList, docStatusMap } = this.filterDocs(sortedDocList);

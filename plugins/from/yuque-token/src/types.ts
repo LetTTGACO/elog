@@ -209,6 +209,8 @@ export interface YuqueWithTokenConfig extends FromPluginBaseOptions {
   login: string;
   repo: string;
   onlyPublic?: boolean;
+  /** 只过滤已发布文档 **/
+  onlyPublished?: boolean;
   /** 下载并发数 */
   limit?: number;
 }

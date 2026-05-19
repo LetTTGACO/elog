@@ -73,6 +73,8 @@ export interface YuqueWithPwdConfig extends FromPluginBaseConfig {
   repo: string;
   linebreak?: boolean;
   onlyPublic?: boolean;
+  /** 只过滤已发布文档 **/
+  onlyPublished?: boolean;
   /** 下载并发数 */
   limit?: number;
 }
