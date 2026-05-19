@@ -1,3 +1,6 @@
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
 import { describe, expect, it, vi } from 'vitest';
 import { ExportCommandError, buildExportRuntimeConfig } from './runtime-config';
 import type { ExportSelection, PluginRegistryEntry } from '../init/types';
@@ -48,6 +51,28 @@ function createSelection(): ExportSelection {
   };
 }
 
+function writePluginPackage(cwd: string, packageName: string, pluginName: string, kind: string) {
+  const packageDir = path.join(cwd, 'node_modules', ...packageName.split('/'));
+  fs.mkdirSync(packageDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(packageDir, 'package.json'),
+    JSON.stringify({ name: packageName, type: 'module', main: 'index.js' }),
+  );
+  fs.writeFileSync(
+    path.join(packageDir, 'index.js'),
+    `export default function plugin() {
+  return {
+    name: ${JSON.stringify(pluginName)},
+    kind: ${JSON.stringify(kind)},
+    download() {},
+    transform(docs) { return docs; },
+    deploy() {}
+  };
+}
+`,
+  );
+}
+
 describe('buildExportRuntimeConfig', () => {
   it('imports plugin factories, passes answers directly, and disables cache', async () => {
     const fromPlugin = { name: 'from:yuque', kind: 'from' as const, download: vi.fn() };
@@ -83,6 +108,20 @@ describe('buildExportRuntimeConfig', () => {
       repo: 'docs',
     });
     expect(process.env.YUQUE_TOKEN).toBeUndefined();
+  });
+
+  it('resolves default plugin imports from the provided cwd', async () => {
+    const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'elog-export-runtime-'));
+    writePluginPackage(cwd, fromEntry.packageName, 'from:yuque-token', 'from');
+    writePluginPackage(cwd, transformEntry.packageName, 'transform:image-local', 'transform');
+    writePluginPackage(cwd, toEntry.packageName, 'to:local', 'to');
+
+    const config = await buildExportRuntimeConfig(createSelection(), { cwd });
+
+    expect(config.from.name).toBe('from:yuque-token');
+    expect(config.plugins?.[0]?.name).toBe('transform:image-local');
+    expect(Array.isArray(config.to)).toBe(false);
+    expect(config.to).toMatchObject({ name: 'to:local' });
   });
 
   it('wraps import failures as ExportCommandError', async () => {

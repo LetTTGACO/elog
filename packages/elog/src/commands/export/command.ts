@@ -8,13 +8,17 @@ import type { ExportSelection, PluginRegistry } from '../init/types';
 import { runExportWizard } from '../init/wizard';
 import { reportWorkflowResults, throwOnFailedWorkflow } from '../sync/results';
 import { buildExportRuntimeConfig } from './runtime-config';
+import type { BuildExportRuntimeConfigOptions } from './runtime-config';
 
 export interface RunExportCommandOptions {
   cwd: string;
   loadRegistry?: () => PluginRegistry;
   runWizard?: (registry: PluginRegistry) => Promise<ExportSelection>;
   installPackages?: (options: InstallPackagesOptions) => ReturnType<typeof installPackages>;
-  buildRuntimeConfig?: (selection: ExportSelection) => Promise<ElogConfig>;
+  buildRuntimeConfig?: (
+    selection: ExportSelection,
+    options: BuildExportRuntimeConfigOptions,
+  ) => Promise<ElogConfig>;
   runRuntime?: (config: ElogConfig) => Promise<WorkflowResult[]>;
   reportResults?: (results: WorkflowResult[]) => void;
   throwOnFailed?: (results: WorkflowResult[]) => void;
@@ -50,7 +54,7 @@ export async function runExportCommand(options: RunExportCommandOptions): Promis
 
   doInstall({ cwd: options.cwd, packageManager, packages });
 
-  const runtimeConfig = await doBuildRuntimeConfig(selection);
+  const runtimeConfig = await doBuildRuntimeConfig(selection, { cwd: options.cwd });
   const results = await runRuntime(runtimeConfig);
   reportResults(results);
   throwOnFailed(results);

@@ -95,7 +95,7 @@ describe('runExportCommand', () => {
         ],
       }),
     );
-    expect(buildRuntimeConfig).toHaveBeenCalledWith(selection);
+    expect(buildRuntimeConfig).toHaveBeenCalledWith(selection, { cwd: '/tmp/project' });
     expect(runRuntime).toHaveBeenCalledWith(runtimeConfig);
     expect(reportResults).toHaveBeenCalledWith(results);
     expect(throwOnFailed).toHaveBeenCalledWith(results);

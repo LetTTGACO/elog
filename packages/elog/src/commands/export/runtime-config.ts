@@ -1,3 +1,6 @@
+import path from 'path';
+import { createRequire } from 'module';
+import { pathToFileURL } from 'url';
 import type { ElogConfig } from '../../types/common';
 import type { FromPlugin, ToPlugin, TransformPlugin } from '../../plugins/types';
 import type { ExportSelection, SelectedPlugin } from '../init/types';
@@ -8,6 +11,7 @@ type PluginFactory = (options: Record<string, unknown>) => FromPlugin | Transfor
 type PluginModule = { default?: PluginFactory } | PluginFactory;
 
 export interface BuildExportRuntimeConfigOptions {
+  cwd?: string;
   loadPlugin?: (packageName: string) => Promise<PluginFactory>;
 }
 
@@ -21,10 +25,12 @@ export class ExportCommandError extends Error {
   }
 }
 
-async function defaultLoadPlugin(packageName: string): Promise<PluginFactory> {
+async function defaultLoadPlugin(packageName: string, cwd: string): Promise<PluginFactory> {
   let module: PluginModule;
   try {
-    module = (await import(packageName)) as PluginModule;
+    const requireFromCwd = createRequire(path.join(cwd, 'package.json'));
+    const resolvedPath = requireFromCwd.resolve(packageName);
+    module = (await import(pathToFileURL(resolvedPath).href)) as PluginModule;
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     throw new ExportCommandError(
@@ -75,7 +81,8 @@ export async function buildExportRuntimeConfig(
   selection: ExportSelection,
   options: BuildExportRuntimeConfigOptions = {},
 ): Promise<ElogConfig> {
-  const loadPlugin = options.loadPlugin ?? defaultLoadPlugin;
+  const cwd = options.cwd ?? process.cwd();
+  const loadPlugin = options.loadPlugin ?? ((packageName) => defaultLoadPlugin(packageName, cwd));
   const from = (await createPlugin(selection.from, loadPlugin)) as FromPlugin;
   const plugins = (await Promise.all(
     selection.transforms.map((plugin) => createPlugin(plugin, loadPlugin)),
