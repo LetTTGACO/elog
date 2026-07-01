@@ -4,17 +4,14 @@ import {
   WordPressCategory,
   WordPressConfig,
   WordPressMedia,
-  WordPressMediaParams,
   WordPressPost,
   WordPressTag,
 } from './types';
 import Context from './Context';
 import type { PluginContext } from '@elogx-test/elog';
-import WPAPI from 'wpapi';
 
 export default class WordPressApi extends Context {
   config: WordPressConfig;
-  wpClient: WPAPI;
 
   constructor(config: WordPressConfig, ctx: PluginContext) {
     super(ctx);
@@ -25,18 +22,42 @@ export default class WordPressApi extends Context {
     if (!this.config.username || !this.config.password) {
       this.ctx.logger.error('缺少WordPress账号或密码');
     }
-    this.wpClient = new WPAPI({
-      endpoint: config.endpoint,
-      username: config.username,
-      password: config.password,
+  }
+
+  private get baseUrl() {
+    return this.config.endpoint.replace(/\/$/, '');
+  }
+
+  private get authHeader() {
+    return `Basic ${Buffer.from(`${this.config.username}:${this.config.password}`).toString(
+      'base64',
+    )}`;
+  }
+
+  private async requestInternal<T>(api: string, reqOpts: any = {}): Promise<T> {
+    const res = await this.ctx.http<T>(`${this.baseUrl}${api}`, {
+      ...reqOpts,
+      headers: {
+        Authorization: this.authHeader,
+        ...reqOpts.headers,
+      },
     });
+    if (res.status >= 200 && res.status < 300) {
+      return res.data;
+    }
+    const data = res.data as { code?: string; message?: string };
+    const error = Object.assign(new Error(data?.message || JSON.stringify(res.data)), data);
+    throw error;
   }
 
   /**
    * 获取文章列表
    */
   async getPostList(pageSize = 100, page = 1): Promise<WordPressPost[]> {
-    return this.wpClient.posts().perPage(pageSize).page(page);
+    return this.requestInternal<WordPressPost[]>('/wp/v2/posts', {
+      method: 'GET',
+      data: { per_page: pageSize, page },
+    });
   }
 
   /**
@@ -45,25 +66,16 @@ export default class WordPressApi extends Context {
    * @param allPosts
    */
   async getAllPosts(page = 1, allPosts: WordPressPost[] = []): Promise<WordPressPost[]> {
-    return this.wpClient
-      .posts()
-      .perPage(100)
-      .page(page)
+    return this.getPostList(100, page)
       .then((posts) => {
-        // 将当前页面的文章合并到所有文章数组中
         allPosts = allPosts.concat(posts);
-
         if (posts.length === 100) {
-          // 继续获取下一页
           return this.getAllPosts(page + 1, allPosts);
-        } else {
-          // 已获取到最后一页或没有文章
-          return allPosts;
         }
+        return allPosts;
       })
       .catch((err) => {
         if (err.code === 'rest_post_invalid_page_number') {
-          // 请求页码超过总页数，直接返回所有文章
           return allPosts;
         } else {
           this.ctx.logger.error(`获取文章列表失败: ${err.message}`);
@@ -75,53 +87,60 @@ export default class WordPressApi extends Context {
    * 创建文章
    */
   async createPost(post: CreateWordPressPost): Promise<WordPressPost> {
-    return this.wpClient.posts().create(post);
+    return this.requestInternal<WordPressPost>('/wp/v2/posts', {
+      method: 'POST',
+      data: post,
+    });
   }
 
   /**
    * 更新文章
    */
   async updatePost(id: number, post: UpdateWordPressPost): Promise<WordPressPost> {
-    return this.wpClient.posts().id(id).update(post);
+    return this.requestInternal<WordPressPost>(`/wp/v2/posts/${id}`, {
+      method: 'POST',
+      data: post,
+    });
   }
 
   /**
    * 删除文章
    */
   async deletePost(id: number): Promise<WordPressPost> {
-    return this.wpClient.posts().id(id).delete();
+    return this.requestInternal<WordPressPost>(`/wp/v2/posts/${id}`, {
+      method: 'DELETE',
+    });
   }
 
   /**
    * 获取标签
    */
   async getTags(): Promise<WordPressTag[]> {
-    return this.wpClient.tags();
+    return this.requestInternal<WordPressTag[]>('/wp/v2/tags', { method: 'GET' });
   }
 
   /**
    * 获取全部标签
    */
   async getAllTags(page = 1, allTags: WordPressTag[] = []): Promise<WordPressTag[]> {
-    return this.wpClient
-      .tags()
-      .perPage(100)
-      .page(page)
+    return this.requestInternal<WordPressTag[]>('/wp/v2/tags', {
+      method: 'GET',
+      data: { per_page: 100, page },
+    })
       .then((tags) => {
         if (tags.length === 0) return allTags;
-        // 将当前页面的标签合并到所有标签数组中
         allTags = allTags.concat(tags);
-
         if (tags.length === 100) {
-          // 继续获取下一页
           return this.getAllTags(page + 1, allTags);
-        } else {
-          // 已获取到最后一页或没有标签
-          return allTags;
         }
+        return allTags;
       })
       .catch((err) => {
-        this.ctx.logger.error(`获取标签列表失败${err.message}`);
+        if (err.code === 'rest_post_invalid_page_number') {
+          return allTags;
+        } else {
+          this.ctx.logger.error(`获取标签列表失败: ${err.message}`);
+        }
       });
   }
 
@@ -129,14 +148,17 @@ export default class WordPressApi extends Context {
    * 新增标签
    */
   async createTag(tag: { name: string }): Promise<WordPressTag> {
-    return this.wpClient.tags().create(tag);
+    return this.requestInternal<WordPressTag>('/wp/v2/tags', {
+      method: 'POST',
+      data: tag,
+    });
   }
 
   /**
    * 获取分类
    */
   async getCategories(): Promise<WordPressCategory[]> {
-    return this.wpClient.categories();
+    return this.requestInternal<WordPressCategory[]>('/wp/v2/categories', { method: 'GET' });
   }
 
   /**
@@ -146,25 +168,24 @@ export default class WordPressApi extends Context {
     page = 1,
     allCategories: WordPressCategory[] = [],
   ): Promise<WordPressCategory[]> {
-    return this.wpClient
-      .categories()
-      .perPage(100)
-      .page(page)
+    return this.requestInternal<WordPressCategory[]>('/wp/v2/categories', {
+      method: 'GET',
+      data: { per_page: 100, page },
+    })
       .then((categories) => {
         if (categories.length === 0) return allCategories;
-        // 将当前页面的分类合并到所有分类数组中
         allCategories = allCategories.concat(categories);
-
         if (categories.length === 100) {
-          // 继续获取下一页
           return this.getAllCategories(page + 1, allCategories);
-        } else {
-          // 已获取到最后一页或没有分类
-          return allCategories;
         }
+        return allCategories;
       })
       .catch((err) => {
-        this.ctx.logger.error(`获取分类列表失败: ${err.message}`);
+        if (err.code === 'rest_post_invalid_page_number') {
+          return allCategories;
+        } else {
+          this.ctx.logger.error(`获取分类列表失败: ${err.message}`);
+        }
       });
   }
 
@@ -174,39 +195,36 @@ export default class WordPressApi extends Context {
    * @param category
    */
   async createCategory(category: { name: string }): Promise<WordPressCategory> {
-    return this.wpClient.categories().create(category);
+    return this.requestInternal<WordPressCategory>('/wp/v2/categories', {
+      method: 'POST',
+      data: category,
+    });
   }
 
   /**
    * 获取媒体库
    */
   async getMedia(): Promise<WordPressMedia[]> {
-    return this.wpClient.media();
+    return this.requestInternal<WordPressMedia[]>('/wp/v2/media', { method: 'GET' });
   }
 
   /**
    * 获取全部媒体库
    */
   async getAllMedia(page = 1, allMedia: WordPressMedia[] = []): Promise<WordPressMedia[]> {
-    return this.wpClient
-      .media()
-      .perPage(100)
-      .page(page)
+    return this.requestInternal<WordPressMedia[]>('/wp/v2/media', {
+      method: 'GET',
+      data: { per_page: 100, page },
+    })
       .then((medias) => {
-        // 将当前页面的文章合并到所有媒体数组中
         allMedia = allMedia.concat(medias);
-
         if (medias.length === 100) {
-          // 继续获取下一页
           return this.getAllMedia(page + 1, allMedia);
-        } else {
-          // 已获取到最后一页或没有媒体
-          return allMedia;
         }
+        return allMedia;
       })
       .catch((err) => {
         if (err.code === 'rest_post_invalid_page_number') {
-          // 请求页码超过总页数，直接返回所有媒体
           return allMedia;
         } else {
           this.ctx.logger.error(`获取图片列表失败: ${err.message}`);
@@ -218,13 +236,13 @@ export default class WordPressApi extends Context {
    * 上传媒体
    */
   async uploadMedia(file: Buffer, filename: string): Promise<WordPressMedia> {
-    const imageInfo: WordPressMediaParams = {
-      title: filename,
-      description: 'upload by elog',
-    };
-    return this.wpClient
-      .media()
-      .file(file as any, filename)
-      .create(imageInfo);
+    const form = new FormData();
+    form.set('file', new Blob([file]), filename);
+    form.set('title', filename);
+    form.set('description', 'upload by elog');
+    return this.requestInternal<WordPressMedia>('/wp/v2/media', {
+      method: 'POST',
+      body: form,
+    });
   }
 }
