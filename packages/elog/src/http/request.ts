@@ -1,30 +1,104 @@
-import { HttpClientResponse, request as req, RequestOptions } from 'urllib';
+import { ofetch } from 'ofetch';
 import out from '../logging/logger';
+
+export interface HttpClientResponse<T> {
+  status: number;
+  headers: Record<string, string | string[]>;
+  data: T;
+}
+
+export interface RequestOptions {
+  method?: string;
+  data?: unknown;
+  auth?: string;
+  headers?: Record<string, string>;
+  dataType?: 'json' | 'text' | 'buffer';
+  contentType?: 'json';
+  timeout?: number;
+  stream?: unknown;
+  body?: unknown;
+}
+
+function hasHeader(headers: Record<string, string>, name: string) {
+  const target = name.toLowerCase();
+  return Object.keys(headers).some((key) => key.toLowerCase() === target);
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return Object.prototype.toString.call(value) === '[object Object]';
+}
+
+function normalizeHeaders(headers: Headers) {
+  const normalized: Record<string, string | string[]> = Object.fromEntries(headers.entries());
+  const setCookie = (headers as unknown as { getSetCookie?: () => string[] }).getSetCookie?.();
+  if (setCookie?.length) {
+    normalized['set-cookie'] = setCookie;
+  }
+  return normalized;
+}
 
 /**
  * 网络请求封装，集中设置 Elog 的默认请求头、JSON 行为和超时约束。
- * @param url
- * @param reqOpts
  */
-export default async <T>(url: string, reqOpts?: RequestOptions): Promise<HttpClientResponse<T>> => {
-  const opts: RequestOptions = {
-    contentType: 'json',
-    dataType: 'json',
-    headers: {
-      'User-Agent': 'Elog',
-      ...reqOpts?.headers,
-    },
-    gzip: true,
-    // 超时时间 60s
-    timeout: Number(process.env?.REQUEST_TIMEOUT || 60000) || 60000,
-    ...reqOpts,
+export default async <T>(
+  url: string,
+  reqOpts: RequestOptions = {},
+): Promise<HttpClientResponse<T>> => {
+  const method = (reqOpts.method || 'GET').toUpperCase();
+  const isGetLike = method === 'GET' || method === 'HEAD';
+  const dataType = reqOpts.dataType || 'json';
+  const responseType = dataType === 'buffer' ? 'arrayBuffer' : dataType;
+  const timeout = Number(reqOpts.timeout || process.env?.REQUEST_TIMEOUT || 60000) || 60000;
+  const headers = {
+    'User-Agent': 'Elog',
+    ...reqOpts.headers,
   };
+  const shouldSendJsonBody =
+    !isGetLike &&
+    reqOpts.body === undefined &&
+    reqOpts.stream === undefined &&
+    (reqOpts.contentType ?? 'json') === 'json' &&
+    isPlainObject(reqOpts.data);
+
+  if (reqOpts.auth && !hasHeader(headers, 'authorization')) {
+    headers.Authorization = `Basic ${Buffer.from(reqOpts.auth).toString('base64')}`;
+  }
+
+  if (shouldSendJsonBody && !hasHeader(headers, 'content-type')) {
+    headers['content-type'] = 'application/json';
+  }
+
+  const body =
+    reqOpts.body ??
+    reqOpts.stream ??
+    (shouldSendJsonBody ? JSON.stringify(reqOpts.data) : isGetLike ? undefined : reqOpts.data);
+
+  const opts = {
+    method,
+    query: isGetLike ? reqOpts.data : undefined,
+    body,
+    headers,
+    responseType,
+    timeout,
+    retry: 0,
+    ignoreResponseError: true,
+    duplex: body ? 'half' : undefined,
+  } as const;
+
   out.debug(`API请求URL: ${url}`);
   if (url.includes('api.github.com')) {
-    // GitHub Base64 响应和请求体常很大，只输出 headers 避免 debug 日志刷屏。
-    out.debug(`API请求Header参数: ${JSON.stringify(reqOpts?.headers || {})}`);
+    out.debug(`API请求Header参数: ${JSON.stringify(reqOpts.headers || {})}`);
   } else {
-    out.debug(`API请求参数: ${JSON.stringify(opts)}`);
+    out.debug(`API请求参数: ${JSON.stringify({ ...opts, body: body ? '[body]' : undefined })}`);
   }
-  return req(url, opts);
+
+  const res = await ofetch.raw(url, opts);
+  const data =
+    dataType === 'buffer' && res._data instanceof ArrayBuffer ? Buffer.from(res._data) : res._data;
+
+  return {
+    status: res.status,
+    headers: normalizeHeaders(res.headers),
+    data: data as T,
+  };
 };
