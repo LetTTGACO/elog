@@ -22,8 +22,7 @@
     }
   },
   "dependencies": {
-    "gray-matter": "~4.0.3",
-    "mkdirp": "~3.0.1"
+    "gray-matter": "~4.0.3"
   },
   "devDependencies": {
     "@elogx-test/elog": "workspace:*",

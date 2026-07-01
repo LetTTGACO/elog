@@ -1,7 +1,6 @@
 import { DocDetail, ElogBaseContext, PluginContext } from '@elogx-test/elog';
 import path from 'path';
 import fs from 'fs';
-import { mkdirp } from 'mkdirp';
 import type { AdapterFunction, LocalConfig } from './types';
 import { markdownAdapter, matterMarkdownAdapter } from './utils';
 
@@ -90,7 +89,7 @@ export default class LocalDeploy extends ElogBaseContext {
           const tocPath = doc.docStructure.map((item) => item.title).join('/');
           fileName = this.checkFileName(fileName + tocPath, fileName, doc.id);
           const outDir = path.join(outputDir, tocPath);
-          mkdirp.sync(outDir);
+          fs.mkdirSync(outDir, { recursive: true });
           docPath = path.join(outDir, `${fileName}.${fileExt}`);
           // 生成文件夹
           this.ctx.logger.info('生成文档', `${fileName}.${fileExt}`);
@@ -100,14 +99,14 @@ export default class LocalDeploy extends ElogBaseContext {
           fileName = this.checkFileName(fileName, fileName, doc.id);
           docPath = path.join(outputDir, `${fileName}.${fileExt}`);
           this.ctx.logger.info('生成文档', `${fileName}.${fileExt}`);
-          mkdirp.sync(outputDir);
+          fs.mkdirSync(outputDir, { recursive: true });
         }
       } else {
         // 直接生成
         fileName = this.checkFileName(fileName, fileName, doc.id);
         docPath = path.join(outputDir, `${fileName}.${fileExt}`);
         this.ctx.logger.info('生成文档', `${fileName}.${fileExt}`);
-        mkdirp.sync(outputDir);
+        fs.mkdirSync(outputDir, { recursive: true });
       }
       fs.writeFileSync(docPath, doc.body, {
         encoding: 'utf8',

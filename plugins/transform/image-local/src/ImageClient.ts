@@ -2,7 +2,6 @@ import type { DocDetail, PluginContext } from '@elogx-test/elog';
 import type { ImageLocalConfig, ImageSource, ImageUrl } from './types';
 import path from 'path';
 import fs from 'fs';
-import { mkdirp } from 'mkdirp';
 
 export default class ImageClient {
   private readonly config: ImageLocalConfig;
@@ -60,7 +59,7 @@ export default class ImageClient {
         prefixKey = prefixKey + '/';
       }
       const fullDirPath = path.resolve(process.cwd(), dirPath);
-      mkdirp.sync(dirPath);
+      fs.mkdirSync(fullDirPath, { recursive: true });
       const filePath = path.resolve(fullDirPath, imageName);
       fs.writeFileSync(filePath, imgBuffer);
       // 计算root和output的相对路径

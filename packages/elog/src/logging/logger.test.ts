@@ -19,6 +19,16 @@ describe('logger', () => {
     exitMock.mockClear();
   });
 
+  it('wraps long content into aligned log lines', () => {
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+
+    out.info('标题', 'a'.repeat(130));
+
+    expect(logSpy).toHaveBeenCalledTimes(2);
+    expect(logSpy.mock.calls[0][0]).toContain('a'.repeat(108));
+    expect(logSpy.mock.calls[1][0]).toContain('a'.repeat(22));
+  });
+
   it('exits with a nonzero code for fatal errors', () => {
     vi.spyOn(console, 'log').mockImplementation(() => {});
 

@@ -28,9 +28,7 @@
   },
   "devDependencies": {
     "@elogx-test/elog": "workspace:*",
-    "@types/jsdom": "21.1.2",
     "@types/node": "~22.19.19",
-    "@types/tiny-async-pool": "~2.0.3",
     "tsdown": "^0.22.3",
     "typescript": "~6.0.3"
   }

@@ -1,5 +1,4 @@
 import chalk from 'chalk';
-import { chunk } from 'lodash-es';
 import { LogLevel } from '../types/log';
 import {
   LOGLEVEL_DEBUG,
@@ -12,6 +11,15 @@ import * as process from 'process';
 
 /** 当前终端宽度，用于把长内容分片输出并保持日志头对齐。 */
 export const __columns = process?.stdout?.columns ?? 120;
+
+function chunkString(input: string, size: number) {
+  const chunkSize = Math.max(size, 1);
+  const chunks: string[] = [];
+  for (let i = 0; i < input.length; i += chunkSize) {
+    chunks.push(input.slice(i, i + chunkSize));
+  }
+  return chunks;
+}
 
 /**
  * 辅助输出过程日志，兼顾中文字符宽度和多行内容对齐。
@@ -64,9 +72,9 @@ export function println(level: LogLevel, head: string, content?: string) {
   }
 
   (content ?? '')
-    .replace('/\r\n/g', '\n')
+    .replace(/\r\n/g, '\n')
     .split('\n')
-    .map((c) => chunk(c, __columns - headLength).map((str) => str.join('')))
+    .map((c) => chunkString(c, __columns - headLength))
     .reduce((r, c) => r.concat(c))
     .forEach((str, i) => {
       const _head = i ? ' '.repeat(headLength) : color[level](`${head}${' '.repeat(fillLength)}`);
