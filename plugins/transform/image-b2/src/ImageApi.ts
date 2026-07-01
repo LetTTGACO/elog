@@ -1,7 +1,7 @@
 import B2 from 'backblaze-b2';
-import { ElogBaseContext, PluginContext } from '@elogx-test/elog';
+import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elogx-test/elog';
 import type { ImageB2Config } from './types';
-import { contentTypeForFile, formattedPrefix, publicUrl } from './utils';
+import { contentTypeForFile, publicUrl } from './utils';
 
 interface B2Bucket {
   bucketId?: string;
@@ -28,7 +28,7 @@ export default class B2Api extends ElogBaseContext {
     ) {
       this.ctx.logger.error('缺少 Backblaze B2 配置信息');
     }
-    this.config.prefixKey = formattedPrefix(this.config.prefixKey);
+    this.config.prefixKey = formatImagePrefix(this.config.prefixKey);
     this.api = new B2({
       applicationKeyId: this.config.applicationKeyId,
       applicationKey: this.config.applicationKey,

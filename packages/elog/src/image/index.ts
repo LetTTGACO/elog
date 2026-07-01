@@ -126,6 +126,12 @@ export const genUniqueIdFromUrl = (url: string, length?: number) => {
   return hash;
 };
 
+/** 生成对象存储图片路径前缀：开头无 /，结尾有 /，空值保持空。 */
+export const formatImagePrefix = (prefix?: string): string => {
+  const value = prefix?.replace(/^\/+/, '').replace(/\/+$/, '');
+  return value ? `${value}/` : '';
+};
+
 /**
  * 获取文件类型，按 base64、URL 后缀、下载 buffer 的顺序逐级兜底。
  * @param url

@@ -1,6 +1,5 @@
 import { ImageOSSConfig } from './types';
-import { ElogBaseContext, PluginContext } from '@elogx-test/elog';
-import { formattedPrefix } from './utils';
+import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elogx-test/elog';
 import OSS from 'ali-oss';
 
 export default class COSApi extends ElogBaseContext {
@@ -19,7 +18,7 @@ export default class COSApi extends ElogBaseContext {
     if (!this.config.accessKeyId || !this.config.accessKeySecret) {
       this.ctx.logger.error('缺少腾讯云COS密钥信息');
     }
-    this.config.prefixKey = formattedPrefix(this.config.prefixKey);
+    this.config.prefixKey = formatImagePrefix(this.config.prefixKey);
     this.api = new OSS(this.config);
   }
 

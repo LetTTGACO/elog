@@ -1,5 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { genUniqueIdFromUrl, getBufferFromUrl, getUrlListFromContent } from './index';
+import {
+  formatImagePrefix,
+  genUniqueIdFromUrl,
+  getBufferFromUrl,
+  getUrlListFromContent,
+} from './index';
 
 const requestMock = vi.hoisted(() => vi.fn());
 
@@ -29,6 +34,13 @@ describe('getBufferFromUrl', () => {
       'https://example.com/image',
       expect.objectContaining({ dataType: 'buffer' }),
     );
+  });
+});
+
+describe('formatImagePrefix', () => {
+  it('formats object storage prefixes with no leading slash and one trailing slash', () => {
+    expect(formatImagePrefix()).toBe('');
+    expect(formatImagePrefix('/elog/images//')).toBe('elog/images/');
   });
 });
 

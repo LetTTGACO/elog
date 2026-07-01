@@ -1,8 +1,3 @@
-export const formattedPrefix = (prefix?: string): string => {
-  const value = prefix?.replace(/^\/+/, '').replace(/\/+$/, '');
-  return value ? `${value}/` : '';
-};
-
 export const publicUrl = (host: string, key: string): string => {
   const cleanHost = host.replace(/\/+$/, '');
   const base =

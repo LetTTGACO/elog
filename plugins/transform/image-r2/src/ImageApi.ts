@@ -1,7 +1,7 @@
 import { HeadObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { ElogBaseContext, PluginContext } from '@elogx-test/elog';
+import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elogx-test/elog';
 import type { ImageR2Config } from './types';
-import { contentTypeForFile, formattedPrefix, publicUrl } from './utils';
+import { contentTypeForFile, publicUrl } from './utils';
 
 export default class R2Api extends ElogBaseContext {
   private readonly config: ImageR2Config;
@@ -19,7 +19,7 @@ export default class R2Api extends ElogBaseContext {
     ) {
       this.ctx.logger.error('缺少 Cloudflare R2 配置信息');
     }
-    this.config.prefixKey = formattedPrefix(this.config.prefixKey);
+    this.config.prefixKey = formatImagePrefix(this.config.prefixKey);
     this.api = new S3Client({
       region: this.config.region || 'auto',
       endpoint: this.config.endpoint,
