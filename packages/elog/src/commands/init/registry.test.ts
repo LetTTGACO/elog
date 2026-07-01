@@ -9,16 +9,29 @@ describe('loadBuiltInPluginRegistry', () => {
     expect(registry.plugins.length).toBeGreaterThan(0);
   });
 
-  it('uses Yuque password mode as the built-in Yuque source', () => {
+  it('uses Notion as the first built-in source for the local golden path', () => {
     const registry = loadBuiltInPluginRegistry();
-    const yuque = registry.plugins.find((plugin) => plugin.type === 'yuque-pwd');
+    const fromPlugins = getPluginsByKind(registry, 'from');
 
-    expect(yuque).toMatchObject({
+    expect(fromPlugins[0]).toMatchObject({
       kind: 'from',
-      type: 'yuque-pwd',
-      displayName: '语雀（账号密码模式）',
-      packageName: '@elogx-test/plugin-from-yuque-pwd',
+      type: 'notion',
+      displayName: 'Notion',
+      packageName: '@elogx-test/plugin-from-notion',
+      importName: 'notion',
     });
+  });
+
+  it('includes the Notion, image-local, and local init registry entries', () => {
+    const registry = loadBuiltInPluginRegistry();
+
+    expect(registry.plugins).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ kind: 'from', type: 'notion' }),
+        expect.objectContaining({ kind: 'transform', type: 'image-local' }),
+        expect.objectContaining({ kind: 'to', type: 'local' }),
+      ]),
+    );
   });
 });
 

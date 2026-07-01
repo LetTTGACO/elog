@@ -4,6 +4,39 @@
   "plugins": [
     {
       "kind": "from",
+      "type": "notion",
+      "displayName": "Notion",
+      "packageName": "@elogx-test/plugin-from-notion",
+      "importName": "notion",
+      "optionsSchema": {
+        "type": "object",
+        "required": ["token", "databaseId"],
+        "properties": {
+          "token": {
+            "type": "string",
+            "title": "Notion Token",
+            "x-elog-env": "NOTION_TOKEN",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入 Notion Token"
+            }
+          },
+          "databaseId": {
+            "type": "string",
+            "title": "Notion Database ID",
+            "x-elog-env": "NOTION_DATABASE_ID",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 Notion Database ID"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "kind": "from",
       "type": "yuque-pwd",
       "displayName": "语雀（账号密码模式）",
       "packageName": "@elogx-test/plugin-from-yuque-pwd",

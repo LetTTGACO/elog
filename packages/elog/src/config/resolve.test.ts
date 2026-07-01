@@ -99,6 +99,34 @@ describe('resolveConfig', () => {
     });
   });
 
+  it('rejects a plugin with the wrong from kind', () => {
+    const result = resolveConfig({
+      from: toPlugin,
+      to: toPlugin,
+    });
+
+    expect(result.workflows).toEqual([]);
+    expect(result.diagnostics[0]).toMatchObject({
+      level: 'error',
+      code: 'CONFIG_MISSING_FROM',
+      path: 'workflows[0].from',
+    });
+  });
+
+  it('rejects a plugin with the wrong to kind', () => {
+    const result = resolveConfig({
+      from: fromPlugin,
+      to: transformPlugin,
+    });
+
+    expect(result.workflows).toEqual([]);
+    expect(result.diagnostics[0]).toMatchObject({
+      level: 'error',
+      code: 'CONFIG_MISSING_TO',
+      path: 'workflows[0].to',
+    });
+  });
+
   it('rejects an empty workflow id', () => {
     const result = resolveConfig({
       id: '',
@@ -126,6 +154,20 @@ describe('resolveConfig', () => {
       level: 'error',
       code: 'CONFIG_INVALID_WORKFLOW_ID',
       path: 'workflows[0].id',
+    });
+  });
+
+  it('rejects duplicate workflow ids', () => {
+    const result = resolveConfig([
+      { id: 'same', from: fromPlugin, to: toPlugin },
+      { id: 'same', from: fromPlugin, to: toPlugin },
+    ]);
+
+    expect(result.workflows).toEqual([]);
+    expect(result.diagnostics[0]).toMatchObject({
+      level: 'error',
+      code: 'CONFIG_DUPLICATE_WORKFLOW_ID',
+      path: 'workflows[1].id',
     });
   });
 
@@ -171,5 +213,7 @@ describe('resolveConfig', () => {
       level: 'error',
       code: 'LEGACY_V0_CONFIG_DETECTED',
     });
+    expect(result.diagnostics[0]?.message).toContain('1.0');
+    expect(result.diagnostics[0]?.message).not.toMatch(/migrate command/i);
   });
 });
