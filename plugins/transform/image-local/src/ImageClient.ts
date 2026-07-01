@@ -1,15 +1,15 @@
-import type { DocDetail, PluginContext } from '@elogx-test/elog';
-import type { ImageLocalConfig, ImageSource, ImageUrl } from './types';
+import type { DocDetail, ImageUploader, PluginContext } from '@elogx-test/elog';
+import { ElogImageContext } from '@elogx-test/elog';
+import type { ImageLocalConfig } from './types';
 import path from 'path';
 import fs from 'fs';
 
-export default class ImageClient {
+export default class ImageClient extends ElogImageContext {
   private readonly config: ImageLocalConfig;
-  private readonly ctx: PluginContext;
 
   constructor(config: ImageLocalConfig, ctx: PluginContext) {
+    super(ctx, config);
     this.config = config;
-    this.ctx = ctx;
   }
 
   /**
@@ -72,99 +72,18 @@ export default class ImageClient {
   }
 
   /**
-   * 替换图片
+   * 处理图片
    * @param docDetailList
    */
-  async replaceImages(docDetailList: DocDetail[]) {
-    // 遍历文章列表
-    for (let i = 0; i < docDetailList.length; i++) {
-      const articleInfo = docDetailList[i];
-      // 获取图片URL列表
-      const urlList = this.ctx.image.getUrlListFromContent(articleInfo.body);
-      if (urlList.length) {
-        // 上传图片
-        const urls = await this.transformImages(urlList, articleInfo, () => {
-          // 图片错误
-          articleInfo.error = 1;
-        });
-        if (urls?.length) {
-          // 替换文章中的图片
-          urls.forEach((item) => {
-            this.ctx.logger.info('图片替换', `${item.data}`);
-            articleInfo.body = articleInfo.body.replace(item.originalUrl, item.data);
-          });
-        }
-      }
-    }
-    return docDetailList;
-  }
-
-  /**
-   * 处理图片
-   * @param urlList
-   * @param doc
-   * @param failBack
-   */
-  private async transformImages(
-    urlList: ImageUrl[],
-    doc: DocDetail,
-    failBack?: (image: ImageUrl) => void,
-  ) {
-    const toUploadURLs = urlList.map(async (image) => {
-      return await new Promise<ImageSource | undefined>(async (resolve) => {
-        try {
-          // 生成文件名
-          const fileName = this.ctx.image.genUniqueIdFromUrl(image.data);
-          // 生成文件名后缀
-          const fileType = await this.ctx.image.getFileType(image.data);
-          if (!fileType) {
-            this.ctx.logger.warn(
-              `${doc?.properties?.title} 存在获取图片类型失败，跳过：${image.data}`,
-            );
-            resolve(undefined);
-            return;
-          }
-          // 完整文件名
-          const fullName = `${fileName}.${fileType.type}`;
-          const buffer = await this.ctx.image.getBufferFromUrl(image.originalUrl);
-          if (!buffer) {
-            failBack?.(image);
-            resolve(undefined);
-            return;
-          }
-          // 上传图片
-          resolve({
-            buffer,
-            fileName: fullName,
-            originalUrl: image.originalUrl,
-          });
-        } catch (err: any) {
-          resolve(undefined);
-        }
-      });
-    });
-    const toUploadImages = (await Promise.all(toUploadURLs).then((imgs) =>
-      imgs.filter((img) => img !== undefined),
-    )) as ImageSource[];
-    let output: ImageUrl[] = [];
-
-    for (const img of toUploadImages) {
-      let newUrl: string | undefined = '';
-      newUrl = this.writeImageToLocal(img.buffer!, img.fileName, doc);
-      if (newUrl) {
-        output.push({ originalUrl: img.originalUrl, data: newUrl });
-      }
-    }
-    if (output.length) {
-      output
-        .filter((item) => item.data && item.data !== item.originalUrl)
-        .map((item) => {
-          return {
-            original: item.originalUrl,
-            data: item.data,
-          };
-        });
-      return output;
-    }
+  async processImages(docDetailList: DocDetail[]) {
+    const uploader: ImageUploader = {
+      hasImage: async () => undefined,
+      uploadImage: async (fileName, buffer, doc) => {
+        const fileType = this.ctx.image.getFileTypeFromBuffer(buffer);
+        const fullName = fileType ? `${fileName}.${fileType.type}` : fileName;
+        return this.writeImageToLocal(buffer, fullName, doc!);
+      },
+    };
+    return super.replaceImages(docDetailList, uploader);
   }
 }

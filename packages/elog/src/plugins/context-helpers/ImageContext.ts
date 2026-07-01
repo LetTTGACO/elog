@@ -26,6 +26,11 @@ export class ElogImageContext extends ElogBaseContext {
       this.ctx.logger.info('图片替换已禁用');
       return docDetailList;
     }
-    return replaceImagesFunc(docDetailList, uploader, limit || this.imageBaseConfig.limit || 10);
+    return replaceImagesFunc(
+      docDetailList,
+      uploader,
+      limit || this.imageBaseConfig.limit || 10,
+      this.imageBaseConfig.propertyImageFields,
+    );
   }
 }

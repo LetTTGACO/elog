@@ -1,4 +1,6 @@
-export interface ImageLocalConfig {
+import type { ImageBaseConfig } from '@elogx-test/elog';
+
+export interface ImageLocalConfig extends ImageBaseConfig {
   outputDir: string;
   /** 图片统一前缀 */
   prefixKey?: string;
@@ -7,16 +9,4 @@ export interface ImageLocalConfig {
     enable: boolean;
     docOutputDir: string;
   };
-}
-
-export interface ImageUrl {
-  data: string;
-  originalUrl: string;
-}
-
-export interface ImageSource {
-  fileName: string;
-  originalUrl: string;
-  url?: string;
-  buffer?: Buffer;
 }

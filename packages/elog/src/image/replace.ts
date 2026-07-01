@@ -1,8 +1,18 @@
 import { DocDetail } from '../types/doc';
 import out from '../logging/logger';
-import { genUniqueIdFromUrl, getBufferFromUrl, getFileType, getUrlListFromContent } from './index';
+import {
+  genUniqueIdFromUrl,
+  getBaseUrl,
+  getBufferFromUrl,
+  getFileType,
+  getUrlListFromContent,
+} from './index';
 import { ImageSource, ImageUploader, ImageUrl } from '../types/image';
 import { asyncPoolFunc } from '../doc/download';
+
+interface PropertyImageUrl extends ImageUrl {
+  field: string;
+}
 
 interface TransformImageOptions {
   urlList: ImageUrl[];
@@ -22,6 +32,7 @@ export const replaceImagesFunc = async (
   docDetailList: DocDetail[],
   imageClient: ImageUploader,
   limit: number,
+  propertyImageFields: string[] = [],
 ) => {
   // 文档维度串行处理，避免同一正文被多个异步任务同时修改。
   for (let i = 0; i < docDetailList.length; i++) {
@@ -46,8 +57,44 @@ export const replaceImagesFunc = async (
         });
       }
     }
+
+    const propertyUrlList = getUrlListFromProperties(articleInfo, propertyImageFields);
+    if (propertyUrlList.length) {
+      const urls = await transformImagesFunc({
+        doc: articleInfo,
+        urlList: propertyUrlList,
+        failBack: () => {
+          articleInfo.error = 1;
+        },
+        imageClient,
+        limit,
+      });
+      for (const item of urls) {
+        for (const image of propertyUrlList) {
+          if (image.originalUrl === item.originalUrl) {
+            out.info('图片替换', `${item.url}`);
+            articleInfo.properties[image.field] = item.url;
+          }
+        }
+      }
+    }
   }
   return docDetailList;
+};
+
+const getUrlListFromProperties = (doc: DocDetail, fields: string[]): PropertyImageUrl[] => {
+  return fields
+    .map((field) => {
+      const value = doc.properties?.[field];
+      if (typeof value !== 'string' || (!value.startsWith('http') && !value.startsWith('data:'))) {
+        return undefined;
+      }
+      const image = value.startsWith('data:')
+        ? ({ originalUrl: value, data: value, type: 'base64' } as const)
+        : getBaseUrl(value);
+      return { ...image, field };
+    })
+    .filter((item) => item !== undefined);
 };
 
 /** 批量处理单篇文档的图片上传/复用，并返回需要替换到正文的新地址。 */
@@ -97,7 +144,7 @@ export const transformImagesFunc = async (options: TransformImageOptions) => {
           return undefined;
         }
         // 上传失败时回退原图地址，保持正文可用但不误报替换成功。
-        let url = await imageClient.uploadImage(fileName, buffer);
+        let url = await imageClient.uploadImage(fileName, buffer, doc);
         if (!url) {
           if (image.type === 'url') {
             out.warn(`${doc?.properties?.title} 存在上传图片失败：${image.data}`);

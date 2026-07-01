@@ -8,7 +8,7 @@ export default function imageLocal(options: Partial<ImageLocalConfig>): Transfor
     kind: 'transform',
     transform(docs, ctx) {
       const imageLocal = new ImageClient(options as ImageLocalConfig, ctx);
-      return imageLocal.replaceImages(docs);
+      return imageLocal.processImages(docs);
     },
   };
 }

@@ -31,4 +31,6 @@ export interface ImageBaseConfig {
   disable?: boolean;
   /** 并发数 */
   limit?: number;
+  /** 将 doc.properties 中这些字段当作图片 URL 一并替换。 */
+  propertyImageFields?: string[];
 }
