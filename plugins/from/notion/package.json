@@ -11,7 +11,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "build": "tsdown"
+    "build": "tsdown",
+    "test": "vitest run --passWithNoTests"
   },
   "author": "",
   "license": "MIT",
@@ -24,13 +25,13 @@
     }
   },
   "dependencies": {
-    "@notionhq/client": "~2.2.15",
-    "notion-to-md": "~3.1.1"
+    "@notionhq/client": "~5.22.0"
   },
   "devDependencies": {
     "@elogx-test/elog": "workspace:*",
     "@types/node": "~22.19.19",
     "tsdown": "^0.22.3",
-    "typescript": "~6.0.3"
+    "typescript": "~6.0.3",
+    "vitest": "^4.1.9"
   }
 }

@@ -13,14 +13,13 @@ import {
   SortedDoc,
 } from '@elogx-test/elog';
 import { Client as NotionClient } from '@notionhq/client';
-import { NotionToMarkdown } from 'notion-to-md';
 import { NotionSortDirectionEnum, NotionSortPresetEnum } from './const';
 import { props } from './utils';
 
 export default class NotionApi extends ElogBaseContext {
   config: NotionConfig;
   notion: NotionClient;
-  n2m: NotionToMarkdown;
+  private dataSourceId?: string;
   requestQueryParams: NotionQueryParams;
 
   constructor(config: NotionConfig, ctx: PluginContext) {
@@ -29,22 +28,39 @@ export default class NotionApi extends ElogBaseContext {
     if (!this.config.token) {
       this.ctx.logger.error('缺少 Notion Token');
     }
-    if (!this.config.databaseId) {
-      this.ctx.logger.error('缺少Notion 数据库 ID');
+    if (!this.config.dataSourceId && !this.config.databaseId) {
+      this.ctx.logger.error('缺少 Notion dataSourceId 或 databaseId');
     }
     if (this.config.imgToBase64) {
       this.ctx.logger.warn(
-        '已开启 Notion 文档图片转 Base64，博客平台的 Markdown 解析器/渲染器并未广泛支持 Base64 格式，请自行确认',
+        'Notion 官方 Markdown API 不再内置 imgToBase64；如需图片内联，请迁移到 transform/image 流程',
       );
     }
-    this.notion = new NotionClient({ auth: this.config.token });
-    this.n2m = new NotionToMarkdown({
-      notionClient: this.notion,
-      config: {
-        convertImagesToBase64: this.config.imgToBase64,
-      },
+    this.notion = new NotionClient({
+      auth: this.config.token,
+      notionVersion: '2026-03-11',
     });
     this.requestQueryParams = this.initRequestQueryParams();
+  }
+
+  private async resolveDataSourceId() {
+    if (this.dataSourceId) {
+      return this.dataSourceId;
+    }
+    if (this.config.dataSourceId) {
+      this.dataSourceId = this.config.dataSourceId;
+      return this.dataSourceId;
+    }
+
+    const database = (await this.notion.databases.retrieve({
+      database_id: this.config.databaseId!,
+    })) as unknown as { data_sources?: Array<{ id: string; name?: string }> };
+    const dataSourceId = database.data_sources?.[0]?.id;
+    if (!dataSourceId) {
+      this.ctx.logger.error(`Notion 数据库 ${this.config.databaseId} 没有可用 data source`);
+    }
+    this.dataSourceId = dataSourceId;
+    return this.dataSourceId;
   }
 
   /**
@@ -116,7 +132,6 @@ export default class NotionApi extends ElogBaseContext {
       filter = this.config.filter;
     }
     return {
-      database_id: this.config.databaseId,
       filter,
       sorts,
     };
@@ -163,10 +178,12 @@ export default class NotionApi extends ElogBaseContext {
   async getSortedDocList() {
     const docList: SortedDoc<NotionDoc>[] = [];
     let startCursor: string | undefined;
+    const dataSourceId = await this.resolveDataSourceId();
 
-    // Notion 数据库分页结果需要累积到同一个数组，避免递归创建局部数组导致后续页丢失。
+    // Notion data source 查询结果需要累积到同一个数组，避免递归创建局部数组导致后续页丢失。
     do {
-      let resp = await this.notion.databases.query({
+      let resp = await this.notion.dataSources.query({
+        data_source_id: dataSourceId,
         ...this.requestQueryParams,
         ...(startCursor ? { start_cursor: startCursor } : {}),
       });
@@ -193,11 +210,14 @@ export default class NotionApi extends ElogBaseContext {
    * @param {*} page
    */
   async getDocDetail(page: NotionDoc): Promise<DocDetail> {
-    const blocks = await this.n2m.pageToMarkdown(page.id);
-    if (!blocks.length) {
+    const markdown = await this.notion.pages.retrieveMarkdown({ page_id: page.id });
+    const body = markdown.markdown || '';
+    if (!body) {
       this.ctx.logger.warn(`${page.properties.title} 文档下载超时或无内容 `);
     }
-    let body = this.n2m.toMarkdownString(blocks)?.parent || '';
+    if (markdown.truncated) {
+      this.ctx.logger.warn(`${page.properties.title} 文档过大，Notion Markdown API 返回了截断内容`);
+    }
     const timestamp = new Date(page.last_edited_time).getTime();
     let docStructure: DocStructure[] | undefined;
     const catalogConfig = this.config.catalog as NotionCatalogConfig;

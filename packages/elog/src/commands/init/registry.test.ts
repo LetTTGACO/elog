@@ -22,6 +22,38 @@ describe('loadBuiltInPluginRegistry', () => {
     });
   });
 
+  it('prompts Notion setup for dataSourceId while keeping legacy databaseId', () => {
+    const registry = loadBuiltInPluginRegistry();
+    const notion = registry.plugins.find(
+      (plugin) => plugin.kind === 'from' && plugin.type === 'notion',
+    );
+
+    expect(notion).toMatchObject({
+      optionsSchema: {
+        required: ['token'],
+        properties: {
+          token: expect.any(Object),
+          dataSourceId: {
+            title: 'Notion Data Source ID',
+            'x-elog-env': 'NOTION_DATA_SOURCE_ID',
+            'x-elog-prompt': {
+              type: 'input',
+              message: '请输入 Notion Data Source ID',
+            },
+          },
+          databaseId: {
+            title: 'Notion Database ID',
+            'x-elog-env': 'NOTION_DATABASE_ID',
+            'x-elog-prompt': {
+              type: 'input',
+              message: '请输入 Notion Database ID',
+            },
+          },
+        },
+      },
+    });
+  });
+
   it('includes the Notion, image-local, and local init registry entries', () => {
     const registry = loadBuiltInPluginRegistry();
 

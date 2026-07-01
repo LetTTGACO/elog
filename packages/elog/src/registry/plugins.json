@@ -10,7 +10,7 @@
       "importName": "notion",
       "optionsSchema": {
         "type": "object",
-        "required": ["token", "databaseId"],
+        "required": ["token"],
         "properties": {
           "token": {
             "type": "string",
@@ -20,6 +20,15 @@
             "x-elog-prompt": {
               "type": "password",
               "message": "请输入 Notion Token"
+            }
+          },
+          "dataSourceId": {
+            "type": "string",
+            "title": "Notion Data Source ID",
+            "x-elog-env": "NOTION_DATA_SOURCE_ID",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 Notion Data Source ID"
             }
           },
           "databaseId": {

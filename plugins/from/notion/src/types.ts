@@ -4,8 +4,10 @@ import { DocProperties, DocStructure, type FromPluginBaseConfig } from '@elogx-t
 
 export interface NotionConfig extends FromPluginBaseConfig {
   token: string;
-  /** 数据库id */
-  databaseId: string;
+  /** 数据源 id；Notion 2025-09-03+ 查询入口。 */
+  dataSourceId?: string;
+  /** 数据库 id；兼容旧配置，用于换取第一个 data source id。 */
+  databaseId?: string;
   filter?: any | boolean;
   sorts?: boolean | NotionSortPresetEnum | NotionSort[];
   catalog?: boolean | NotionCatalogConfig;
@@ -24,12 +26,11 @@ export interface NotionDoc extends PageObjectResponse {
 }
 
 export interface NotionQueryParams {
-  database_id: string;
   filter?: any;
   sorts?: any;
   start_cursor?: string;
   page_size?: number;
-  archived?: boolean;
+  in_trash?: boolean;
 }
 
 export interface NotionCatalogConfig {
