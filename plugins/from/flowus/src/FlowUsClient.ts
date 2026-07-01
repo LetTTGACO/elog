@@ -1,5 +1,5 @@
 import { FlowUsConfig } from './types';
-import { ElogFromContext, PluginContext } from '@elogx-test/elog';
+import { DownloadResult, ElogFromContext, PluginContext } from '@elogx-test/elog';
 import FlowUsApi from './FlowUsApi';
 
 export default class FlowUsClient extends ElogFromContext {
@@ -15,10 +15,10 @@ export default class FlowUsClient extends ElogFromContext {
   /**
    * 获取文章列表
    */
-  async getDocDetailList() {
+  async getDocDetailList(): Promise<DownloadResult> {
     return this.docDetailList({
-      getSortedDocList: this.api.getSortedDocList,
-      getDocDetail: this.api.getDocDetail,
+      getSortedDocList: () => this.api.getSortedDocList(),
+      getDocDetail: (doc) => this.api.getDocDetail(doc),
       limit: this.config.limit,
     });
   }

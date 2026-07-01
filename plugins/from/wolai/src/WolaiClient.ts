@@ -1,4 +1,4 @@
-import { ElogFromContext, PluginContext } from '@elogx-test/elog';
+import { DownloadResult, ElogFromContext, PluginContext } from '@elogx-test/elog';
 import WolaiApi from './WolaiApi';
 import { WoLaiConfig } from './types';
 
@@ -15,10 +15,10 @@ export default class WolaiClient extends ElogFromContext {
   /**
    * 获取文章列表
    */
-  override async getDocDetailList() {
+  async getDocDetailList(): Promise<DownloadResult> {
     return this.docDetailList({
-      getSortedDocList: this.api.getSortedDocList,
-      getDocDetail: this.api.getDocDetail,
+      getSortedDocList: () => this.api.getSortedDocList(),
+      getDocDetail: (doc) => this.api.getDocDetail(doc),
       limit: this.config.limit,
     });
   }

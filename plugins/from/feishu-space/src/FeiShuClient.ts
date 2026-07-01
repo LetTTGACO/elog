@@ -1,5 +1,5 @@
 import { FeiShuConfig } from './types';
-import { ElogFromContext, PluginContext } from '@elogx-test/elog';
+import { DownloadResult, ElogFromContext, PluginContext } from '@elogx-test/elog';
 import FeiShuApi from './FeiShuApi';
 
 export default class FeiShuClient extends ElogFromContext {
@@ -15,10 +15,10 @@ export default class FeiShuClient extends ElogFromContext {
   /**
    * 获取文章列表
    */
-  async getDocDetailList() {
+  async getDocDetailList(): Promise<DownloadResult> {
     return this.docDetailList({
-      getSortedDocList: this.api.getSortedDocList,
-      getDocDetail: this.api.getDocDetail,
+      getSortedDocList: () => this.api.getSortedDocList(),
+      getDocDetail: (doc) => this.api.getDocDetail(doc),
       limit: this.config.limit,
     });
   }
