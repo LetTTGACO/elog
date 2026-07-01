@@ -1,0 +1,35 @@
+{
+  "name": "@elogx-test/plugin-image-r2",
+  "version": "1.0.2",
+  "description": "",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "test": "vitest run --passWithNoTests"
+  },
+  "peerDependencies": {
+    "@elogx-test/elog": "^1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@elogx-test/elog": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "3.445.0"
+  },
+  "devDependencies": {
+    "@elogx-test/elog": "workspace:*",
+    "@types/node": "~22.19.19",
+    "tsdown": "^0.22.3",
+    "typescript": "~6.0.3",
+    "vitest": "^4.1.9"
+  }
+}
