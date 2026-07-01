@@ -25,7 +25,8 @@
     }
   },
   "dependencies": {
-    "@notionhq/client": "~5.22.0"
+    "@notionhq/client": "~5.22.0",
+    "notion-to-md": "3.1.9"
   },
   "devDependencies": {
     "@elogx-test/elog": "workspace:*",

@@ -13,12 +13,14 @@ import {
   SortedDoc,
 } from '@elogx-test/elog';
 import { Client as NotionClient } from '@notionhq/client';
+import { NotionToMarkdown } from 'notion-to-md';
 import { NotionSortDirectionEnum, NotionSortPresetEnum } from './const';
 import { props } from './utils';
 
 export default class NotionApi extends ElogBaseContext {
   config: NotionConfig;
   notion: NotionClient;
+  n2m: NotionToMarkdown;
   private dataSourceId?: string;
   requestQueryParams: NotionQueryParams;
 
@@ -33,12 +35,18 @@ export default class NotionApi extends ElogBaseContext {
     }
     if (this.config.imgToBase64) {
       this.ctx.logger.warn(
-        'Notion 官方 Markdown API 不再内置 imgToBase64；如需图片内联，请迁移到 transform/image 流程',
+        '已开启 Notion 文档图片转 Base64，博客平台的 Markdown 解析器/渲染器并未广泛支持 Base64 格式，请自行确认',
       );
     }
     this.notion = new NotionClient({
       auth: this.config.token,
       notionVersion: '2026-03-11',
+    });
+    this.n2m = new NotionToMarkdown({
+      notionClient: this.notion,
+      config: {
+        convertImagesToBase64: this.config.imgToBase64,
+      },
     });
     this.requestQueryParams = this.initRequestQueryParams();
   }
@@ -210,14 +218,11 @@ export default class NotionApi extends ElogBaseContext {
    * @param {*} page
    */
   async getDocDetail(page: NotionDoc): Promise<DocDetail> {
-    const markdown = await this.notion.pages.retrieveMarkdown({ page_id: page.id });
-    const body = markdown.markdown || '';
-    if (!body) {
+    const blocks = await this.n2m.pageToMarkdown(page.id);
+    if (!blocks.length) {
       this.ctx.logger.warn(`${page.properties.title} 文档下载超时或无内容 `);
     }
-    if (markdown.truncated) {
-      this.ctx.logger.warn(`${page.properties.title} 文档过大，Notion Markdown API 返回了截断内容`);
-    }
+    const body = this.n2m.toMarkdownString(blocks)?.parent || '';
     const timestamp = new Date(page.last_edited_time).getTime();
     let docStructure: DocStructure[] | undefined;
     const catalogConfig = this.config.catalog as NotionCatalogConfig;

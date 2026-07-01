@@ -122,18 +122,27 @@ export default class LocalDeploy extends ElogBaseContext {
    */
   private checkFileName(fileName: string, originName: string, docId: string) {
     const { fileExt = 'md' } = this.config;
+    const checkedName = this.sanitizeFileName(fileName);
+    const safeOriginName = this.sanitizeFileName(originName);
     let newName: string;
-    if (this.cacheFileNames.includes(fileName)) {
-      const newFileName = `${originName}_${docId}`;
+    if (this.cacheFileNames.includes(checkedName)) {
+      const newFileName = this.sanitizeFileName(`${originName}_${docId}`);
       this.ctx.logger.warn(
         '文档重复',
-        `${originName}.${fileExt} 文档已存在，将为自动重命名为${newFileName}.${fileExt}`,
+        `${safeOriginName}.${fileExt} 文档已存在，将为自动重命名为${newFileName}.${fileExt}`,
       );
       newName = newFileName;
     } else {
-      newName = originName;
-      this.cacheFileNames.push(fileName);
+      newName = safeOriginName;
+      this.cacheFileNames.push(checkedName);
     }
     return newName;
+  }
+
+  private sanitizeFileName(fileName: string) {
+    const safeName = String(fileName)
+      .replace(/[<>:"/\\|?*\x00-\x1F]/g, '-')
+      .trim();
+    return safeName || '未命名文档';
   }
 }

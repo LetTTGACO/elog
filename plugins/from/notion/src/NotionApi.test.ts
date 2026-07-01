@@ -7,6 +7,9 @@ const notionMocks = vi.hoisted(() => ({
   queryDataSource: vi.fn(),
   retrieveDatabase: vi.fn(),
   retrieveMarkdown: vi.fn(),
+  notionToMarkdownOptions: undefined as unknown,
+  pageToMarkdown: vi.fn(),
+  toMarkdownString: vi.fn(),
 }));
 
 vi.mock('@notionhq/client', () => ({
@@ -22,6 +25,16 @@ vi.mock('@notionhq/client', () => ({
       pages: {
         retrieveMarkdown: notionMocks.retrieveMarkdown,
       },
+    };
+  }),
+}));
+
+vi.mock('notion-to-md', () => ({
+  NotionToMarkdown: vi.fn(function NotionToMarkdown(options) {
+    notionMocks.notionToMarkdownOptions = options;
+    return {
+      pageToMarkdown: notionMocks.pageToMarkdown,
+      toMarkdownString: notionMocks.toMarkdownString,
     };
   }),
 }));
@@ -69,6 +82,9 @@ describe('NotionApi', () => {
     notionMocks.queryDataSource.mockReset();
     notionMocks.retrieveDatabase.mockReset();
     notionMocks.retrieveMarkdown.mockReset();
+    notionMocks.notionToMarkdownOptions = undefined as unknown;
+    notionMocks.pageToMarkdown.mockReset();
+    notionMocks.toMarkdownString.mockReset();
   });
 
   it('collects documents from every paginated data source query', async () => {
@@ -155,19 +171,16 @@ describe('NotionApi', () => {
     );
   });
 
-  it('downloads page markdown through the official SDK endpoint', async () => {
-    notionMocks.retrieveMarkdown.mockResolvedValueOnce({
-      object: 'page_markdown',
-      id: 'page-1',
-      markdown: '# Page 1\ncontent',
-      truncated: false,
-      unknown_block_ids: [],
-    });
+  it('downloads page markdown through notion-to-md', async () => {
+    const blocks = [{ parent: '# Page 1', children: [] }];
+    notionMocks.pageToMarkdown.mockResolvedValueOnce(blocks);
+    notionMocks.toMarkdownString.mockReturnValueOnce({ parent: '# Page 1\ncontent' });
 
     const api = new NotionApi(
       {
         token: 'token',
         dataSourceId: 'source-1',
+        imgToBase64: true,
       },
       createCtx(),
     );
@@ -175,6 +188,11 @@ describe('NotionApi', () => {
     const detail = await api.getDocDetail(createPage('page-1', 'Page 1') as any);
 
     expect(detail.body).toBe('# Page 1\ncontent');
-    expect(notionMocks.retrieveMarkdown).toHaveBeenCalledWith({ page_id: 'page-1' });
+    expect(notionMocks.pageToMarkdown).toHaveBeenCalledWith('page-1');
+    expect(notionMocks.toMarkdownString).toHaveBeenCalledWith(blocks);
+    expect(notionMocks.notionToMarkdownOptions).toMatchObject({
+      config: { convertImagesToBase64: true },
+    });
+    expect(notionMocks.retrieveMarkdown).not.toHaveBeenCalled();
   });
 });

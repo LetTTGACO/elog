@@ -21,7 +21,7 @@ export default defineConfig({
   plugins: [
     imageLocal({
       outputDir: './source/images',
-      prefixKey: '/images',
+      prefixKey: './images',
       propertyImageFields: ['cover'],
     }),
   ],
