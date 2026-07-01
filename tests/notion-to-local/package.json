@@ -1,0 +1,21 @@
+{
+  "name": "@elogx-test/notion-to-local",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "elog:sync": "elog sync --env .elog.env",
+    "test": "vitest run elog.config.test.ts"
+  },
+  "dependencies": {
+    "@elogx-test/elog": "workspace:*",
+    "@elogx-test/plugin-from-notion": "workspace:*",
+    "@elogx-test/plugin-image-local": "workspace:*",
+    "@elogx-test/plugin-to-local": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "~22.19.19",
+    "typescript": "~6.0.3",
+    "vitest": "^4.1.9"
+  }
+}

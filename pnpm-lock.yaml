@@ -469,6 +469,31 @@ importers:
         specifier: ^4.1.9
         version: 4.1.9(@types/node@22.19.19)(jsdom@21.1.2)(vite@8.0.13(@types/node@22.19.19)(esbuild@0.28.1)(yaml@2.9.0))
 
+  tests/notion-to-local:
+    dependencies:
+      '@elogx-test/elog':
+        specifier: workspace:*
+        version: link:../../packages/elog
+      '@elogx-test/plugin-from-notion':
+        specifier: workspace:*
+        version: link:../../plugins/from/notion
+      '@elogx-test/plugin-image-local':
+        specifier: workspace:*
+        version: link:../../plugins/transform/image-local
+      '@elogx-test/plugin-to-local':
+        specifier: workspace:*
+        version: link:../../plugins/to/local
+    devDependencies:
+      '@types/node':
+        specifier: ~22.19.19
+        version: 22.19.19
+      typescript:
+        specifier: ~6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@types/node@22.19.19)(jsdom@21.1.2)(vite@8.0.13(@types/node@22.19.19)(esbuild@0.28.1)(yaml@2.9.0))
+
   tests/test-elog:
     dependencies:
       '@elogx-test/elog':
