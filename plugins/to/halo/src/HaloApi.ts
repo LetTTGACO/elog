@@ -1,6 +1,5 @@
 import { HaloConfig } from './types';
 import Context from './Context';
-import FormStream from 'formstream';
 import type { PluginContext } from '@elogx-test/elog';
 import type {
   Attachment,
@@ -131,16 +130,15 @@ export default class HaloApi extends Context {
    * 上传附件
    */
   async uploadAttachment(buffer: Buffer, filename: string) {
-    const form = new FormStream();
-    form.buffer('file', buffer, filename);
-    form.field('policyName', this.config.policyName || '');
-    form.field('groupName', this.config.groupName || '');
+    const form = new FormData();
+    form.set('file', new Blob([buffer]), filename);
+    form.set('policyName', this.config.policyName || '');
+    form.set('groupName', this.config.groupName || '');
     return this.requestInternal<Attachment>(
       '/apis/api.console.halo.run/v1alpha1/attachments/upload',
       {
         method: 'POST',
-        stream: form as any,
-        headers: form.headers(),
+        body: form,
       },
     );
   }
