@@ -81,3 +81,6 @@ dist
 
 # E2E local workspaces
 tests/e2e/.tmp/
+
+.pnpm-store
+elog.cache.json

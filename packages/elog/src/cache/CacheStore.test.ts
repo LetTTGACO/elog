@@ -81,4 +81,27 @@ describe('CacheStore', () => {
     expect(cache.cachedDocList[0]).not.toHaveProperty('body');
     expect(cache.sortedDocList).toEqual([{ id: 'existing', updateTime: 2 }]);
   });
+
+  it('drops cached docs missing from the latest sorted doc list', () => {
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'elog-cache-'));
+    const cacheFile = path.join(tempDir, 'elog.cache.json');
+    fs.writeFileSync(
+      cacheFile,
+      JSON.stringify({
+        cachedDocList: [makeDoc('kept'), makeDoc('removed')],
+        sortedDocList: [
+          { id: 'kept', updateTime: 1 },
+          { id: 'removed', updateTime: 1 },
+        ],
+      }),
+      { encoding: 'utf8' },
+    );
+    const store = new CacheStore({ disabled: false, writeDisabled: false, filePath: cacheFile });
+
+    store.write([{ id: 'kept', updateTime: 1 }]);
+
+    const cache = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
+    expect(cache.cachedDocList.map((doc: DocDetail) => doc.id)).toEqual(['kept']);
+    expect(cache.sortedDocList).toEqual([{ id: 'kept', updateTime: 1 }]);
+  });
 });

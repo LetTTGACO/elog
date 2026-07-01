@@ -130,4 +130,62 @@ describe('PluginDriver', () => {
 
     expect(calls).toEqual(['first', 'second']);
   });
+
+  it('runs deploy hooks in parallel when requested', async () => {
+    const calls: string[] = [];
+    const first: ToPlugin = {
+      name: 'to:first',
+      kind: 'to',
+      async deploy() {
+        calls.push('first:start');
+        await new Promise((resolve) => setTimeout(resolve, 10));
+        calls.push('first:end');
+      },
+    };
+    const second: ToPlugin = {
+      name: 'to:second',
+      kind: 'to',
+      deploy() {
+        calls.push('second');
+      },
+    };
+    const driver = new PluginDriver({ from, transforms: [], to: [first, second] }, ctx);
+
+    await driver.runDeployHooks([], 'parallel');
+
+    expect(calls).toEqual(['first:start', 'second', 'first:end']);
+  });
+
+  it('passes shallow-copied docs to each deploy plugin', async () => {
+    const docs = [
+      {
+        id: 'a',
+        title: 'A',
+        updateTime: 1,
+        body: 'original',
+        properties: { title: 'A', urlname: 'a' },
+      },
+    ];
+    const first: ToPlugin = {
+      name: 'to:first',
+      kind: 'to',
+      deploy(deployDocs) {
+        deployDocs[0].body = 'changed-by-first';
+      },
+    };
+    const secondBodies: string[] = [];
+    const second: ToPlugin = {
+      name: 'to:second',
+      kind: 'to',
+      deploy(deployDocs) {
+        secondBodies.push(deployDocs[0].body);
+      },
+    };
+    const driver = new PluginDriver({ from, transforms: [], to: [first, second] }, ctx);
+
+    await driver.runDeployHooks(docs, 'serial');
+
+    expect(docs[0].body).toBe('original');
+    expect(secondBodies).toEqual(['original']);
+  });
 });

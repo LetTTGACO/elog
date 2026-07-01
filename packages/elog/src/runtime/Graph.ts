@@ -35,6 +35,10 @@ export class Graph {
       const downloadResult = await driver.runDownloadHook();
       // 没有待更新文档时不执行转换和部署，保证增量同步的空跑成本最低。
       if (downloadResult.docDetailList.length === 0) {
+        if (downloadResult.sortedDocList) {
+          cacheStore.write(downloadResult.sortedDocList);
+        }
+
         return {
           status: 'skipped',
           workflowId: this.workflow.id,

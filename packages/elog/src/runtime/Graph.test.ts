@@ -184,7 +184,7 @@ describe('Graph', () => {
     expect(fs.existsSync(workflow.cache.filePath)).toBe(false);
   });
 
-  it('returns skipped result without transform, deploy, or cache write when there are no changes', async () => {
+  it('returns skipped result without transform or deploy when there are no changes', async () => {
     tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'elog-graph-'));
     const calls: string[] = [];
     const from: FromPlugin = {
@@ -223,6 +223,56 @@ describe('Graph', () => {
       reason: 'no-changes',
     });
     expect(calls).toEqual([]);
-    expect(fs.existsSync(workflow.cache.filePath)).toBe(false);
+    const cache = JSON.parse(fs.readFileSync(workflow.cache.filePath, 'utf8'));
+    expect(cache).toEqual({
+      cachedDocList: [],
+      sortedDocList: [],
+    });
+  });
+
+  it('prunes cache for deleted source docs even when no docs need deployment', async () => {
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'elog-graph-'));
+    const cacheFile = path.join(tempDir, 'elog.cache.json');
+    fs.writeFileSync(
+      cacheFile,
+      JSON.stringify({
+        cachedDocList: [makeDoc('kept'), makeDoc('removed')],
+        sortedDocList: [
+          { id: 'kept', updateTime: 1 },
+          { id: 'removed', updateTime: 1 },
+        ],
+      }),
+      { encoding: 'utf8' },
+    );
+    const from: FromPlugin = {
+      name: 'from:deleted',
+      kind: 'from',
+      async download() {
+        return {
+          docDetailList: [],
+          sortedDocList: [{ id: 'kept', updateTime: 1 }],
+          docStatusMap: {},
+        };
+      },
+    };
+    const workflow = makeWorkflow({
+      from,
+      cache: {
+        disabled: false,
+        writeDisabled: false,
+        filePath: cacheFile,
+      },
+    });
+
+    const result = await new Graph(workflow).sync();
+
+    expect(result).toEqual({
+      status: 'skipped',
+      workflowId: 'workflow-1',
+      reason: 'no-changes',
+    });
+    const cache = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
+    expect(cache.cachedDocList.map((doc: DocDetail) => doc.id)).toEqual(['kept']);
+    expect(cache.sortedDocList).toEqual([{ id: 'kept', updateTime: 1 }]);
   });
 });

@@ -60,11 +60,14 @@ export class CacheStore {
       return;
     }
 
+    const sortedDocIds = new Set(sortedDocList.map((doc) => doc.id));
     const cacheJson = {
-      cachedDocList: this.cachedDocList.map((item) => {
-        const { body: _body, ...docWithoutBody } = item;
-        return docWithoutBody;
-      }),
+      cachedDocList: this.cachedDocList
+        .filter((item) => sortedDocIds.has(item.id))
+        .map((item) => {
+          const { body: _body, ...docWithoutBody } = item;
+          return docWithoutBody;
+        }),
       sortedDocList,
     };
 
