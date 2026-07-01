@@ -23,7 +23,7 @@
     "url": "https://github.com/LetTTGACO/elog/issues"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=18"
   },
   "scripts": {
     "build": "rimraf dist && tsup --legacy-output"
