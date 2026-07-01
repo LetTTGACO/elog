@@ -21,6 +21,7 @@
   },
   "changesets": [
     "empty-words-act",
+    "plenty-hats-rule",
     "shaggy-rocks-walk"
   ]
 }

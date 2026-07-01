@@ -1,5 +1,14 @@
 # @elog/cli
 
+## 0.15.0-beta.2
+
+### Patch Changes
+
+- 升级 Notion SDK。
+- Updated dependencies
+  - @elog/shared@0.15.0-beta.2
+  - @elog/core@0.15.0-beta.2
+
 ## 0.15.0-beta.1
 
 ### Patch Changes

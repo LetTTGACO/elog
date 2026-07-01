@@ -1,5 +1,11 @@
 # @elog/types
 
+## 0.15.0-beta.2
+
+### Patch Changes
+
+- 升级 Notion SDK。
+
 ## 0.15.0-beta.1
 
 ### Patch Changes

@@ -1,5 +1,22 @@
 # @elog/core
 
+## 0.15.0-beta.2
+
+### Patch Changes
+
+- 升级 Notion SDK。
+- Updated dependencies
+  - @elog/plugin-image@0.15.0-beta.2
+  - @elog/sdk-outline@0.15.0-beta.2
+  - @elog/sdk-feishu@0.15.0-beta.2
+  - @elog/sdk-flowus@0.15.0-beta.2
+  - @elog/sdk-notion@0.15.0-beta.2
+  - @elog/sdk-wolai@0.15.0-beta.2
+  - @elog/sdk-yuque@0.15.0-beta.2
+  - @elog/deploy@0.15.0-beta.2
+  - @elog/shared@0.15.0-beta.2
+  - @elog/types@0.15.0-beta.2
+
 ## 0.15.0-beta.1
 
 ### Patch Changes
