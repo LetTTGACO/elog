@@ -24,9 +24,9 @@
     }
   },
   "devDependencies": {
-    "typescript": "~6.0.3",
-    "tsdown": "^0.22.0",
+    "@elogx-test/elog": "workspace:*",
     "@types/node": "~22.19.19",
-    "@elogx-test/elog": "workspace:*"
+    "tsdown": "^0.22.3",
+    "typescript": "~6.0.3"
   }
 }

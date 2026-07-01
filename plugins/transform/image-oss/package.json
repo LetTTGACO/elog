@@ -22,13 +22,13 @@
     }
   },
   "dependencies": {
-    "ali-oss": "~6.20.0"
+    "ali-oss": "~6.23.0"
   },
   "devDependencies": {
-    "@types/ali-oss": "~6.16.11",
     "@elogx-test/elog": "workspace:*",
-    "typescript": "~6.0.3",
-    "tsdown": "^0.22.0",
-    "@types/node": "~22.19.19"
+    "@types/ali-oss": "~6.23.3",
+    "@types/node": "~22.19.19",
+    "tsdown": "^0.22.3",
+    "typescript": "~6.0.3"
   }
 }

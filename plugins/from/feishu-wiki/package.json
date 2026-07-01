@@ -24,15 +24,15 @@
     }
   },
   "dependencies": {
-    "front-matter": "~4.0.2",
     "@feishux/api": "^0.3.1",
     "@feishux/doc-to-md": "^0.3.1",
-    "@feishux/shared": "^0.3.1"
+    "@feishux/shared": "^0.3.1",
+    "front-matter": "~4.0.2"
   },
   "devDependencies": {
-    "typescript": "~6.0.3",
-    "tsdown": "^0.22.0",
+    "@elogx-test/elog": "workspace:*",
     "@types/node": "~22.19.19",
-    "@elogx-test/elog": "workspace:*"
+    "tsdown": "^0.22.3",
+    "typescript": "~6.0.3"
   }
 }

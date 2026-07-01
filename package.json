@@ -4,11 +4,11 @@
   "type": "module",
   "packageManager": "pnpm@11.1.2",
   "devDependencies": {
-    "@changesets/cli": "^2.29.0",
-    "husky": "^9.1.0",
+    "@changesets/cli": "^2.31.0",
+    "husky": "^9.1.7",
     "lint-staged": "^15.5.0",
-    "prettier": "^3.8.3",
-    "turbo": "^2.5.0"
+    "prettier": "^3.9.4",
+    "turbo": "^2.10.2"
   },
   "lint-staged": {
     "*.{ts,js,json,md}": "prettier --write"

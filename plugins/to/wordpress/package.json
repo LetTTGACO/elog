@@ -22,16 +22,16 @@
     }
   },
   "dependencies": {
-    "wpapi": "~1.2.2",
-    "markdown-it": "~14.1.0",
-    "highlight.js": "~11.9.0"
+    "highlight.js": "~11.11.1",
+    "markdown-it": "~14.2.0",
+    "wpapi": "~1.2.2"
   },
   "devDependencies": {
     "@elogx-test/elog": "workspace:*",
-    "typescript": "~6.0.3",
-    "tsdown": "^0.22.0",
+    "@types/markdown-it": "~14.1.2",
     "@types/node": "~22.19.19",
     "@types/wpapi": "~1.1.4",
-    "@types/markdown-it": "~14.0.0"
+    "tsdown": "^0.22.3",
+    "typescript": "~6.0.3"
   }
 }

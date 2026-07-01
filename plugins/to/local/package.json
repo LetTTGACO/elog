@@ -22,13 +22,13 @@
     }
   },
   "dependencies": {
-    "mkdirp": "~3.0.1",
-    "gray-matter": "~4.0.3"
+    "gray-matter": "~4.0.3",
+    "mkdirp": "~3.0.1"
   },
   "devDependencies": {
     "@elogx-test/elog": "workspace:*",
-    "typescript": "~6.0.3",
-    "tsdown": "^0.22.0",
-    "@types/node": "~22.19.19"
+    "@types/node": "~22.19.19",
+    "tsdown": "^0.22.3",
+    "typescript": "~6.0.3"
   }
 }

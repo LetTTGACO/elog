@@ -25,14 +25,14 @@
   },
   "dependencies": {
     "front-matter": "~4.0.2",
-    "jsencrypt-node": "~1.0.4",
-    "jsdom": "^21.1.2"
+    "jsdom": "^21.1.2",
+    "jsencrypt-node": "~1.0.4"
   },
   "devDependencies": {
-    "typescript": "~6.0.3",
-    "tsdown": "^0.22.0",
-    "@types/node": "~22.19.19",
     "@elogx-test/elog": "workspace:*",
-    "@types/jsdom": "21.1.2"
+    "@types/jsdom": "21.1.2",
+    "@types/node": "~22.19.19",
+    "tsdown": "^0.22.3",
+    "typescript": "~6.0.3"
   }
 }
