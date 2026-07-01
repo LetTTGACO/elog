@@ -46,10 +46,12 @@ export class CacheStore {
         continue;
       }
 
+      const cacheDoc = doc.error === 1 ? { ...doc, _status: DocStatus.IMAGE_ERROR } : doc;
+
       if (status._status === DocStatus.NEW) {
-        this.cachedDocList.push(doc);
+        this.cachedDocList.push(cacheDoc);
       } else {
-        this.cachedDocList[status._updateIndex] = doc;
+        this.cachedDocList[status._updateIndex] = cacheDoc;
       }
     }
   }

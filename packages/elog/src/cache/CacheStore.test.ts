@@ -51,6 +51,20 @@ describe('CacheStore', () => {
     expect(cache.sortedDocList).toEqual([{ id: 'a', updateTime: 1 }]);
   });
 
+  it('marks image transform failures for retry', () => {
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'elog-cache-'));
+    const cacheFile = path.join(tempDir, 'elog.cache.json');
+    const store = new CacheStore({ disabled: false, writeDisabled: false, filePath: cacheFile });
+
+    store.update([{ ...makeDoc('a'), error: 1 }], {
+      a: { _updateIndex: -1, _status: DocStatus.NEW },
+    });
+    store.write([{ id: 'a', updateTime: 1 }]);
+
+    const cache = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
+    expect(cache.cachedDocList[0]._status).toBe(DocStatus.IMAGE_ERROR);
+  });
+
   it('loads enabled cache and updates existing cached docs', () => {
     tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'elog-cache-'));
     const cacheFile = path.join(tempDir, 'elog.cache.json');
