@@ -6,6 +6,9 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
@@ -19,20 +22,19 @@
   },
   "dependencies": {
     "@types/tiny-async-pool": "~2.0.3",
-    "bundle-require": "^4.0.0",
+    "bundle-require": "^5.1.0",
     "chalk": "~5.6.2",
-    "commander": "~12.0.0",
+    "commander": "~15.0.0",
     "dotenv": "~17.4.2",
     "esbuild": "0.28.1",
-    "image-size": "~1.1.0",
-    "inquirer": "~9.2.17",
+    "image-size": "~2.0.2",
+    "inquirer": "~14.0.2",
     "joycon": "3.1.1",
     "lodash-es": "^4.17.21",
     "tiny-async-pool": "~2.1.0",
-    "urllib": "2.41.0"
+    "urllib": "4.9.1"
   },
   "devDependencies": {
-    "@types/inquirer": "~9.0.10",
     "@types/lodash": "^4.14.189",
     "@types/lodash-es": "~4.17.12",
     "@types/node": "~22.19.19",

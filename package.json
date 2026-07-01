@@ -2,6 +2,9 @@
   "name": "elog-monorepo",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "packageManager": "pnpm@11.1.2",
   "devDependencies": {
     "@changesets/cli": "^2.31.0",

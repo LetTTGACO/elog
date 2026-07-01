@@ -159,7 +159,7 @@ export const getFileType = async (url: string) => {
 export const getBufferFromUrl = async (url: string, options?: any) => {
   try {
     const res = await request<Buffer>(url, {
-      dataType: 'arraybuffer',
+      dataType: 'buffer',
       ...options,
     });
     out.info('下载成功', url);
