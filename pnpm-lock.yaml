@@ -502,12 +502,21 @@ importers:
       '@elogx-test/elog':
         specifier: workspace:*
         version: link:../../packages/elog
+      '@elogx-test/plugin-from-notion':
+        specifier: workspace:*
+        version: link:../../plugins/from/notion
       '@elogx-test/plugin-from-yuque-pwd':
         specifier: workspace:*
         version: link:../../plugins/from/yuque-pwd
+      '@elogx-test/plugin-from-yuque-token':
+        specifier: workspace:*
+        version: link:../../plugins/from/yuque-token
       '@elogx-test/plugin-image-local':
         specifier: workspace:*
         version: link:../../plugins/transform/image-local
+      '@elogx-test/plugin-image-r2':
+        specifier: workspace:*
+        version: link:../../plugins/transform/image-r2
       '@elogx-test/plugin-to-local':
         specifier: workspace:*
         version: link:../../plugins/to/local

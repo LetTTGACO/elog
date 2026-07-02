@@ -9,12 +9,18 @@
     "elog:sync": "elog sync -e .env",
     "e2e": "pnpm run build:repo && vitest run",
     "test:cli": "pnpm run build:repo && vitest run src/cli-command.e2e.test.ts",
-    "test:yuque-local": "pnpm run build:repo && ELOG_E2E_CASE=yuque-image-local-to-local vitest run src/sync-matrix.e2e.test.ts"
+    "test:notion-local": "pnpm run build:repo && ELOG_E2E_CASE=notion-image-local-to-local vitest run src/sync-matrix.e2e.test.ts",
+    "test:yuque-local": "pnpm run build:repo && ELOG_E2E_CASE=yuque-image-local-to-local vitest run src/sync-matrix.e2e.test.ts",
+    "test:yuque-r2-local": "pnpm run build:repo && ELOG_E2E_CASE=yuque-image-r2-to-local vitest run src/sync-matrix.e2e.test.ts",
+    "test:yuque-token-local": "pnpm run build:repo && ELOG_E2E_CASE=yuque-token-image-local-to-local vitest run src/sync-matrix.e2e.test.ts"
   },
   "dependencies": {
     "@elogx-test/elog": "workspace:*",
+    "@elogx-test/plugin-from-notion": "workspace:*",
     "@elogx-test/plugin-from-yuque-pwd": "workspace:*",
+    "@elogx-test/plugin-from-yuque-token": "workspace:*",
     "@elogx-test/plugin-image-local": "workspace:*",
+    "@elogx-test/plugin-image-r2": "workspace:*",
     "@elogx-test/plugin-to-local": "workspace:*"
   },
   "devDependencies": {
