@@ -1,6 +1,25 @@
 import { NotionDoc } from './types';
 import { DocProperties } from '@elog/cli';
 
+function formatTime(time: string | number | Date) {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat('en-US', {
+      timeZone: process.env.TIME_ZONE || 'Asia/Shanghai',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hourCycle: 'h23',
+    })
+      .formatToParts(new Date(time))
+      .map((part) => [part.type, part.value]),
+  );
+
+  return `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}:${parts.second}`;
+}
+
 /**
  * 获取元数据Val
  * @param data
@@ -14,7 +33,7 @@ export function getPropVal(data: any) {
     case 'select':
       return val.name;
     case 'date':
-      return val.start;
+      return val.start ? formatTime(val.start) : '';
     case 'rich_text':
     case 'title':
       return val.map((a: any) => a.plain_text).join('');
@@ -60,12 +79,10 @@ export function props(page: NotionDoc): DocProperties {
   }
   // date
   if (!properties.date) {
-    // properties.date = timeFormat(page.created_time)
-    properties.date = page.created_time;
+    properties.date = formatTime(page.created_time);
   }
   if (!properties.updated) {
-    // properties.updated = timeFormat(page.last_edited_time)
-    properties.updated = page.last_edited_time;
+    properties.updated = formatTime(page.last_edited_time);
   }
   return properties;
 }
