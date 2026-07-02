@@ -1,5 +1,6 @@
 import { FeiShuDoc } from './types';
 import frontMatter from 'front-matter';
+import { formatTime } from '@elog/shared';
 
 /**
  * 生成元数据
@@ -11,9 +12,9 @@ export const getProps = (page: FeiShuDoc, body: string) => {
     // urlname
     urlname: page.id,
     // 创建时间
-    date: page.createdAt,
+    date: formatTime(page.createdAt),
     // 更新时间
-    updated: page.updatedAt,
+    updated: formatTime(page.updatedAt),
   } as any;
   try {
     const regex = /^---[\s|\S]+?---/i;

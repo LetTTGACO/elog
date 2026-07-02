@@ -30,6 +30,7 @@
     }
   },
   "dependencies": {
+    "@elog/shared": "workspace:*",
     "@feishux/api": "^0.3.1",
     "@feishux/doc-to-md": "^0.3.1",
     "@feishux/shared": "^0.3.1",

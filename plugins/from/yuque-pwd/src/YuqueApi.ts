@@ -29,15 +29,16 @@ export default class YuqueApi extends ElogBaseContext {
       password: encrypt(this.config.password),
       loginType: 'password',
     };
+    const baseUrl = this.config.baseUrl!;
 
     const res = await this.ctx.http<any>(
-      `${this.config.baseUrl}/api/mobile_app/accounts/login?language=zh-cn`,
+      `${baseUrl}/api/mobile_app/accounts/login?language=zh-cn`,
       {
         method: 'post',
         data: loginInfo,
         headers: {
-          Referer: this.config.baseUrl + '/login?goto=https%3A%2F%2Fwww.yuque.com%2Fdashboard',
-          origin: this.config.baseUrl,
+          Referer: baseUrl + '/login?goto=https%3A%2F%2Fwww.yuque.com%2Fdashboard',
+          origin: baseUrl,
           'user-agent':
             'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/20G81 YuqueMobileApp/1.0.2 (AppBuild/650 Device/Phone Locale/zh-cn Theme/light YuqueType/public)',
         },

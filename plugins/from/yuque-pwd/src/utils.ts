@@ -3,6 +3,7 @@ import { YuQuePwdPublicKey } from './const';
 import JSEncrypt from 'jsencrypt-node';
 import type { NormalizedYuqueDoc, YuqueDoc } from './types';
 import type { PluginContext, DocProperties } from '@elog/cli';
+import { formatTime } from '@elog/shared';
 
 /**
  * 生成元数据
@@ -14,12 +15,10 @@ export const getProps = (doc: YuqueDoc | NormalizedYuqueDoc, body: string, ctx: 
     // urlname
     urlname: doc.slug,
     // 创建时间
-    // date: timeFormat(doc.created_at),
-    date: doc.created_at,
+    date: formatTime(doc.created_at),
     // 更新时间
-    // updated: timeFormat(doc.updated_at),
     // TODO Front-Matter 字段确认
-    updated: doc.updated_at,
+    updated: formatTime(doc.updated_at),
   } as any;
 
   // 封面

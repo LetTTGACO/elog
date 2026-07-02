@@ -29,6 +29,9 @@
       "optional": true
     }
   },
+  "dependencies": {
+    "@elog/shared": "workspace:*"
+  },
   "devDependencies": {
     "@elog/cli": "workspace:*",
     "@types/node": "~22.19.19",

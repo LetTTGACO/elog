@@ -73,8 +73,26 @@ importers:
         specifier: ^4.1.9
         version: 4.1.9(@types/node@22.19.19)(jsdom@21.1.2)(vite@8.0.13(@types/node@22.19.19)(esbuild@0.28.1)(yaml@2.9.0))
 
+  packages/shared:
+    devDependencies:
+      '@types/node':
+        specifier: ~22.19.19
+        version: 22.19.19
+      tsdown:
+        specifier: ^0.22.3
+        version: 0.22.3(typescript@6.0.3)
+      typescript:
+        specifier: ~6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@types/node@22.19.19)(jsdom@21.1.2)(vite@8.0.13(@types/node@22.19.19)(esbuild@0.28.1)(yaml@2.9.0))
+
   plugins/from/feishu-space:
     dependencies:
+      '@elog/shared':
+        specifier: workspace:*
+        version: link:../../../packages/shared
       '@feishux/api':
         specifier: ^0.3.1
         version: 0.3.3
@@ -103,6 +121,9 @@ importers:
 
   plugins/from/feishu-wiki:
     dependencies:
+      '@elog/shared':
+        specifier: workspace:*
+        version: link:../../../packages/shared
       '@feishux/api':
         specifier: ^0.3.1
         version: 0.3.3
@@ -131,6 +152,9 @@ importers:
 
   plugins/from/flowus:
     dependencies:
+      '@elog/shared':
+        specifier: workspace:*
+        version: link:../../../packages/shared
       '@flowusx/flowus-client':
         specifier: ^0.0.5-beta.4
         version: 0.0.5-beta.4
@@ -156,6 +180,9 @@ importers:
 
   plugins/from/notion:
     dependencies:
+      '@elog/shared':
+        specifier: workspace:*
+        version: link:../../../packages/shared
       '@notionhq/client':
         specifier: ~5.22.0
         version: 5.22.0
@@ -180,6 +207,10 @@ importers:
         version: 4.1.9(@types/node@22.19.19)(jsdom@21.1.2)(vite@8.0.13(@types/node@22.19.19)(esbuild@0.28.1)(yaml@2.9.0))
 
   plugins/from/wolai:
+    dependencies:
+      '@elog/shared':
+        specifier: workspace:*
+        version: link:../../../packages/shared
     devDependencies:
       '@elog/cli':
         specifier: workspace:*
@@ -196,6 +227,9 @@ importers:
 
   plugins/from/yuque-pwd:
     dependencies:
+      '@elog/shared':
+        specifier: workspace:*
+        version: link:../../../packages/shared
       front-matter:
         specifier: ~4.0.2
         version: 4.0.2
@@ -227,6 +261,9 @@ importers:
 
   plugins/from/yuque-token:
     dependencies:
+      '@elog/shared':
+        specifier: workspace:*
+        version: link:../../../packages/shared
       front-matter:
         specifier: ~4.0.2
         version: 4.0.2

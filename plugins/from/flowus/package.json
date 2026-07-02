@@ -30,6 +30,7 @@
     }
   },
   "dependencies": {
+    "@elog/shared": "workspace:*",
     "@flowusx/flowus-client": "^0.0.5-beta.4",
     "@flowusx/flowus-to-md": "^0.0.5-beta.4"
   },

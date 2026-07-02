@@ -2,6 +2,7 @@ import { FlowUsDoc, FlowUsFilterItem, FlowUsSortItem } from './types';
 import { FlowUsSortDirectionEnum } from './const';
 import { Block } from '@flowusx/flowus-types';
 import { DocProperties, DocStructure, SortedDoc } from '@elog/cli';
+import { formatTime } from '@elog/shared';
 
 /**
  * 获取元数据Val
@@ -76,11 +77,8 @@ export function props(pageBlock: Block, tableBlock: Block): DocProperties {
   let properties: any = {};
   properties.urlname = pageBlock.uuid;
   properties.title = pageBlock.title;
-  // TODO 时间格式化 properties 属性
-  properties.updated = pageBlock.updatedAt;
-  // properties.updated = timeFormat(pageBlock.updatedAt);
-  properties.date = pageBlock.createdAt;
-  // properties.date = timeFormat(pageBlock.createdAt);
+  properties.updated = formatTime(pageBlock.updatedAt);
+  properties.date = formatTime(pageBlock.createdAt);
   if (pageBlock.data.fullLink) {
     properties.cover = pageBlock.data.fullLink;
   }

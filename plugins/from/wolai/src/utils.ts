@@ -7,6 +7,7 @@ import {
 } from './types';
 import { WolaiSortDirectionEnum } from './const';
 import { DocDetail, DocProperties, DocStructure, SortedDoc } from '@elog/cli';
+import { formatTime } from '@elog/shared';
 
 /**
  * 获取元数据Val
@@ -79,13 +80,10 @@ export function props(
   }
   // date
   if (!properties.date) {
-    // TODO properties 属性确定
-    properties.date = page.created_time;
-    // properties.date = timeFormat(page.created_time)
+    properties.date = formatTime(page.created_time);
   }
   if (!properties.updated) {
-    // properties.updated = timeFormat(page.edited_time)
-    properties.updated = page.edited_time;
+    properties.updated = formatTime(page.edited_time);
   }
   return properties;
 }
