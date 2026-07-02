@@ -60,15 +60,15 @@ elog sync -c elog.config.1x.ts
 
 ## 依赖迁移规则
 
-1. 0.x 项目通常依赖 `@elog/cli`。1.0 配置需要核心包和具体插件包。
+1. 核心包使用 `@elog/cli`。
 2. 按实际用到的插件添加依赖，不要一次装全平台插件。
-3. 当前 1.0 包名按本文映射使用 `@elogx-test/*`。如果未来官方包名变化，以 [LetTTGACO/elog](https://github.com/LetTTGACO/elog) 最新实现为准。
+3. 如果字段映射附录没有覆盖到某个插件包名，以 [LetTTGACO/elog](https://github.com/LetTTGACO/elog) 最新实现为准。
 
 生成依赖列表时按这条规则：
 
-- 一定包含 `@elogx-test/elog`。
+- 一定包含 `@elog/cli`。
 - 按 `write.platform` 增加一个来源插件包。
-- 一定包含 `@elogx-test/plugin-to-local`。
+- 一定包含 `@elog/plugin-to-local`。
 - 仅当 `image.enable: true` 时，按 `image.platform` 增加一个图片插件包。
 - 如果生成了用户专属本地 transform 文件，不需要为它添加 npm 依赖。
 
@@ -131,11 +131,11 @@ elog sync -c elog.config.1x.ts
 
 | 旧配置事实 | 新 import |
 | --- | --- |
-| 任意支持路径 | `defineConfig` from `@elogx-test/elog` |
-| Notion 来源 | `fromNotion` from `@elogx-test/plugin-from-notion` |
-| 语雀 Token 来源 | `fromYuque` from `@elogx-test/plugin-from-yuque-token` |
-| 语雀账号密码来源 | `fromYuque` from `@elogx-test/plugin-from-yuque-pwd` |
-| Local 目标 | `toLocal` from `@elogx-test/plugin-to-local` |
+| 任意支持路径 | `defineConfig` from `@elog/cli` |
+| Notion 来源 | `fromNotion` from `@elog/plugin-from-notion` |
+| 语雀 Token 来源 | `fromYuque` from `@elog/plugin-from-yuque-token` |
+| 语雀账号密码来源 | `fromYuque` from `@elog/plugin-from-yuque-pwd` |
+| Local 目标 | `toLocal` from `@elog/plugin-to-local` |
 | 图片平台 | 按“图片 transform 插件”附录选择对应 `image*` import |
 | 用户自定义转换 | 从你新建的本地 transform 文件 import |
 
@@ -263,9 +263,9 @@ elog sync -c elog.config.1x.ts
 
 | 0.x 来源 | 1.0 包 | import | factory |
 | --- | --- | --- | --- |
-| `write.platform: 'notion'` | `@elogx-test/plugin-from-notion` | `fromNotion` | `fromNotion(options)` |
-| `write.platform: 'yuque'` | `@elogx-test/plugin-from-yuque-token` | `fromYuque` | `fromYuque(options)` |
-| `write.platform: 'yuque-pwd'` | `@elogx-test/plugin-from-yuque-pwd` | `fromYuque` | `fromYuque(options)` |
+| `write.platform: 'notion'` | `@elog/plugin-from-notion` | `fromNotion` | `fromNotion(options)` |
+| `write.platform: 'yuque'` | `@elog/plugin-from-yuque-token` | `fromYuque` | `fromYuque(options)` |
+| `write.platform: 'yuque-pwd'` | `@elog/plugin-from-yuque-pwd` | `fromYuque` | `fromYuque(options)` |
 
 #### `fromNotion(options)`
 
@@ -317,7 +317,7 @@ elog sync -c elog.config.1x.ts
 
 | 0.x | 1.0 |
 | --- | --- |
-| `deploy.platform: 'local'` | `@elogx-test/plugin-to-local` + `toLocal(options)` |
+| `deploy.platform: 'local'` | `@elog/plugin-to-local` + `toLocal(options)` |
 
 | 1.0 字段 | 迁移来源 | 说明 |
 | --- | --- | --- |
@@ -349,14 +349,14 @@ elog sync -c elog.config.1x.ts
 
 | 0.x `image.platform` | 1.0 包 | import | factory |
 | --- | --- | --- | --- |
-| `local` | `@elogx-test/plugin-image-local` | `imageLocal` | `imageLocal(options)` |
-| `cos` | `@elogx-test/plugin-image-cos` | `imageCos` | `imageCos(options)` |
-| `oss` | `@elogx-test/plugin-image-oss` | `imageOss` | `imageOss(options)` |
-| `github` | `@elogx-test/plugin-image-github` | `imageGithub` | `imageGithub(options)` |
-| `qiniu` | `@elogx-test/plugin-image-qiniu` | `imageQiniu` | `imageQiniu(options)` |
-| `upyun` | `@elogx-test/plugin-image-upyun` | `imageUpyun` | `imageUpyun(options)` |
-| `r2` | `@elogx-test/plugin-image-r2` | `imageR2` | `imageR2(options)` |
-| `b2` | `@elogx-test/plugin-image-b2` | `imageB2` | `imageB2(options)` |
+| `local` | `@elog/plugin-image-local` | `imageLocal` | `imageLocal(options)` |
+| `cos` | `@elog/plugin-image-cos` | `imageCos` | `imageCos(options)` |
+| `oss` | `@elog/plugin-image-oss` | `imageOss` | `imageOss(options)` |
+| `github` | `@elog/plugin-image-github` | `imageGithub` | `imageGithub(options)` |
+| `qiniu` | `@elog/plugin-image-qiniu` | `imageQiniu` | `imageQiniu(options)` |
+| `upyun` | `@elog/plugin-image-upyun` | `imageUpyun` | `imageUpyun(options)` |
+| `r2` | `@elog/plugin-image-r2` | `imageR2` | `imageR2(options)` |
+| `b2` | `@elog/plugin-image-b2` | `imageB2` | `imageB2(options)` |
 
 #### `imageLocal(options)`
 
