@@ -213,7 +213,7 @@ describe('resolveConfig', () => {
       level: 'error',
       code: 'LEGACY_V0_CONFIG_DETECTED',
     });
-    expect(result.diagnostics[0]?.message).toContain('MIGRATION.md');
+    expect(result.diagnostics[0]?.message).toContain('does not auto-migrate');
     expect(result.diagnostics[0]?.message).not.toMatch(/migrate command/i);
   });
 });
