@@ -1,5 +1,5 @@
 {
-  "name": "@elog/plugin-image-github",
+  "name": "@elog/plugin-transform-image-github",
   "version": "1.0.0-beta.0",
   "description": "",
   "main": "dist/index.js",

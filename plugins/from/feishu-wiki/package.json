@@ -1,5 +1,5 @@
 {
-  "name": "@elogx-test/plugin-from-feishu-wiki",
+  "name": "@elog/plugin-from-feishu-wiki",
   "version": "1.0.1",
   "description": "",
   "main": "dist/index.js",

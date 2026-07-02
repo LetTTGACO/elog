@@ -27,7 +27,7 @@ const imageLocal: PluginRegistryEntry = {
   kind: 'transform',
   type: 'image-local',
   displayName: '下载图片到本地',
-  packageName: '@elog/plugin-image-local',
+  packageName: '@elog/plugin-transform-image-local',
   importName: 'imageLocal',
   optionsSchema: {
     type: 'object',
@@ -90,7 +90,7 @@ describe('generateInitFiles', () => {
     expect(files).toEqual({
       configText: `import { defineConfig } from '@elog/cli';
 import fromYuque from '@elog/plugin-from-yuque-pwd';
-import imageLocal from '@elog/plugin-image-local';
+import imageLocal from '@elog/plugin-transform-image-local';
 import toLocal from '@elog/plugin-to-local';
 
 export default defineConfig({
@@ -135,7 +135,7 @@ export default defineConfig({
       kind: 'to',
       type: 'halo',
       displayName: 'Halo',
-      packageName: '@elogx-test/plugin-to-halo',
+      packageName: '@elog/plugin-to-halo',
       importName: 'toHalo',
       optionsSchema: {
         type: 'object',
@@ -183,14 +183,22 @@ export default defineConfig({
     });
 
     expect(files.configText).toContain("import yuqueToken from '@elog/plugin-from-yuque-token';");
-    expect(files.configText).toContain("import imageLocal from '@elog/plugin-image-local';");
-    expect(files.configText).toContain("import imageCos from '@elog/plugin-image-cos';");
-    expect(files.configText).toContain("import imageOss from '@elog/plugin-image-oss';");
-    expect(files.configText).toContain("import imageGithub from '@elog/plugin-image-github';");
-    expect(files.configText).toContain("import imageQiniu from '@elog/plugin-image-qiniu';");
-    expect(files.configText).toContain("import imageUpyun from '@elog/plugin-image-upyun';");
-    expect(files.configText).toContain("import imageR2 from '@elog/plugin-image-r2';");
-    expect(files.configText).toContain("import imageB2 from '@elog/plugin-image-b2';");
+    expect(files.configText).toContain(
+      "import imageLocal from '@elog/plugin-transform-image-local';",
+    );
+    expect(files.configText).toContain("import imageCos from '@elog/plugin-transform-image-cos';");
+    expect(files.configText).toContain("import imageOss from '@elog/plugin-transform-image-oss';");
+    expect(files.configText).toContain(
+      "import imageGithub from '@elog/plugin-transform-image-github';",
+    );
+    expect(files.configText).toContain(
+      "import imageQiniu from '@elog/plugin-transform-image-qiniu';",
+    );
+    expect(files.configText).toContain(
+      "import imageUpyun from '@elog/plugin-transform-image-upyun';",
+    );
+    expect(files.configText).toContain("import imageR2 from '@elog/plugin-transform-image-r2';");
+    expect(files.configText).toContain("import imageB2 from '@elog/plugin-transform-image-b2';");
     expect(files.configText).toContain("import toLocal from '@elog/plugin-to-local';");
 
     expect(files.configText).toContain('process.env.YUQUE_TOKEN');

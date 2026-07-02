@@ -1,6 +1,6 @@
 import { defineConfig } from '@elog/cli';
 import fromNotion from '@elog/plugin-from-notion';
-import imageLocal from '@elog/plugin-image-local';
+import imageLocal from '@elog/plugin-transform-image-local';
 import toLocal from '@elog/plugin-to-local';
 
 export default defineConfig({

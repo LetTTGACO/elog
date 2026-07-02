@@ -511,15 +511,15 @@ importers:
       '@elog/plugin-from-yuque-token':
         specifier: workspace:*
         version: link:../../plugins/from/yuque-token
-      '@elog/plugin-image-local':
-        specifier: workspace:*
-        version: link:../../plugins/transform/image-local
-      '@elog/plugin-image-r2':
-        specifier: workspace:*
-        version: link:../../plugins/transform/image-r2
       '@elog/plugin-to-local':
         specifier: workspace:*
         version: link:../../plugins/to/local
+      '@elog/plugin-transform-image-local':
+        specifier: workspace:*
+        version: link:../../plugins/transform/image-local
+      '@elog/plugin-transform-image-r2':
+        specifier: workspace:*
+        version: link:../../plugins/transform/image-r2
     devDependencies:
       '@types/node':
         specifier: ~22.19.19
@@ -539,12 +539,12 @@ importers:
       '@elog/plugin-from-notion':
         specifier: workspace:*
         version: link:../../plugins/from/notion
-      '@elog/plugin-image-local':
-        specifier: workspace:*
-        version: link:../../plugins/transform/image-local
       '@elog/plugin-to-local':
         specifier: workspace:*
         version: link:../../plugins/to/local
+      '@elog/plugin-transform-image-local':
+        specifier: workspace:*
+        version: link:../../plugins/transform/image-local
     devDependencies:
       '@types/node':
         specifier: ~22.19.19
@@ -564,12 +564,12 @@ importers:
       '@elog/plugin-from-yuque-token':
         specifier: workspace:*
         version: link:../../plugins/from/yuque-token
-      '@elog/plugin-image-local':
-        specifier: workspace:*
-        version: link:../../plugins/transform/image-local
       '@elog/plugin-to-local':
         specifier: workspace:*
         version: link:../../plugins/to/local
+      '@elog/plugin-transform-image-local':
+        specifier: workspace:*
+        version: link:../../plugins/transform/image-local
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
@@ -586,12 +586,12 @@ importers:
       '@elog/plugin-from-yuque-pwd':
         specifier: workspace:*
         version: link:../../plugins/from/yuque-pwd
-      '@elog/plugin-image-local':
-        specifier: workspace:*
-        version: link:../../plugins/transform/image-local
       '@elog/plugin-to-local':
         specifier: workspace:*
         version: link:../../plugins/to/local
+      '@elog/plugin-transform-image-local':
+        specifier: workspace:*
+        version: link:../../plugins/transform/image-local
     devDependencies:
       '@types/node':
         specifier: ~22.19.19

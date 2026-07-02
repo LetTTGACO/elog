@@ -18,7 +18,7 @@ const transformEntry: PluginRegistryEntry = {
   kind: 'transform',
   type: 'image-local',
   displayName: '下载图片到本地',
-  packageName: '@elog/plugin-image-local',
+  packageName: '@elog/plugin-transform-image-local',
   importName: 'imageLocal',
   optionsSchema: { type: 'object', properties: {}, additionalProperties: false },
 };

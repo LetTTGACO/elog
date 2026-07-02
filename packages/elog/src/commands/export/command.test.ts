@@ -17,7 +17,7 @@ const transformEntry: PluginRegistryEntry = {
   kind: 'transform',
   type: 'image-local',
   displayName: '下载图片到本地',
-  packageName: '@elog/plugin-image-local',
+  packageName: '@elog/plugin-transform-image-local',
   importName: 'imageLocal',
   optionsSchema: { type: 'object', properties: {}, additionalProperties: false },
 };
@@ -49,7 +49,7 @@ describe('selectedPackages', () => {
   it('extracts unique package names from export selection', () => {
     expect(selectedPackages(selection)).toEqual([
       '@elog/plugin-from-yuque-pwd',
-      '@elog/plugin-image-local',
+      '@elog/plugin-transform-image-local',
       '@elog/plugin-to-local',
     ]);
   });
@@ -93,7 +93,7 @@ describe('runExportCommand', () => {
         cwd: '/tmp/project',
         packages: [
           '@elog/plugin-from-yuque-pwd',
-          '@elog/plugin-image-local',
+          '@elog/plugin-transform-image-local',
           '@elog/plugin-to-local',
         ],
       }),

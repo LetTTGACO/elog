@@ -1,5 +1,5 @@
 {
-  "name": "@elogx-test/plugin-from-wolai",
+  "name": "@elog/plugin-from-wolai",
   "version": "1.0.1",
   "description": "",
   "main": "dist/index.js",

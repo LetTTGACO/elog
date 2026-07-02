@@ -351,14 +351,14 @@ elog sync -c elog.config.1x.ts
 
 | 0.x `image.platform` | 1.0 包 | import | factory |
 | --- | --- | --- | --- |
-| `local` | `@elog/plugin-image-local` | `imageLocal` | `imageLocal(options)` |
-| `cos` | `@elog/plugin-image-cos` | `imageCos` | `imageCos(options)` |
-| `oss` | `@elog/plugin-image-oss` | `imageOss` | `imageOss(options)` |
-| `github` | `@elog/plugin-image-github` | `imageGithub` | `imageGithub(options)` |
-| `qiniu` | `@elog/plugin-image-qiniu` | `imageQiniu` | `imageQiniu(options)` |
-| `upyun` | `@elog/plugin-image-upyun` | `imageUpyun` | `imageUpyun(options)` |
-| `r2` | `@elog/plugin-image-r2` | `imageR2` | `imageR2(options)` |
-| `b2` | `@elog/plugin-image-b2` | `imageB2` | `imageB2(options)` |
+| `local` | `@elog/plugin-transform-image-local` | `imageLocal` | `imageLocal(options)` |
+| `cos` | `@elog/plugin-transform-image-cos` | `imageCos` | `imageCos(options)` |
+| `oss` | `@elog/plugin-transform-image-oss` | `imageOss` | `imageOss(options)` |
+| `github` | `@elog/plugin-transform-image-github` | `imageGithub` | `imageGithub(options)` |
+| `qiniu` | `@elog/plugin-transform-image-qiniu` | `imageQiniu` | `imageQiniu(options)` |
+| `upyun` | `@elog/plugin-transform-image-upyun` | `imageUpyun` | `imageUpyun(options)` |
+| `r2` | `@elog/plugin-transform-image-r2` | `imageR2` | `imageR2(options)` |
+| `b2` | `@elog/plugin-transform-image-b2` | `imageB2` | `imageB2(options)` |
 
 #### `imageLocal(options)`
 

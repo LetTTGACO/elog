@@ -71,7 +71,7 @@ const imageLocal: PluginRegistryEntry = {
   kind: 'transform',
   type: 'image-local',
   displayName: '下载图片到本地',
-  packageName: '@elog/plugin-image-local',
+  packageName: '@elog/plugin-transform-image-local',
   importName: 'imageLocal',
   optionsSchema: {
     type: 'object',
@@ -129,7 +129,7 @@ describe('buildOptionQuestions', () => {
       kind: 'from',
       type: 'test-enum',
       displayName: 'Enum Test',
-      packageName: '@elogx-test/plugin-from-enum',
+      packageName: '@elog/plugin-from-enum',
       importName: 'fromEnum',
       optionsSchema: {
         type: 'object',
@@ -159,7 +159,7 @@ describe('buildOptionQuestions', () => {
       kind: 'from',
       type: 'test-number',
       displayName: 'Number Test',
-      packageName: '@elogx-test/plugin-from-number',
+      packageName: '@elog/plugin-from-number',
       importName: 'fromNumber',
       optionsSchema: {
         type: 'object',
@@ -188,7 +188,7 @@ describe('buildOptionQuestions', () => {
       kind: 'from',
       type: 'test-secret',
       displayName: 'Secret Test',
-      packageName: '@elogx-test/plugin-from-secret',
+      packageName: '@elog/plugin-from-secret',
       importName: 'fromSecret',
       optionsSchema: {
         type: 'object',
@@ -217,7 +217,7 @@ describe('buildOptionQuestions', () => {
       kind: 'from',
       type: 'test-string',
       displayName: 'String Test',
-      packageName: '@elogx-test/plugin-from-string',
+      packageName: '@elog/plugin-from-string',
       importName: 'fromString',
       optionsSchema: {
         type: 'object',

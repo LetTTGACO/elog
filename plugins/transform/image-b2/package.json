@@ -1,5 +1,5 @@
 {
-  "name": "@elog/plugin-image-b2",
+  "name": "@elog/plugin-transform-image-b2",
   "version": "1.0.0-beta.0",
   "description": "",
   "main": "dist/index.js",

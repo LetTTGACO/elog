@@ -1,5 +1,5 @@
 {
-  "name": "@elogx-test/plugin-to-confluence",
+  "name": "@elog/plugin-to-confluence",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",

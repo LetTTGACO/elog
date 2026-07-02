@@ -5,9 +5,8 @@ This file provides guidance to Claude Code / Codex-style coding agents when work
 ## Project Overview
 
 Elog is a CLI tool and library for syncing documents from writing and note-taking
-platforms to blogging/CMS targets. The 1.0 rewrite is a pnpm/Turborepo monorepo.
-Release-line packages use the `@elog/` scope; experimental packages may remain
-under `@elogx-test/` until they are promoted.
+platforms to blogging/CMS targets. The 1.0 rewrite is a pnpm/Turborepo monorepo,
+and workspace packages use the `@elog/` scope.
 
 The system is plugin-driven:
 
@@ -267,8 +266,8 @@ Shared image helpers live in:
 
 Image plugins are `transform` middleware. Two styles exist:
 
-- Cloud-style image plugins (`plugin-image-cos`, `oss`, `github`, `qiniu`, `upyun`) extend `ElogImageContext` and pass an `ImageUploader` with `hasImage()` and `uploadImage()`.
-- `plugin-image-local` currently implements its own `ImageClient` directly using `PluginContext` and filesystem writes.
+- Cloud-style image plugins (`plugin-transform-image-cos`, `oss`, `github`, `qiniu`, `upyun`) extend `ElogImageContext` and pass an `ImageUploader` with `hasImage()` and `uploadImage()`.
+- `plugin-transform-image-local` currently implements its own `ImageClient` directly using `PluginContext` and filesystem writes.
 
 The shared replacement flow extracts image URLs from doc bodies, generates stable
 file names, checks existing uploads, uploads missing images, and replaces original

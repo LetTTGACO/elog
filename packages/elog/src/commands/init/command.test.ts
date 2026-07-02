@@ -18,7 +18,7 @@ const sampleRegistry: PluginRegistry = {
       kind: 'transform',
       type: 'transform:image-local',
       displayName: 'Local Images',
-      packageName: '@elog/plugin-image-local',
+      packageName: '@elog/plugin-transform-image-local',
       importName: 'imageLocal',
       optionsSchema: { type: 'object', properties: {} },
     },
@@ -68,7 +68,7 @@ describe('selectedPackages', () => {
     const packages = selectedPackages(sampleSelection);
     expect(packages).toEqual([
       '@elog/plugin-from-notion',
-      '@elog/plugin-image-local',
+      '@elog/plugin-transform-image-local',
       '@elog/plugin-to-local',
     ]);
   });

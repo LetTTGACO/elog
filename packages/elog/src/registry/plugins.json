@@ -185,7 +185,7 @@
       "kind": "transform",
       "type": "image-cos",
       "displayName": "腾讯云 COS 图床",
-      "packageName": "@elog/plugin-image-cos",
+      "packageName": "@elog/plugin-transform-image-cos",
       "importName": "imageCos",
       "optionsSchema": {
         "type": "object",
@@ -255,7 +255,7 @@
       "kind": "transform",
       "type": "image-oss",
       "displayName": "阿里云 OSS 图床",
-      "packageName": "@elog/plugin-image-oss",
+      "packageName": "@elog/plugin-transform-image-oss",
       "importName": "imageOss",
       "optionsSchema": {
         "type": "object",
@@ -325,7 +325,7 @@
       "kind": "transform",
       "type": "image-github",
       "displayName": "GitHub 图床",
-      "packageName": "@elog/plugin-image-github",
+      "packageName": "@elog/plugin-transform-image-github",
       "importName": "imageGithub",
       "optionsSchema": {
         "type": "object",
@@ -394,7 +394,7 @@
       "kind": "transform",
       "type": "image-qiniu",
       "displayName": "七牛云图床",
-      "packageName": "@elog/plugin-image-qiniu",
+      "packageName": "@elog/plugin-transform-image-qiniu",
       "importName": "imageQiniu",
       "optionsSchema": {
         "type": "object",
@@ -464,7 +464,7 @@
       "kind": "transform",
       "type": "image-upyun",
       "displayName": "又拍云图床",
-      "packageName": "@elog/plugin-image-upyun",
+      "packageName": "@elog/plugin-transform-image-upyun",
       "importName": "imageUpyun",
       "optionsSchema": {
         "type": "object",
@@ -524,7 +524,7 @@
       "kind": "transform",
       "type": "image-r2",
       "displayName": "Cloudflare R2 图床",
-      "packageName": "@elog/plugin-image-r2",
+      "packageName": "@elog/plugin-transform-image-r2",
       "importName": "imageR2",
       "optionsSchema": {
         "type": "object",
@@ -603,7 +603,7 @@
       "kind": "transform",
       "type": "image-b2",
       "displayName": "Backblaze B2 图床",
-      "packageName": "@elog/plugin-image-b2",
+      "packageName": "@elog/plugin-transform-image-b2",
       "importName": "imageB2",
       "optionsSchema": {
         "type": "object",
@@ -664,7 +664,7 @@
       "kind": "transform",
       "type": "image-local",
       "displayName": "下载图片到本地",
-      "packageName": "@elog/plugin-image-local",
+      "packageName": "@elog/plugin-transform-image-local",
       "importName": "imageLocal",
       "optionsSchema": {
         "type": "object",

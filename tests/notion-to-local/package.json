@@ -1,5 +1,5 @@
 {
-  "name": "@elogx-test/notion-to-local",
+  "name": "@elog/notion-to-local",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -9,7 +9,7 @@
   "dependencies": {
     "@elog/cli": "workspace:*",
     "@elog/plugin-from-notion": "workspace:*",
-    "@elog/plugin-image-local": "workspace:*",
+    "@elog/plugin-transform-image-local": "workspace:*",
     "@elog/plugin-to-local": "workspace:*"
   },
   "devDependencies": {

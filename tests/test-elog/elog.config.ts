@@ -1,7 +1,7 @@
 import { defineConfig } from '@elog/cli';
 import fromYuque from '@elog/plugin-from-yuque-token';
 import toLocal from '@elog/plugin-to-local';
-import imageLocal from '@elog/plugin-image-local';
+import imageLocal from '@elog/plugin-transform-image-local';
 
 export default defineConfig({
   from: fromYuque({

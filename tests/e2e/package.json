@@ -1,5 +1,5 @@
 {
-  "name": "@elogx-test/e2e",
+  "name": "@elog/e2e",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -19,8 +19,8 @@
     "@elog/plugin-from-notion": "workspace:*",
     "@elog/plugin-from-yuque-pwd": "workspace:*",
     "@elog/plugin-from-yuque-token": "workspace:*",
-    "@elog/plugin-image-local": "workspace:*",
-    "@elog/plugin-image-r2": "workspace:*",
+    "@elog/plugin-transform-image-local": "workspace:*",
+    "@elog/plugin-transform-image-r2": "workspace:*",
     "@elog/plugin-to-local": "workspace:*"
   },
   "devDependencies": {

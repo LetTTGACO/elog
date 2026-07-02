@@ -1,7 +1,7 @@
 import elog from '@elog/cli';
 import yuque from '@elog/plugin-from-yuque-token';
 import local from '@elog/plugin-to-local';
-import imageElog from '@elog/plugin-image-local';
+import imageElog from '@elog/plugin-transform-image-local';
 
 elog({
   from: yuque({

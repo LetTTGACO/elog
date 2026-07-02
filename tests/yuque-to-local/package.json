@@ -1,5 +1,5 @@
 {
-  "name": "@elogx-test/yuque-to-local",
+  "name": "@elog/yuque-to-local",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -10,7 +10,7 @@
     "@elog/cli": "workspace:*",
     "@elog/plugin-from-yuque-pwd": "workspace:*",
     "@elog/plugin-to-local": "workspace:*",
-    "@elog/plugin-image-local": "workspace:*"
+    "@elog/plugin-transform-image-local": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "~22.19.19",
