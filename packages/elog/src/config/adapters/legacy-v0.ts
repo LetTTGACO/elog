@@ -32,7 +32,7 @@ export function detectLegacyV0Config(raw: unknown): LegacyAdapterResult {
         level: 'error',
         code: 'LEGACY_V0_CONFIG_DETECTED',
         message:
-          'Detected an Elog 0.x style config. Elog 1.0 uses the new plugin workflow; please rewrite this config with from, plugins, and to entries.',
+          'Detected an Elog 0.x style config. Elog 1.0 uses the new plugin workflow; see MIGRATION.md for the stable migration guide.',
       },
     ],
   };
