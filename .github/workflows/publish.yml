@@ -1,0 +1,48 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - '*'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
+
+      - name: Use latest npm
+        run: npm install -g npm@latest
+
+      - name: Verify release tag
+        run: |
+          release_version="${GITHUB_REF_NAME#v}"
+          package_version="$(node -p "require('./packages/elog/package.json').version")"
+          if [ "$release_version" != "$package_version" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match @elog/cli version $package_version"
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
+
+      - name: Publish packages
+        run: pnpm changeset publish

@@ -1,6 +1,12 @@
 {
   "name": "@elog/plugin-from-flowus",
   "version": "1.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LetTTGACO/elog.git",
+    "directory": "plugins/from/flowus"
+  },
+  "private": true,
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.js",

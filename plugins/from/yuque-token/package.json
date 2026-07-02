@@ -2,6 +2,11 @@
   "name": "@elog/plugin-from-yuque-token",
   "version": "1.0.0-beta.0",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LetTTGACO/elog.git",
+    "directory": "plugins/from/yuque-token"
+  },
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
