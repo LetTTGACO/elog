@@ -1,5 +1,5 @@
 import Context from './Context';
-import type { PluginContext, DocDetail } from '@elogx-test/elog';
+import type { PluginContext, DocDetail } from '@elog/cli';
 import type {
   ConfluenceConfig,
   WikiContent,

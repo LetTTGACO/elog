@@ -1,5 +1,5 @@
-import type { DocDetail, PluginContext } from '@elogx-test/elog';
-import { ElogImageContext } from '@elogx-test/elog';
+import type { DocDetail, PluginContext } from '@elog/cli';
+import { ElogImageContext } from '@elog/cli';
 import R2Api from './ImageApi';
 import type { ImageR2Config } from './types';
 

@@ -1,5 +1,5 @@
 import { Options as OSSOptions } from 'ali-oss';
-import { ImageBaseConfig } from '@elogx-test/elog';
+import { ImageBaseConfig } from '@elog/cli';
 
 export interface ImageOSSInnerConfig extends OSSOptions {
   /** 自定义域名 */

@@ -1,4 +1,4 @@
-import { ImageBaseConfig } from '@elogx-test/elog';
+import { ImageBaseConfig } from '@elog/cli';
 
 export interface ImageGithubConfig extends ImageBaseConfig {
   /** 自定义域名 */

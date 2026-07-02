@@ -1,5 +1,5 @@
 import { FlowUsSortPresetEnum } from './const';
-import { DocProperties, FromPluginBaseConfig } from '@elogx-test/elog';
+import { DocProperties, FromPluginBaseConfig } from '@elog/cli';
 
 export interface FlowUsCatalogConfig {
   enable: boolean;

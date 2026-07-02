@@ -1,4 +1,4 @@
-import type { ImageBaseConfig } from '@elogx-test/elog';
+import type { ImageBaseConfig } from '@elog/cli';
 
 export interface ImageLocalConfig extends ImageBaseConfig {
   outputDir: string;

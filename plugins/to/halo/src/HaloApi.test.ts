@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { PluginContext } from '@elogx-test/elog';
+import type { PluginContext } from '@elog/cli';
 import HaloApi from './HaloApi';
 
 function createCtx() {

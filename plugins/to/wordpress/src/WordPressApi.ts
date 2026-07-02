@@ -8,7 +8,7 @@ import {
   WordPressTag,
 } from './types';
 import Context from './Context';
-import type { PluginContext } from '@elogx-test/elog';
+import type { PluginContext } from '@elog/cli';
 
 export default class WordPressApi extends Context {
   config: WordPressConfig;

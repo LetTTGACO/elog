@@ -15,13 +15,13 @@
     "test:yuque-token-local": "pnpm run build:repo && ELOG_E2E_CASE=yuque-token-image-local-to-local vitest run src/sync-matrix.e2e.test.ts"
   },
   "dependencies": {
-    "@elogx-test/elog": "workspace:*",
-    "@elogx-test/plugin-from-notion": "workspace:*",
-    "@elogx-test/plugin-from-yuque-pwd": "workspace:*",
-    "@elogx-test/plugin-from-yuque-token": "workspace:*",
-    "@elogx-test/plugin-image-local": "workspace:*",
-    "@elogx-test/plugin-image-r2": "workspace:*",
-    "@elogx-test/plugin-to-local": "workspace:*"
+    "@elog/cli": "workspace:*",
+    "@elog/plugin-from-notion": "workspace:*",
+    "@elog/plugin-from-yuque-pwd": "workspace:*",
+    "@elog/plugin-from-yuque-token": "workspace:*",
+    "@elog/plugin-image-local": "workspace:*",
+    "@elog/plugin-image-r2": "workspace:*",
+    "@elog/plugin-to-local": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "~22.19.19",

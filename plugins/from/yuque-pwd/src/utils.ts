@@ -2,7 +2,7 @@ import frontMatter from 'front-matter';
 import { YuQuePwdPublicKey } from './const';
 import JSEncrypt from 'jsencrypt-node';
 import type { NormalizedYuqueDoc, YuqueDoc } from './types';
-import type { PluginContext, DocProperties } from '@elogx-test/elog';
+import type { PluginContext, DocProperties } from '@elog/cli';
 
 /**
  * 生成元数据

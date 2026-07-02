@@ -14,7 +14,7 @@ const yuque: PluginRegistryEntry = {
   kind: 'from',
   type: 'yuque-pwd',
   displayName: '语雀',
-  packageName: '@elogx-test/plugin-from-yuque-pwd',
+  packageName: '@elog/plugin-from-yuque-pwd',
   importName: 'fromYuque',
   optionsSchema: {
     type: 'object',
@@ -52,7 +52,7 @@ const localTarget: PluginRegistryEntry = {
   kind: 'to',
   type: 'local',
   displayName: '本地目录',
-  packageName: '@elogx-test/plugin-to-local',
+  packageName: '@elog/plugin-to-local',
   importName: 'toLocal',
   optionsSchema: {
     type: 'object',
@@ -71,7 +71,7 @@ const imageLocal: PluginRegistryEntry = {
   kind: 'transform',
   type: 'image-local',
   displayName: '下载图片到本地',
-  packageName: '@elogx-test/plugin-image-local',
+  packageName: '@elog/plugin-image-local',
   importName: 'imageLocal',
   optionsSchema: {
     type: 'object',

@@ -5,7 +5,7 @@ import type {
   WordPressConfig,
   WordPressPost,
 } from './types';
-import type { DocDetail, PluginContext } from '@elogx-test/elog';
+import type { DocDetail, PluginContext } from '@elog/cli';
 import WordPressApi from './WordPressApi';
 import Context from './Context';
 import { getNoRepValues, htmlAdapterWithHighlight, removeEmptyProperties } from './utils';

@@ -1,5 +1,5 @@
 import { FeiShuConfig } from './types';
-import { DownloadResult, ElogFromContext, PluginContext } from '@elogx-test/elog';
+import { DownloadResult, ElogFromContext, PluginContext } from '@elog/cli';
 import FeiShuApi from './FeiShuApi';
 
 export default class FeiShuClient extends ElogFromContext {

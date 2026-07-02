@@ -85,7 +85,7 @@ importers:
         specifier: ~4.0.2
         version: 4.0.2
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@types/node':
@@ -113,7 +113,7 @@ importers:
         specifier: ~4.0.2
         version: 4.0.2
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@types/node':
@@ -135,7 +135,7 @@ importers:
         specifier: ^0.0.5-beta.4
         version: 0.0.5-beta.5
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@flowusx/flowus-types':
@@ -160,7 +160,7 @@ importers:
         specifier: 3.1.9
         version: 3.1.9
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@types/node':
@@ -178,7 +178,7 @@ importers:
 
   plugins/from/wolai:
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@types/node':
@@ -203,7 +203,7 @@ importers:
         specifier: ~1.0.4
         version: 1.0.4
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@types/jsdom':
@@ -228,7 +228,7 @@ importers:
         specifier: ~4.0.2
         version: 4.0.2
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@types/node':
@@ -247,7 +247,7 @@ importers:
         specifier: ~12.0.1
         version: 12.0.1
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@types/node':
@@ -269,7 +269,7 @@ importers:
         specifier: ~2.3.5
         version: 2.3.5
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@halo-dev/api-client':
@@ -297,7 +297,7 @@ importers:
         specifier: ~4.0.3
         version: 4.0.3
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@types/node':
@@ -319,7 +319,7 @@ importers:
         specifier: ~14.2.0
         version: 14.2.0
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@types/markdown-it':
@@ -344,7 +344,7 @@ importers:
         specifier: ^1.7.0
         version: 1.7.1
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@types/backblaze-b2':
@@ -369,7 +369,7 @@ importers:
         specifier: ~2.15.4
         version: 2.15.4
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@types/node':
@@ -384,7 +384,7 @@ importers:
 
   plugins/transform/image-github:
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@types/node':
@@ -399,7 +399,7 @@ importers:
 
   plugins/transform/image-local:
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@types/node':
@@ -418,7 +418,7 @@ importers:
         specifier: ~6.23.0
         version: 6.23.0
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@types/ali-oss':
@@ -440,7 +440,7 @@ importers:
         specifier: ~7.15.2
         version: 7.15.2
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@types/node':
@@ -459,7 +459,7 @@ importers:
         specifier: 3.445.0
         version: 3.445.0
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@types/node':
@@ -481,7 +481,7 @@ importers:
         specifier: ~3.4.6
         version: 3.4.6
     devDependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
       '@types/node':
@@ -499,25 +499,25 @@ importers:
 
   tests/e2e:
     dependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../packages/elog
-      '@elogx-test/plugin-from-notion':
+      '@elog/plugin-from-notion':
         specifier: workspace:*
         version: link:../../plugins/from/notion
-      '@elogx-test/plugin-from-yuque-pwd':
+      '@elog/plugin-from-yuque-pwd':
         specifier: workspace:*
         version: link:../../plugins/from/yuque-pwd
-      '@elogx-test/plugin-from-yuque-token':
+      '@elog/plugin-from-yuque-token':
         specifier: workspace:*
         version: link:../../plugins/from/yuque-token
-      '@elogx-test/plugin-image-local':
+      '@elog/plugin-image-local':
         specifier: workspace:*
         version: link:../../plugins/transform/image-local
-      '@elogx-test/plugin-image-r2':
+      '@elog/plugin-image-r2':
         specifier: workspace:*
         version: link:../../plugins/transform/image-r2
-      '@elogx-test/plugin-to-local':
+      '@elog/plugin-to-local':
         specifier: workspace:*
         version: link:../../plugins/to/local
     devDependencies:
@@ -533,16 +533,16 @@ importers:
 
   tests/notion-to-local:
     dependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../packages/elog
-      '@elogx-test/plugin-from-notion':
+      '@elog/plugin-from-notion':
         specifier: workspace:*
         version: link:../../plugins/from/notion
-      '@elogx-test/plugin-image-local':
+      '@elog/plugin-image-local':
         specifier: workspace:*
         version: link:../../plugins/transform/image-local
-      '@elogx-test/plugin-to-local':
+      '@elog/plugin-to-local':
         specifier: workspace:*
         version: link:../../plugins/to/local
     devDependencies:
@@ -555,19 +555,19 @@ importers:
 
   tests/test-elog:
     dependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../packages/elog
-      '@elogx-test/plugin-from-yuque-pwd':
+      '@elog/plugin-from-yuque-pwd':
         specifier: workspace:*
         version: link:../../plugins/from/yuque-pwd
-      '@elogx-test/plugin-from-yuque-token':
+      '@elog/plugin-from-yuque-token':
         specifier: workspace:*
         version: link:../../plugins/from/yuque-token
-      '@elogx-test/plugin-image-local':
+      '@elog/plugin-image-local':
         specifier: workspace:*
         version: link:../../plugins/transform/image-local
-      '@elogx-test/plugin-to-local':
+      '@elog/plugin-to-local':
         specifier: workspace:*
         version: link:../../plugins/to/local
       '@types/node':
@@ -580,16 +580,16 @@ importers:
 
   tests/yuque-to-local:
     dependencies:
-      '@elogx-test/elog':
+      '@elog/cli':
         specifier: workspace:*
         version: link:../../packages/elog
-      '@elogx-test/plugin-from-yuque-pwd':
+      '@elog/plugin-from-yuque-pwd':
         specifier: workspace:*
         version: link:../../plugins/from/yuque-pwd
-      '@elogx-test/plugin-image-local':
+      '@elog/plugin-image-local':
         specifier: workspace:*
         version: link:../../plugins/transform/image-local
-      '@elogx-test/plugin-to-local':
+      '@elog/plugin-to-local':
         specifier: workspace:*
         version: link:../../plugins/to/local
     devDependencies:

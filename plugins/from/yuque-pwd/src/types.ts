@@ -1,4 +1,4 @@
-import type { DocStructure, FromPluginBaseConfig } from '@elogx-test/elog';
+import type { DocStructure, FromPluginBaseConfig } from '@elog/cli';
 
 /** 语雀文档（不带详情）列表返回 */
 export interface YuqueDoc {

@@ -1,6 +1,6 @@
 import { NormalizedYuqueDoc, YuqueWithPwdConfig } from './types';
-import { ElogFromContext } from '@elogx-test/elog';
-import type { DocDetail, DocStructure, DownloadResult, PluginContext } from '@elogx-test/elog';
+import { ElogFromContext } from '@elog/cli';
+import type { DocDetail, DocStructure, DownloadResult, PluginContext } from '@elog/cli';
 import YuqueApi from './YuqueApi';
 import { IllegalityDocFormat } from './const';
 import { getProps, processMarkdownRaw } from './utils';

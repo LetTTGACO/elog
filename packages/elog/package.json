@@ -1,6 +1,6 @@
 {
-  "name": "@elogx-test/elog",
-  "version": "1.0.2",
+  "name": "@elog/cli",
+  "version": "1.0.0-beta.0",
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.js",

@@ -1,7 +1,7 @@
 import { FlowUsDoc, FlowUsFilterItem, FlowUsSortItem } from './types';
 import { FlowUsSortDirectionEnum } from './const';
 import { Block } from '@flowusx/flowus-types';
-import { DocProperties, DocStructure, SortedDoc } from '@elogx-test/elog';
+import { DocProperties, DocStructure, SortedDoc } from '@elog/cli';
 
 /**
  * 获取元数据Val

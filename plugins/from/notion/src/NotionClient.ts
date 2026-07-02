@@ -1,5 +1,5 @@
 import { NotionConfig } from './types';
-import { DownloadResult, ElogFromContext, PluginContext } from '@elogx-test/elog';
+import { DownloadResult, ElogFromContext, PluginContext } from '@elog/cli';
 import NotionApi from './NotionApi';
 
 export default class NotionClient extends ElogFromContext {

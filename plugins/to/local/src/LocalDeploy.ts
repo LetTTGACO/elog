@@ -1,4 +1,4 @@
-import { DocDetail, ElogBaseContext, PluginContext } from '@elogx-test/elog';
+import { DocDetail, ElogBaseContext, PluginContext } from '@elog/cli';
 import path from 'path';
 import fs from 'fs';
 import type { AdapterFunction, LocalConfig } from './types';

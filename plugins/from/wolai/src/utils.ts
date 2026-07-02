@@ -6,7 +6,7 @@ import {
   WoLaiTableRow,
 } from './types';
 import { WolaiSortDirectionEnum } from './const';
-import { DocDetail, DocProperties, DocStructure, SortedDoc } from '@elogx-test/elog';
+import { DocDetail, DocProperties, DocStructure, SortedDoc } from '@elog/cli';
 
 /**
  * 获取元数据Val

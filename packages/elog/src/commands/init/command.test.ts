@@ -10,7 +10,7 @@ const sampleRegistry: PluginRegistry = {
       kind: 'from',
       type: 'from:notion',
       displayName: 'Notion',
-      packageName: '@elogx-test/plugin-from-notion',
+      packageName: '@elog/plugin-from-notion',
       importName: 'notion',
       optionsSchema: { type: 'object', properties: {} },
     },
@@ -18,7 +18,7 @@ const sampleRegistry: PluginRegistry = {
       kind: 'transform',
       type: 'transform:image-local',
       displayName: 'Local Images',
-      packageName: '@elogx-test/plugin-image-local',
+      packageName: '@elog/plugin-image-local',
       importName: 'imageLocal',
       optionsSchema: { type: 'object', properties: {} },
     },
@@ -26,7 +26,7 @@ const sampleRegistry: PluginRegistry = {
       kind: 'to',
       type: 'to:local',
       displayName: 'Local',
-      packageName: '@elogx-test/plugin-to-local',
+      packageName: '@elog/plugin-to-local',
       importName: 'toLocal',
       optionsSchema: { type: 'object', properties: {} },
     },
@@ -40,15 +40,15 @@ const sampleSelection: PluginSelection = {
 };
 
 const sampleFiles: GeneratedInitFiles = {
-  configText: "import { defineConfig } from '@elogx-test/elog';\n",
+  configText: "import { defineConfig } from '@elog/cli';\n",
 };
 
 describe('createInitDryRunOutput', () => {
   it('prints install command and config only', () => {
-    const input = { ...sampleFiles, installCommand: 'pnpm add @elogx-test/plugin-from-notion' };
+    const input = { ...sampleFiles, installCommand: 'pnpm add @elog/plugin-from-notion' };
     const output = createInitDryRunOutput(input);
 
-    expect(output).toContain('pnpm add @elogx-test/plugin-from-notion');
+    expect(output).toContain('pnpm add @elog/plugin-from-notion');
     expect(output).toContain(sampleFiles.configText);
     expect(output).not.toContain('.env');
     expect(output).not.toContain('redacted');
@@ -67,9 +67,9 @@ describe('selectedPackages', () => {
   it('extracts unique package names from all plugin kinds', () => {
     const packages = selectedPackages(sampleSelection);
     expect(packages).toEqual([
-      '@elogx-test/plugin-from-notion',
-      '@elogx-test/plugin-image-local',
-      '@elogx-test/plugin-to-local',
+      '@elog/plugin-from-notion',
+      '@elog/plugin-image-local',
+      '@elog/plugin-to-local',
     ]);
   });
 
@@ -80,7 +80,7 @@ describe('selectedPackages', () => {
       to: [sampleRegistry.plugins[0]!],
     };
     const packages = selectedPackages(selection);
-    expect(packages).toEqual(['@elogx-test/plugin-from-notion']);
+    expect(packages).toEqual(['@elog/plugin-from-notion']);
   });
 });
 

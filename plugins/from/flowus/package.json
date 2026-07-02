@@ -16,10 +16,10 @@
   "author": "",
   "license": "MIT",
   "peerDependencies": {
-    "@elogx-test/elog": "^1.0.0"
+    "@elog/cli": "^1.0.0-beta.0"
   },
   "peerDependenciesMeta": {
-    "@elogx-test/elog": {
+    "@elog/cli": {
       "optional": true
     }
   },
@@ -28,7 +28,7 @@
     "@flowusx/flowus-to-md": "^0.0.5-beta.4"
   },
   "devDependencies": {
-    "@elogx-test/elog": "workspace:*",
+    "@elog/cli": "workspace:*",
     "@flowusx/flowus-types": "^0.0.5-beta.3",
     "@types/node": "~22.19.19",
     "tsdown": "^0.22.3",

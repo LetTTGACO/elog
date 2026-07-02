@@ -1,11 +1,5 @@
 import { FlowUsCatalogConfig, FlowUsConfig, FlowUsDoc, FlowUsFilterAndSortParams } from './types';
-import {
-  DocDetail,
-  DocStructure,
-  ElogBaseContext,
-  PluginContext,
-  SortedDoc,
-} from '@elogx-test/elog';
+import { DocDetail, DocStructure, ElogBaseContext, PluginContext, SortedDoc } from '@elog/cli';
 import { FlowUsSortDirectionEnum, FlowUsSortPresetEnum } from './const';
 import { FlowUsClient as FlowUsSDK } from '@flowusx/flowus-client';
 import { filterDocs, genCatalog, props, sortDocs } from './utils';

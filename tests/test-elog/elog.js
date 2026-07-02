@@ -1,31 +1,19 @@
-import elog from '@elogx-test/elog';
-import yuque from '@elogx-test/plugin-from-yuque';
-import local from '@elogx-test/plugin-to-local';
-import imageElog from '@elogx-test/plugin-image-local';
+import elog from '@elog/cli';
+import yuque from '@elog/plugin-from-yuque-token';
+import local from '@elog/plugin-to-local';
+import imageElog from '@elog/plugin-image-local';
 
 elog({
   from: yuque({
-    pwd: {
-      username: '',
-      password: '',
-      login: '',
-      repo: 'elog-docs',
-      linebreak: false,
-      cacheFilePath: './elog.cache.json',
-    },
-    token: {
-      token: '',
-      login: '',
-      repo: '',
-      onlyPublic: false,
-      cacheFilePath: './elog.cache.json',
-      disableCache: true,
-    },
+    token: '',
+    login: '',
+    repo: '',
+    onlyPublic: false,
   }),
   to: [
     local({
       outputDir: './docs',
-      deployByStructure: true,
+      keepToc: true,
       filename: 'title',
       frontMatter: { enable: true },
     }),

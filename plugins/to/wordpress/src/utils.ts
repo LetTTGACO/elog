@@ -1,4 +1,4 @@
-import type { DocDetail } from '@elogx-test/elog';
+import type { DocDetail } from '@elog/cli';
 import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
 import { AnyObject, NoRepValues } from './types';

@@ -1,7 +1,7 @@
-import { defineConfig } from '@elogx-test/elog';
-import yuqueToken from '@elogx-test/plugin-from-yuque-token';
-import imageLocal from '@elogx-test/plugin-image-local';
-import toLocal from '@elogx-test/plugin-to-local';
+import { defineConfig } from '@elog/cli';
+import yuqueToken from '@elog/plugin-from-yuque-token';
+import imageLocal from '@elog/plugin-image-local';
+import toLocal from '@elog/plugin-to-local';
 
 export default defineConfig({
   id: 'yuque-token-image-local-to-local',

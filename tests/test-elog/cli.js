@@ -33,7 +33,7 @@ const genConfigByName = async (name) => {
   for (let i = 0; i < plugins.length; i++) {
     const item = plugins[i];
     // NOTE 暂定都使用官方模版
-    const pluginName = `@elogx-test/plugin-${item}`;
+    const pluginName = `@elog/plugin-${item}`;
     const res = await import(pluginName);
     const pluginFunc = res.default;
     console.log(pluginFunc);
@@ -55,7 +55,7 @@ const genConfigByName = async (name) => {
 
 const genConfig = ({ from, to, plugin }) => {
   return `
-import { defineConfig } from '@elogx-test/elog';
+import { defineConfig } from '@elog/cli';
 import ${from.alias} from '${from.plugin}';
 import ${to.alias} from '${to.plugin}';
 import ${plugin.alias} from '${plugin.plugin}';
@@ -67,7 +67,7 @@ export default defineConfig({
 });`;
 };
 
-const name = 'from-yuque_image-local_to-local';
+const name = 'from-yuque-token_image-local_to-local';
 genConfigByName(name).then((str) => {
   // 把 process 开头的 字符串去除引号
   fs.writeFileSync('./elog1.config.ts', str, {

@@ -13,7 +13,7 @@ import {
   ElogBaseContext,
   PluginContext,
   SortedDoc,
-} from '@elogx-test/elog';
+} from '@elog/cli';
 import { WolaiSortPresetEnum, WolaiSortDirectionEnum } from './const';
 import { filterDocs, genCatalog, props, sortDocs } from './utils';
 import { Buffer } from 'node:buffer';

@@ -7,5 +7,14 @@
   "access": "public",
   "baseBranch": "1.0-dev",
   "updateInternalDependencies": "patch",
-  "ignore": ["test-elog"]
+  "ignore": [
+    "test-elog",
+    "@elogx-test/plugin-from-feishu-space",
+    "@elogx-test/plugin-from-feishu-wiki",
+    "@elogx-test/plugin-from-flowus",
+    "@elogx-test/plugin-from-wolai",
+    "@elogx-test/plugin-to-confluence",
+    "@elogx-test/plugin-to-halo",
+    "@elogx-test/plugin-to-wordpress"
+  ]
 }

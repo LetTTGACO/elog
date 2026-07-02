@@ -1,7 +1,7 @@
-import { defineConfig } from '@elogx-test/elog';
-import fromNotion from '@elogx-test/plugin-from-notion';
-import imageLocal from '@elogx-test/plugin-image-local';
-import toLocal from '@elogx-test/plugin-to-local';
+import { defineConfig } from '@elog/cli';
+import fromNotion from '@elog/plugin-from-notion';
+import imageLocal from '@elog/plugin-image-local';
+import toLocal from '@elog/plugin-to-local';
 
 export default defineConfig({
   id: 'notion-to-local',

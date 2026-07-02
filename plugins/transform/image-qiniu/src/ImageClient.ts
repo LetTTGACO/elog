@@ -1,4 +1,4 @@
-import { DocDetail, ElogImageContext, PluginContext } from '@elogx-test/elog';
+import { DocDetail, ElogImageContext, PluginContext } from '@elog/cli';
 import { ImageQiniuConfig } from './types';
 import QiniuApi from './ImageApi';
 

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { PluginContext } from '@elogx-test/elog';
+import type { PluginContext } from '@elog/cli';
 import NotionApi from './NotionApi';
 
 const notionMocks = vi.hoisted(() => ({

@@ -1,4 +1,4 @@
-import { DocStructure, FromPluginBaseConfig } from '@elogx-test/elog';
+import { DocStructure, FromPluginBaseConfig } from '@elog/cli';
 
 export interface FeiShuConfig extends FromPluginBaseConfig {
   /** 父文件夹token */

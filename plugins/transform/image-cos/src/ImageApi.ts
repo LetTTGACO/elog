@@ -1,5 +1,5 @@
 import { ImageCOSConfig } from './types';
-import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elogx-test/elog';
+import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elog/cli';
 import COS from 'cos-nodejs-sdk-v5';
 
 export default class COSApi extends ElogBaseContext {

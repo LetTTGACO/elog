@@ -1,5 +1,5 @@
 import B2 from 'backblaze-b2';
-import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elogx-test/elog';
+import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elog/cli';
 import type { ImageB2Config } from './types';
 import { contentTypeForFile, publicUrl } from './utils';
 

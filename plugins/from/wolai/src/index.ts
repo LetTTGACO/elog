@@ -1,4 +1,4 @@
-import type { FromPlugin } from '@elogx-test/elog';
+import type { FromPlugin } from '@elog/cli';
 import type { WoLaiConfig } from './types';
 import WolaiClient from './WolaiClient';
 

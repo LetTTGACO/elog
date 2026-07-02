@@ -1,5 +1,5 @@
 import { ImageOSSConfig } from './types';
-import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elogx-test/elog';
+import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elog/cli';
 import OSS from 'ali-oss';
 
 export default class COSApi extends ElogBaseContext {

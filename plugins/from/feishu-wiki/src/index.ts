@@ -1,4 +1,4 @@
-import type { FromPlugin } from '@elogx-test/elog';
+import type { FromPlugin } from '@elog/cli';
 import type { FeiShuConfig } from './types';
 import FeiShuClient from './FeiShuClient';
 

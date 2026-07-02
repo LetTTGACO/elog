@@ -1,5 +1,5 @@
 import { NotionDoc } from './types';
-import { DocProperties } from '@elogx-test/elog';
+import { DocProperties } from '@elog/cli';
 
 /**
  * 获取元数据Val

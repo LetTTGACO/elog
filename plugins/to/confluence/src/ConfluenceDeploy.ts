@@ -1,4 +1,4 @@
-import type { DocDetail, PluginContext } from '@elogx-test/elog';
+import type { DocDetail, PluginContext } from '@elog/cli';
 import ConfluenceApi from './ConfluenceApi';
 import Context from './Context';
 import type { ConfluenceConfig, WikiMap } from './types';

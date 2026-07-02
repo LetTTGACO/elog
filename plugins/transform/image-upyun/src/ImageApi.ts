@@ -1,5 +1,5 @@
 import { ImageUPYunConfig } from './types';
-import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elogx-test/elog';
+import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elog/cli';
 import UPYun from 'upyun';
 
 export default class COSApi extends ElogBaseContext {

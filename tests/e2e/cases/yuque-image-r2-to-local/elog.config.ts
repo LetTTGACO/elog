@@ -1,7 +1,7 @@
-import { defineConfig } from '@elogx-test/elog';
-import fromYuque from '@elogx-test/plugin-from-yuque-pwd';
-import imageR2 from '@elogx-test/plugin-image-r2';
-import toLocal from '@elogx-test/plugin-to-local';
+import { defineConfig } from '@elog/cli';
+import fromYuque from '@elog/plugin-from-yuque-pwd';
+import imageR2 from '@elog/plugin-image-r2';
+import toLocal from '@elog/plugin-to-local';
 
 export default defineConfig({
   id: 'yuque-image-r2-to-local',

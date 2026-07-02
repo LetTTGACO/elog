@@ -18,11 +18,11 @@
   },
   "private": true,
   "dependencies": {
-    "@elogx-test/elog": "workspace:*",
-    "@elogx-test/plugin-from-yuque-pwd": "workspace:*",
-    "@elogx-test/plugin-from-yuque-token": "workspace:*",
-    "@elogx-test/plugin-image-local": "workspace:*",
-    "@elogx-test/plugin-to-local": "workspace:*",
+    "@elog/cli": "workspace:*",
+    "@elog/plugin-from-yuque-pwd": "workspace:*",
+    "@elog/plugin-from-yuque-token": "workspace:*",
+    "@elog/plugin-image-local": "workspace:*",
+    "@elog/plugin-to-local": "workspace:*",
     "@types/node": "~22.19.19"
   },
   "devDependencies": {

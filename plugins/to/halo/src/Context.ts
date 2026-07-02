@@ -1,4 +1,4 @@
-import type { PluginContext } from '@elogx-test/elog';
+import type { PluginContext } from '@elog/cli';
 
 export default class {
   readonly ctx: PluginContext;

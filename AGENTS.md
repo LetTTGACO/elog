@@ -5,8 +5,9 @@ This file provides guidance to Claude Code / Codex-style coding agents when work
 ## Project Overview
 
 Elog is a CLI tool and library for syncing documents from writing and note-taking
-platforms to blogging/CMS targets. The 1.0 rewrite is a pnpm/Turborepo monorepo
-under the temporary development scope `@elogx-test/`.
+platforms to blogging/CMS targets. The 1.0 rewrite is a pnpm/Turborepo monorepo.
+Release-line packages use the `@elog/` scope; experimental packages may remain
+under `@elogx-test/` until they are promoted.
 
 The system is plugin-driven:
 
@@ -33,7 +34,7 @@ pnpm build
 pnpm test
 
 # Run core package tests only
-pnpm --filter @elogx-test/elog test
+pnpm --filter @elog/cli test
 
 # Build a single package from that package directory
 cd packages/elog && pnpm build
@@ -291,9 +292,9 @@ effects from one target plugin being visible to another target plugin.
 ## Plugin Development Pattern
 
 Each plugin exports a default function that accepts config and returns a
-discriminated plugin type. The npm package name is scoped
-(`@elogx-test/plugin-*`), and the internal plugin names use namespace-style names
-such as `from:notion`, `transform:image-local`, and `to:local`.
+discriminated plugin type. Release-line npm package names are scoped as
+`@elog/plugin-*`, and the internal plugin names use namespace-style names such
+as `from:notion`, `transform:image-local`, and `to:local`.
 
 Source plugin:
 
@@ -342,9 +343,10 @@ export default function toLocal(options: Partial<LocalConfig>): ToPlugin {
 
 Plugin package conventions:
 
-- Declare `@elogx-test/elog` as a peer dependency.
+- Declare `@elog/cli` as a peer dependency.
 - Mark that peer optional via `peerDependenciesMeta`.
-- Add `@elogx-test/elog: "workspace:*"` as a dev dependency.
+- Add `@elog/cli: "workspace:*"` as a dev dependency.
+- Use `@elog/plugin-*` for release-line packages.
 - Keep plugin packages ESM-only.
 
 ## Publishing And CI

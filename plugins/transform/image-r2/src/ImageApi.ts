@@ -1,5 +1,5 @@
 import { HeadObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elogx-test/elog';
+import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elog/cli';
 import type { ImageR2Config } from './types';
 import { contentTypeForFile, publicUrl } from './utils';
 

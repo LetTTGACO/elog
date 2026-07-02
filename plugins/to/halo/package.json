@@ -15,10 +15,10 @@
     "test": "vitest run --passWithNoTests"
   },
   "peerDependencies": {
-    "@elogx-test/elog": "^1.0.0"
+    "@elog/cli": "^1.0.0-beta.0"
   },
   "peerDependenciesMeta": {
-    "@elogx-test/elog": {
+    "@elog/cli": {
       "optional": true
     }
   },
@@ -27,7 +27,7 @@
     "transliteration": "~2.3.5"
   },
   "devDependencies": {
-    "@elogx-test/elog": "workspace:*",
+    "@elog/cli": "workspace:*",
     "@halo-dev/api-client": "2.10.0",
     "@types/markdown-it": "~14.1.2",
     "@types/node": "~22.19.19",

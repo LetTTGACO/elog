@@ -1,4 +1,4 @@
-import { DocDetail } from '@elogx-test/elog';
+import { DocDetail } from '@elog/cli';
 
 /**
  * local 配置

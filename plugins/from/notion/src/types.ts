@@ -1,6 +1,6 @@
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { NotionSortDirectionEnum, NotionSortPresetEnum } from './const';
-import { DocProperties, DocStructure, type FromPluginBaseConfig } from '@elogx-test/elog';
+import { DocProperties, DocStructure, type FromPluginBaseConfig } from '@elog/cli';
 
 export interface NotionConfig extends FromPluginBaseConfig {
   token: string;

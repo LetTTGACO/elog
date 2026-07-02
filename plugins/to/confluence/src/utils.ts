@@ -1,4 +1,4 @@
-import type { DocDetail } from '@elogx-test/elog';
+import type { DocDetail } from '@elog/cli';
 import { md2Wiki } from './WikiRender';
 /**
  * 将markdown转wiki

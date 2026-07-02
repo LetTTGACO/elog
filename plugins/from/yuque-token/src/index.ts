@@ -1,4 +1,4 @@
-import type { FromPlugin } from '@elogx-test/elog';
+import type { FromPlugin } from '@elog/cli';
 import type { YuqueInputConfig, YuqueWithTokenConfig } from './types';
 import YuqueClient from './YuqueClient';
 

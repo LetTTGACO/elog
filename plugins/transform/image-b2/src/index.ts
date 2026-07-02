@@ -1,4 +1,4 @@
-import type { TransformPlugin } from '@elogx-test/elog';
+import type { TransformPlugin } from '@elog/cli';
 import ImageClient from './ImageClient';
 import type { ImageB2Config } from './types';
 

@@ -1,6 +1,6 @@
 {
-  "name": "@elogx-test/plugin-from-yuque-pwd",
-  "version": "1.0.1",
+  "name": "@elog/plugin-from-yuque-pwd",
+  "version": "1.0.0-beta.0",
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -17,10 +17,10 @@
   "author": "",
   "license": "MIT",
   "peerDependencies": {
-    "@elogx-test/elog": "^1.0.0"
+    "@elog/cli": "^1.0.0-beta.0"
   },
   "peerDependenciesMeta": {
-    "@elogx-test/elog": {
+    "@elog/cli": {
       "optional": true
     }
   },
@@ -30,7 +30,7 @@
     "jsencrypt-node": "~1.0.4"
   },
   "devDependencies": {
-    "@elogx-test/elog": "workspace:*",
+    "@elog/cli": "workspace:*",
     "@types/jsdom": "21.1.2",
     "@types/node": "~22.19.19",
     "vitest": "^4.1.9",

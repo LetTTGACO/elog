@@ -1,4 +1,4 @@
-import { DocDetail, DocProperties } from '@elogx-test/elog';
+import { DocDetail, DocProperties } from '@elog/cli';
 import matter from 'gray-matter';
 
 /**

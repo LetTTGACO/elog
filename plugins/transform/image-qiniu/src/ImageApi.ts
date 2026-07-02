@@ -1,5 +1,5 @@
 import { ImageQiniuConfig } from './types';
-import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elogx-test/elog';
+import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elog/cli';
 import * as qiniu from 'qiniu';
 
 export default class COSApi extends ElogBaseContext {

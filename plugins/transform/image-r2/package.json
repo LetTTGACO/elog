@@ -1,6 +1,6 @@
 {
-  "name": "@elogx-test/plugin-image-r2",
-  "version": "1.0.2",
+  "name": "@elog/plugin-image-r2",
+  "version": "1.0.0-beta.0",
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -15,10 +15,10 @@
     "test": "vitest run --passWithNoTests"
   },
   "peerDependencies": {
-    "@elogx-test/elog": "^1.0.0"
+    "@elog/cli": "^1.0.0-beta.0"
   },
   "peerDependenciesMeta": {
-    "@elogx-test/elog": {
+    "@elog/cli": {
       "optional": true
     }
   },
@@ -26,7 +26,7 @@
     "@aws-sdk/client-s3": "3.445.0"
   },
   "devDependencies": {
-    "@elogx-test/elog": "workspace:*",
+    "@elog/cli": "workspace:*",
     "@types/node": "~22.19.19",
     "tsdown": "^0.22.3",
     "typescript": "~6.0.3",

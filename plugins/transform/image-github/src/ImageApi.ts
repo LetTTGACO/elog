@@ -1,5 +1,5 @@
 import { ImageGithubConfig } from './types';
-import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elogx-test/elog';
+import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elog/cli';
 
 export default class COSApi extends ElogBaseContext {
   private readonly config: ImageGithubConfig;

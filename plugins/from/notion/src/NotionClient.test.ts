@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { DocDetail, PluginContext, SortedDoc } from '@elogx-test/elog';
+import type { DocDetail, PluginContext, SortedDoc } from '@elog/cli';
 import NotionClient from './NotionClient';
 import type { NotionDoc } from './types';
 
