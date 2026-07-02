@@ -1,9 +1,9 @@
 name: CI
 on:
   push:
-    branches: ['master']
+    branches: ['v1']
   pull_request:
-    branches: ['master']
+    branches: ['v1']
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,6 +21,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Verify Change Logs
-        run: npx changeset status --since=origin/master
+        run: npx changeset status --since=origin/v1
       - name: Build
         run: pnpm turbo build --force

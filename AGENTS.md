@@ -363,20 +363,20 @@ git push --follow-tags
 
 Changeset config:
 
-- Base branch: `master`
+- Base branch: `v1`
 - Public access
 - `test-elog` is ignored
 - Internal dependency bumps default to patch
 
-CI (`.github/workflows/ci.yml`) runs on pushes and PRs to `master`:
+CI (`.github/workflows/ci.yml`) runs on pushes and PRs to `v1`:
 
 ```bash
 pnpm install --frozen-lockfile
-npx changeset status --since=origin/master
+npx changeset status --since=origin/v1
 pnpm turbo build --force
 ```
 
-Every non-trivial PR to `master` should include a changeset.
+Every non-trivial PR to `v1` should include a changeset.
 
 ## Coding Conventions
 
