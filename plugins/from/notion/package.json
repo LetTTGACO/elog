@@ -1,6 +1,6 @@
 {
   "name": "@elog/plugin-from-notion",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.0-beta.1",
   "description": "",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
   "author": "",
   "license": "MIT",
   "peerDependencies": {
-    "@elog/cli": "^1.0.0-beta.0"
+    "@elog/cli": "^1.0.0-beta.1"
   },
   "peerDependenciesMeta": {
     "@elog/cli": {

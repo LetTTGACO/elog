@@ -27,5 +27,5 @@
     "test-elog": "1.0.0-beta.0",
     "@elog/e2e": "1.0.0-beta.0"
   },
-  "changesets": []
+  "changesets": ["fluffy-balloons-see", "quiet-adults-pump", "red-cobras-pick"]
 }
