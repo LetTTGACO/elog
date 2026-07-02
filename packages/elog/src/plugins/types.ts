@@ -11,8 +11,6 @@ import type {
   getFileTypeFromUrl,
   getUrlListFromContent,
   formatImagePrefix,
-  publicUrl,
-  contentTypeForFile,
 } from '../image';
 
 /** 工作流基础信息会传给所有插件，用于日志和缓存定位。 */
@@ -46,8 +44,6 @@ export interface ImageUtils {
   getFileType: typeof getFileType;
   getBufferFromUrl: typeof getBufferFromUrl;
   formatImagePrefix: typeof formatImagePrefix;
-  publicUrl: typeof publicUrl;
-  contentTypeForFile: typeof contentTypeForFile;
 }
 
 /** 插件运行上下文聚合运行时能力，避免插件直接依赖 CLI 或全局状态。 */

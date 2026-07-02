@@ -1,6 +1,7 @@
 import B2 from 'backblaze-b2';
 import { ElogBaseContext, PluginContext } from '@elog/cli';
 import type { ImageB2Config } from './types';
+import { contentTypeForFile, publicUrl } from './utils';
 
 interface B2Bucket {
   bucketId?: string;
@@ -49,7 +50,7 @@ export default class B2Api extends ElogBaseContext {
       const file = (files.data?.files as B2File[] | undefined)?.find(
         (item) => item.fileName === key,
       );
-      return file?.fileName ? this.ctx.image.publicUrl(this.config.host, file.fileName) : undefined;
+      return file?.fileName ? publicUrl(this.config.host, file.fileName) : undefined;
     } catch (e: any) {
       this.ctx.logger.debug(`图床检查出错: ${e.message}`);
     }
@@ -68,9 +69,9 @@ export default class B2Api extends ElogBaseContext {
         uploadAuthToken: uploadUrl.data.authorizationToken,
         fileName: key,
         data: buffer,
-        mime: this.ctx.image.contentTypeForFile(fullName),
+        mime: contentTypeForFile(fullName),
       });
-      return this.ctx.image.publicUrl(this.config.host, file.data.fileName || key);
+      return publicUrl(this.config.host, file.data.fileName || key);
     } catch (e: any) {
       this.ctx.logger.warn('跳过上传', `上传图片失败，请检查: ${e.message}`);
       this.ctx.logger.debug(e);
