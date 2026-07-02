@@ -54,6 +54,28 @@ describe('loadBuiltInPluginRegistry', () => {
     });
   });
 
+  it('prompts Yuque password mode for latexCode', () => {
+    const registry = loadBuiltInPluginRegistry();
+    const yuquePwd = registry.plugins.find(
+      (plugin) => plugin.kind === 'from' && plugin.type === 'yuque-pwd',
+    );
+
+    expect(yuquePwd).toMatchObject({
+      optionsSchema: {
+        properties: {
+          latexCode: {
+            title: '转换语雀 LaTeX 公式',
+            default: false,
+            'x-elog-prompt': {
+              type: 'confirm',
+              message: '是否转换语雀 LaTeX 公式？',
+            },
+          },
+        },
+      },
+    });
+  });
+
   it('includes the Notion, image-local, and local init registry entries', () => {
     const registry = loadBuiltInPluginRegistry();
 
@@ -181,6 +203,15 @@ describe('parsePluginRegistry', () => {
                 'x-elog-prompt': {
                   type: 'password',
                   message: '请输入语雀密码',
+                },
+              },
+              latexCode: {
+                type: 'boolean',
+                title: '转换语雀 LaTeX 公式',
+                default: false,
+                'x-elog-prompt': {
+                  type: 'confirm',
+                  message: '是否转换语雀 LaTeX 公式？',
                 },
               },
             },

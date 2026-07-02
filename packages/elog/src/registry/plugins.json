@@ -159,6 +159,15 @@
               "message": "请输入语雀知识库路径"
             }
           },
+          "latexCode": {
+            "type": "boolean",
+            "title": "转换语雀 LaTeX 公式",
+            "default": false,
+            "x-elog-prompt": {
+              "type": "confirm",
+              "message": "是否转换语雀 LaTeX 公式？"
+            }
+          },
           "onlyPublic": {
             "type": "boolean",
             "title": "只同步公开文章",
