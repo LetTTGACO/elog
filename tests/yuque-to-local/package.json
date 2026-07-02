@@ -1,5 +1,5 @@
 {
-  "name": "@elogx-test/notion-to-local",
+  "name": "@elogx-test/yuque-to-local",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -8,9 +8,9 @@
   },
   "dependencies": {
     "@elogx-test/elog": "workspace:*",
-    "@elogx-test/plugin-from-notion": "workspace:*",
-    "@elogx-test/plugin-image-local": "workspace:*",
-    "@elogx-test/plugin-to-local": "workspace:*"
+    "@elogx-test/plugin-from-yuque-pwd": "workspace:*",
+    "@elogx-test/plugin-to-local": "workspace:*",
+    "@elogx-test/plugin-image-local": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "~22.19.19",

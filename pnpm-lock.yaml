@@ -10,7 +10,7 @@ importers:
     devDependencies:
       '@changesets/cli':
         specifier: ^2.31.0
-        version: 2.31.0(@types/node@25.7.0)
+        version: 2.31.0(@types/node@22.19.19)
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -552,9 +552,6 @@ importers:
       typescript:
         specifier: ~6.0.3
         version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@types/node@22.19.19)(jsdom@21.1.2)(vite@8.0.13(@types/node@22.19.19)(esbuild@0.28.1)(yaml@2.9.0))
 
   tests/test-elog:
     dependencies:
@@ -577,6 +574,28 @@ importers:
         specifier: ~22.19.19
         version: 22.19.19
     devDependencies:
+      typescript:
+        specifier: ~6.0.3
+        version: 6.0.3
+
+  tests/yuque-to-local:
+    dependencies:
+      '@elogx-test/elog':
+        specifier: workspace:*
+        version: link:../../packages/elog
+      '@elogx-test/plugin-from-yuque-pwd':
+        specifier: workspace:*
+        version: link:../../plugins/from/yuque-pwd
+      '@elogx-test/plugin-image-local':
+        specifier: workspace:*
+        version: link:../../plugins/transform/image-local
+      '@elogx-test/plugin-to-local':
+        specifier: workspace:*
+        version: link:../../plugins/to/local
+    devDependencies:
+      '@types/node':
+        specifier: ~22.19.19
+        version: 22.19.19
       typescript:
         specifier: ~6.0.3
         version: 6.0.3
@@ -1697,9 +1716,6 @@ packages:
 
   '@types/node@22.19.19':
     resolution: {integrity: sha512-dyh/xO2Fh5bYrfWaaqGrRQQGkNdmYw6AmaAUvYeUMNTWQtvb796ikLdmTchRmOlOiIJ1TDXfWgVx1QkUlQ6Hew==}
-
-  '@types/node@25.7.0':
-    resolution: {integrity: sha512-z+pdZyxE+RTQE9AcboAZCb4otwcrvgHD+GlBpPgn0emDVt0ohrTMhAwlr2Wd9nZ+nihhYFxO2pThz3C5qSu2Eg==}
 
   '@types/tough-cookie@4.0.5':
     resolution: {integrity: sha512-/Ad8+nIOV7Rl++6f1BdKxFSMgmoqEoYbHRpPcx3JEfv8VRsQe9Z4mCXeJBzxs7mbHY/XOZZuXlRNfhpVPbs6ZA==}
@@ -3521,9 +3537,6 @@ packages:
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
-  undici-types@7.21.0:
-    resolution: {integrity: sha512-w9IMgQrz4O0YN1LtB7K5P63vhlIOvC7opSmouCJ+ZywlPAlO9gIkJ+otk6LvGpAs2wg4econaCz3TvQ9xPoyuQ==}
-
   undici@5.21.2:
     resolution: {integrity: sha512-f6pTQ9RF4DQtwoWSaC42P/NKlUjvezVvd9r155ohqkwFNRyBKM3f3pcty3ouusefNRyM25XhIQEbeQ46sZDJfQ==}
     engines: {node: '>=12.18'}
@@ -4294,7 +4307,7 @@ snapshots:
     dependencies:
       '@changesets/types': 6.1.0
 
-  '@changesets/cli@2.31.0(@types/node@25.7.0)':
+  '@changesets/cli@2.31.0(@types/node@22.19.19)':
     dependencies:
       '@changesets/apply-release-plan': 7.1.1
       '@changesets/assemble-release-plan': 6.0.10
@@ -4310,7 +4323,7 @@ snapshots:
       '@changesets/should-skip-package': 0.1.2
       '@changesets/types': 6.1.0
       '@changesets/write': 0.4.0
-      '@inquirer/external-editor': 1.0.2(@types/node@25.7.0)
+      '@inquirer/external-editor': 1.0.2(@types/node@22.19.19)
       '@manypkg/get-packages': 1.1.3
       ansi-colors: 4.1.3
       enquirer: 2.4.1
@@ -4604,12 +4617,12 @@ snapshots:
     optionalDependencies:
       '@types/node': 22.19.19
 
-  '@inquirer/external-editor@1.0.2(@types/node@25.7.0)':
+  '@inquirer/external-editor@1.0.2(@types/node@22.19.19)':
     dependencies:
       chardet: 2.2.0
       iconv-lite: 0.7.2
     optionalDependencies:
-      '@types/node': 25.7.0
+      '@types/node': 22.19.19
 
   '@inquirer/external-editor@3.0.3(@types/node@22.19.19)':
     dependencies:
@@ -5248,11 +5261,6 @@ snapshots:
   '@types/node@22.19.19':
     dependencies:
       undici-types: 6.21.0
-
-  '@types/node@25.7.0':
-    dependencies:
-      undici-types: 7.21.0
-    optional: true
 
   '@types/tough-cookie@4.0.5': {}
 
@@ -7028,9 +7036,6 @@ snapshots:
       quansync: 1.0.0
 
   undici-types@6.21.0: {}
-
-  undici-types@7.21.0:
-    optional: true
 
   undici@5.21.2:
     dependencies:
