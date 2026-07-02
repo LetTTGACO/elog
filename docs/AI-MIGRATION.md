@@ -64,150 +64,92 @@ elog sync -c elog.config.1x.ts
 2. 按实际用到的插件添加依赖，不要一次装全平台插件。
 3. 当前 1.0 包名按本文映射使用 `@elogx-test/*`。如果未来官方包名变化，以 [LetTTGACO/elog](https://github.com/LetTTGACO/elog) 最新实现为准。
 
-最小依赖示例：
+生成依赖列表时按这条规则：
 
-```json
-{
-  "devDependencies": {
-    "@elogx-test/elog": "latest",
-    "@elogx-test/plugin-from-notion": "latest",
-    "@elogx-test/plugin-image-local": "latest",
-    "@elogx-test/plugin-to-local": "latest"
-  }
-}
-```
+- 一定包含 `@elogx-test/elog`。
+- 按 `write.platform` 增加一个来源插件包。
+- 一定包含 `@elogx-test/plugin-to-local`。
+- 仅当 `image.enable: true` 时，按 `image.platform` 增加一个图片插件包。
+- 如果生成了用户专属本地 transform 文件，不需要为它添加 npm 依赖。
 
 ## ENV 迁移规则
 
-保留旧 ENV 名。例如旧配置这样写：
+保留旧 ENV 名。迁移时扫描旧配置中所有 `process.env.<NAME>`：
 
-```js
-token: process.env.NOTION_TOKEN,
-databaseId: process.env.NOTION_DATABASE_ID,
-```
+- 新配置继续使用同一个 `<NAME>`。
+- env example 只写 `<NAME>=`。
+- 不要根据本文、官方示例或变量命名偏好改名。
+- 不要读取、复制或重写用户真实 `.env` 里的值。
+- 最终提醒用户手动把敏感值迁移到新运行环境。
 
-新配置继续这样写：
+## 配置迁移方法
 
-```ts
-token: process.env.NOTION_TOKEN,
-databaseId: process.env.NOTION_DATABASE_ID,
-```
+不要从本文复制一份固定配置给用户。你要根据用户自己的 0.x 配置生成一份新配置。
 
-只生成 example：
+### 1. 找到用户正在使用的 0.x 配置
 
-```dotenv
-NOTION_TOKEN=
-NOTION_DATABASE_ID=
-```
+优先按运行入口找：
 
-不要读取、复制或重写用户真实 `.env` 里的值。最终提醒用户手动把敏感值迁移到新运行环境。
+- 读 `package.json` scripts，查找 `elog sync`、`elog -c`、`elog sync -c`。
+- 搜索 `elog.config` 命名的文件。
+- 如果存在多个配置文件，逐个一对一迁移，不要合并。
 
-## 常见场景模板
+找到候选配置后，读取当前文件内容并识别：
 
-### Notion -> Local -> Local Images
+- 顶层 `write.platform`
+- 顶层 `deploy.platform`
+- 顶层 `image.enable`
+- 顶层 `image.platform`
+- 顶层 `extension.cachePath`、`extension.disableCache`
+- 旧配置引用的本地扩展文件路径，例如 `formatExt`、`imagePathExt`、`secretExt`、`image.plugin`
 
-```ts
-import { defineConfig } from '@elogx-test/elog';
-import fromNotion from '@elogx-test/plugin-from-notion';
-import imageLocal from '@elogx-test/plugin-image-local';
-import toLocal from '@elogx-test/plugin-to-local';
+### 2. 抽取旧配置中的事实
 
-export default defineConfig({
-  cacheFilePath: 'elog.cache.json',
-  from: fromNotion({
-    token: process.env.NOTION_TOKEN,
-    dataSourceId: process.env.NOTION_DATA_SOURCE_ID,
-    databaseId: process.env.NOTION_DATABASE_ID,
-    filter: { property: 'status', select: { equals: '已发布' } },
-  }),
-  plugins: [
-    imageLocal({
-      outputDir: './source/images',
-      prefixKey: './images',
-      propertyImageFields: ['cover'],
-    }),
-  ],
-  to: toLocal({
-    outputDir: './source/_posts',
-    filename: 'title',
-    frontMatter: {
-      enable: true,
-      include: ['categories', 'tags', 'title', 'date', 'updated', 'permalink', 'cover', 'description'],
-    },
-  }),
-});
-```
+把旧配置拆成四组事实，再按附录映射：
 
-### 语雀 Token -> Local -> COS Images
+| 事实组 | 从哪里读 |
+| --- | --- |
+| 来源平台 | `write.platform` |
+| 来源配置 | `write.notion`、`write.yuque` 或 `write['yuque-pwd']` |
+| 本地部署配置 | `deploy.local` |
+| 图片配置 | `image[image.platform]`，仅当 `image.enable: true` 时使用 |
 
-```ts
-import { defineConfig } from '@elogx-test/elog';
-import fromYuque from '@elogx-test/plugin-from-yuque-token';
-import imageCos from '@elogx-test/plugin-image-cos';
-import toLocal from '@elogx-test/plugin-to-local';
+不要改写用户字段值。路径、文件名字段、Front Matter include/exclude、ENV 名称都以旧配置为准。
 
-export default defineConfig({
-  cacheFilePath: 'elog.cache.json',
-  from: fromYuque({
-    token: process.env.YUQUE_TOKEN,
-    login: process.env.YUQUE_LOGIN,
-    repo: process.env.YUQUE_REPO,
-    onlyPublic: false,
-    onlyPublished: true,
-  }),
-  plugins: [
-    imageCos({
-      secretId: process.env.COS_SECRET_ID,
-      secretKey: process.env.COS_SECRET_KEY,
-      bucket: process.env.COS_IMAGE_BUCKET,
-      region: process.env.COS_IMAGE_REGION,
-      host: process.env.COS_HOST,
-      prefixKey: 'elog-docs-images',
-    }),
-  ],
-  to: toLocal({
-    outputDir: './docs/yuque',
-    filename: 'urlname',
-    frontMatter: { enable: true },
-  }),
-});
-```
+### 3. 生成 1.0 配置结构
 
-### 语雀账号密码 -> Local -> Local Images
+新配置只需要四块：
 
-```ts
-import { defineConfig } from '@elogx-test/elog';
-import fromYuque from '@elogx-test/plugin-from-yuque-pwd';
-import imageLocal from '@elogx-test/plugin-image-local';
-import toLocal from '@elogx-test/plugin-to-local';
+| 1.0 位置 | 生成规则 |
+| --- | --- |
+| `cacheFilePath` | 来自 `extension.cachePath`；没有则按旧缓存命名习惯保留或使用 `elog.cache.json`。 |
+| `from` | 按 `write.platform` 选择来源插件，再填入来源配置映射后的字段。 |
+| `plugins` | 按顺序放 transform 插件。图片启用时放官方图片插件；有自定义转换时放用户专属自定义 transform。 |
+| `to` | 本文只生成 `toLocal(...)`，字段来自 `deploy.local`。 |
 
-export default defineConfig({
-  cacheFilePath: 'elog.cache.json',
-  from: fromYuque({
-    username: process.env.YUQUE_USERNAME,
-    password: process.env.YUQUE_PWD,
-    login: process.env.YUQUE_LOGIN,
-    repo: process.env.YUQUE_REPO,
-    onlyPublic: false,
-    onlyPublished: true,
-  }),
-  plugins: [
-    imageLocal({
-      outputDir: './docs/images',
-      pathFollowDoc: {
-        enable: true,
-        docOutputDir: './docs/docs',
-      },
-    }),
-  ],
-  to: toLocal({
-    outputDir: './docs/docs',
-    filename: 'title',
-    keepToc: true,
-    frontMatter: { enable: true },
-  }),
-});
-```
+生成 imports 时只导入实际用到的插件：
+
+| 旧配置事实 | 新 import |
+| --- | --- |
+| 任意支持路径 | `defineConfig` from `@elogx-test/elog` |
+| Notion 来源 | `fromNotion` from `@elogx-test/plugin-from-notion` |
+| 语雀 Token 来源 | `fromYuque` from `@elogx-test/plugin-from-yuque-token` |
+| 语雀账号密码来源 | `fromYuque` from `@elogx-test/plugin-from-yuque-pwd` |
+| Local 目标 | `toLocal` from `@elogx-test/plugin-to-local` |
+| 图片平台 | 按“图片 transform 插件”附录选择对应 `image*` import |
+| 用户自定义转换 | 从你新建的本地 transform 文件 import |
+
+### 4. 决定 transform 顺序
+
+1. 如果旧自定义逻辑只是改正文、属性、Front Matter 字段，先迁移为自定义 transform。
+2. 如果旧逻辑需要处理属性图片，例如 `cover`，优先使用图片插件的 `propertyImageFields`，而不是重写上传逻辑。
+3. 如果旧逻辑必须在图片替换前处理原始 URL，把自定义 transform 放在图片插件前。
+4. 如果旧逻辑必须读取替换后的图片 URL，把自定义 transform 放在图片插件后。
+5. 无法判断顺序时，记录原因并询问用户。
+
+### 5. 生成 env example
+
+扫描旧配置中出现的 `process.env.X`，原名写入 env example。不要根据本文示例创造新 ENV 名，不要读取或复制真实密钥。
 
 ## 0.x 专用扩展点迁移
 
@@ -215,73 +157,56 @@ export default defineConfig({
 
 0.x 的 `deploy.local.formatExt` 在部署前处理文档。1.0 的 `toLocal` 不再接收 `formatExt`；把逻辑迁移到 transform 插件。
 
-如果旧 `formatExt` 只是替换正文：
+迁移方法：
 
-```ts
-import type { DocDetail, TransformPlugin } from '@elogx-test/elog';
-
-export default function customFormat(): TransformPlugin {
-  return {
-    name: 'transform:custom-format',
-    kind: 'transform',
-    async transform(docs: DocDetail[]) {
-      return docs.map((doc) => ({
-        ...doc,
-        body: doc.body
-          ?.replaceAll(':::tips', ':::tip')
-          .replaceAll(':::success', ':::tip'),
-      }));
-    },
-  };
-}
-```
-
-在 config 中使用：
-
-```ts
-import customFormat from './elog.transforms';
-
-export default defineConfig({
-  from: fromYuque({}),
-  plugins: [
-    customFormat(),
-    imageLocal({ outputDir: './docs/images' }),
-  ],
-  to: toLocal({ outputDir: './docs/docs', filename: 'title' }),
-});
-```
+1. 读取 `deploy.local.formatExt` 指向的文件。如果它是函数而不是路径，直接读取旧配置中的函数体。
+2. 找到它导出的 `format` 函数。
+3. 判断它做了什么：
+   - 修改 `doc.body`
+   - 修改 `doc.properties`
+   - 生成最终 Markdown 字符串
+   - 调用 0.x 的 adapter，例如 `matterMarkdownAdapter`
+   - 通过旧 `imageClient` 上传属性图片
+4. 只保留用户自己的业务转换逻辑。不要把 0.x adapter 调用原样迁移到 transform 插件里；1.0 `toLocal` 会按 `frontMatter` 重新生成 Markdown。
+5. 如果它通过 `imageClient` 处理属性图片，优先改用图片插件的 `propertyImageFields`。只有官方图片插件无法表达时，才写自定义图片 transform。
+6. 新建用户专属 transform 文件。该插件的输入是 1.0 的 `DocDetail[]`，输出仍然是 `DocDetail[]`。
+7. 在新 1.0 config 的 `plugins` 数组中引入该 transform，并按“决定 transform 顺序”放置。
 
 ### `imagePathExt`
 
-优先判断 1.0 `imageLocal.pathFollowDoc` 是否足够：
+0.x 的 `imagePathExt` 用来动态计算本地图片保存路径和 Markdown 中的图片前缀。
 
-```ts
-imageLocal({
-  outputDir: './docs/images',
-  pathFollowDoc: {
-    enable: true,
-    docOutputDir: './docs/docs',
-  },
-});
-```
+迁移方法：
 
-如果旧 `imagePathExt` 需要按标题、属性或其他复杂规则动态计算图片路径，官方 `imageLocal` 字段可能不够。此时不要硬塞字段；改写自定义图片插件或 transform 插件。
+1. 读取 `image.local.imagePathExt` 指向的文件。
+2. 找到它导出的 `getImagePath` 函数。
+3. 判断它是否只是“图片目录跟随文档目录”。如果是，迁移到 `imageLocal.pathFollowDoc`。
+4. 如果它按标题、分类、属性、日期或其他业务规则计算路径，不要硬塞到官方字段里。
+5. 为该用户新建自定义图片 transform 或自定义图片插件，复用旧 `getImagePath` 的业务规则，并适配 1.0 的 transform 输入输出。
+6. 生成新插件时保留旧路径计算意图，但不要假设所有用户都和示例项目一样使用相同目录结构。
 
 ### `secretExt`
 
 0.x 的 `secretExt` 用来动态处理图床密钥。1.0 迁移时不要照搬：
 
-- 普通密钥：改成 `process.env.X`。
-- 动态签名或临时凭证：写自定义插件逻辑。
-- 不要把 `secretExt` 路径继续放进官方图片插件配置。
+迁移方法：
+
+1. 读取旧图床配置中的 `secretExt` 文件。
+2. 找到它导出的密钥生成逻辑。
+3. 如果它只是从环境变量取值，删除 `secretExt`，直接在新插件配置中使用旧 ENV 名。
+4. 如果它会生成临时凭证、动态签名或从外部服务取密钥，不要放进官方图片插件字段。
+5. 为该用户新建自定义图片插件或 transform，在插件内部实现凭证获取，再执行上传。
 
 ### `image.plugin`
 
 0.x 的 `image.plugin` 不等价于 1.0 的稳定字段。迁移顺序：
 
-1. 如果能对应官方图片插件，用官方插件。
-2. 如果只是正文替换，用自定义 transform 插件。
-3. 如果是完整自定义上传逻辑，写自定义图片 transform 插件。
+1. 找到 `image.plugin` 指向的包、文件或函数。
+2. 阅读它的输入输出和副作用：是否下载图片、上传图片、替换正文 URL、处理属性图片、读取密钥。
+3. 如果它只是对官方图床做轻量包装，优先替换为对应官方图片插件。
+4. 如果它只是改正文或属性，迁移为用户专属 transform。
+5. 如果它实现了完整上传流程，迁移为用户专属图片 transform 或自定义图片插件。
+6. 迁移后在新配置中 import 新插件，不要继续使用 0.x 的 `image.plugin` 字段。
 
 ## 未知字段处理
 
@@ -377,7 +302,7 @@ imageLocal({
 | --- | --- | --- |
 | `baseUrl` | `write['yuque-pwd'].host` 或 `baseUrl` | 1.0 使用 `baseUrl`；空字符串可省略。 |
 | `username` | `write['yuque-pwd'].username` | 保留旧 ENV 名。 |
-| `password` | `write['yuque-pwd'].password` | 保留旧 ENV 名，例如 `YUQUE_PWD` 或 `YUQUE_PASSWORD` 以旧配置为准。 |
+| `password` | `write['yuque-pwd'].password` | 保留旧 ENV 名，以旧配置为准。 |
 | `login` | `write['yuque-pwd'].login` | 原样迁移。 |
 | `repo` | `write['yuque-pwd'].repo` | 原样迁移。 |
 | `latexCode` | `write['yuque-pwd'].latexCode` | 有旧字段才迁移。 |
