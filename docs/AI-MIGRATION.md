@@ -61,8 +61,10 @@ elog sync -c elog.config.1x.ts
 ## 依赖迁移规则
 
 1. 核心包使用 `@elog/cli`。
-2. 按实际用到的插件添加依赖，不要一次装全平台插件。
-3. 如果字段映射附录没有覆盖到某个插件包名，以 [LetTTGACO/elog](https://github.com/LetTTGACO/elog) 最新实现为准。
+2. 生成依赖前先执行 `npm view @elog/cli version`，把返回的版本号写入
+   `package.json`；不要凭记忆写版本号，也不要默认写成 `latest`。
+3. 按实际用到的插件添加依赖，不要一次装全平台插件。
+4. 如果字段映射附录没有覆盖到某个插件包名，以 [LetTTGACO/elog](https://github.com/LetTTGACO/elog) 最新实现为准。
 
 生成依赖列表时按这条规则：
 
