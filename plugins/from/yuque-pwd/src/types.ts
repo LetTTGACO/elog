@@ -71,6 +71,7 @@ export interface YuqueWithPwdConfig extends FromPluginBaseConfig {
   password: string;
   login: string;
   repo: string;
+  latexCode?: boolean;
   linebreak?: boolean;
   onlyPublic?: boolean;
   /** 只过滤已发布文档 **/

@@ -138,7 +138,7 @@ export default class YuqueApi extends ElogBaseContext {
         method: 'GET',
         data: {
           attachment: true,
-          latexcode: false,
+          latexcode: !!this.config.latexCode,
           anchor: false,
           linebreak: !!this.config.linebreak,
         },
