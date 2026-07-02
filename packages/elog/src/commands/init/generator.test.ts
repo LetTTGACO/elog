@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { generateInitFiles, renderObjectLiteral } from './generator';
+import { loadBuiltInPluginRegistry } from './registry';
 import type { PluginRegistryEntry, PluginSelection } from './types';
 
 const fromYuque: PluginRegistryEntry = {
@@ -157,5 +158,52 @@ export default defineConfig({
     expect(files.configText).toContain('toLocal(');
     expect(files.configText).toContain('toHalo(');
     expect(files.configText).toContain('apiUrl: process.env.HALO_API_URL');
+  });
+
+  it('generates config for every 1.0 stable registry entry', () => {
+    const registry = loadBuiltInPluginRegistry();
+    const byKey = (kind: PluginRegistryEntry['kind'], type: string) => {
+      const entry = registry.plugins.find((plugin) => plugin.kind === kind && plugin.type === type);
+      expect(entry).toBeDefined();
+      return entry!;
+    };
+    const files = generateInitFiles({
+      from: byKey('from', 'yuque-token'),
+      transforms: [
+        'image-local',
+        'image-cos',
+        'image-oss',
+        'image-github',
+        'image-qiniu',
+        'image-upyun',
+        'image-r2',
+        'image-b2',
+      ].map((type) => byKey('transform', type)),
+      to: [byKey('to', 'local')],
+    });
+
+    expect(files.configText).toContain(
+      "import yuqueToken from '@elogx-test/plugin-from-yuque-token';",
+    );
+    expect(files.configText).toContain("import imageLocal from '@elogx-test/plugin-image-local';");
+    expect(files.configText).toContain("import imageCos from '@elogx-test/plugin-image-cos';");
+    expect(files.configText).toContain("import imageOss from '@elogx-test/plugin-image-oss';");
+    expect(files.configText).toContain(
+      "import imageGithub from '@elogx-test/plugin-image-github';",
+    );
+    expect(files.configText).toContain("import imageQiniu from '@elogx-test/plugin-image-qiniu';");
+    expect(files.configText).toContain("import imageUpyun from '@elogx-test/plugin-image-upyun';");
+    expect(files.configText).toContain("import imageR2 from '@elogx-test/plugin-image-r2';");
+    expect(files.configText).toContain("import imageB2 from '@elogx-test/plugin-image-b2';");
+    expect(files.configText).toContain("import toLocal from '@elogx-test/plugin-to-local';");
+
+    expect(files.configText).toContain('process.env.YUQUE_TOKEN');
+    expect(files.configText).toContain('process.env.COS_SECRET_ID');
+    expect(files.configText).toContain('process.env.OSS_SECRET_ID');
+    expect(files.configText).toContain('process.env.GITHUB_TOKEN');
+    expect(files.configText).toContain('process.env.QINIU_SECRET_ID');
+    expect(files.configText).toContain('process.env.UPYUN_PASSWORD');
+    expect(files.configText).toContain('process.env.R2_ACCESS_KEY_ID');
+    expect(files.configText).toContain('process.env.B2_APPLICATION_KEY_ID');
   });
 });

@@ -65,6 +65,88 @@ describe('loadBuiltInPluginRegistry', () => {
       ]),
     );
   });
+
+  it('includes all 1.0 stable plugin registry entries', () => {
+    const stableEntries = [
+      {
+        kind: 'from',
+        type: 'notion',
+        packageName: '@elogx-test/plugin-from-notion',
+        importName: 'notion',
+      },
+      {
+        kind: 'from',
+        type: 'yuque-token',
+        packageName: '@elogx-test/plugin-from-yuque-token',
+        importName: 'yuqueToken',
+      },
+      {
+        kind: 'from',
+        type: 'yuque-pwd',
+        packageName: '@elogx-test/plugin-from-yuque-pwd',
+        importName: 'fromYuque',
+      },
+      {
+        kind: 'transform',
+        type: 'image-local',
+        packageName: '@elogx-test/plugin-image-local',
+        importName: 'imageLocal',
+      },
+      {
+        kind: 'transform',
+        type: 'image-cos',
+        packageName: '@elogx-test/plugin-image-cos',
+        importName: 'imageCos',
+      },
+      {
+        kind: 'transform',
+        type: 'image-oss',
+        packageName: '@elogx-test/plugin-image-oss',
+        importName: 'imageOss',
+      },
+      {
+        kind: 'transform',
+        type: 'image-github',
+        packageName: '@elogx-test/plugin-image-github',
+        importName: 'imageGithub',
+      },
+      {
+        kind: 'transform',
+        type: 'image-qiniu',
+        packageName: '@elogx-test/plugin-image-qiniu',
+        importName: 'imageQiniu',
+      },
+      {
+        kind: 'transform',
+        type: 'image-upyun',
+        packageName: '@elogx-test/plugin-image-upyun',
+        importName: 'imageUpyun',
+      },
+      {
+        kind: 'transform',
+        type: 'image-r2',
+        packageName: '@elogx-test/plugin-image-r2',
+        importName: 'imageR2',
+      },
+      {
+        kind: 'transform',
+        type: 'image-b2',
+        packageName: '@elogx-test/plugin-image-b2',
+        importName: 'imageB2',
+      },
+      {
+        kind: 'to',
+        type: 'local',
+        packageName: '@elogx-test/plugin-to-local',
+        importName: 'toLocal',
+      },
+    ] as const;
+
+    const registry = loadBuiltInPluginRegistry();
+    expect(registry.plugins).toEqual(
+      expect.arrayContaining(stableEntries.map((entry) => expect.objectContaining(entry))),
+    );
+  });
 });
 
 describe('parsePluginRegistry', () => {

@@ -46,6 +46,74 @@
     },
     {
       "kind": "from",
+      "type": "yuque-token",
+      "displayName": "语雀（Token 模式）",
+      "packageName": "@elogx-test/plugin-from-yuque-token",
+      "importName": "yuqueToken",
+      "optionsSchema": {
+        "type": "object",
+        "required": ["token", "login", "repo"],
+        "properties": {
+          "token": {
+            "type": "string",
+            "title": "语雀 Token",
+            "x-elog-env": "YUQUE_TOKEN",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入语雀 Token"
+            }
+          },
+          "login": {
+            "type": "string",
+            "title": "语雀用户名",
+            "x-elog-env": "YUQUE_LOGIN",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入语雀用户名"
+            }
+          },
+          "repo": {
+            "type": "string",
+            "title": "语雀知识库路径",
+            "x-elog-env": "YUQUE_REPO",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入语雀知识库路径"
+            }
+          },
+          "onlyPublic": {
+            "type": "boolean",
+            "title": "只同步公开文章",
+            "default": false,
+            "x-elog-prompt": {
+              "type": "confirm",
+              "message": "是否只同步公开文章？"
+            }
+          },
+          "onlyPublished": {
+            "type": "boolean",
+            "title": "只同步已发布文档",
+            "default": false,
+            "x-elog-prompt": {
+              "type": "confirm",
+              "message": "是否只同步已发布文档？"
+            }
+          },
+          "limit": {
+            "type": "number",
+            "title": "下载并发数",
+            "x-elog-prompt": {
+              "type": "number",
+              "message": "请输入下载并发数"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "kind": "from",
       "type": "yuque-pwd",
       "displayName": "语雀（账号密码模式）",
       "packageName": "@elogx-test/plugin-from-yuque-pwd",
@@ -98,6 +166,485 @@
             "x-elog-prompt": {
               "type": "confirm",
               "message": "是否只同步公开文章？"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "kind": "transform",
+      "type": "image-cos",
+      "displayName": "腾讯云 COS 图床",
+      "packageName": "@elogx-test/plugin-image-cos",
+      "importName": "imageCos",
+      "optionsSchema": {
+        "type": "object",
+        "required": ["secretId", "secretKey", "bucket", "region"],
+        "properties": {
+          "secretId": {
+            "type": "string",
+            "title": "COS SecretId",
+            "x-elog-env": "COS_SECRET_ID",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入 COS SecretId"
+            }
+          },
+          "secretKey": {
+            "type": "string",
+            "title": "COS SecretKey",
+            "x-elog-env": "COS_SECRET_KEY",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入 COS SecretKey"
+            }
+          },
+          "bucket": {
+            "type": "string",
+            "title": "COS Bucket",
+            "x-elog-env": "COS_BUCKET",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 COS Bucket"
+            }
+          },
+          "region": {
+            "type": "string",
+            "title": "COS Region",
+            "x-elog-env": "COS_REGION",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 COS Region"
+            }
+          },
+          "host": {
+            "type": "string",
+            "title": "COS 自定义域名",
+            "x-elog-env": "COS_HOST",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 COS 自定义域名"
+            }
+          },
+          "prefixKey": {
+            "type": "string",
+            "title": "COS 路径前缀",
+            "x-elog-env": "COS_PREFIX_KEY",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 COS 路径前缀"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "kind": "transform",
+      "type": "image-oss",
+      "displayName": "阿里云 OSS 图床",
+      "packageName": "@elogx-test/plugin-image-oss",
+      "importName": "imageOss",
+      "optionsSchema": {
+        "type": "object",
+        "required": ["secretId", "secretKey", "bucket", "region"],
+        "properties": {
+          "secretId": {
+            "type": "string",
+            "title": "OSS AccessKey ID",
+            "x-elog-env": "OSS_SECRET_ID",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入 OSS AccessKey ID"
+            }
+          },
+          "secretKey": {
+            "type": "string",
+            "title": "OSS AccessKey Secret",
+            "x-elog-env": "OSS_SECRET_KEY",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入 OSS AccessKey Secret"
+            }
+          },
+          "bucket": {
+            "type": "string",
+            "title": "OSS Bucket",
+            "x-elog-env": "OSS_BUCKET",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 OSS Bucket"
+            }
+          },
+          "region": {
+            "type": "string",
+            "title": "OSS Region",
+            "x-elog-env": "OSS_REGION",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 OSS Region"
+            }
+          },
+          "host": {
+            "type": "string",
+            "title": "OSS 自定义域名",
+            "x-elog-env": "OSS_HOST",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 OSS 自定义域名"
+            }
+          },
+          "prefixKey": {
+            "type": "string",
+            "title": "OSS 路径前缀",
+            "x-elog-env": "OSS_PREFIX_KEY",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 OSS 路径前缀"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "kind": "transform",
+      "type": "image-github",
+      "displayName": "GitHub 图床",
+      "packageName": "@elogx-test/plugin-image-github",
+      "importName": "imageGithub",
+      "optionsSchema": {
+        "type": "object",
+        "required": ["user", "token", "repo"],
+        "properties": {
+          "user": {
+            "type": "string",
+            "title": "GitHub 用户名",
+            "x-elog-env": "GITHUB_USER",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 GitHub 用户名"
+            }
+          },
+          "token": {
+            "type": "string",
+            "title": "GitHub Token",
+            "x-elog-env": "GITHUB_TOKEN",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入 GitHub Token"
+            }
+          },
+          "repo": {
+            "type": "string",
+            "title": "GitHub 仓库名",
+            "x-elog-env": "GITHUB_REPO",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 GitHub 仓库名"
+            }
+          },
+          "branch": {
+            "type": "string",
+            "title": "GitHub 分支",
+            "x-elog-env": "GITHUB_BRANCH",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 GitHub 分支"
+            }
+          },
+          "host": {
+            "type": "string",
+            "title": "GitHub 自定义域名",
+            "x-elog-env": "GITHUB_HOST",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 GitHub 自定义域名"
+            }
+          },
+          "prefixKey": {
+            "type": "string",
+            "title": "GitHub 路径前缀",
+            "x-elog-env": "GITHUB_PREFIX_KEY",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 GitHub 路径前缀"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "kind": "transform",
+      "type": "image-qiniu",
+      "displayName": "七牛云图床",
+      "packageName": "@elogx-test/plugin-image-qiniu",
+      "importName": "imageQiniu",
+      "optionsSchema": {
+        "type": "object",
+        "required": ["secretId", "secretKey", "bucket", "region"],
+        "properties": {
+          "secretId": {
+            "type": "string",
+            "title": "七牛云 AccessKey",
+            "x-elog-env": "QINIU_SECRET_ID",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入七牛云 AccessKey"
+            }
+          },
+          "secretKey": {
+            "type": "string",
+            "title": "七牛云 SecretKey",
+            "x-elog-env": "QINIU_SECRET_KEY",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入七牛云 SecretKey"
+            }
+          },
+          "bucket": {
+            "type": "string",
+            "title": "七牛云 Bucket",
+            "x-elog-env": "QINIU_BUCKET",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入七牛云 Bucket"
+            }
+          },
+          "region": {
+            "type": "string",
+            "title": "七牛云 Region",
+            "x-elog-env": "QINIU_REGION",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入七牛云 Region"
+            }
+          },
+          "host": {
+            "type": "string",
+            "title": "七牛云自定义域名",
+            "x-elog-env": "QINIU_HOST",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入七牛云自定义域名"
+            }
+          },
+          "prefixKey": {
+            "type": "string",
+            "title": "七牛云路径前缀",
+            "x-elog-env": "QINIU_PREFIX_KEY",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入七牛云路径前缀"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "kind": "transform",
+      "type": "image-upyun",
+      "displayName": "又拍云图床",
+      "packageName": "@elogx-test/plugin-image-upyun",
+      "importName": "imageUpyun",
+      "optionsSchema": {
+        "type": "object",
+        "required": ["bucket", "user", "password"],
+        "properties": {
+          "bucket": {
+            "type": "string",
+            "title": "又拍云服务名",
+            "x-elog-env": "UPYUN_BUCKET",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入又拍云服务名"
+            }
+          },
+          "user": {
+            "type": "string",
+            "title": "又拍云操作员",
+            "x-elog-env": "UPYUN_USER",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入又拍云操作员"
+            }
+          },
+          "password": {
+            "type": "string",
+            "title": "又拍云操作员密码",
+            "x-elog-env": "UPYUN_PASSWORD",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入又拍云操作员密码"
+            }
+          },
+          "host": {
+            "type": "string",
+            "title": "又拍云自定义域名",
+            "x-elog-env": "UPYUN_HOST",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入又拍云自定义域名"
+            }
+          },
+          "prefixKey": {
+            "type": "string",
+            "title": "又拍云路径前缀",
+            "x-elog-env": "UPYUN_PREFIX_KEY",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入又拍云路径前缀"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "kind": "transform",
+      "type": "image-r2",
+      "displayName": "Cloudflare R2 图床",
+      "packageName": "@elogx-test/plugin-image-r2",
+      "importName": "imageR2",
+      "optionsSchema": {
+        "type": "object",
+        "required": ["host", "accessKeyId", "secretAccessKey", "bucket", "endpoint"],
+        "properties": {
+          "host": {
+            "type": "string",
+            "title": "R2 自定义域名",
+            "x-elog-env": "R2_HOST",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 R2 自定义域名"
+            }
+          },
+          "accessKeyId": {
+            "type": "string",
+            "title": "R2 Access Key ID",
+            "x-elog-env": "R2_ACCESS_KEY_ID",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入 R2 Access Key ID"
+            }
+          },
+          "secretAccessKey": {
+            "type": "string",
+            "title": "R2 Secret Access Key",
+            "x-elog-env": "R2_SECRET_ACCESS_KEY",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入 R2 Secret Access Key"
+            }
+          },
+          "bucket": {
+            "type": "string",
+            "title": "R2 Bucket",
+            "x-elog-env": "R2_BUCKET",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 R2 Bucket"
+            }
+          },
+          "endpoint": {
+            "type": "string",
+            "title": "R2 Endpoint",
+            "x-elog-env": "R2_ENDPOINT",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 R2 Endpoint"
+            }
+          },
+          "region": {
+            "type": "string",
+            "title": "R2 Region",
+            "x-elog-env": "R2_REGION",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 R2 Region"
+            }
+          },
+          "prefixKey": {
+            "type": "string",
+            "title": "R2 路径前缀",
+            "x-elog-env": "R2_PREFIX_KEY",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 R2 路径前缀"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "kind": "transform",
+      "type": "image-b2",
+      "displayName": "Backblaze B2 图床",
+      "packageName": "@elogx-test/plugin-image-b2",
+      "importName": "imageB2",
+      "optionsSchema": {
+        "type": "object",
+        "required": ["host", "applicationKeyId", "applicationKey", "bucket"],
+        "properties": {
+          "host": {
+            "type": "string",
+            "title": "B2 自定义域名",
+            "x-elog-env": "B2_HOST",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 B2 自定义域名"
+            }
+          },
+          "applicationKeyId": {
+            "type": "string",
+            "title": "B2 Application Key ID",
+            "x-elog-env": "B2_APPLICATION_KEY_ID",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入 B2 Application Key ID"
+            }
+          },
+          "applicationKey": {
+            "type": "string",
+            "title": "B2 Application Key",
+            "x-elog-env": "B2_APPLICATION_KEY",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入 B2 Application Key"
+            }
+          },
+          "bucket": {
+            "type": "string",
+            "title": "B2 Bucket",
+            "x-elog-env": "B2_BUCKET",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 B2 Bucket"
+            }
+          },
+          "prefixKey": {
+            "type": "string",
+            "title": "B2 路径前缀",
+            "x-elog-env": "B2_PREFIX_KEY",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 B2 路径前缀"
             }
           }
         },
