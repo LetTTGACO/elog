@@ -1,5 +1,5 @@
 import { ImageCOSConfig } from './types';
-import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elog/cli';
+import { ElogBaseContext, PluginContext } from '@elog/cli';
 import COS from 'cos-nodejs-sdk-v5';
 
 export default class COSApi extends ElogBaseContext {
@@ -18,7 +18,7 @@ export default class COSApi extends ElogBaseContext {
     if (!this.config.SecretId || !this.config.SecretKey) {
       this.ctx.logger.error('缺少腾讯云COS密钥信息');
     }
-    this.config.prefixKey = formatImagePrefix(this.config.prefixKey);
+    this.config.prefixKey = this.ctx.image.formatImagePrefix(this.config.prefixKey);
     this.api = new COS(this.config);
   }
 

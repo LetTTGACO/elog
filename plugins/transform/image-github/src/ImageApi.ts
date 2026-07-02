@@ -1,5 +1,5 @@
 import { ImageGithubConfig } from './types';
-import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elog/cli';
+import { ElogBaseContext, PluginContext } from '@elog/cli';
 
 export default class COSApi extends ElogBaseContext {
   private readonly config: ImageGithubConfig;
@@ -16,7 +16,7 @@ export default class COSApi extends ElogBaseContext {
     if (!this.config.token || !this.config.user || !this.config.repo) {
       this.ctx.logger.error('缺少Github 配置信息');
     }
-    this.config.prefixKey = formatImagePrefix(this.config.prefixKey);
+    this.config.prefixKey = this.ctx.image.formatImagePrefix(this.config.prefixKey);
   }
 
   async _fetch(fileName: string, options: any, base64File?: string) {

@@ -11,6 +11,9 @@ import {
   getFileTypeFromBuffer,
   getFileTypeFromUrl,
   getUrlListFromContent,
+  formatImagePrefix,
+  publicUrl,
+  contentTypeForFile,
 } from '../image';
 import type { PluginContext, WorkflowInfo } from './types';
 
@@ -45,6 +48,9 @@ export function createPluginContext(options: {
       getBaseUrl,
       getFileType,
       getBufferFromUrl,
+      formatImagePrefix,
+      publicUrl,
+      contentTypeForFile,
     },
   };
 }

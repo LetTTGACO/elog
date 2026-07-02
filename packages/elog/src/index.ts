@@ -6,7 +6,6 @@ export type * from './types/log';
 export * from './types/common';
 export * from './types/doc';
 export * from './types/image';
-export { formatImagePrefix } from './image';
 export type {
   BasePlugin,
   CacheReadonlyContext,

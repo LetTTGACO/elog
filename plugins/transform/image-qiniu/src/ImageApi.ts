@@ -1,5 +1,5 @@
 import { ImageQiniuConfig } from './types';
-import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elog/cli';
+import { ElogBaseContext, PluginContext } from '@elog/cli';
 import * as qiniu from 'qiniu';
 
 export default class COSApi extends ElogBaseContext {
@@ -18,7 +18,7 @@ export default class COSApi extends ElogBaseContext {
     if (!this.config.host) {
       this.ctx.logger.error('使用七牛云时，需要指定域名host');
     }
-    this.config.prefixKey = formatImagePrefix(this.config.prefixKey);
+    this.config.prefixKey = this.ctx.image.formatImagePrefix(this.config.prefixKey);
     const mac = new qiniu.auth.digest.Mac(this.config.secretId, this.config.secretKey);
     const putPolicy = new qiniu.rs.PutPolicy({ scope: this.config.bucket }); // 配置
     this.uploadToken = putPolicy.uploadToken(mac); // 获取上传凭证

@@ -132,6 +132,32 @@ export const formatImagePrefix = (prefix?: string): string => {
   return value ? `${value}/` : '';
 };
 
+/** 生成对象存储公开访问地址，host 可带协议，默认补 https。 */
+export const publicUrl = (host: string, key: string): string => {
+  const cleanHost = host.replace(/\/+$/, '');
+  const base =
+    cleanHost.startsWith('http://') || cleanHost.startsWith('https://')
+      ? cleanHost
+      : `https://${cleanHost}`;
+  return `${base}/${key}`;
+};
+
+/** 根据图片文件名推断上传 Content-Type。 */
+export const contentTypeForFile = (fileName: string): string | undefined => {
+  const ext = fileName.split('.').pop()?.toLowerCase();
+  if (!ext) return undefined;
+
+  return {
+    avif: 'image/avif',
+    gif: 'image/gif',
+    jpeg: 'image/jpeg',
+    jpg: 'image/jpeg',
+    png: 'image/png',
+    svg: 'image/svg+xml',
+    webp: 'image/webp',
+  }[ext];
+};
+
 /**
  * 获取文件类型，按 base64、URL 后缀、下载 buffer 的顺序逐级兜底。
  * @param url

@@ -1,7 +1,6 @@
 import { HeadObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elog/cli';
+import { ElogBaseContext, PluginContext } from '@elog/cli';
 import type { ImageR2Config } from './types';
-import { contentTypeForFile, publicUrl } from './utils';
 
 export default class R2Api extends ElogBaseContext {
   private readonly config: ImageR2Config;
@@ -19,7 +18,7 @@ export default class R2Api extends ElogBaseContext {
     ) {
       this.ctx.logger.error('缺少 Cloudflare R2 配置信息');
     }
-    this.config.prefixKey = formatImagePrefix(this.config.prefixKey);
+    this.config.prefixKey = this.ctx.image.formatImagePrefix(this.config.prefixKey);
     this.api = new S3Client({
       region: this.config.region || 'auto',
       endpoint: this.config.endpoint,
@@ -39,7 +38,7 @@ export default class R2Api extends ElogBaseContext {
           Key: key,
         }),
       );
-      return publicUrl(this.config.host, key);
+      return this.ctx.image.publicUrl(this.config.host, key);
     } catch (e: any) {
       if (e?.name !== 'NotFound' && e?.$metadata?.httpStatusCode !== 404) {
         this.ctx.logger.debug(`图床检查出错: ${e.message}`);
@@ -56,10 +55,10 @@ export default class R2Api extends ElogBaseContext {
           Bucket: this.config.bucket,
           Key: key,
           Body: buffer,
-          ContentType: contentTypeForFile(fullName),
+          ContentType: this.ctx.image.contentTypeForFile(fullName),
         }),
       );
-      return publicUrl(this.config.host, key);
+      return this.ctx.image.publicUrl(this.config.host, key);
     } catch (e: any) {
       this.ctx.logger.warn('跳过上传', `上传图片失败，请检查: ${e.message}`);
       this.ctx.logger.debug(e);

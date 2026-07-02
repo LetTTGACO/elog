@@ -1,5 +1,5 @@
 import { ImageUPYunConfig } from './types';
-import { ElogBaseContext, formatImagePrefix, PluginContext } from '@elog/cli';
+import { ElogBaseContext, PluginContext } from '@elog/cli';
 import UPYun from 'upyun';
 
 export default class COSApi extends ElogBaseContext {
@@ -19,7 +19,7 @@ export default class COSApi extends ElogBaseContext {
       );
       this.config.host = `http://${this.config.bucket}.test.upcdn.net`;
     }
-    this.config.prefixKey = formatImagePrefix(this.config.prefixKey);
+    this.config.prefixKey = this.ctx.image.formatImagePrefix(this.config.prefixKey);
     this.api = new UPYun.Client(
       new UPYun.Service(this.config.bucket, this.config.user, this.config.password),
     );
