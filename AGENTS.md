@@ -376,7 +376,7 @@ Publishing flow:
 - Normal beta publishing is manual through `.github/workflows/publish.yml`.
 - The regular publish command is `pnpm nx release --preid=beta --yes`.
 - The one-time migration bootstrap command is `pnpm nx release prerelease --preid=beta --yes`.
-- Do not create `.changeset/*.md`; Changesets is no longer part of the toolchain.
+- Do not create legacy release-state Markdown files; Nx Release is the only release tool.
 - Do not use git tags to trigger publishing. Nx release tags are only the release ledger.
 
 CI (`.github/workflows/ci.yml`) runs on pushes and PRs to `v1`:
