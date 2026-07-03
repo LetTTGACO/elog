@@ -21,7 +21,9 @@
     "@elog/plugin-from-yuque-token": "workspace:*",
     "@elog/plugin-transform-image-local": "workspace:*",
     "@elog/plugin-transform-image-r2": "workspace:*",
-    "@elog/plugin-to-local": "workspace:*"
+    "@elog/plugin-to-halo": "workspace:*",
+    "@elog/plugin-to-local": "workspace:*",
+    "@elog/plugin-to-wordpress": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "~22.19.19",

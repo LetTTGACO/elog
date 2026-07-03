@@ -551,9 +551,15 @@ importers:
       '@elog/plugin-from-yuque-token':
         specifier: workspace:*
         version: link:../../plugins/from/yuque-token
+      '@elog/plugin-to-halo':
+        specifier: workspace:*
+        version: link:../../plugins/to/halo
       '@elog/plugin-to-local':
         specifier: workspace:*
         version: link:../../plugins/to/local
+      '@elog/plugin-to-wordpress':
+        specifier: workspace:*
+        version: link:../../plugins/to/wordpress
       '@elog/plugin-transform-image-local':
         specifier: workspace:*
         version: link:../../plugins/transform/image-local
