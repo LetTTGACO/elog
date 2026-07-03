@@ -31,8 +31,8 @@ export interface CommandCase {
 
 export interface SyncCaseExpected {
   cacheFile: string;
-  outputDir: string;
-  minMarkdownFiles: number;
+  outputDir?: string;
+  minMarkdownFiles?: number;
   imageDir?: string;
   minImageFiles?: number;
 }

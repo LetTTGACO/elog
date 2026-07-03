@@ -64,17 +64,22 @@ export function countFiles(directoryPath: string): number {
 }
 
 export function expectSyncArtifacts(workspace: string, expected: SyncCaseExpected): void {
-  const outputDir = path.join(workspace, expected.outputDir);
   const cachePath = path.join(workspace, expected.cacheFile);
   const cache = readJsonFile(cachePath);
 
-  requireDirectory(outputDir);
-  expect(countFilesByExtension(outputDir, '.md')).toBeGreaterThanOrEqual(expected.minMarkdownFiles);
   expect(cache).toHaveProperty('sortedDocList');
+
+  if (expected.outputDir) {
+    const outputDir = path.join(workspace, expected.outputDir);
+    requireDirectory(outputDir);
+    expect(countFilesByExtension(outputDir, '.md')).toBeGreaterThanOrEqual(
+      expected.minMarkdownFiles ?? 1,
+    );
+  }
 
   if (expected.imageDir) {
     const imageDir = path.join(workspace, expected.imageDir);
     requireDirectory(imageDir);
-    expect(countFiles(imageDir)).toBeGreaterThanOrEqual(expected.minImageFiles ?? 0);
+    expect(countFiles(imageDir)).toBeGreaterThanOrEqual(expected.minImageFiles ?? 1);
   }
 }
