@@ -2,6 +2,12 @@ name: Publish
 
 on:
   workflow_dispatch:
+    inputs:
+      bootstrap:
+        description: 'Run the one-time Nx Release migration bootstrap'
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -31,6 +37,11 @@ jobs:
       - name: Build
         run: pnpm build
       - name: Publish packages
-        run: pnpm nx release --preid=beta --yes
+        run: |
+          if [ "${{ inputs.bootstrap }}" = "true" ]; then
+            pnpm nx release 1.0.0-beta.2 --first-release --yes
+          else
+            pnpm nx release --preid=beta --yes
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

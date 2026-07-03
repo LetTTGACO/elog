@@ -356,8 +356,9 @@ Nx Release config:
 
 - Projects relationship: independent
 - Version source: conventional commits
-- Current version resolver: npm registry, falling back to disk
+- Current version resolver: package release tags, falling back to disk
 - Release tag pattern: `{projectName}@{version}`
+- First-release changelog fallback: `automaticFromRef`
 - Public/stable packages are listed explicitly in `nx.json`
 - `version.updateDependents` is `never`
 - Project changelogs are enabled; workspace changelog is disabled
@@ -375,7 +376,8 @@ Publishing flow:
 
 - Normal beta publishing is manual through `.github/workflows/publish.yml`.
 - The regular publish command is `pnpm nx release --preid=beta --yes`.
-- The one-time migration bootstrap command is `pnpm nx release prerelease --preid=beta --yes`.
+- The one-time migration bootstrap command is `pnpm nx release 1.0.0-beta.2 --first-release --yes`.
+- In the publish workflow, enable the `bootstrap` input only for that one migration release.
 - Do not create legacy release-state Markdown files; Nx Release is the only release tool.
 - Do not use git tags to trigger publishing. Nx release tags are only the release ledger.
 
