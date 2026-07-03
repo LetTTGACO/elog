@@ -49,6 +49,14 @@
       "commit": true,
       "tag": true,
       "push": true
+    },
+    "conventionalCommits": {
+      "types": {
+        "feat": {
+          "semverBump": "patch"
+        }
+      }
     }
-  }
+  },
+  "analytics": false
 }

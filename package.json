@@ -19,6 +19,10 @@
   "scripts": {
     "build": "nx run-many -t build",
     "test": "nx run-many -t test --exclude=@elog/e2e",
+    "release:beta:dry-run": "NPM_CONFIG_TAG=beta nx release --dry-run --preid=beta",
+    "release:beta": "NPM_CONFIG_TAG=beta nx release --preid=beta --yes",
+    "release:dry-run": "nx release --dry-run",
+    "release": "nx release --yes",
     "prepare": "husky",
     "e2e": "pnpm --filter @elog/e2e e2e",
     "e2e:cli": "pnpm --filter @elog/e2e test:cli",
