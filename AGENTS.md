@@ -5,7 +5,7 @@ This file provides guidance to Claude Code / Codex-style coding agents when work
 ## Project Overview
 
 Elog is a CLI tool and library for syncing documents from writing and note-taking
-platforms to blogging/CMS targets. The 1.0 rewrite is a pnpm/Turborepo monorepo,
+platforms to blogging/CMS targets. The 1.0 rewrite is a pnpm/Nx monorepo,
 and workspace packages use the `@elog/` scope.
 
 The system is plugin-driven:
@@ -26,10 +26,10 @@ Supported plugin families in this repo:
 # Install dependencies
 pnpm install
 
-# Build all workspace packages through Turbo
+# Build all workspace packages through Nx
 pnpm build
 
-# Run automated tests through Turbo
+# Run automated tests through Nx
 pnpm test
 
 # Run core package tests only
@@ -72,10 +72,10 @@ packages:
 ## Build System
 
 - Root package manager: `pnpm@11.1.2`
-- Root build command: `turbo build`
-- Root test command: `turbo test`
+- Root build command: `nx run-many -t build`
+- Root test command: `nx run-many -t test --exclude=@elog/e2e`
 - Per-package build command: `tsdown`
-- Turbo build outputs: `dist/**`
+- Nx build outputs: `{projectRoot}/dist`
 - Packages are ESM-only (`"type": "module"`)
 - `tsdown.config.ts` currently enables sourcemaps and leaves extensions unfixed:
 
@@ -350,33 +350,44 @@ Plugin package conventions:
 
 ## Publishing And CI
 
-Publishing uses Changesets.
+Publishing uses Nx Release.
 
-Changeset config:
+Nx Release config:
 
-- Base branch: `v1`
-- Public access
-- `test-elog` is ignored
-- Internal dependency bumps default to patch
+- Projects relationship: independent
+- Version source: conventional commits
+- Current version resolver: npm registry, falling back to disk
+- Release tag pattern: `{projectName}@{version}`
+- Public/stable packages are listed explicitly in `nx.json`
+- `version.updateDependents` is `never`
+- Project changelogs are enabled; workspace changelog is disabled
 
-Agent changeset rules:
+Release matrix rules:
 
-- Do not create `.changeset/*.md` just because a normal code commit is requested.
-- Create or edit `.changeset/*.md` only when the user asks to prepare a PR, finish/finalize a change, add a changeset, prepare a release, or publish.
-- If the user skips straight to release/publish wording, first check whether the current public package changes are already covered by `.changeset/*.md`; add or fix the changeset before running version/publish steps.
-- Do not use interactive `pnpm changeset` by default. Write the changeset Markdown file directly.
-- When deciding packages for a changeset, compare against `origin/v1`, respect `.changeset/config.json` `ignore`, and exclude `"private": true` packages unless the user is deliberately changing the release matrix.
-- Test-only, docs-only, ignored-package-only, or private-package-only changes do not need a changeset unless CI or the user explicitly requires one.
+- Only packages listed in `nx.json` `release.projects` are published.
+- Private packages remain `private: true` and must not be added to `release.projects`.
+- Do not publish or bump `@elog/cli` just because a plugin or `@elog/shared` changed.
+- Plugins keep `@elog/cli` as an optional peer dependency plus `devDependencies.@elog/cli: "workspace:*"`.
+- Workspace packages with a real runtime dependency on `@elog/shared` use `dependencies.@elog/shared: "workspace:^"` so published manifests keep a compatible range.
+- Nx Release uses `updateDependents: "never"`; shared compatibility is handled by semver ranges, not automatic dependent patch bumps.
+
+Publishing flow:
+
+- Normal beta publishing is manual through `.github/workflows/publish.yml`.
+- The regular publish command is `pnpm nx release --preid=beta --yes`.
+- The one-time migration bootstrap command is `pnpm nx release prerelease --preid=beta --yes`.
+- Do not create `.changeset/*.md`; Changesets is no longer part of the toolchain.
+- Do not use git tags to trigger publishing. Nx release tags are only the release ledger.
 
 CI (`.github/workflows/ci.yml`) runs on pushes and PRs to `v1`:
 
 ```bash
 pnpm install --frozen-lockfile
-npx changeset status --since=origin/v1
-pnpm turbo build --force
+pnpm build
+pnpm test
 ```
 
-Every non-trivial PR to `v1` should include a changeset.
+Every non-trivial PR to `v1` should pass the Nx build and test commands.
 
 ## Coding Conventions
 
@@ -387,7 +398,7 @@ Every non-trivial PR to `v1` should include a changeset.
 - There is no repository ESLint config, even though `eslint` appears as a package dev dependency.
 - Prefer existing context helpers (`ElogFromContext`, `ElogImageContext`, `ElogBaseContext`) over duplicating orchestration logic.
 - Keep source plugins responsible for producing `DocDetail[]`; keep transform plugins responsible for mutating/returning docs; keep deploy plugins responsible for target side effects.
-- Do not commit generated `dist/**`, `.turbo/**`, `.rush/**`, build logs, local docs/images, or cache files unless explicitly requested.
+- Do not commit generated `dist/**`, `.nx/cache/**`, build logs, local docs/images, or cache files unless explicitly requested.
 
 ## Useful Files To Inspect
 
