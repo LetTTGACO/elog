@@ -1,9 +1,7 @@
 name: Publish
 
 on:
-  push:
-    tags:
-      - 'v*'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -24,15 +22,6 @@ jobs:
 
       - name: Use latest npm
         run: npm install -g npm@latest
-
-      - name: Verify release tag
-        run: |
-          release_version="${GITHUB_REF_NAME#v}"
-          package_version="$(node -p "require('./packages/elog/package.json').version")"
-          if [ "$release_version" != "$package_version" ]; then
-            echo "Tag $GITHUB_REF_NAME does not match @elog/cli version $package_version"
-            exit 1
-          fi
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

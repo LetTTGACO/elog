@@ -350,15 +350,7 @@ Plugin package conventions:
 
 ## Publishing And CI
 
-Publishing uses Changesets:
-
-```bash
-pnpm changeset
-git add .changeset/ && git commit -m "chore: add changeset"
-pnpm version
-pnpm build && pnpm publish
-git push --follow-tags
-```
+Publishing uses Changesets.
 
 Changeset config:
 
@@ -366,6 +358,15 @@ Changeset config:
 - Public access
 - `test-elog` is ignored
 - Internal dependency bumps default to patch
+
+Agent changeset rules:
+
+- Do not create `.changeset/*.md` just because a normal code commit is requested.
+- Create or edit `.changeset/*.md` only when the user asks to prepare a PR, finish/finalize a change, add a changeset, prepare a release, or publish.
+- If the user skips straight to release/publish wording, first check whether the current public package changes are already covered by `.changeset/*.md`; add or fix the changeset before running version/publish steps.
+- Do not use interactive `pnpm changeset` by default. Write the changeset Markdown file directly.
+- When deciding packages for a changeset, compare against `origin/v1`, respect `.changeset/config.json` `ignore`, and exclude `"private": true` packages unless the user is deliberately changing the release matrix.
+- Test-only, docs-only, ignored-package-only, or private-package-only changes do not need a changeset unless CI or the user explicitly requires one.
 
 CI (`.github/workflows/ci.yml`) runs on pushes and PRs to `v1`:
 
