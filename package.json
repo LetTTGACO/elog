@@ -26,6 +26,9 @@
     "prepare": "husky",
     "e2e": "pnpm --filter @elog/e2e e2e",
     "e2e:cli": "pnpm --filter @elog/e2e test:cli",
-    "e2e:yuque-local": "pnpm --filter @elog/e2e test:yuque-local"
+    "e2e:notion-local": "pnpm --filter @elog/e2e test:notion-local",
+    "e2e:yuque-local": "pnpm --filter @elog/e2e test:yuque-local",
+    "e2e:notion-wordpress": "pnpm --filter @elog/e2e test:notion-wordpress",
+    "e2e:notion-halo": "pnpm --filter @elog/e2e test:notion-halo"
   }
 }

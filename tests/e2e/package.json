@@ -9,10 +9,10 @@
     "elog:sync": "elog sync -e .env",
     "e2e": "pnpm run build:repo && vitest run",
     "test:cli": "pnpm run build:repo && vitest run src/cli-command.e2e.test.ts",
-    "test:notion-local": "pnpm run build:repo && ELOG_E2E_CASE=notion-image-local-to-local vitest run src/sync-matrix.e2e.test.ts",
-    "test:yuque-local": "pnpm run build:repo && ELOG_E2E_CASE=yuque-image-local-to-local vitest run src/sync-matrix.e2e.test.ts",
-    "test:yuque-r2-local": "pnpm run build:repo && ELOG_E2E_CASE=yuque-image-r2-to-local vitest run src/sync-matrix.e2e.test.ts",
-    "test:yuque-token-local": "pnpm run build:repo && ELOG_E2E_CASE=yuque-token-image-local-to-local vitest run src/sync-matrix.e2e.test.ts"
+    "test:notion-local": "pnpm run build:repo && ELOG_E2E_CASE=notion-to-local vitest run src/sync-matrix.e2e.test.ts",
+    "test:yuque-local": "pnpm run build:repo && ELOG_E2E_CASE=yuque-to-local vitest run src/sync-matrix.e2e.test.ts",
+    "test:notion-wordpress": "pnpm run build:repo && ELOG_E2E_CASE=notion-to-wordpress vitest run src/sync-matrix.e2e.test.ts",
+    "test:notion-halo": "pnpm run build:repo && ELOG_E2E_CASE=notion-to-halo vitest run src/sync-matrix.e2e.test.ts"
   },
   "dependencies": {
     "@elog/cli": "workspace:*",
