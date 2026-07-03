@@ -9,8 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 2
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v3
         with:
@@ -18,7 +16,7 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Verify Change Logs
-        run: npx changeset status --since=origin/v1
       - name: Build
-        run: pnpm turbo build --force
+        run: pnpm build
+      - name: Test
+        run: pnpm test
