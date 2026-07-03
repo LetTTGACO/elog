@@ -6,3 +6,4 @@ packages:
   - 'tests/*'
 allowBuilds:
   esbuild: true
+  nx: true

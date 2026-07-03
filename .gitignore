@@ -70,6 +70,9 @@ jspm_packages
 # Rush build cache (legacy)
 .rush/
 
+# Nx local cache
+.nx/
+
 # Build output
 dist
 
