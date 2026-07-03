@@ -1,0 +1,53 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/dist"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    }
+  },
+  "release": {
+    "projects": [
+      "@elog/cli",
+      "@elog/shared",
+      "@elog/plugin-from-notion",
+      "@elog/plugin-from-yuque-token",
+      "@elog/plugin-from-yuque-pwd",
+      "@elog/plugin-transform-image-local",
+      "@elog/plugin-transform-image-cos",
+      "@elog/plugin-transform-image-oss",
+      "@elog/plugin-transform-image-github",
+      "@elog/plugin-transform-image-qiniu",
+      "@elog/plugin-transform-image-upyun",
+      "@elog/plugin-transform-image-r2",
+      "@elog/plugin-transform-image-b2",
+      "@elog/plugin-to-local"
+    ],
+    "projectsRelationship": "independent",
+    "releaseTag": {
+      "pattern": "{projectName}@{version}",
+      "strictPreid": true
+    },
+    "version": {
+      "specifierSource": "conventional-commits",
+      "currentVersionResolver": "registry",
+      "fallbackCurrentVersionResolver": "disk",
+      "updateDependents": "never",
+      "preserveLocalDependencyProtocols": true,
+      "preserveMatchingDependencyRanges": true
+    },
+    "changelog": {
+      "workspaceChangelog": false,
+      "projectChangelogs": true
+    },
+    "git": {
+      "commit": true,
+      "tag": true,
+      "push": true
+    }
+  }
+}
