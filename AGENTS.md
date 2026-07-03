@@ -375,9 +375,10 @@ Release matrix rules:
 Publishing flow:
 
 - Normal beta publishing is manual through `.github/workflows/publish.yml`.
-- The regular publish command is `pnpm nx release --preid=beta --yes`.
-- The one-time migration bootstrap command is `pnpm nx release 1.0.0-beta.2 --first-release --yes`.
+- The regular publish command is `NPM_CONFIG_TAG=beta pnpm nx release --preid=beta --yes`.
+- The one-time migration bootstrap command is `NPM_CONFIG_TAG=beta pnpm nx release 1.0.0-beta.2 --first-release --yes`.
 - In the publish workflow, enable the `bootstrap` input only for that one migration release.
+- The publish workflow sets `NPM_CONFIG_TAG=beta` so prerelease packages update the npm `beta` dist-tag.
 - Do not create legacy release-state Markdown files; Nx Release is the only release tool.
 - Do not use git tags to trigger publishing. Nx release tags are only the release ledger.
 
