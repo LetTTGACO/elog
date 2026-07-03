@@ -34,13 +34,14 @@
     },
     "version": {
       "specifierSource": "conventional-commits",
-      "currentVersionResolver": "registry",
+      "currentVersionResolver": "git-tag",
       "fallbackCurrentVersionResolver": "disk",
       "updateDependents": "never",
       "preserveLocalDependencyProtocols": true,
       "preserveMatchingDependencyRanges": true
     },
     "changelog": {
+      "automaticFromRef": true,
       "workspaceChangelog": false,
       "projectChangelogs": true
     },

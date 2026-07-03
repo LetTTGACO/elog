@@ -7,6 +7,7 @@
   },
   "packageManager": "pnpm@11.1.2",
   "devDependencies": {
+    "@nx/js": "^23.0.1",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.0",
     "nx": "^23.0.1",

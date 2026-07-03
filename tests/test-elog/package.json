@@ -4,7 +4,7 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "build": "",
+    "build": "node -e \"\"",
     "elog:init-templ": "elog init --template yuque-local",
     "elog:init": "elog init",
     "elog:sync": "elog sync --env .elog.env",
