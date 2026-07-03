@@ -29,7 +29,7 @@
     }
   },
   "dependencies": {
-    "@elog/shared": "workspace:*",
+    "@elog/shared": "workspace:^",
     "front-matter": "~4.0.2"
   },
   "devDependencies": {

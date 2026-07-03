@@ -30,7 +30,7 @@
     }
   },
   "dependencies": {
-    "@elog/shared": "workspace:*",
+    "@elog/shared": "workspace:^",
     "front-matter": "~4.0.2",
     "jsdom": "^21.1.2",
     "jsencrypt-node": "~1.0.4"

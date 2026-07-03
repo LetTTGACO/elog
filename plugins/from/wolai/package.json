@@ -30,7 +30,7 @@
     }
   },
   "dependencies": {
-    "@elog/shared": "workspace:*"
+    "@elog/shared": "workspace:^"
   },
   "devDependencies": {
     "@elog/cli": "workspace:*",

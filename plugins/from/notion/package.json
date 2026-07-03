@@ -30,7 +30,7 @@
     }
   },
   "dependencies": {
-    "@elog/shared": "workspace:*",
+    "@elog/shared": "workspace:^",
     "@notionhq/client": "~5.22.0",
     "notion-to-md": "3.1.9"
   },
