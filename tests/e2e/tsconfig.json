@@ -1,0 +1,7 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": ["src/**/*.ts", "cases/**/*.ts", "command-cases/**/*.ts", "vitest.config.ts"]
+}

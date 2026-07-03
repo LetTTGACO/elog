@@ -8,39 +8,41 @@ const commandCases = await loadCommandCases(repoRoot);
 
 describe('elog command e2e', () => {
   for (const commandCase of commandCases) {
-    it.skipIf(commandCase.skip)(
-      commandCase.id,
-      typeof commandCase.skip === 'string' ? commandCase.skip : undefined,
-      async () => {
-        const workspace = createTempWorkspace(`elog-e2e-${commandCase.id}-`);
-        let passed = false;
+    const runCase = commandCase.skip ? it.skip : it;
+    const title =
+      typeof commandCase.skip === 'string'
+        ? `${commandCase.id} (skipped: ${commandCase.skip})`
+        : commandCase.id;
 
-        try {
-          await commandCase.setup?.({
-            workspace: workspace.path,
-            repoRoot,
-          });
+    runCase(title, async () => {
+      const workspace = createTempWorkspace(`elog-e2e-${commandCase.id}-`);
+      let passed = false;
 
-          const result = await runElog(commandCase.command, {
-            cwd: workspace.path,
-            repoRoot,
-            env: commandCase.env,
-          });
+      try {
+        await commandCase.setup?.({
+          workspace: workspace.path,
+          repoRoot,
+        });
 
-          await commandCase.expect({
-            result,
-            workspace: workspace.path,
-            repoRoot,
-          });
+        const result = await runElog(commandCase.command, {
+          cwd: workspace.path,
+          repoRoot,
+          env: commandCase.env,
+        });
 
-          passed = true;
-        } finally {
-          if (!passed) {
-            console.info(preserveWorkspaceMessage(workspace.path));
-          }
-          workspace.cleanup(passed);
+        await commandCase.expect({
+          result,
+          workspace: workspace.path,
+          repoRoot,
+        });
+
+        passed = true;
+      } finally {
+        if (!passed) {
+          console.info(preserveWorkspaceMessage(workspace.path));
         }
-      },
-    );
+        workspace.cleanup(passed);
+      }
+    });
   }
 });
