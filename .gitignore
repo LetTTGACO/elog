@@ -85,5 +85,11 @@ dist
 # E2E local workspaces
 tests/e2e/.tmp/
 
+# Legacy manual test artifacts
+tests/test-elog/docs/
+tests/test-elog/docs-new/
+tests/test-elog/images/
+tests/yuque-to-local/source/_posts/
+
 .pnpm-store
 elog.cache.json
