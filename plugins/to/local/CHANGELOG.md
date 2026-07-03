@@ -1,3 +1,9 @@
+## 1.0.0-beta.2 (2026-07-03)
+
+### 🧱 Updated Dependencies
+
+- Updated @elog/cli to 1.0.0-beta.2
+
 # @elog/plugin-to-local
 
 ## 1.0.0-beta.1
