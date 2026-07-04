@@ -8,7 +8,7 @@ const syncCase: SyncCase = {
   title: 'Notion source -> WordPress deploy',
   requiredEnv: [
     'ELOG_E2E_NOTION_TOKEN',
-    'ELOG_E2E_NOTION_DATA_SOURCE_ID',
+    'ELOG_E2E_NOTION_DATABASE_ID',
     'ELOG_E2E_WORDPRESS_ENDPOINT',
     'ELOG_E2E_WORDPRESS_USERNAME',
     'ELOG_E2E_WORDPRESS_PASSWORD',

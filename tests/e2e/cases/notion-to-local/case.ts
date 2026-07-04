@@ -6,7 +6,7 @@ import { e2eProfile } from './elog.config';
 const syncCase: SyncCase = {
   id: e2eProfile.id,
   title: 'Notion source -> local deploy',
-  requiredEnv: ['ELOG_E2E_NOTION_TOKEN', 'ELOG_E2E_NOTION_DATA_SOURCE_ID'],
+  requiredEnv: ['ELOG_E2E_NOTION_TOKEN', 'ELOG_E2E_NOTION_DATABASE_ID'],
   configFile: 'elog.config.ts',
   expected: {
     cacheFile: e2eProfile.cacheFile,

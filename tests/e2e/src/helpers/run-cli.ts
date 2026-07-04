@@ -30,12 +30,16 @@ export function runElog(args: string[], options: RunCliOptions): Promise<CliResu
 
 function runProcess(command: string, args: string[], options: RunCliOptions): Promise<CliResult> {
   return new Promise((resolve, reject) => {
+    const env = {
+      ...process.env,
+      ...options.env,
+    };
+    const streamOutput =
+      env.ELOG_E2E_STREAM_OUTPUT === '1' || env.ELOG_E2E_STREAM_OUTPUT?.toLowerCase() === 'true';
+
     const child = spawn(command, args, {
       cwd: options.cwd,
-      env: {
-        ...process.env,
-        ...options.env,
-      },
+      env,
       stdio: ['ignore', 'pipe', 'pipe'],
     });
 
@@ -47,10 +51,16 @@ function runProcess(command: string, args: string[], options: RunCliOptions): Pr
 
     child.stdout.on('data', (chunk: string) => {
       stdout += chunk;
+      if (streamOutput) {
+        process.stdout.write(chunk);
+      }
     });
 
     child.stderr.on('data', (chunk: string) => {
       stderr += chunk;
+      if (streamOutput) {
+        process.stderr.write(chunk);
+      }
     });
 
     child.on('error', reject);

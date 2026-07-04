@@ -4,8 +4,8 @@ import { expect } from 'vitest';
 import type { CliResult, SyncCaseExpected } from './types';
 
 export function expectExitCode(result: CliResult, exitCode: number): void {
-  expect(result.exitCode).toBe(exitCode);
-  expect(result.signal).toBeNull();
+  expect(result.exitCode, result.combinedOutput).toBe(exitCode);
+  expect(result.signal, result.combinedOutput).toBeNull();
 }
 
 export function expectOutputContains(result: CliResult, text: string): void {

@@ -39,7 +39,7 @@ export default defineConfig({
   cacheFilePath: e2eProfile.cacheFile,
   from: fromNotion({
     token: process.env.ELOG_E2E_NOTION_TOKEN,
-    dataSourceId: process.env.ELOG_E2E_NOTION_DATA_SOURCE_ID,
+    databaseId: process.env.ELOG_E2E_NOTION_DATABASE_ID,
     catalog: false,
   }),
   plugins:

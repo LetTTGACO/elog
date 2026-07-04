@@ -11,7 +11,11 @@ export function createTempWorkspace(prefix = 'elog-e2e-'): TempWorkspace {
   return {
     path: workspacePath,
     cleanup(remove = true) {
-      if (remove && process.env.ELOG_E2E_KEEP_TMP !== '1') {
+      const keepTmp =
+        process.env.ELOG_E2E_KEEP_TMP === '1' ||
+        process.env.ELOG_E2E_KEEP_TMP?.toLowerCase() === 'true';
+
+      if (remove && !keepTmp) {
         fs.rmSync(workspacePath, { recursive: true, force: true });
       } else {
         console.info(`Preserved e2e workspace: ${workspacePath}`);

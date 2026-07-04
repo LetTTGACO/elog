@@ -4,6 +4,7 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: ['src/**/*.e2e.test.ts'],
+    setupFiles: ['./src/setup-env.ts'],
     testTimeout: 120_000,
     hookTimeout: 120_000,
     clearMocks: true,
