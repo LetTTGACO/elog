@@ -121,8 +121,8 @@ setup.
 Useful e2e env controls:
 
 - `ELOG_E2E_CASE`: select one sync case; package scripts usually set this.
-- `ELOG_E2E_STREAM_OUTPUT=true`: stream child CLI output while still capturing it.
-- `ELOG_E2E_KEEP_TMP=true`: keep successful temporary workspaces for inspection.
+- `ELOG_E2E_STREAM_OUTPUT=1`: stream child CLI output while still capturing it.
+- `ELOG_E2E_KEEP_TMP=1`: keep successful temporary workspaces for inspection.
 
 Use canonical `ELOG_E2E_*` env names in `.env`. Notion e2e uses database IDs:
 `ELOG_E2E_NOTION_TOKEN` and `ELOG_E2E_NOTION_DATABASE_ID`.
@@ -163,6 +163,22 @@ build, or e2e verification command instead.
 - No repository ESLint config.
 - Follow existing package structure and local helper APIs.
 - Keep changes scoped to the affected package or plugin.
+- For comments, first match the density, language, and placement already used
+  in the file or nearby module. If there is no local pattern, write fewer
+  comments and only when they explain why something exists or name a boundary
+  the code alone does not make obvious.
+- Prefer comments on core runtime flows, plugin lifecycle ordering, config/cache
+  compatibility semantics, error/exit-code contracts, test fixtures that protect
+  historical bugs or platform edges, and deliberate simplifications such as
+  `ponytail:` notes.
+- Avoid comments that restate what the next line does, routine Arrange/Act/Assert
+  test markers, and JSDoc `@param` blocks that only repeat TypeScript types.
+  `TODO` comments must name the follow-up action or trigger condition; use
+  `@deprecated` only for real compatibility periods and point to the replacement
+  when possible.
+- Do not bulk-clean old comments for style. When editing old code, keep useful
+  local style and only remove or rewrite nearby comments that are clearly stale
+  or just narrate the code.
 
 ## Useful Files
 

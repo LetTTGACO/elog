@@ -32,8 +32,8 @@ Vitest 启动时会读取当前目录的 `.env`。从仓库根目录通过 `pnpm
 | 变量 | 作用 |
 | --- | --- |
 | `ELOG_E2E_CASE` | 只运行指定同步用例。通常由 `test:notion-local` 等脚本自动设置。 |
-| `ELOG_E2E_STREAM_OUTPUT=true` | 同步时把真实 CLI stdout/stderr 实时输出到控制台，同时仍保留断言捕获。也兼容 `1`。 |
-| `ELOG_E2E_KEEP_TMP=true` | 测试通过后也保留 `.tmp` 临时 workspace，便于调试产物。失败时默认会保留。也兼容 `1`。 |
+| `ELOG_E2E_STREAM_OUTPUT=1` | 同步时把真实 CLI stdout/stderr 实时输出到控制台，同时仍保留断言捕获。也兼容 `true`。 |
+| `ELOG_E2E_KEEP_TMP=1` | 测试通过后也保留 `.tmp` 临时 workspace，便于调试产物。失败时默认会保留。也兼容 `true`。 |
 
 平台凭据变量：
 
