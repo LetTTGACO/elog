@@ -178,3 +178,17 @@ build, or e2e verification command instead.
 - `packages/elog/src/doc/filter.ts`
 - `packages/elog/src/image/replace.ts`
 - `tests/fixtures/basic-config/elog.config.ts`
+
+## Agent skills
+
+### Issue tracker
+
+Issues and PRDs are tracked as local markdown under `.scratch/<feature>/`; external PRs are not a triage surface. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The canonical triage roles use the default label strings. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+This repo uses a single-context domain doc layout. See `docs/agents/domain.md`.

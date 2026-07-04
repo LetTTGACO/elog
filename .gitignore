@@ -82,6 +82,12 @@ dist
 # Codex local artifacts
 .superpowers/
 
+# Local/private docs with their own git history
+docs/adr/
+
+# Local markdown issue tracker
+.scratch/
+
 # E2E local workspaces
 tests/e2e/.tmp/
 
