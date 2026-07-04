@@ -33,6 +33,7 @@ pnpm --filter @elog/cli test
 pnpm e2e:cli
 pnpm e2e:notion-local
 pnpm e2e:yuque-pwd-local
+pnpm e2e:yuque-token-local
 pnpm e2e:notion-wordpress
 pnpm e2e:notion-halo
 ```

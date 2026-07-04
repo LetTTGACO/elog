@@ -16,6 +16,7 @@
 | --- | --- | --- |
 | `notion-to-local` | 测 Notion 下载和本地部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID` |
 | `yuque-pwd-to-local` | 测语雀密码登录下载和本地部署 | `ELOG_E2E_YUQUE_USERNAME`, `ELOG_E2E_YUQUE_PWD`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO` |
+| `yuque-token-to-local` | 测语雀 Token 登录下载和本地部署 | `ELOG_E2E_YUQUE_TOKEN`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO` |
 | `notion-to-wordpress` | 测 WordPress 部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID`, `ELOG_E2E_WORDPRESS_ENDPOINT`, `ELOG_E2E_WORDPRESS_USERNAME`, `ELOG_E2E_WORDPRESS_PASSWORD` |
 | `notion-to-halo` | 测 Halo 部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID`, `ELOG_E2E_HALO_ENDPOINT`, `ELOG_E2E_HALO_TOKEN` |
 
@@ -40,6 +41,7 @@ Vitest 启动时会读取当前目录的 `.env`。从仓库根目录通过 `pnpm
 | --- | --- |
 | Notion | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID` |
 | 语雀密码登录 | `ELOG_E2E_YUQUE_USERNAME`, `ELOG_E2E_YUQUE_PWD`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO` |
+| 语雀 Token 登录 | `ELOG_E2E_YUQUE_TOKEN`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO` |
 | WordPress | `ELOG_E2E_WORDPRESS_ENDPOINT`, `ELOG_E2E_WORDPRESS_USERNAME`, `ELOG_E2E_WORDPRESS_PASSWORD` |
 | Halo | `ELOG_E2E_HALO_ENDPOINT`, `ELOG_E2E_HALO_TOKEN` |
 | R2 图床 | `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
@@ -54,6 +56,7 @@ R2 变量只在对应 case 的 `e2eProfile.image` 改成 `{ kind: 'r2' }` 时需
 pnpm e2e:cli
 pnpm e2e:notion-local
 pnpm e2e:yuque-pwd-local
+pnpm e2e:yuque-token-local
 pnpm e2e:notion-wordpress
 pnpm e2e:notion-halo
 ```
@@ -69,6 +72,7 @@ pnpm e2e
 ```bash
 pnpm run test:notion-local
 pnpm run test:yuque-pwd-local
+pnpm run test:yuque-token-local
 pnpm run test:notion-wordpress
 pnpm run test:notion-halo
 ```

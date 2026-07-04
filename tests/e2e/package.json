@@ -11,6 +11,7 @@
     "test:cli": "pnpm run build:repo && vitest run src/cli-command.e2e.test.ts",
     "test:notion-local": "pnpm run build:repo && ELOG_E2E_CASE=notion-to-local vitest run src/sync-matrix.e2e.test.ts",
     "test:yuque-pwd-local": "pnpm run build:repo && ELOG_E2E_CASE=yuque-pwd-to-local vitest run src/sync-matrix.e2e.test.ts",
+    "test:yuque-token-local": "pnpm run build:repo && ELOG_E2E_CASE=yuque-token-to-local vitest run src/sync-matrix.e2e.test.ts",
     "test:notion-wordpress": "pnpm run build:repo && ELOG_E2E_CASE=notion-to-wordpress vitest run src/sync-matrix.e2e.test.ts",
     "test:notion-halo": "pnpm run build:repo && ELOG_E2E_CASE=notion-to-halo vitest run src/sync-matrix.e2e.test.ts"
   },
