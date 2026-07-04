@@ -1,5 +1,8 @@
 import { expect } from 'vitest';
-import { imageExpectedFromProfile } from '../../src/helpers/image-expected';
+import {
+  imageExpectedFromProfile,
+  imageRequiredEnvFromProfile,
+} from '../../src/helpers/image-expected';
 import type { SyncCase } from '../../src/helpers/types';
 import { e2eProfile } from './elog.config';
 
@@ -12,6 +15,7 @@ const syncCase: SyncCase = {
     'ELOG_E2E_WORDPRESS_ENDPOINT',
     'ELOG_E2E_WORDPRESS_USERNAME',
     'ELOG_E2E_WORDPRESS_PASSWORD',
+    ...imageRequiredEnvFromProfile(e2eProfile.image),
   ],
   configFile: 'elog.config.ts',
   expected: {
