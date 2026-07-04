@@ -1,8 +1,16 @@
-import { defineConfig } from '@elog/cli';
+import { defineConfig, type TransformPlugin } from '@elog/cli';
 import fromYuque from '@elog/plugin-from-yuque-pwd';
+import imageB2 from '@elog/plugin-transform-image-b2';
+import imageCos from '@elog/plugin-transform-image-cos';
+import imageGithub from '@elog/plugin-transform-image-github';
 import imageLocal from '@elog/plugin-transform-image-local';
+import imageOss from '@elog/plugin-transform-image-oss';
+import imageQiniu from '@elog/plugin-transform-image-qiniu';
 import imageR2 from '@elog/plugin-transform-image-r2';
+import imageUpyun from '@elog/plugin-transform-image-upyun';
 import toLocal from '@elog/plugin-to-local';
+
+type E2eCloudImageKind = 'b2' | 'cos' | 'github' | 'oss' | 'qiniu' | 'r2' | 'upyun';
 
 type E2eImageProfile =
   | { kind: 'none' }
@@ -12,10 +20,108 @@ type E2eImageProfile =
       prefixKey: string;
       expectFiles?: boolean;
     }
-  | {
-      kind: 'r2';
-      expectFiles?: false;
-    };
+  | { kind: E2eCloudImageKind; prefixKey?: string; expectFiles?: false };
+
+type E2eImageKind = E2eImageProfile['kind'];
+
+const env = process.env;
+const cloudPrefixKey = 'elog-e2e/';
+
+const imageProfiles: Record<E2eImageKind, E2eImageProfile> = {
+  none: { kind: 'none' },
+  local: {
+    kind: 'local',
+    outputDir: 'images',
+    prefixKey: '../images',
+    expectFiles: true,
+  },
+  b2: { kind: 'b2', prefixKey: cloudPrefixKey },
+  cos: { kind: 'cos', prefixKey: cloudPrefixKey },
+  github: { kind: 'github', prefixKey: cloudPrefixKey },
+  oss: { kind: 'oss', prefixKey: cloudPrefixKey },
+  qiniu: { kind: 'qiniu', prefixKey: cloudPrefixKey },
+  r2: { kind: 'r2', prefixKey: cloudPrefixKey },
+  upyun: { kind: 'upyun', prefixKey: cloudPrefixKey },
+};
+
+function createImagePlugins(image: E2eImageProfile): TransformPlugin[] {
+  if (image.kind === 'none') return [];
+  if (image.kind === 'local') {
+    return [
+      imageLocal({
+        outputDir: image.outputDir,
+        prefixKey: image.prefixKey,
+      }),
+    ];
+  }
+
+  return [
+    {
+      b2: () =>
+        imageB2({
+          host: env.ELOG_E2E_B2_HOST!,
+          applicationKeyId: env.ELOG_E2E_B2_APPLICATION_KEY_ID!,
+          applicationKey: env.ELOG_E2E_B2_APPLICATION_KEY!,
+          bucket: env.ELOG_E2E_B2_BUCKET!,
+          prefixKey: image.prefixKey,
+        }),
+      cos: () =>
+        imageCos({
+          secretId: env.ELOG_E2E_COS_SECRET_ID!,
+          secretKey: env.ELOG_E2E_COS_SECRET_KEY!,
+          bucket: env.ELOG_E2E_COS_BUCKET!,
+          region: env.ELOG_E2E_COS_REGION!,
+          host: env.ELOG_E2E_COS_HOST,
+          prefixKey: image.prefixKey,
+        }),
+      github: () =>
+        imageGithub({
+          user: env.ELOG_E2E_GITHUB_USER!,
+          token: env.ELOG_E2E_GITHUB_TOKEN!,
+          repo: env.ELOG_E2E_GITHUB_REPO!,
+          branch: env.ELOG_E2E_GITHUB_BRANCH,
+          host: env.ELOG_E2E_GITHUB_HOST,
+          prefixKey: image.prefixKey,
+        }),
+      oss: () =>
+        imageOss({
+          secretId: env.ELOG_E2E_OSS_SECRET_ID!,
+          secretKey: env.ELOG_E2E_OSS_SECRET_KEY!,
+          bucket: env.ELOG_E2E_OSS_BUCKET!,
+          region: env.ELOG_E2E_OSS_REGION!,
+          host: env.ELOG_E2E_OSS_HOST,
+          prefixKey: image.prefixKey,
+        }),
+      qiniu: () =>
+        imageQiniu({
+          secretId: env.ELOG_E2E_QINIU_SECRET_ID!,
+          secretKey: env.ELOG_E2E_QINIU_SECRET_KEY!,
+          bucket: env.ELOG_E2E_QINIU_BUCKET!,
+          region: env.ELOG_E2E_QINIU_REGION!,
+          host: env.ELOG_E2E_QINIU_HOST!,
+          prefixKey: image.prefixKey,
+        }),
+      r2: () =>
+        imageR2({
+          host: env.ELOG_E2E_R2_HOST!,
+          accessKeyId: env.ELOG_E2E_R2_ACCESS_KEY_ID!,
+          secretAccessKey: env.ELOG_E2E_R2_SECRET_ACCESS_KEY!,
+          bucket: env.ELOG_E2E_R2_BUCKET!,
+          endpoint: env.ELOG_E2E_R2_ENDPOINT!,
+          region: env.ELOG_E2E_R2_REGION,
+          prefixKey: image.prefixKey,
+        }),
+      upyun: () =>
+        imageUpyun({
+          bucket: env.ELOG_E2E_UPYUN_BUCKET!,
+          user: env.ELOG_E2E_UPYUN_USER!,
+          password: env.ELOG_E2E_UPYUN_PASSWORD!,
+          host: env.ELOG_E2E_UPYUN_HOST,
+          prefixKey: image.prefixKey,
+        }),
+    }[image.kind](),
+  ];
+}
 
 export const e2eProfile: {
   id: string;
@@ -26,12 +132,7 @@ export const e2eProfile: {
   id: 'yuque-pwd-to-local',
   cacheFile: 'elog.cache.json',
   docOutputDir: 'docs',
-  image: {
-    kind: 'local',
-    outputDir: 'images',
-    prefixKey: '../images',
-    expectFiles: true,
-  },
+  image: imageProfiles.local,
 };
 
 export default defineConfig({
@@ -44,25 +145,7 @@ export default defineConfig({
     repo: process.env.ELOG_E2E_YUQUE_REPO,
     onlyPublic: false,
   }),
-  plugins:
-    e2eProfile.image.kind === 'local'
-      ? [
-          imageLocal({
-            outputDir: e2eProfile.image.outputDir,
-            prefixKey: e2eProfile.image.prefixKey,
-          }),
-        ]
-      : e2eProfile.image.kind === 'r2'
-        ? [
-            imageR2({
-              host: process.env.ELOG_E2E_R2_HOST!,
-              accessKeyId: process.env.ELOG_E2E_R2_ACCESS_KEY_ID!,
-              secretAccessKey: process.env.ELOG_E2E_R2_SECRET_ACCESS_KEY!,
-              bucket: process.env.ELOG_E2E_R2_BUCKET!,
-              endpoint: process.env.ELOG_E2E_R2_ENDPOINT!,
-            }),
-          ]
-        : [],
+  plugins: createImagePlugins(e2eProfile.image),
   to: toLocal({
     outputDir: e2eProfile.docOutputDir,
     keepToc: true,

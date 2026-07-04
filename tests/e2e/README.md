@@ -44,9 +44,15 @@ Vitest 启动时会读取当前目录的 `.env`。从仓库根目录通过 `pnpm
 | 语雀 Token 登录 | `ELOG_E2E_YUQUE_TOKEN`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO` |
 | WordPress | `ELOG_E2E_WORDPRESS_ENDPOINT`, `ELOG_E2E_WORDPRESS_USERNAME`, `ELOG_E2E_WORDPRESS_PASSWORD` |
 | Halo | `ELOG_E2E_HALO_ENDPOINT`, `ELOG_E2E_HALO_TOKEN` |
+| B2 图床 | `ELOG_E2E_B2_HOST`, `ELOG_E2E_B2_APPLICATION_KEY_ID`, `ELOG_E2E_B2_APPLICATION_KEY`, `ELOG_E2E_B2_BUCKET` |
+| COS 图床 | `ELOG_E2E_COS_SECRET_ID`, `ELOG_E2E_COS_SECRET_KEY`, `ELOG_E2E_COS_BUCKET`, `ELOG_E2E_COS_REGION` |
+| GitHub 图床 | `ELOG_E2E_GITHUB_USER`, `ELOG_E2E_GITHUB_TOKEN`, `ELOG_E2E_GITHUB_REPO` |
+| OSS 图床 | `ELOG_E2E_OSS_SECRET_ID`, `ELOG_E2E_OSS_SECRET_KEY`, `ELOG_E2E_OSS_BUCKET`, `ELOG_E2E_OSS_REGION` |
+| 七牛云图床 | `ELOG_E2E_QINIU_SECRET_ID`, `ELOG_E2E_QINIU_SECRET_KEY`, `ELOG_E2E_QINIU_BUCKET`, `ELOG_E2E_QINIU_REGION`, `ELOG_E2E_QINIU_HOST` |
 | R2 图床 | `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
+| 又拍云图床 | `ELOG_E2E_UPYUN_BUCKET`, `ELOG_E2E_UPYUN_USER`, `ELOG_E2E_UPYUN_PASSWORD` |
 
-R2 变量只在对应 case 的 `e2eProfile.image` 改成 `{ kind: 'r2' }` 时需要。
+图床凭据只在对应 case 的 `e2eProfile.image` 选中云图床时需要。
 
 ## 推荐运行方式
 
@@ -86,21 +92,19 @@ pnpm exec elog sync --config cases/notion-to-local/elog.config.ts --env .env
 
 ## 图床插件
 
-图床配置放在每个 case 的 `elog.config.ts` 里，通过 `e2eProfile.image` 切换：
+语雀密码登录用例可以在 `elog.config.ts` 里切换图床：
 
 ```ts
-image: { kind: 'none' }
-image: { kind: 'local', outputDir: 'images', prefixKey: '../images', expectFiles: true }
-image: { kind: 'r2', expectFiles: false }
+image: imageProfiles.r2,
 ```
 
 断言会根据 `e2eProfile.image` 自动调整：
 
 - `none`：不检查图片输出。
 - `local` 且 `expectFiles: true`：检查 `outputDir` 下至少有图片文件。
-- `r2`：只检查同步流程成功，不检查本地图片文件。
+- 云图床：只检查同步流程成功，不检查本地图片文件。
 
-所以你可以在 `elog.config.ts` 里临时改 `outputDir`、`prefixKey` 或图床类型；只要 `e2eProfile` 和插件参数保持一致，case 不会因为路径变化误报。
+如果要改本地图片路径，继续改对应 case 的 `e2eProfile.image` 即可。
 
 ## 断言原则
 

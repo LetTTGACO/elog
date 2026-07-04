@@ -560,12 +560,30 @@ importers:
       '@elog/plugin-to-wordpress':
         specifier: workspace:*
         version: link:../../plugins/to/wordpress
+      '@elog/plugin-transform-image-b2':
+        specifier: workspace:*
+        version: link:../../plugins/transform/image-b2
+      '@elog/plugin-transform-image-cos':
+        specifier: workspace:*
+        version: link:../../plugins/transform/image-cos
+      '@elog/plugin-transform-image-github':
+        specifier: workspace:*
+        version: link:../../plugins/transform/image-github
       '@elog/plugin-transform-image-local':
         specifier: workspace:*
         version: link:../../plugins/transform/image-local
+      '@elog/plugin-transform-image-oss':
+        specifier: workspace:*
+        version: link:../../plugins/transform/image-oss
+      '@elog/plugin-transform-image-qiniu':
+        specifier: workspace:*
+        version: link:../../plugins/transform/image-qiniu
       '@elog/plugin-transform-image-r2':
         specifier: workspace:*
         version: link:../../plugins/transform/image-r2
+      '@elog/plugin-transform-image-upyun':
+        specifier: workspace:*
+        version: link:../../plugins/transform/image-upyun
     devDependencies:
       '@types/node':
         specifier: ~22.19.19
