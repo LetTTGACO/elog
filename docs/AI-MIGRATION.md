@@ -370,6 +370,11 @@ elog sync -c elog.config.1x.ts
 | `pathFollowDoc.docOutputDir` | `deploy.local.outputDir` | 文档输出目录，用于计算相对图片路径。 |
 | `propertyImageFields` | 旧 `formatExt` 中处理的属性图片 | 例如 Notion cover 迁移为 `['cover']`。 |
 
+`pathFollowDoc` 只用于本地图床相对路径。开启后 `prefixKey` 会失效，且需要保证
+`pathFollowDoc.docOutputDir` 等于最终文档输出根目录，文档最终目录结构等于
+`docOutputDir + docStructure`。如果目标是 `toLocal`，需要同时开启 `keepToc: true`；
+`keepToc: false` 时不要开启 `pathFollowDoc`，直接配置 `prefixKey`。
+
 #### `imageCos(options)`
 
 字段：`secretId`、`secretKey`、`bucket`、`region`、`host`、`prefixKey`、`disable`、`limit`、`propertyImageFields`。
