@@ -23,7 +23,7 @@ export const e2eProfile: {
   docOutputDir: string;
   image: E2eImageProfile;
 } = {
-  id: 'yuque-to-local',
+  id: 'yuque-pwd-to-local',
   cacheFile: 'elog.cache.json',
   docOutputDir: 'docs',
   image: {

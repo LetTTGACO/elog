@@ -15,7 +15,7 @@
 | 用例 | 作用 | 必需环境变量 |
 | --- | --- | --- |
 | `notion-to-local` | 测 Notion 下载和本地部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID` |
-| `yuque-to-local` | 测语雀下载和本地部署 | `ELOG_E2E_YUQUE_USERNAME`, `ELOG_E2E_YUQUE_PWD`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO` |
+| `yuque-pwd-to-local` | 测语雀密码登录下载和本地部署 | `ELOG_E2E_YUQUE_USERNAME`, `ELOG_E2E_YUQUE_PWD`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO` |
 | `notion-to-wordpress` | 测 WordPress 部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID`, `ELOG_E2E_WORDPRESS_ENDPOINT`, `ELOG_E2E_WORDPRESS_USERNAME`, `ELOG_E2E_WORDPRESS_PASSWORD` |
 | `notion-to-halo` | 测 Halo 部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID`, `ELOG_E2E_HALO_ENDPOINT`, `ELOG_E2E_HALO_TOKEN` |
 
@@ -53,7 +53,7 @@ R2 变量只在对应 case 的 `e2eProfile.image` 改成 `{ kind: 'r2' }` 时需
 ```bash
 pnpm e2e:cli
 pnpm e2e:notion-local
-pnpm e2e:yuque-local
+pnpm e2e:yuque-pwd-local
 pnpm e2e:notion-wordpress
 pnpm e2e:notion-halo
 ```
@@ -68,7 +68,7 @@ pnpm e2e
 
 ```bash
 pnpm run test:notion-local
-pnpm run test:yuque-local
+pnpm run test:yuque-pwd-local
 pnpm run test:notion-wordpress
 pnpm run test:notion-halo
 ```
