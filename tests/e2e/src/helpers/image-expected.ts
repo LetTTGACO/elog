@@ -5,7 +5,10 @@ export type E2eImageProfile =
   | {
       kind: 'local';
       outputDir: string;
-      prefixKey: string;
+      pathFollowDoc?: {
+        enable: boolean;
+        docOutputDir: string;
+      };
       expectFiles?: boolean;
     }
   | {

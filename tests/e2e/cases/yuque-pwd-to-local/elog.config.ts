@@ -17,7 +17,10 @@ type E2eImageProfile =
   | {
       kind: 'local';
       outputDir: string;
-      prefixKey: string;
+      pathFollowDoc?: {
+        enable: boolean;
+        docOutputDir: string;
+      };
       expectFiles?: boolean;
     }
   | { kind: E2eCloudImageKind; prefixKey?: string; expectFiles?: false };
@@ -25,6 +28,7 @@ type E2eImageProfile =
 type E2eImageKind = E2eImageProfile['kind'];
 
 const env = process.env;
+const docOutputDir = 'docs';
 const cloudPrefixKey = 'elog-e2e/';
 
 const imageProfiles: Record<E2eImageKind, E2eImageProfile> = {
@@ -32,7 +36,10 @@ const imageProfiles: Record<E2eImageKind, E2eImageProfile> = {
   local: {
     kind: 'local',
     outputDir: 'images',
-    prefixKey: '../images',
+    pathFollowDoc: {
+      enable: true,
+      docOutputDir,
+    },
     expectFiles: true,
   },
   b2: { kind: 'b2', prefixKey: cloudPrefixKey },
@@ -50,7 +57,7 @@ function createImagePlugins(image: E2eImageProfile): TransformPlugin[] {
     return [
       imageLocal({
         outputDir: image.outputDir,
-        prefixKey: image.prefixKey,
+        pathFollowDoc: image.pathFollowDoc,
       }),
     ];
   }
@@ -131,7 +138,7 @@ export const e2eProfile: {
 } = {
   id: 'yuque-pwd-to-local',
   cacheFile: 'elog.cache.json',
-  docOutputDir: 'docs',
+  docOutputDir,
   image: imageProfiles.local,
 };
 
@@ -142,7 +149,7 @@ export default defineConfig({
     username: process.env.ELOG_E2E_YUQUE_USERNAME,
     password: process.env.ELOG_E2E_YUQUE_PWD,
     login: process.env.ELOG_E2E_YUQUE_LOGIN,
-    repo: process.env.ELOG_E2E_YUQUE_REPO,
+    repo: process.env.ELOG_E2E_YUQUE_REPO_TOC,
     onlyPublic: false,
   }),
   plugins: createImagePlugins(e2eProfile.image),
