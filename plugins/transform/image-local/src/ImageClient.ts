@@ -79,7 +79,9 @@ export default class ImageClient extends ElogImageContext {
     const uploader: ImageUploader = {
       hasImage: async () => undefined,
       uploadImage: async (fileName, buffer, doc) => {
-        const fileType = this.ctx.image.getFileTypeFromBuffer(buffer);
+        const fileType = /\.[a-z0-9]+$/i.test(fileName)
+          ? undefined
+          : this.ctx.image.getFileTypeFromBuffer(buffer);
         const fullName = fileType ? `${fileName}.${fileType.type}` : fileName;
         return this.writeImageToLocal(buffer, fullName, doc!);
       },

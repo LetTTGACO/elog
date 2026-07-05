@@ -115,7 +115,6 @@ export const transformImagesFunc = async (options: TransformImageOptions) => {
         }
         return undefined;
       }
-      // 完整文件名用于 hasImage 检查，uploadImage 仍沿用历史接口传入无后缀名。
       const fullName = `${fileName}.${fileType.type}`;
       // 图床已存在时直接复用，避免重复上传和产生不稳定 URL。
       let exist = await imageClient.hasImage(fullName);
@@ -144,7 +143,7 @@ export const transformImagesFunc = async (options: TransformImageOptions) => {
           return undefined;
         }
         // 上传失败时回退原图地址，保持正文可用但不误报替换成功。
-        let url = await imageClient.uploadImage(fileName, buffer, doc);
+        let url = await imageClient.uploadImage(fullName, buffer, doc);
         if (!url) {
           if (image.type === 'url') {
             out.warn(`${doc?.properties?.title} 存在上传图片失败：${image.data}`);
