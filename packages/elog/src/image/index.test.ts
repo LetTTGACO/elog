@@ -42,14 +42,12 @@ describe('getBufferFromUrl', () => {
     requestMock.mockResolvedValue({ data: Buffer.from('image') });
 
     await getBufferFromUrl('https://static.flowus.cn/image.png');
+    await getBufferFromUrl('https://static.flowus.net.cn/image.png');
     await getBufferFromUrl('https://example.com/image.png');
 
-    expect(requestMock.mock.calls[0][1]).toEqual(
-      expect.objectContaining({
-        headers: { referer: 'https://flowus.cn/' },
-      }),
-    );
-    expect(requestMock.mock.calls[1][1]).not.toHaveProperty('headers');
+    expect(requestMock.mock.calls[0][1]).toHaveProperty('headers.referer', 'https://flowus.cn/');
+    expect(requestMock.mock.calls[1][1]).toHaveProperty('headers.referer', 'https://flowus.cn/');
+    expect(requestMock.mock.calls[2][1]).not.toHaveProperty('headers');
   });
 });
 

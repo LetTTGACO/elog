@@ -186,7 +186,12 @@ export const getBufferFromUrl = async (url: string, options?: any) => {
 const getFlowUsImageHeaders = (url: string) => {
   try {
     const hostname = new URL(url).hostname.toLowerCase();
-    if (hostname === 'flowus.cn' || hostname.endsWith('.flowus.cn')) {
+    if (
+      hostname === 'flowus.cn' ||
+      hostname.endsWith('.flowus.cn') ||
+      hostname === 'flowus.net.cn' ||
+      hostname.endsWith('.flowus.net.cn')
+    ) {
       return { referer: 'https://flowus.cn/' };
     }
   } catch {}
