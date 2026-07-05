@@ -12,7 +12,9 @@ describe('FeiShuApi image resources', () => {
     });
     api.feishu = {
       getPageBlocks: vi.fn().mockResolvedValue([]),
-      getResourceItem: vi.fn().mockResolvedValue({ buffer: { data: image }, name: 'diagram.png' }),
+      getResourceItem: vi
+        .fn()
+        .mockResolvedValue({ buffer: { data: image }, type: 'png', name: 'diagram.png' }),
     } as any;
     api.f2m = {
       toMarkdownString: () => '![diagram](image-token)',
