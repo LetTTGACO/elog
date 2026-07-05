@@ -48,16 +48,17 @@ export default class COSApi extends ElogBaseContext {
    * @param buffer
    */
   async uploadImage(fileName: string, buffer: Buffer) {
+    const key = `${this.config.prefixKey}${fileName}`;
     try {
       const res = await this.api!.putObject({
         Bucket: this.config.bucket, // 存储桶名字（必须）
         Region: this.config.region, // 存储桶所在地域，必须字段
-        Key: `${this.config.prefixKey}/${fileName}`, //  文件名  必须
+        Key: key, //  文件名  必须
         StorageClass: 'STANDARD', // 上传模式（标准模式）
         Body: buffer, // 上传文件对象
       });
       if (this.config.host) {
-        return `https://${this.config.host}/${this.config.prefixKey}${fileName}`;
+        return `https://${this.config.host}/${key}`;
       }
       return `https://${res.Location}`;
     } catch (e: any) {
