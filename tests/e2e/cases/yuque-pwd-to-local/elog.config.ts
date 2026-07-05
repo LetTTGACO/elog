@@ -29,7 +29,7 @@ type E2eImageKind = E2eImageProfile['kind'];
 
 const env = process.env;
 const docOutputDir = 'docs';
-const cloudPrefixKey = 'elog-e2e/';
+const cloudPrefixKey = 'elog-e2e/yuque-pwd/';
 
 const imageProfiles: Record<E2eImageKind, E2eImageProfile> = {
   none: { kind: 'none' },

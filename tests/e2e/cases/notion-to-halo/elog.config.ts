@@ -54,7 +54,7 @@ export default defineConfig({
               secretAccessKey: process.env.ELOG_E2E_R2_SECRET_ACCESS_KEY!,
               bucket: process.env.ELOG_E2E_R2_BUCKET!,
               endpoint: process.env.ELOG_E2E_R2_ENDPOINT!,
-              prefixKey: 'elog-e2e/',
+              prefixKey: 'elog-e2e/notion/',
             }),
           ]
         : [],

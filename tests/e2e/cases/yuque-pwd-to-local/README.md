@@ -8,7 +8,7 @@
 
 - `e2eProfile.image`: 可以在 `imageProfiles.local`、`b2`、`cos`、`github`、`oss`、`qiniu`、`r2`、`upyun`、`none` 之间切换。`case.ts` 会根据这里的 `kind` 自动追加对应图床环境变量。
 - `imageProfiles.local.outputDir`: 可以改成本地图床输出目录，例如 `images`、`assets`。现有断言会按这个值重新计算 Markdown 图片链接前缀。
-- 云图床 profile 的 `prefixKey`: 可以改上传前缀。当前统一用 `cloudPrefixKey = 'elog-e2e/'`，也可以给某个云图床单独写值。
+- 云图床 profile 的 `prefixKey`: 可以改上传前缀。当前统一用 `cloudPrefixKey = 'elog-e2e/yuque-pwd/'`，也可以给某个云图床单独写值。
 - 云图床插件里的可选字段，例如 `host`、`branch`、`region`: 可以按对应插件能力和环境变量调整。
 - `cacheFile`: 可以改缓存文件名，`case.ts` 读取 `e2eProfile.cacheFile`，会跟着变。
 
