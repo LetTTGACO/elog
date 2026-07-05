@@ -551,6 +551,12 @@ importers:
       '@elog/cli':
         specifier: workspace:*
         version: link:../../packages/elog
+      '@elog/plugin-from-feishu-space':
+        specifier: workspace:*
+        version: link:../../plugins/from/feishu-space
+      '@elog/plugin-from-feishu-wiki':
+        specifier: workspace:*
+        version: link:../../plugins/from/feishu-wiki
       '@elog/plugin-from-notion':
         specifier: workspace:*
         version: link:../../plugins/from/notion
