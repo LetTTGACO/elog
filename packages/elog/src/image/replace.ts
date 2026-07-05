@@ -5,6 +5,7 @@ import {
   getBaseUrl,
   getBufferFromUrl,
   getFileType,
+  getImageDataUrl,
   getUrlListFromContent,
 } from './index';
 import { ImageSource, ImageUploader, ImageUrl } from '../types/image';
@@ -112,6 +113,7 @@ export const transformImagesFunc = async (options: TransformImageOptions) => {
           out.warn(`${doc?.properties?.title} 存在获取图片类型失败，跳过：${image.data}`);
         } else {
           out.warn(`${doc?.properties?.title} 存在获取图片类型失败`);
+          failBack?.(image);
         }
         return undefined;
       }
@@ -127,14 +129,10 @@ export const transformImagesFunc = async (options: TransformImageOptions) => {
           url: exist,
         };
       } else {
-        let buffer = null;
+        let buffer: Buffer | undefined;
         if (image.type === 'base64') {
           // base64 图片不需要网络下载，直接转换为上传 buffer。
-          const buffer = Buffer.from(image.data, 'base64');
-          if (!buffer) {
-            failBack?.(image);
-            return undefined;
-          }
+          buffer = getImageDataUrl(image.data)?.buffer;
         } else {
           buffer = await getBufferFromUrl(image.originalUrl);
         }

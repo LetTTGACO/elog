@@ -1,7 +1,7 @@
 import { ImageGithubConfig } from './types';
 import { ElogBaseContext, PluginContext } from '@elog/cli';
 
-export default class COSApi extends ElogBaseContext {
+export default class GithubApi extends ElogBaseContext {
   private readonly config: ImageGithubConfig;
   constructor(config: ImageGithubConfig, ctx: PluginContext) {
     super(ctx);

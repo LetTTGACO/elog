@@ -89,14 +89,27 @@ export default class FeiShuApi extends ElogBaseContext {
     };
   }
 
-  /**
-   * Buffer 转 base64
-   * @param token
-   */
   async bufferToBase64(token: string) {
     const res = await this.feishu.getResourceItem(token);
-    const buffer = res.buffer as unknown as Buffer;
-    // buffer 转 base64
-    return buffer.toString('base64');
+    const buffer = getResourceBuffer(res);
+    const name = getResourceName(res, token);
+    return `data:image/${getImageSubtype(name)};base64,${buffer.toString('base64')}`;
   }
 }
+
+const getResourceBuffer = (res: unknown) => {
+  const item = res as { buffer?: Buffer | { data?: Buffer } };
+  return Buffer.isBuffer(item.buffer) ? item.buffer : (item.buffer?.data as Buffer);
+};
+
+const getResourceName = (res: unknown, fallback: string) => {
+  const item = res as { name?: string; filename?: string; fileName?: string };
+  return item.name || item.filename || item.fileName || fallback;
+};
+
+const getImageSubtype = (name: string) => {
+  const filename = name.split(/[?#]/)[0].split('/').pop();
+  const extIndex = filename?.lastIndexOf('.') ?? -1;
+  const ext = extIndex > 0 ? filename?.substring(extIndex + 1).toLowerCase() : undefined;
+  return ext && /^[a-z0-9]+$/.test(ext) ? ext : 'png';
+};

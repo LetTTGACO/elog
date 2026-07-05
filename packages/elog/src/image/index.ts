@@ -9,28 +9,41 @@ interface FileType {
   name?: string;
 }
 
+const IMAGE_DATA_URL_REG = /^data:image\/([a-zA-Z0-9.+-]+);base64,([A-Za-z0-9+/]+={0,2})$/;
+
+export const getImageDataUrl = (url: string) => {
+  const res = url.match(IMAGE_DATA_URL_REG);
+  if (!res) {
+    return undefined;
+  }
+  const payload = res[2];
+  const buffer = Buffer.from(payload, 'base64');
+  if (
+    !buffer.length ||
+    buffer.toString('base64').replace(/=+$/, '') !== payload.replace(/=+$/, '')
+  ) {
+    return undefined;
+  }
+  return {
+    type: res[1],
+    payload,
+    buffer,
+  };
+};
+
 /**
  * 通过图片 url 获取文件 type（不含 "."），优先使用 URL 文件名避免额外下载。
  * @param url
  * @param needError
  */
 export const getFileTypeFromUrl = (url: string, needError = true) => {
-  const reg = /[^/]+(?!.*\/)/g;
-  const imgName = url
-    .match(reg)
-    ?.filter((item) => item)
-    .pop();
-  // 去除#
-  let filename = '';
-  let filetype = '';
+  const imgName = cleanUrlParam(url).split('/').filter(Boolean).pop();
   if (imgName) {
-    const imgL = imgName.split('.');
-    if (imgL.length > 1) {
-      filename = imgName.split('.')[0];
-      filetype = imgName.split('.')[1].split('?')[0].split('#')[0];
+    const extIndex = imgName.lastIndexOf('.');
+    if (extIndex > 0 && extIndex < imgName.length - 1) {
       return {
-        name: filename,
-        type: filetype,
+        name: imgName.substring(0, extIndex),
+        type: imgName.substring(extIndex + 1),
       };
     } else {
       // needError 用于探测式调用，避免降级到 buffer 识别前产生噪声日志。
@@ -56,18 +69,7 @@ export const getFileTypeFromBuffer = (buffer: Buffer): FileType | undefined => {
  * @param originalUrl
  */
 export const cleanUrlParam = (originalUrl: string) => {
-  let newUrl = originalUrl;
-  // 去除#号
-  const indexPoundSign = originalUrl.indexOf('#');
-  if (indexPoundSign !== -1) {
-    newUrl = originalUrl.substring(0, indexPoundSign);
-  }
-  // 去除?号
-  const indexQuestionMark = originalUrl.indexOf('?');
-  if (indexQuestionMark !== -1) {
-    newUrl = originalUrl.substring(0, indexQuestionMark);
-  }
-  return newUrl;
+  return originalUrl.split(/[?#]/)[0];
 };
 
 /**
@@ -139,13 +141,13 @@ export const formatImagePrefix = (prefix?: string): string => {
 export const getFileType = async (url: string) => {
   // 从 base64 中获取文件类型
   if (url.startsWith('data:')) {
-    const base64Reg = /^data:image\/(\w+);base64,/;
-    const res = url.match(base64Reg);
-    if (res) {
+    const dataUrl = getImageDataUrl(url);
+    if (dataUrl) {
       return {
-        type: res[1],
+        type: dataUrl.type,
       };
     }
+    return undefined;
   }
   let fileType: FileType | undefined = getFileTypeFromUrl(url, false);
   if (!fileType) {
@@ -164,13 +166,29 @@ export const getFileType = async (url: string) => {
  */
 export const getBufferFromUrl = async (url: string, options?: any) => {
   try {
+    const flowUsHeaders = getFlowUsImageHeaders(url);
+    const headers = {
+      ...options?.headers,
+      ...flowUsHeaders,
+    };
     const res = await request<Buffer>(url, {
       dataType: 'buffer',
       ...options,
+      ...(Object.keys(headers).length ? { headers } : {}),
     });
     out.info('下载成功', url);
     return res.data;
   } catch (e: any) {
     out.warn(`下载失败: ${url}，${e.message}`);
   }
+};
+
+const getFlowUsImageHeaders = (url: string) => {
+  try {
+    const hostname = new URL(url).hostname.toLowerCase();
+    if (hostname === 'flowus.cn' || hostname.endsWith('.flowus.cn')) {
+      return { referer: 'https://flowus.cn/' };
+    }
+  } catch {}
+  return {};
 };

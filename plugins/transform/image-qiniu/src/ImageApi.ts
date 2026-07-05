@@ -2,7 +2,7 @@ import { ImageQiniuConfig } from './types';
 import { ElogBaseContext, PluginContext } from '@elog/cli';
 import * as qiniu from 'qiniu';
 
-export default class COSApi extends ElogBaseContext {
+export default class QiniuApi extends ElogBaseContext {
   private readonly config: ImageQiniuConfig;
   uploadToken?: string;
   bucketManager?: qiniu.rs.BucketManager;

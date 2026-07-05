@@ -2,7 +2,7 @@ import { ImageUPYunConfig } from './types';
 import { ElogBaseContext, PluginContext } from '@elog/cli';
 import UPYun from 'upyun';
 
-export default class COSApi extends ElogBaseContext {
+export default class UPYunApi extends ElogBaseContext {
   private readonly config: ImageUPYunConfig;
   private readonly api: UPYun.Client;
   constructor(config: ImageUPYunConfig, ctx: PluginContext) {
