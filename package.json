@@ -28,6 +28,8 @@
     "e2e:cli": "pnpm --filter @elog/e2e test:cli",
     "e2e:feishu-wiki-local": "pnpm --filter @elog/e2e test:feishu-wiki-local",
     "e2e:feishu-space-r2-local": "pnpm --filter @elog/e2e test:feishu-space-r2-local",
+    "e2e:flowus-local": "pnpm --filter @elog/e2e test:flowus-local",
+    "e2e:flowus-r2-local": "pnpm --filter @elog/e2e test:flowus-r2-local",
     "e2e:notion-local": "pnpm --filter @elog/e2e test:notion-local",
     "e2e:yuque-pwd-local": "pnpm --filter @elog/e2e test:yuque-pwd-local",
     "e2e:yuque-token-local": "pnpm --filter @elog/e2e test:yuque-token-local",

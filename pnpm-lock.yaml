@@ -557,6 +557,9 @@ importers:
       '@elog/plugin-from-feishu-wiki':
         specifier: workspace:*
         version: link:../../plugins/from/feishu-wiki
+      '@elog/plugin-from-flowus':
+        specifier: workspace:*
+        version: link:../../plugins/from/flowus
       '@elog/plugin-from-notion':
         specifier: workspace:*
         version: link:../../plugins/from/notion
