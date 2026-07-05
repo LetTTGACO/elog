@@ -8,6 +8,8 @@ import {
 import type { SyncCase } from '../../src/helpers/types';
 import { e2eProfile } from './elog.config';
 
+// FlowUs now requires a paid account for this path. Keep this e2e as optional
+// manual coverage while FlowUs support is paused.
 function collectFiles(directory: string, predicate: (file: string) => boolean): string[] {
   const files: string[] = [];
 

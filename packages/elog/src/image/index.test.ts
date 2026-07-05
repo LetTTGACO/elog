@@ -37,18 +37,6 @@ describe('getBufferFromUrl', () => {
       expect.objectContaining({ dataType: 'buffer' }),
     );
   });
-
-  it('sends the FlowUs referer only for FlowUs image hosts', async () => {
-    requestMock.mockResolvedValue({ data: Buffer.from('image') });
-
-    await getBufferFromUrl('https://static.flowus.cn/image.png');
-    await getBufferFromUrl('https://static.flowus.net.cn/image.png');
-    await getBufferFromUrl('https://example.com/image.png');
-
-    expect(requestMock.mock.calls[0][1]).toHaveProperty('headers.referer', 'https://flowus.cn/');
-    expect(requestMock.mock.calls[1][1]).toHaveProperty('headers.referer', 'https://flowus.cn/');
-    expect(requestMock.mock.calls[2][1]).not.toHaveProperty('headers');
-  });
 });
 
 describe('getFileTypeFromUrl', () => {

@@ -166,11 +166,7 @@ export const getFileType = async (url: string) => {
  */
 export const getBufferFromUrl = async (url: string, options?: any) => {
   try {
-    const flowUsHeaders = getFlowUsImageHeaders(url);
-    const headers = {
-      ...options?.headers,
-      ...flowUsHeaders,
-    };
+    const headers = options?.headers ?? {};
     const res = await request<Buffer>(url, {
       dataType: 'buffer',
       ...options,
@@ -183,17 +179,19 @@ export const getBufferFromUrl = async (url: string, options?: any) => {
   }
 };
 
-const getFlowUsImageHeaders = (url: string) => {
-  try {
-    const hostname = new URL(url).hostname.toLowerCase();
-    if (
-      hostname === 'flowus.cn' ||
-      hostname.endsWith('.flowus.cn') ||
-      hostname === 'flowus.net.cn' ||
-      hostname.endsWith('.flowus.net.cn')
-    ) {
-      return { referer: 'https://flowus.cn/' };
-    }
-  } catch {}
-  return {};
-};
+// ponytail: FlowUs is member-gated and currently unmaintained; keep this special
+// case out of the global image pipeline until FlowUs support has an owner again.
+// const getFlowUsImageHeaders = (url: string) => {
+//   try {
+//     const hostname = new URL(url).hostname.toLowerCase();
+//     if (
+//       hostname === 'flowus.cn' ||
+//       hostname.endsWith('.flowus.cn') ||
+//       hostname === 'flowus.net.cn' ||
+//       hostname.endsWith('.flowus.net.cn')
+//     ) {
+//       return { referer: 'https://flowus.cn/' };
+//     }
+//   } catch {}
+//   return {};
+// };

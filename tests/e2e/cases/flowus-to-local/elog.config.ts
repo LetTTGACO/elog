@@ -4,6 +4,8 @@ import imageLocal from '@elog/plugin-transform-image-local';
 import imageR2 from '@elog/plugin-transform-image-r2';
 import toLocal from '@elog/plugin-to-local';
 
+// FlowUs support is currently paused: the real platform path is member-gated
+// and should stay as manual e2e coverage, not a required maintenance surface.
 type E2eImageProfile =
   | {
       kind: 'local';

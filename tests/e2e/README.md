@@ -17,7 +17,6 @@
 | `notion-to-local` | 测 Notion 下载和本地部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID` |
 | `feishu-wiki-to-local` | 测飞书 Wiki 下载、本地图床和本地部署 | `ELOG_E2E_FEISHU_APP_ID`, `ELOG_E2E_FEISHU_APP_SECRET`, `ELOG_E2E_FEISHU_WIKI_ID` |
 | `feishu-space-r2-to-local` | 测飞书 Space 下载、R2 图床和本地部署 | `ELOG_E2E_FEISHU_APP_ID`, `ELOG_E2E_FEISHU_APP_SECRET`, `ELOG_E2E_FEISHU_SPACE_FOLDER_TOKEN`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
-| `flowus-to-local` | 测 FlowUs 下载、本地图床或 R2 图床和本地部署 | `ELOG_E2E_FLOWUS_TABLE_PAGE_ID`，R2 模式另需 `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
 | `yuque-pwd-to-local` | 测语雀密码登录、目录结构图片路径和本地部署 | `ELOG_E2E_YUQUE_USERNAME`, `ELOG_E2E_YUQUE_PWD`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO_TOC` |
 | `yuque-token-to-local` | 测语雀 Token 登录下载和本地部署 | `ELOG_E2E_YUQUE_TOKEN`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO` |
 | `notion-to-wordpress` | 测 WordPress 部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID`, `ELOG_E2E_WORDPRESS_ENDPOINT`, `ELOG_E2E_WORDPRESS_USERNAME`, `ELOG_E2E_WORDPRESS_PASSWORD` |
@@ -37,7 +36,6 @@ Vitest 启动时会读取当前目录的 `.env`。从仓库根目录通过 `pnpm
 | `ELOG_E2E_CASE` | 只运行指定同步用例。通常由 `test:notion-local` 等脚本自动设置。 |
 | `ELOG_E2E_STREAM_OUTPUT=1` | 同步时把真实 CLI stdout/stderr 实时输出到控制台，同时仍保留断言捕获。也兼容 `true`。 |
 | `ELOG_E2E_KEEP_TMP=1` | 测试通过后也保留 `.tmp` 临时 workspace，便于调试产物。失败时默认会保留。也兼容 `true`。 |
-| `ELOG_E2E_FLOWUS_IMAGE=local\|r2` | FlowUs 用例选择本地图床或 R2 图床；不设置时默认 `local`。 |
 
 平台凭据变量：
 
@@ -45,7 +43,6 @@ Vitest 启动时会读取当前目录的 `.env`。从仓库根目录通过 `pnpm
 | --- | --- |
 | Notion | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID` |
 | 飞书 | `ELOG_E2E_FEISHU_APP_ID`, `ELOG_E2E_FEISHU_APP_SECRET`, `ELOG_E2E_FEISHU_WIKI_ID`, `ELOG_E2E_FEISHU_WIKI_FOLDER_TOKEN`, `ELOG_E2E_FEISHU_SPACE_FOLDER_TOKEN`, `ELOG_E2E_FEISHU_BASE_URL` |
-| FlowUs | `ELOG_E2E_FLOWUS_TABLE_PAGE_ID` |
 | 语雀密码登录 | `ELOG_E2E_YUQUE_USERNAME`, `ELOG_E2E_YUQUE_PWD`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO_TOC` |
 | 语雀 Token 登录 | `ELOG_E2E_YUQUE_TOKEN`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO` |
 | WordPress | `ELOG_E2E_WORDPRESS_ENDPOINT`, `ELOG_E2E_WORDPRESS_USERNAME`, `ELOG_E2E_WORDPRESS_PASSWORD` |
@@ -68,8 +65,6 @@ Vitest 启动时会读取当前目录的 `.env`。从仓库根目录通过 `pnpm
 pnpm e2e:cli
 pnpm e2e:feishu-wiki-local
 pnpm e2e:feishu-space-r2-local
-pnpm e2e:flowus-local
-pnpm e2e:flowus-r2-local
 pnpm e2e:notion-local
 pnpm e2e:yuque-pwd-local
 pnpm e2e:yuque-token-local
@@ -89,8 +84,6 @@ pnpm e2e
 pnpm run test:notion-local
 pnpm run test:feishu-wiki-local
 pnpm run test:feishu-space-r2-local
-pnpm run test:flowus-local
-pnpm run test:flowus-r2-local
 pnpm run test:yuque-pwd-local
 pnpm run test:yuque-token-local
 pnpm run test:notion-wordpress
