@@ -22,6 +22,7 @@ export default defineConfig({
     wikiId: process.env.ELOG_E2E_FEISHU_WIKI_ID,
     folderToken: process.env.ELOG_E2E_FEISHU_WIKI_FOLDER_TOKEN,
     baseUrl: process.env.ELOG_E2E_FEISHU_BASE_URL,
+    disableParentDoc: true,
   }),
   plugins: [
     imageLocal({
@@ -33,5 +34,6 @@ export default defineConfig({
     outputDir: e2eProfile.docOutputDir,
     filename: 'title',
     frontMatter: { enable: true },
+    keepToc: true,
   }),
 });

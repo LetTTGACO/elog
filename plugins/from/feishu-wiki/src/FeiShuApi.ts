@@ -58,10 +58,10 @@ export default class FeiShuApi extends ElogBaseContext {
             updateTime: Number(item.obj_edit_time + '000'),
             catalog: level > 0 ? newCatalog : [],
           };
-          // 首先检查 item 是否没有 children 属性，或者 self.config.disableParentDoc 是否不为 true。
+          // 首先检查 item 是否没有实际子节点，或者 self.config.disableParentDoc 是否不为 true。
           // 如果这两个条件中的任何一个为 true，那么 doc 对象就会被添加到 self.catalog 数组中
           // disableParentDoc 就是为了控制当父文档下存在文档时，父文档需不需要下载
-          if (!item.children || !self.config.disableParentDoc) {
+          if (!item.children?.length || !self.config.disableParentDoc) {
             sortedDocList.push(doc);
           }
         }
