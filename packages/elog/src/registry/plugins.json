@@ -182,6 +182,126 @@
       }
     },
     {
+      "kind": "from",
+      "type": "feishu-wiki",
+      "displayName": "飞书 Wiki",
+      "packageName": "@elog/plugin-from-feishu-wiki",
+      "importName": "fromFeishuWiki",
+      "optionsSchema": {
+        "type": "object",
+        "required": ["appId", "appSecret", "wikiId"],
+        "properties": {
+          "appId": {
+            "type": "string",
+            "title": "飞书 App ID",
+            "x-elog-env": "FEISHU_APP_ID",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入飞书 App ID"
+            }
+          },
+          "appSecret": {
+            "type": "string",
+            "title": "飞书 App Secret",
+            "x-elog-env": "FEISHU_APP_SECRET",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入飞书 App Secret"
+            }
+          },
+          "wikiId": {
+            "type": "string",
+            "title": "飞书知识库 ID",
+            "x-elog-env": "FEISHU_WIKI_ID",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入飞书知识库 ID"
+            }
+          },
+          "folderToken": {
+            "type": "string",
+            "title": "飞书知识库节点 Token",
+            "x-elog-env": "FEISHU_WIKI_FOLDER_TOKEN",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入飞书知识库节点 Token"
+            }
+          },
+          "disableParentDoc": {
+            "type": "boolean",
+            "title": "跳过父级文档",
+            "default": false,
+            "x-elog-prompt": {
+              "type": "confirm",
+              "message": "父级文档下存在子文档时，是否跳过父级文档？"
+            }
+          },
+          "baseUrl": {
+            "type": "string",
+            "title": "飞书 API Base URL",
+            "x-elog-env": "FEISHU_BASE_URL",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入飞书 API Base URL"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "kind": "from",
+      "type": "feishu-space",
+      "displayName": "飞书云空间",
+      "packageName": "@elog/plugin-from-feishu-space",
+      "importName": "fromFeishuSpace",
+      "optionsSchema": {
+        "type": "object",
+        "required": ["appId", "appSecret", "folderToken"],
+        "properties": {
+          "appId": {
+            "type": "string",
+            "title": "飞书 App ID",
+            "x-elog-env": "FEISHU_APP_ID",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入飞书 App ID"
+            }
+          },
+          "appSecret": {
+            "type": "string",
+            "title": "飞书 App Secret",
+            "x-elog-env": "FEISHU_APP_SECRET",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入飞书 App Secret"
+            }
+          },
+          "folderToken": {
+            "type": "string",
+            "title": "飞书文件夹 Token",
+            "x-elog-env": "FEISHU_SPACE_FOLDER_TOKEN",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入飞书文件夹 Token"
+            }
+          },
+          "baseUrl": {
+            "type": "string",
+            "title": "飞书 API Base URL",
+            "x-elog-env": "FEISHU_BASE_URL",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入飞书 API Base URL"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
       "kind": "transform",
       "type": "image-cos",
       "displayName": "腾讯云 COS 图床",

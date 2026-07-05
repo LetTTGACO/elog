@@ -16,6 +16,8 @@
       "@elog/cli",
       "@elog/shared",
       "@elog/plugin-from-notion",
+      "@elog/plugin-from-feishu-wiki",
+      "@elog/plugin-from-feishu-space",
       "@elog/plugin-from-yuque-token",
       "@elog/plugin-from-yuque-pwd",
       "@elog/plugin-transform-image-local",

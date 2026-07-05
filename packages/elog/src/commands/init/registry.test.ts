@@ -109,6 +109,18 @@ describe('loadBuiltInPluginRegistry', () => {
         importName: 'fromYuque',
       },
       {
+        kind: 'from',
+        type: 'feishu-wiki',
+        packageName: '@elog/plugin-from-feishu-wiki',
+        importName: 'fromFeishuWiki',
+      },
+      {
+        kind: 'from',
+        type: 'feishu-space',
+        packageName: '@elog/plugin-from-feishu-space',
+        importName: 'fromFeishuSpace',
+      },
+      {
         kind: 'transform',
         type: 'image-local',
         packageName: '@elog/plugin-transform-image-local',

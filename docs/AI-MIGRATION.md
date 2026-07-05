@@ -4,7 +4,7 @@
 
 ## 给 AI 的第一原则
 
-- 只迁移本文明确支持的路径：Notion / 语雀 Token / 语雀账号密码 -> Local -> 官方图片插件。
+- 只迁移本文明确支持的路径：Notion / 语雀 Token / 语雀账号密码 / 飞书 -> Local -> 官方图片插件。
 - 不要覆盖用户现有的 0.x 配置文件。新建 1.0 配置文件。
 - 不要复制 `.env` 里的敏感值。只生成 env example，并提醒用户手动迁移。
 - 用户旧配置里已有的 `process.env.X` 名称就是事实来源。不要为了贴合示例而改 ENV 名。
@@ -18,12 +18,13 @@
 - `write.platform: 'notion'`
 - `write.platform: 'yuque'`
 - `write.platform: 'yuque-pwd'`
+- `write.platform: 'feishu'`
 - `deploy.platform: 'local'`
 - `image.platform`: `local`、`cos`、`oss`、`github`、`qiniu`、`upyun`、`r2`、`b2`
 
 不支持作为本轮迁移目标：
 
-- 来源：Feishu、FlowUs、Wolai、Outline 或其他来源。
+- 来源：FlowUs、Wolai、Outline 或其他来源。
 - 目标：Halo、WordPress、Confluence 或其他非 Local 目标。
 - 0.x 命令能力：`clean`、`force`、`full-cache`、`upgrade`。
 - Local 输出格式：`html`、`html-highlight`、`wiki`。
@@ -112,7 +113,7 @@ elog sync -c elog.config.1x.ts
 | 事实组 | 从哪里读 |
 | --- | --- |
 | 来源平台 | `write.platform` |
-| 来源配置 | `write.notion`、`write.yuque` 或 `write['yuque-pwd']` |
+| 来源配置 | `write.notion`、`write.yuque`、`write['yuque-pwd']` 或 `write.feishu` |
 | 本地部署配置 | `deploy.local` |
 | 图片配置 | `image[image.platform]`，仅当 `image.enable: true` 时使用 |
 
@@ -137,6 +138,8 @@ elog sync -c elog.config.1x.ts
 | Notion 来源 | `fromNotion` from `@elog/plugin-from-notion` |
 | 语雀 Token 来源 | `fromYuque` from `@elog/plugin-from-yuque-token` |
 | 语雀账号密码来源 | `fromYuque` from `@elog/plugin-from-yuque-pwd` |
+| 飞书 Wiki 来源 | `fromFeishuWiki` from `@elog/plugin-from-feishu-wiki` |
+| 飞书云空间来源 | `fromFeishuSpace` from `@elog/plugin-from-feishu-space` |
 | Local 目标 | `toLocal` from `@elog/plugin-to-local` |
 | 图片平台 | 按“图片 transform 插件”附录选择对应 `image*` import |
 | 用户自定义转换 | 从你新建的本地 transform 文件 import |
@@ -268,6 +271,8 @@ elog sync -c elog.config.1x.ts
 | `write.platform: 'notion'` | `@elog/plugin-from-notion` | `fromNotion` | `fromNotion(options)` |
 | `write.platform: 'yuque'` | `@elog/plugin-from-yuque-token` | `fromYuque` | `fromYuque(options)` |
 | `write.platform: 'yuque-pwd'` | `@elog/plugin-from-yuque-pwd` | `fromYuque` | `fromYuque(options)` |
+| `write.platform: 'feishu'` + `write.feishu.type: 'wiki'` | `@elog/plugin-from-feishu-wiki` | `fromFeishuWiki` | `fromFeishuWiki(options)` |
+| `write.platform: 'feishu'` + `write.feishu.type` 缺失或为 `space` | `@elog/plugin-from-feishu-space` | `fromFeishuSpace` | `fromFeishuSpace(options)` |
 
 #### `fromNotion(options)`
 
@@ -314,6 +319,33 @@ elog sync -c elog.config.1x.ts
 | `disableCache` | `extension.disableCache` | 推荐迁移到顶层。 |
 | `cacheFilePath` | `extension.cachePath` | 推荐迁移到顶层。 |
 | `limit` | `write['yuque-pwd'].limit` | 下载并发数；有旧字段才迁移。 |
+
+#### `fromFeishuWiki(options)`
+
+0.x 的飞书来源按 `write.feishu.type` 拆成两个 1.0 来源插件。`type: 'wiki'`
+迁移到 `fromFeishuWiki`。
+
+| 1.0 字段 | 迁移来源 | 说明 |
+| --- | --- | --- |
+| `appId` | `write.feishu.appId` | 保留旧 ENV 名。 |
+| `appSecret` | `write.feishu.appSecret` | 保留旧 ENV 名。 |
+| `wikiId` | `write.feishu.wikiId` | 原样迁移。 |
+| `folderToken` | `write.feishu.folderToken` | 可选；用于指定知识库节点。 |
+| `baseUrl` | `write.feishu.baseUrl` | 空字符串可省略。 |
+| `disableParentDoc` | `write.feishu.disableParentDoc` | 原样迁移；父文档只作为目录时设为 `true`。 |
+| `limit` | `write.feishu.limit` | 下载并发数；有旧字段才迁移。 |
+
+#### `fromFeishuSpace(options)`
+
+`write.feishu.type` 缺失或为 `space` 时，迁移到 `fromFeishuSpace`。
+
+| 1.0 字段 | 迁移来源 | 说明 |
+| --- | --- | --- |
+| `appId` | `write.feishu.appId` | 保留旧 ENV 名。 |
+| `appSecret` | `write.feishu.appSecret` | 保留旧 ENV 名。 |
+| `folderToken` | `write.feishu.folderToken` | 原样迁移。 |
+| `baseUrl` | `write.feishu.baseUrl` | 空字符串可省略。 |
+| `limit` | `write.feishu.limit` | 下载并发数；有旧字段才迁移。 |
 
 ### Local 目标插件
 
