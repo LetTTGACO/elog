@@ -1,25 +1,24 @@
-import type { DocDetail } from '@elog/cli';
-import MarkdownIt from 'markdown-it';
-import hljs from 'highlight.js';
+import type { DocDetail, ImageUrl } from '@elog/cli';
 import { AnyObject, NoRepValues } from './types';
 
-/**
- * markdown转html（代码高亮）
- * @param post
- */
-export function htmlAdapterWithHighlight(post: DocDetail) {
-  let { body } = post;
-  return new MarkdownIt({
-    html: true,
-    xhtmlOut: true,
-    breaks: true,
-    linkify: true,
-    typographer: true,
-    highlight: function (code: string, lang: string) {
-      const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-      return hljs.highlight(code, { language }).value;
-    },
-  }).render(body);
+export function getHtmlImageUrlsFromContent(
+  content: string,
+  cleanUrlParam: (url: string) => string,
+): ImageUrl[] {
+  const images: ImageUrl[] = [];
+  const imgTagReg = /<img\b[^>]*>/gi;
+  const srcReg = /\bsrc\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/i;
+  for (const match of content.matchAll(imgTagReg)) {
+    const src = match[0].match(srcReg);
+    const originalUrl = src?.[1] ?? src?.[2] ?? src?.[3];
+    if (!originalUrl) continue;
+    if (originalUrl.startsWith('data:')) {
+      images.push({ originalUrl, data: originalUrl, type: 'base64' });
+      continue;
+    }
+    images.push({ originalUrl, data: cleanUrlParam(originalUrl), type: 'url' });
+  }
+  return images;
 }
 
 export function getNoRepValues(

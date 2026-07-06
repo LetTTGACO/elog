@@ -8,7 +8,18 @@ import type {
 import type { DocDetail, PluginContext } from '@elog/cli';
 import WordPressApi from './WordPressApi';
 import Context from './Context';
-import { getNoRepValues, htmlAdapterWithHighlight, removeEmptyProperties } from './utils';
+import { getHtmlImageUrlsFromContent, getNoRepValues, removeEmptyProperties } from './utils';
+
+function assertHtmlBodyTypes(docs: DocDetail[], error: PluginContext['logger']['error']) {
+  for (const doc of docs) {
+    const bodyType = doc.bodyType ?? 'markdown';
+    if (bodyType !== 'html') {
+      error(
+        `WordPress target expects HTML Document Body, received ${bodyType} for ${doc.properties.title}. Add the Markdown-to-HTML Body Transform before deploying to WordPress.`,
+      );
+    }
+  }
+}
 
 export default class extends Context {
   private readonly config: WordPressConfig;
@@ -24,6 +35,7 @@ export default class extends Context {
     if (docs.length === 0) {
       this.ctx.logger.error('没有可部署的文档');
     }
+    assertHtmlBodyTypes(docs, this.ctx.logger.error);
     this.ctx.logger.success('正在部署到 WordPress...');
     const articleList = JSON.parse(JSON.stringify(docs)) as DocDetail[];
     try {
@@ -94,8 +106,6 @@ export default class extends Context {
           this.ctx.logger.warn('跳过更新', `存在重复文档：${articleInfo.properties.title}`);
           continue;
         }
-        // 自定义处理md文档
-        articleInfo.body = htmlAdapterWithHighlight(articleInfo);
         const post: UpdateWordPressPost | CreateWordPressPost = {
           title: articleInfo.properties.title,
           content: articleInfo.body,
@@ -157,7 +167,10 @@ export default class extends Context {
         // 处理文档图片
         if (this.config.enableUploadImage) {
           // 收集文档图片
-          const urlList = this.ctx.image.getUrlListFromContent(articleInfo.body);
+          const urlList = getHtmlImageUrlsFromContent(
+            articleInfo.body,
+            this.ctx.image.cleanUrlParam,
+          );
           for (const image of urlList) {
             // 生成文件名
             const fileName = this.ctx.image.genUniqueIdFromUrl(image.data, 28);
@@ -207,6 +220,7 @@ export default class extends Context {
               articleInfo.body = articleInfo.body.replace(image.originalUrl, item.guid.rendered);
             }
           }
+          post.content = articleInfo.body;
         }
         const cachePage = postMap[articleInfo.properties.title];
         if (cachePage) {

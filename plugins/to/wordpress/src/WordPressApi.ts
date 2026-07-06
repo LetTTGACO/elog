@@ -237,7 +237,9 @@ export default class WordPressApi extends Context {
    */
   async uploadMedia(file: Buffer, filename: string): Promise<WordPressMedia> {
     const form = new FormData();
-    form.set('file', new Blob([file]), filename);
+    const upload = new ArrayBuffer(file.byteLength);
+    new Uint8Array(upload).set(file);
+    form.set('file', new Blob([upload]), filename);
     form.set('title', filename);
     form.set('description', 'upload by elog');
     return this.requestInternal<WordPressMedia>('/wp/v2/media', {
