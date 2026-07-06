@@ -14,14 +14,14 @@
 
 | 用例 | 作用 | 必需环境变量 |
 | --- | --- | --- |
-| `notion-to-local` | 测 Notion 下载和本地部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID` |
+| `notion-to-local` | 测 Notion 下载、R2 图床和本地部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
 | `notion-catalog-to-local` | 测 Notion catalog 字段到本地目录结构 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_CATALOG_DATABASE_ID` |
 | `feishu-wiki-to-local` | 测飞书 Wiki 下载、本地图床和本地部署 | `ELOG_E2E_FEISHU_APP_ID`, `ELOG_E2E_FEISHU_APP_SECRET`, `ELOG_E2E_FEISHU_WIKI_ID` |
 | `feishu-space-r2-to-local` | 测飞书 Space 下载、R2 图床和本地部署 | `ELOG_E2E_FEISHU_APP_ID`, `ELOG_E2E_FEISHU_APP_SECRET`, `ELOG_E2E_FEISHU_SPACE_FOLDER_TOKEN`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
 | `yuque-pwd-to-local` | 测语雀密码登录、目录结构图片路径和本地部署 | `ELOG_E2E_YUQUE_USERNAME`, `ELOG_E2E_YUQUE_PWD`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO_TOC` |
-| `yuque-token-to-local` | 测语雀 Token 登录下载和本地部署 | `ELOG_E2E_YUQUE_TOKEN`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO` |
+| `yuque-token-to-local` | 测语雀 Token 登录下载、R2 图床和本地部署 | `ELOG_E2E_YUQUE_TOKEN`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
 | `notion-to-wordpress` | 测 Notion、R2 图床和 WordPress 部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID`, `ELOG_E2E_WORDPRESS_ENDPOINT`, `ELOG_E2E_WORDPRESS_USERNAME`, `ELOG_E2E_WORDPRESS_PASSWORD`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
-| `notion-to-halo` | 测 Notion、R2 图床和 Halo 部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID`, `ELOG_E2E_HALO_ENDPOINT`, `ELOG_E2E_HALO_TOKEN`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
+| `notion-to-halo` | 手动测 Notion、R2 图床和 Halo 部署；Halo 不在稳定发布矩阵 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID`, `ELOG_E2E_HALO_ENDPOINT`, `ELOG_E2E_HALO_TOKEN`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
 
 如果某个用例缺少环境变量，Vitest 会跳过它。
 
@@ -102,7 +102,7 @@ pnpm exec elog sync --config cases/notion-to-local/elog.config.ts --env .env
 
 ## 图床插件
 
-语雀密码登录用例可以在 `elog.config.ts` 里切换图床：
+部分用例可以在对应 `elog.config.ts` 里切换图床：
 
 ```ts
 image: imageProfiles.r2,
@@ -110,11 +110,10 @@ image: imageProfiles.r2,
 
 断言会根据 `e2eProfile.image` 自动调整：
 
-- `none`：不检查图片输出。
 - `local` 且 `expectFiles: true`：检查 `outputDir` 下至少有图片文件。
-- 云图床：只检查同步流程成功，不检查本地图片文件。
+- 云图床：不检查本地图片文件；部分 case 会额外检查 Markdown 中的图床 host。
 
-如果要改本地图片路径，继续改对应 case 的 `e2eProfile.image` 即可。
+如果要改本地图片路径或云图床前缀，继续改对应 case 的 `e2eProfile.image` 即可。
 
 ## 断言原则
 

@@ -131,16 +131,16 @@ export default defineConfig({
   });
 
   it('renders multiple to plugins as an array', () => {
-    const toHalo: PluginRegistryEntry = {
+    const toRemote: PluginRegistryEntry = {
       kind: 'to',
-      type: 'halo',
-      displayName: 'Halo',
-      packageName: '@elog/plugin-to-halo',
-      importName: 'toHalo',
+      type: 'remote',
+      displayName: 'Remote',
+      packageName: '@elog/plugin-to-remote',
+      importName: 'toRemote',
       optionsSchema: {
         type: 'object',
         properties: {
-          apiUrl: { type: 'string', 'x-elog-env': 'HALO_API_URL' },
+          apiUrl: { type: 'string', 'x-elog-env': 'REMOTE_API_URL' },
         },
         additionalProperties: false,
       },
@@ -149,67 +149,15 @@ export default defineConfig({
     const selection: PluginSelection = {
       from: fromYuque,
       transforms: [],
-      to: [toLocal, toHalo],
+      to: [toLocal, toRemote],
     };
 
     const files = generateInitFiles(selection);
 
     expect(files.configText).toContain('to: [');
     expect(files.configText).toContain('toLocal(');
-    expect(files.configText).toContain('toHalo(');
-    expect(files.configText).toContain('apiUrl: process.env.HALO_API_URL');
-  });
-
-  it('generates explicit CMS body-transform workflows from built-in registry entries', () => {
-    const registry = loadBuiltInPluginRegistry();
-    const byKey = (kind: PluginRegistryEntry['kind'], type: string) => {
-      const entry = registry.plugins.find((plugin) => plugin.kind === kind && plugin.type === type);
-      expect(entry).toBeDefined();
-      return entry!;
-    };
-
-    const htmlWorkflow = generateInitFiles({
-      from: byKey('from', 'notion'),
-      transforms: [byKey('transform', 'markdown-to-html')],
-      to: [byKey('to', 'halo')],
-    });
-    const confluenceWorkflow = generateInitFiles({
-      from: byKey('from', 'notion'),
-      transforms: [byKey('transform', 'markdown-to-confluence-wiki')],
-      to: [byKey('to', 'confluence')],
-    });
-
-    expect(htmlWorkflow.configText).toContain(
-      "import markdownToHtml from '@elog/plugin-transform-markdown-to-html';",
-    );
-    expect(htmlWorkflow.configText).toContain("import toHalo from '@elog/plugin-to-halo';");
-    expect(htmlWorkflow.configText).toContain(`plugins: [
-    markdownToHtml({}),
-  ],`);
-    expect(htmlWorkflow.configText).toContain(`to: toHalo({
-    endpoint: process.env.HALO_ENDPOINT,
-    token: process.env.HALO_TOKEN,
-  }),`);
-    expect(htmlWorkflow.configText).not.toContain('markdown:');
-    expect(htmlWorkflow.configText).not.toContain('formatExt');
-
-    expect(confluenceWorkflow.configText).toContain(
-      "import markdownToConfluenceWiki from '@elog/plugin-transform-markdown-to-confluence-wiki';",
-    );
-    expect(confluenceWorkflow.configText).toContain(
-      "import toConfluence from '@elog/plugin-to-confluence';",
-    );
-    expect(confluenceWorkflow.configText).toContain(`plugins: [
-    markdownToConfluenceWiki({}),
-  ],`);
-    expect(confluenceWorkflow.configText).toContain(`to: toConfluence({
-    user: process.env.CONFLUENCE_USER,
-    password: process.env.CONFLUENCE_PASSWORD,
-    baseUrl: process.env.CONFLUENCE_BASE_URL,
-    spaceKey: process.env.CONFLUENCE_SPACE_KEY,
-    rootPageId: process.env.CONFLUENCE_ROOT_PAGE_ID,
-  }),`);
-    expect(confluenceWorkflow.configText).not.toContain('formatExt');
+    expect(files.configText).toContain('toRemote(');
+    expect(files.configText).toContain('apiUrl: process.env.REMOTE_API_URL');
   });
 
   it('generates config for every 1.0 stable registry entry', () => {
@@ -231,9 +179,8 @@ export default defineConfig({
         'image-r2',
         'image-b2',
         'markdown-to-html',
-        'markdown-to-confluence-wiki',
       ].map((type) => byKey('transform', type)),
-      to: [byKey('to', 'local'), byKey('to', 'halo'), byKey('to', 'confluence')],
+      to: [byKey('to', 'local')],
     });
 
     expect(files.configText).toContain("import yuqueToken from '@elog/plugin-from-yuque-token';");
@@ -256,12 +203,7 @@ export default defineConfig({
     expect(files.configText).toContain(
       "import markdownToHtml from '@elog/plugin-transform-markdown-to-html';",
     );
-    expect(files.configText).toContain(
-      "import markdownToConfluenceWiki from '@elog/plugin-transform-markdown-to-confluence-wiki';",
-    );
     expect(files.configText).toContain("import toLocal from '@elog/plugin-to-local';");
-    expect(files.configText).toContain("import toHalo from '@elog/plugin-to-halo';");
-    expect(files.configText).toContain("import toConfluence from '@elog/plugin-to-confluence';");
 
     expect(files.configText).toContain('process.env.YUQUE_TOKEN');
     expect(files.configText).toContain('process.env.COS_SECRET_ID');
@@ -271,7 +213,8 @@ export default defineConfig({
     expect(files.configText).toContain('process.env.UPYUN_PASSWORD');
     expect(files.configText).toContain('process.env.R2_ACCESS_KEY_ID');
     expect(files.configText).toContain('process.env.B2_APPLICATION_KEY_ID');
-    expect(files.configText).toContain('process.env.HALO_ENDPOINT');
-    expect(files.configText).toContain('process.env.CONFLUENCE_BASE_URL');
+    expect(files.configText).not.toContain('@elog/plugin-to-halo');
+    expect(files.configText).not.toContain('@elog/plugin-to-confluence');
+    expect(files.configText).not.toContain('@elog/plugin-transform-markdown-to-confluence-wiki');
   });
 });

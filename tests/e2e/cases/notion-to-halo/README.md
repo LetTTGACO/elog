@@ -2,7 +2,7 @@
 
 ## 测试目的
 
-这个 case 用来验证 Notion 文档可以经过 Markdown-to-HTML transform 后部署到真实 Halo 站点。
+这个 case 用来验证 Notion 文档可以经过 Markdown-to-HTML transform 后部署到真实 Halo 站点。Halo 当前不在稳定发布矩阵中，这个 case 更偏手动验收和兼容性观察。
 
 ## 覆盖范围
 

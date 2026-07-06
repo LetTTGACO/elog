@@ -24,12 +24,7 @@ const publicPublishConfig = {
   registry: 'https://registry.npmjs.org/',
 };
 
-const newlyPublicPackages = [
-  'plugins/transform/markdown-to-html',
-  'plugins/transform/markdown-to-confluence-wiki',
-  'plugins/to/halo',
-  'plugins/to/confluence',
-] as const;
+const newlyPublicPackages = ['plugins/transform/markdown-to-html'] as const;
 
 const publicReleaseProjects = [
   '@elog/cli',
@@ -48,20 +43,23 @@ const publicReleaseProjects = [
   '@elog/plugin-transform-image-r2',
   '@elog/plugin-transform-image-b2',
   '@elog/plugin-transform-markdown-to-html',
-  '@elog/plugin-transform-markdown-to-confluence-wiki',
   '@elog/plugin-to-local',
-  '@elog/plugin-to-halo',
-  '@elog/plugin-to-confluence',
 ] as const;
 
 const privatePluginPackages = [
   { project: '@elog/plugin-from-flowus', packageDir: 'plugins/from/flowus' },
   { project: '@elog/plugin-from-wolai', packageDir: 'plugins/from/wolai' },
+  {
+    project: '@elog/plugin-transform-markdown-to-confluence-wiki',
+    packageDir: 'plugins/transform/markdown-to-confluence-wiki',
+  },
+  { project: '@elog/plugin-to-halo', packageDir: 'plugins/to/halo' },
+  { project: '@elog/plugin-to-confluence', packageDir: 'plugins/to/confluence' },
   { project: '@elog/plugin-to-wordpress', packageDir: 'plugins/to/wordpress' },
 ] as const;
 
 describe('release configuration', () => {
-  it('makes CMS targets and body transforms public first-party plugins', () => {
+  it('makes stable body transforms public first-party plugins', () => {
     for (const packageDir of newlyPublicPackages) {
       const pkg = readJson<PackageJson>(path.join(packageDir, 'package.json'));
 
