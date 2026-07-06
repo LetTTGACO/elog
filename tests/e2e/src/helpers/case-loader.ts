@@ -22,15 +22,22 @@ export async function loadSyncCases(repoRoot: string): Promise<SyncCase[]> {
   return cases;
 }
 
-export function filterSyncCases(cases: SyncCase[], selectedCase?: string): SyncCase[] {
+export function filterSyncCases(
+  cases: SyncCase[],
+  selectedCase?: string,
+  stableOnly = false,
+): SyncCase[] {
+  const candidates = stableOnly ? cases.filter((testCase) => testCase.stable !== false) : cases;
+
   if (!selectedCase) {
-    return cases;
+    return candidates;
   }
 
-  const filtered = cases.filter((testCase) => testCase.id === selectedCase);
+  const filtered = candidates.filter((testCase) => testCase.id === selectedCase);
 
   if (filtered.length === 0) {
-    throw new Error(`No e2e sync case matched ELOG_E2E_CASE=${selectedCase}`);
+    const matrixName = stableOnly ? ' stable' : '';
+    throw new Error(`No${matrixName} e2e sync case matched ELOG_E2E_CASE=${selectedCase}`);
   }
 
   return filtered;

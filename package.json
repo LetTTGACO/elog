@@ -26,6 +26,7 @@
     "release": "nx release --yes",
     "prepare": "husky",
     "e2e": "pnpm --filter @elog/e2e e2e",
+    "e2e:stable": "pnpm --filter @elog/e2e test:stable",
     "e2e:cli": "pnpm --filter @elog/e2e test:cli",
     "e2e:feishu-wiki-local": "pnpm --filter @elog/e2e test:feishu-wiki-local",
     "e2e:feishu-space-r2-local": "pnpm --filter @elog/e2e test:feishu-space-r2-local",

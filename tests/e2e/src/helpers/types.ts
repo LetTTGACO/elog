@@ -50,6 +50,7 @@ export interface SyncCaseAssertContext extends SyncCaseContext {
 export interface SyncCase {
   id: string;
   title: string;
+  stable?: boolean;
   requiredEnv: string[];
   configFile: string;
   expected: SyncCaseExpected;

@@ -9,6 +9,7 @@ import { e2eProfile } from './elog.config';
 const syncCase: SyncCase = {
   id: e2eProfile.id,
   title: 'Notion source -> WordPress deploy',
+  stable: false,
   requiredEnv: [
     'ELOG_E2E_NOTION_TOKEN',
     'ELOG_E2E_NOTION_DATABASE_ID',

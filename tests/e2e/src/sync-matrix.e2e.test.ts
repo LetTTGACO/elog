@@ -11,7 +11,9 @@ import {
 
 const repoRoot = repoRootFromE2e();
 const loadedCases = await loadSyncCases(repoRoot);
-const syncCases = filterSyncCases(loadedCases, process.env.ELOG_E2E_CASE);
+const stableOnly =
+  process.env.ELOG_E2E_STABLE === '1' || process.env.ELOG_E2E_STABLE?.toLowerCase() === 'true';
+const syncCases = filterSyncCases(loadedCases, process.env.ELOG_E2E_CASE, stableOnly);
 
 describe('elog sync e2e matrix', () => {
   for (const syncCase of syncCases) {

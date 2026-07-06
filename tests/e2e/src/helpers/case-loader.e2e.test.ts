@@ -17,6 +17,7 @@ const cases: SyncCase[] = [
   {
     id: 'two',
     title: 'Two',
+    stable: false,
     requiredEnv: [],
     configFile: 'elog.config.ts',
     expected: {
@@ -37,6 +38,16 @@ describe('filterSyncCases', () => {
 
   it('returns only the matching case when a filter is provided', () => {
     expect(filterSyncCases(cases, 'two').map((testCase) => testCase.id)).toEqual(['two']);
+  });
+
+  it('returns only stable cases when stable mode is enabled', () => {
+    expect(filterSyncCases(cases, undefined, true).map((testCase) => testCase.id)).toEqual(['one']);
+  });
+
+  it('does not match optional manual cases in stable mode', () => {
+    expect(() => filterSyncCases(cases, 'two', true)).toThrow(
+      'No stable e2e sync case matched ELOG_E2E_CASE=two',
+    );
   });
 
   it('throws a readable error for an unknown filter', () => {

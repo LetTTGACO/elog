@@ -23,6 +23,8 @@
 | `notion-to-wordpress` | 测 Notion、R2 图床和 WordPress 部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID`, `ELOG_E2E_WORDPRESS_ENDPOINT`, `ELOG_E2E_WORDPRESS_USERNAME`, `ELOG_E2E_WORDPRESS_PASSWORD`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
 | `notion-to-halo` | 测专用 Notion-Halo fixture、R2 正文/cover 图床和 Halo 部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_HALO_DATABASE_ID`, `ELOG_E2E_HALO_ENDPOINT`, `ELOG_E2E_HALO_TOKEN`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
 
+`pnpm e2e:stable` 会运行稳定同步矩阵，包括 `notion-to-halo`。`stable: false` 的手动/可选用例（例如 WordPress、FlowUs）不会被稳定矩阵选中。
+
 如果某个用例缺少环境变量，Vitest 会跳过它。
 
 ## 环境变量
@@ -35,6 +37,7 @@ Vitest 启动时会读取当前目录的 `.env`。从仓库根目录通过 `pnpm
 | 变量 | 作用 |
 | --- | --- |
 | `ELOG_E2E_CASE` | 只运行指定同步用例。通常由 `test:notion-local` 等脚本自动设置。 |
+| `ELOG_E2E_STABLE=1` | 只运行稳定同步矩阵，排除 `stable: false` 的手动/可选 case。通常由 `test:stable` 脚本自动设置。也兼容 `true`。 |
 | `ELOG_E2E_STREAM_OUTPUT=1` | 同步时把真实 CLI stdout/stderr 实时输出到控制台，同时仍保留断言捕获。也兼容 `true`。 |
 | `ELOG_E2E_KEEP_TMP=1` | 测试通过后也保留 `.tmp` 临时 workspace，便于调试产物。失败时默认会保留。也兼容 `true`。 |
 
@@ -64,6 +67,7 @@ Vitest 启动时会读取当前目录的 `.env`。从仓库根目录通过 `pnpm
 
 ```bash
 pnpm e2e:cli
+pnpm e2e:stable
 pnpm e2e:feishu-wiki-local
 pnpm e2e:feishu-space-r2-local
 pnpm e2e:notion-local
@@ -83,6 +87,7 @@ pnpm e2e
 进入 `tests/e2e` 也可以跑单个用例：
 
 ```bash
+pnpm run test:stable
 pnpm run test:notion-local
 pnpm run test:notion-catalog-local
 pnpm run test:feishu-wiki-local

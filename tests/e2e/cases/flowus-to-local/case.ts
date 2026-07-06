@@ -37,6 +37,7 @@ function readMarkdownOutput(workspace: string): string {
 const syncCase: SyncCase = {
   id: e2eProfile.id,
   title: `FlowUs source -> ${e2eProfile.image.kind} image transform -> local deploy`,
+  stable: false,
   requiredEnv: ['ELOG_E2E_FLOWUS_TABLE_PAGE_ID', ...imageRequiredEnvFromProfile(e2eProfile.image)],
   configFile: 'elog.config.ts',
   expected: {
