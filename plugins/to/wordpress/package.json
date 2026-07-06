@@ -6,7 +6,6 @@
     "url": "git+https://github.com/LetTTGACO/elog.git",
     "directory": "plugins/to/wordpress"
   },
-  "private": true,
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.js",
