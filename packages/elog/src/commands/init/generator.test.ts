@@ -171,7 +171,7 @@ export default defineConfig({
     const htmlWorkflow = generateInitFiles({
       from: byKey('from', 'notion'),
       transforms: [byKey('transform', 'markdown-to-html')],
-      to: [byKey('to', 'halo'), byKey('to', 'wordpress')],
+      to: [byKey('to', 'halo')],
     });
     const confluenceWorkflow = generateInitFiles({
       from: byKey('from', 'notion'),
@@ -183,21 +183,13 @@ export default defineConfig({
       "import markdownToHtml from '@elog/plugin-transform-markdown-to-html';",
     );
     expect(htmlWorkflow.configText).toContain("import toHalo from '@elog/plugin-to-halo';");
-    expect(htmlWorkflow.configText).toContain(
-      "import toWordPress from '@elog/plugin-to-wordpress';",
-    );
     expect(htmlWorkflow.configText).toContain(`plugins: [
     markdownToHtml({}),
   ],`);
-    expect(htmlWorkflow.configText).toContain(`toHalo({
-      endpoint: process.env.HALO_ENDPOINT,
-      token: process.env.HALO_TOKEN,
-    })`);
-    expect(htmlWorkflow.configText).toContain(`toWordPress({
-      endpoint: process.env.WORDPRESS_ENDPOINT,
-      username: process.env.WORDPRESS_USERNAME,
-      password: process.env.WORDPRESS_PASSWORD,
-    })`);
+    expect(htmlWorkflow.configText).toContain(`to: toHalo({
+    endpoint: process.env.HALO_ENDPOINT,
+    token: process.env.HALO_TOKEN,
+  }),`);
     expect(htmlWorkflow.configText).not.toContain('markdown:');
     expect(htmlWorkflow.configText).not.toContain('formatExt');
 
@@ -241,12 +233,7 @@ export default defineConfig({
         'markdown-to-html',
         'markdown-to-confluence-wiki',
       ].map((type) => byKey('transform', type)),
-      to: [
-        byKey('to', 'local'),
-        byKey('to', 'halo'),
-        byKey('to', 'wordpress'),
-        byKey('to', 'confluence'),
-      ],
+      to: [byKey('to', 'local'), byKey('to', 'halo'), byKey('to', 'confluence')],
     });
 
     expect(files.configText).toContain("import yuqueToken from '@elog/plugin-from-yuque-token';");
@@ -274,7 +261,6 @@ export default defineConfig({
     );
     expect(files.configText).toContain("import toLocal from '@elog/plugin-to-local';");
     expect(files.configText).toContain("import toHalo from '@elog/plugin-to-halo';");
-    expect(files.configText).toContain("import toWordPress from '@elog/plugin-to-wordpress';");
     expect(files.configText).toContain("import toConfluence from '@elog/plugin-to-confluence';");
 
     expect(files.configText).toContain('process.env.YUQUE_TOKEN');
@@ -286,7 +272,6 @@ export default defineConfig({
     expect(files.configText).toContain('process.env.R2_ACCESS_KEY_ID');
     expect(files.configText).toContain('process.env.B2_APPLICATION_KEY_ID');
     expect(files.configText).toContain('process.env.HALO_ENDPOINT');
-    expect(files.configText).toContain('process.env.WORDPRESS_ENDPOINT');
     expect(files.configText).toContain('process.env.CONFLUENCE_BASE_URL');
   });
 });

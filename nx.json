@@ -37,7 +37,6 @@
       "@elog/plugin-transform-markdown-to-confluence-wiki",
       "@elog/plugin-to-local",
       "@elog/plugin-to-halo",
-      "@elog/plugin-to-wordpress",
       "@elog/plugin-to-confluence"
     ],
     "projectsRelationship": "independent",

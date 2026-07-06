@@ -194,12 +194,6 @@ describe('loadBuiltInPluginRegistry', () => {
       },
       {
         kind: 'to',
-        type: 'wordpress',
-        packageName: '@elog/plugin-to-wordpress',
-        importName: 'toWordPress',
-      },
-      {
-        kind: 'to',
         type: 'confluence',
         packageName: '@elog/plugin-to-confluence',
         importName: 'toConfluence',
@@ -247,20 +241,6 @@ describe('loadBuiltInPluginRegistry', () => {
     expect(Object.keys(byKey('to', 'halo').optionsSchema.properties ?? {})).toEqual([
       'endpoint',
       'token',
-    ]);
-
-    expect(byKey('to', 'wordpress').optionsSchema).toMatchObject({
-      required: ['endpoint', 'username', 'password'],
-      properties: {
-        endpoint: { 'x-elog-env': 'WORDPRESS_ENDPOINT' },
-        username: { 'x-elog-env': 'WORDPRESS_USERNAME' },
-        password: { 'x-elog-env': 'WORDPRESS_PASSWORD', 'x-elog-secret': true },
-      },
-    });
-    expect(Object.keys(byKey('to', 'wordpress').optionsSchema.properties ?? {})).toEqual([
-      'endpoint',
-      'username',
-      'password',
     ]);
 
     expect(byKey('to', 'confluence').optionsSchema).toMatchObject({

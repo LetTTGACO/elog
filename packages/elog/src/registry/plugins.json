@@ -903,48 +903,6 @@
     },
     {
       "kind": "to",
-      "type": "wordpress",
-      "displayName": "WordPress",
-      "packageName": "@elog/plugin-to-wordpress",
-      "importName": "toWordPress",
-      "optionsSchema": {
-        "type": "object",
-        "required": ["endpoint", "username", "password"],
-        "properties": {
-          "endpoint": {
-            "type": "string",
-            "title": "WordPress Endpoint",
-            "x-elog-env": "WORDPRESS_ENDPOINT",
-            "x-elog-prompt": {
-              "type": "input",
-              "message": "请输入 WordPress Endpoint"
-            }
-          },
-          "username": {
-            "type": "string",
-            "title": "WordPress Username",
-            "x-elog-env": "WORDPRESS_USERNAME",
-            "x-elog-prompt": {
-              "type": "input",
-              "message": "请输入 WordPress Username"
-            }
-          },
-          "password": {
-            "type": "string",
-            "title": "WordPress Password",
-            "x-elog-env": "WORDPRESS_PASSWORD",
-            "x-elog-secret": true,
-            "x-elog-prompt": {
-              "type": "password",
-              "message": "请输入 WordPress Password"
-            }
-          }
-        },
-        "additionalProperties": false
-      }
-    },
-    {
-      "kind": "to",
       "type": "confluence",
       "displayName": "Confluence",
       "packageName": "@elog/plugin-to-confluence",

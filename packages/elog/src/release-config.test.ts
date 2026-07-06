@@ -28,7 +28,6 @@ const newlyPublicPackages = [
   'plugins/transform/markdown-to-html',
   'plugins/transform/markdown-to-confluence-wiki',
   'plugins/to/halo',
-  'plugins/to/wordpress',
   'plugins/to/confluence',
 ] as const;
 
@@ -52,11 +51,14 @@ const publicReleaseProjects = [
   '@elog/plugin-transform-markdown-to-confluence-wiki',
   '@elog/plugin-to-local',
   '@elog/plugin-to-halo',
-  '@elog/plugin-to-wordpress',
   '@elog/plugin-to-confluence',
 ] as const;
 
-const privatePluginProjects = ['@elog/plugin-from-flowus', '@elog/plugin-from-wolai'] as const;
+const privatePluginPackages = [
+  { project: '@elog/plugin-from-flowus', packageDir: 'plugins/from/flowus' },
+  { project: '@elog/plugin-from-wolai', packageDir: 'plugins/from/wolai' },
+  { project: '@elog/plugin-to-wordpress', packageDir: 'plugins/to/wordpress' },
+] as const;
 
 describe('release configuration', () => {
   it('makes CMS targets and body transforms public first-party plugins', () => {
@@ -73,12 +75,12 @@ describe('release configuration', () => {
 
   it('releases exactly the 1.0 public support matrix packages', () => {
     const nxJson = readJson<{ release: { projects: string[] } }>('nx.json');
+    const privatePluginProjects = privatePluginPackages.map(({ project }) => project);
 
     expect(nxJson.release.projects).toEqual(publicReleaseProjects);
-    expect(nxJson.release.projects).not.toEqual(expect.arrayContaining([...privatePluginProjects]));
+    expect(nxJson.release.projects).not.toEqual(expect.arrayContaining(privatePluginProjects));
 
-    for (const project of privatePluginProjects) {
-      const packageDir = `plugins/from/${project.replace('@elog/plugin-from-', '')}`;
+    for (const { project, packageDir } of privatePluginPackages) {
       const pkg = readJson<PackageJson>(path.join(packageDir, 'package.json'));
 
       expect(pkg.private, project).toBe(true);
