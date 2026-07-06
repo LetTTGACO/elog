@@ -1,10 +1,7 @@
 import { Renderer as MarkdownRenderer, marked } from 'marked';
 import { stringify } from 'querystring';
 
-/**
- * confluence wiki 语言映射
- */
-const langMap: any = {
+const langMap: Record<string, string> = {
   javascript: 'js',
   typescript: 'js',
   java: 'java',
@@ -14,14 +11,7 @@ const langMap: any = {
   yaml: 'yml',
 };
 
-/**
- * WIKI 渲染器
- */
 class WikiRenderer extends MarkdownRenderer {
-  constructor() {
-    super();
-  }
-
   override paragraph(text: string) {
     return text + '\n\n';
   }
@@ -97,16 +87,15 @@ class WikiRenderer extends MarkdownRenderer {
       lang = lang.toLowerCase();
       lang = langMap[lang] || 'none';
     }
-    let config = {
+    const config = {
       language: lang,
       borderStyle: 'solid',
-      theme: 'default', // dark is good
+      theme: 'default',
       linenumbers: true,
       collapse: false,
     };
     const lineCount = code.split('\n').length;
     if (lineCount > 20) {
-      // code is too long
       config.collapse = true;
     }
     const param = stringify(config, '|', '=');
@@ -114,10 +103,6 @@ class WikiRenderer extends MarkdownRenderer {
   }
 }
 
-/**
- * 将markdown转wiki
- * @param markdown
- */
 export const md2Wiki = (markdown: string) => {
   const wikiRenderer = new WikiRenderer();
   return marked.parse(markdown, { renderer: wikiRenderer });

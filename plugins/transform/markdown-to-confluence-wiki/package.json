@@ -1,21 +1,17 @@
 {
-  "name": "@elog/plugin-to-confluence",
+  "name": "@elog/plugin-transform-markdown-to-confluence-wiki",
   "version": "1.0.0-beta.0",
+  "private": true,
+  "description": "",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LetTTGACO/elog.git",
-    "directory": "plugins/to/confluence"
+    "directory": "plugins/transform/markdown-to-confluence-wiki"
   },
-  "private": true,
-  "description": "",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
   "scripts": {
     "build": "tsdown",
     "test": "vitest run --passWithNoTests"
@@ -27,6 +23,9 @@
     "@elog/cli": {
       "optional": true
     }
+  },
+  "dependencies": {
+    "marked": "~12.0.1"
   },
   "devDependencies": {
     "@elog/cli": "workspace:*",

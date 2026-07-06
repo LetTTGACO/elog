@@ -2,7 +2,17 @@ import type { DocDetail, PluginContext } from '@elog/cli';
 import ConfluenceApi from './ConfluenceApi';
 import Context from './Context';
 import type { ConfluenceConfig, WikiMap } from './types';
-import { wikiAdapter } from './utils';
+
+function assertConfluenceWikiBodyTypes(docs: DocDetail[], error: PluginContext['logger']['error']) {
+  for (const doc of docs) {
+    const bodyType = doc.bodyType ?? 'markdown';
+    if (bodyType !== 'confluence-wiki') {
+      error(
+        `Confluence target expects Confluence wiki Document Body, received ${bodyType} for ${doc.properties.title}. Add the Markdown-to-Confluence wiki Body Transform before deploying to Confluence.`,
+      );
+    }
+  }
+}
 
 export default class ConfluenceDeploy extends Context {
   private readonly api: ConfluenceApi;
@@ -16,6 +26,7 @@ export default class ConfluenceDeploy extends Context {
     if (docs.length === 0) {
       this.ctx.logger.error('没有可部署的文档');
     }
+    assertConfluenceWikiBodyTypes(docs, this.ctx.logger.error);
     this.ctx.logger.success('正在部署到Confluence...');
     const articleList = JSON.parse(JSON.stringify(docs)) as DocDetail[];
     // 重新排序articleList，按照层级更新文章
@@ -35,8 +46,6 @@ export default class ConfluenceDeploy extends Context {
     });
     // 根据目录上传到wiki上
     for (const articleInfo of sortArticleList) {
-      // 将markdown转wiki
-      articleInfo.body = wikiAdapter(articleInfo) as string;
       // 是否存在
       const cacheWikiPage = rootPageMap[articleInfo.properties.title];
       if (cacheWikiPage) {
