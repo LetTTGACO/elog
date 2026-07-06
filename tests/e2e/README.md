@@ -135,6 +135,8 @@ image: imageProfiles.r2,
 
 - `elog.config.ts`：真实 Elog 配置，并导出 `e2eProfile`。
 - `case.ts`：声明必需环境变量、配置文件名和轻断言。
+- `README.md`：说明这个 case 的测试目的、fixture 要求、覆盖范围和不覆盖范围。
+  如果 case 支持手动切换图床、profile 或其他关键配置，README 里必须写清楚要改哪个文件、哪个字段，以及切换后需要哪些环境变量。
 
 常用组合优先保持少量：
 

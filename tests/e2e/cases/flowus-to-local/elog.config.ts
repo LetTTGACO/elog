@@ -34,8 +34,6 @@ const imageProfiles: Record<E2eImageProfile['kind'], E2eImageProfile> = {
   },
 };
 
-const imageKind = env.ELOG_E2E_FLOWUS_IMAGE === 'r2' ? 'r2' : 'local';
-
 function createImagePlugins(image: E2eImageProfile): TransformPlugin[] {
   if (image.kind === 'local') {
     return [
@@ -70,7 +68,7 @@ export const e2eProfile: {
   id: 'flowus-to-local',
   cacheFile: 'elog.cache.json',
   docOutputDir,
-  image: imageProfiles[imageKind],
+  image: imageProfiles.local,
 };
 
 export default defineConfig({

@@ -1,8 +1,60 @@
 # yuque-pwd-to-local
 
-这个 case 用来测试语雀密码登录、本地部署、目录结构保留，以及图床插件。
+## 测试目的
+
+这个 case 用来验证语雀密码登录、语雀目录结构、本地图床 `pathFollowDoc`，以及本地 Markdown 部署能串成一个真实同步流程。
 
 当前默认场景是：语雀 TOC Repo -> 本地图床 -> 本地 Markdown。
+
+## 覆盖范围
+
+- `fromYuque` 可以通过用户名、密码和 login 地址读取指定语雀知识库。
+- `ELOG_E2E_YUQUE_REPO_TOC` 指向带目录结构的语雀测试知识库。
+- `toLocal.keepToc` 会根据语雀目录信息生成嵌套文档目录。
+- `imageLocal.pathFollowDoc` 会根据文档所在目录计算图片相对路径。
+- 第二次运行应命中无变化或跳过逻辑。
+
+## Fixture 要求
+
+- 语雀测试知识库至少保留一篇嵌套目录文档。
+- 至少一篇嵌套目录文档应包含图片，用来覆盖 `pathFollowDoc` 的相对路径计算。
+- 密码登录环境变量必须指向可访问该知识库的测试账号。
+
+## 不覆盖
+
+- 语雀 Token 登录路径；它由 `yuque-token-to-local` 覆盖。
+- Notion/FlowUs 的 catalog 字段。
+- 云图床全矩阵的真实可用性；这里只通过 profile 保留可切换入口。
+
+## 配置切换
+
+图床切换点在 `tests/e2e/cases/yuque-pwd-to-local/elog.config.ts` 的 `e2eProfile.image`：
+
+```ts
+image: imageProfiles.local,
+```
+
+要关闭图床，改成：
+
+```ts
+image: imageProfiles.none,
+```
+
+要切到某个云图床，改成对应 profile：
+
+```ts
+image: imageProfiles.r2,
+```
+
+可选值包括 `local`、`b2`、`cos`、`github`、`oss`、`qiniu`、`r2`、`upyun`、`none`。`case.ts` 会根据 `e2eProfile.image.kind` 自动追加对应图床环境变量；这些环境变量定义在 `tests/e2e/src/helpers/image-expected.ts` 的 `requiredEnvByImageKind`。
+
+如果切到云图床，上传前缀默认来自同一个文件里的：
+
+```ts
+const cloudPrefixKey = 'elog-e2e/yuque-pwd/';
+```
+
+要只改某一个云图床的前缀，编辑对应 `imageProfiles.<kind>.prefixKey`。如果保持本地图床，不要给 `imageProfiles.local` 加 `prefixKey`，因为当前测试依赖 `pathFollowDoc` 动态计算嵌套目录中的相对图片路径。
 
 ## 可以直接改
 
