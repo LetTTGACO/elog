@@ -813,6 +813,30 @@
       }
     },
     {
+      "kind": "transform",
+      "type": "markdown-to-html",
+      "displayName": "Markdown 转 HTML",
+      "packageName": "@elog/plugin-transform-markdown-to-html",
+      "importName": "markdownToHtml",
+      "optionsSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    {
+      "kind": "transform",
+      "type": "markdown-to-confluence-wiki",
+      "displayName": "Markdown 转 Confluence Wiki",
+      "packageName": "@elog/plugin-transform-markdown-to-confluence-wiki",
+      "importName": "markdownToConfluenceWiki",
+      "optionsSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    {
       "kind": "to",
       "type": "local",
       "displayName": "本地目录",
@@ -838,6 +862,141 @@
             "x-elog-prompt": {
               "type": "confirm",
               "message": "是否保持原有目录结构？"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "kind": "to",
+      "type": "halo",
+      "displayName": "Halo",
+      "packageName": "@elog/plugin-to-halo",
+      "importName": "toHalo",
+      "optionsSchema": {
+        "type": "object",
+        "required": ["endpoint", "token"],
+        "properties": {
+          "endpoint": {
+            "type": "string",
+            "title": "Halo Endpoint",
+            "x-elog-env": "HALO_ENDPOINT",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 Halo Endpoint"
+            }
+          },
+          "token": {
+            "type": "string",
+            "title": "Halo Token",
+            "x-elog-env": "HALO_TOKEN",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入 Halo Token"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "kind": "to",
+      "type": "wordpress",
+      "displayName": "WordPress",
+      "packageName": "@elog/plugin-to-wordpress",
+      "importName": "toWordPress",
+      "optionsSchema": {
+        "type": "object",
+        "required": ["endpoint", "username", "password"],
+        "properties": {
+          "endpoint": {
+            "type": "string",
+            "title": "WordPress Endpoint",
+            "x-elog-env": "WORDPRESS_ENDPOINT",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 WordPress Endpoint"
+            }
+          },
+          "username": {
+            "type": "string",
+            "title": "WordPress Username",
+            "x-elog-env": "WORDPRESS_USERNAME",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 WordPress Username"
+            }
+          },
+          "password": {
+            "type": "string",
+            "title": "WordPress Password",
+            "x-elog-env": "WORDPRESS_PASSWORD",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入 WordPress Password"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "kind": "to",
+      "type": "confluence",
+      "displayName": "Confluence",
+      "packageName": "@elog/plugin-to-confluence",
+      "importName": "toConfluence",
+      "optionsSchema": {
+        "type": "object",
+        "required": ["user", "password", "baseUrl", "spaceKey", "rootPageId"],
+        "properties": {
+          "user": {
+            "type": "string",
+            "title": "Confluence User",
+            "x-elog-env": "CONFLUENCE_USER",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 Confluence User"
+            }
+          },
+          "password": {
+            "type": "string",
+            "title": "Confluence Password",
+            "x-elog-env": "CONFLUENCE_PASSWORD",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入 Confluence Password"
+            }
+          },
+          "baseUrl": {
+            "type": "string",
+            "title": "Confluence Base URL",
+            "x-elog-env": "CONFLUENCE_BASE_URL",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 Confluence Base URL"
+            }
+          },
+          "spaceKey": {
+            "type": "string",
+            "title": "Confluence Space Key",
+            "x-elog-env": "CONFLUENCE_SPACE_KEY",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 Confluence Space Key"
+            }
+          },
+          "rootPageId": {
+            "type": "string",
+            "title": "Confluence Root Page ID",
+            "x-elog-env": "CONFLUENCE_ROOT_PAGE_ID",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 Confluence Root Page ID"
             }
           }
         },

@@ -169,10 +169,40 @@ describe('loadBuiltInPluginRegistry', () => {
         importName: 'imageB2',
       },
       {
+        kind: 'transform',
+        type: 'markdown-to-html',
+        packageName: '@elog/plugin-transform-markdown-to-html',
+        importName: 'markdownToHtml',
+      },
+      {
+        kind: 'transform',
+        type: 'markdown-to-confluence-wiki',
+        packageName: '@elog/plugin-transform-markdown-to-confluence-wiki',
+        importName: 'markdownToConfluenceWiki',
+      },
+      {
         kind: 'to',
         type: 'local',
         packageName: '@elog/plugin-to-local',
         importName: 'toLocal',
+      },
+      {
+        kind: 'to',
+        type: 'halo',
+        packageName: '@elog/plugin-to-halo',
+        importName: 'toHalo',
+      },
+      {
+        kind: 'to',
+        type: 'wordpress',
+        packageName: '@elog/plugin-to-wordpress',
+        importName: 'toWordPress',
+      },
+      {
+        kind: 'to',
+        type: 'confluence',
+        packageName: '@elog/plugin-to-confluence',
+        importName: 'toConfluence',
       },
     ] as const;
 
@@ -180,6 +210,76 @@ describe('loadBuiltInPluginRegistry', () => {
     expect(registry.plugins).toEqual(
       expect.arrayContaining(stableEntries.map((entry) => expect.objectContaining(entry))),
     );
+  });
+
+  it('exposes CMS body transforms and target connection schemas', () => {
+    const registry = loadBuiltInPluginRegistry();
+    const byKey = (kind: 'transform' | 'to', type: string) => {
+      const entry = registry.plugins.find((plugin) => plugin.kind === kind && plugin.type === type);
+      expect(entry).toBeDefined();
+      return entry!;
+    };
+
+    expect(byKey('transform', 'markdown-to-html')).toMatchObject({
+      displayName: 'Markdown 转 HTML',
+      optionsSchema: {
+        type: 'object',
+        properties: {},
+        additionalProperties: false,
+      },
+    });
+    expect(byKey('transform', 'markdown-to-confluence-wiki')).toMatchObject({
+      displayName: 'Markdown 转 Confluence Wiki',
+      optionsSchema: {
+        type: 'object',
+        properties: {},
+        additionalProperties: false,
+      },
+    });
+
+    expect(byKey('to', 'halo').optionsSchema).toMatchObject({
+      required: ['endpoint', 'token'],
+      properties: {
+        endpoint: { 'x-elog-env': 'HALO_ENDPOINT' },
+        token: { 'x-elog-env': 'HALO_TOKEN', 'x-elog-secret': true },
+      },
+    });
+    expect(Object.keys(byKey('to', 'halo').optionsSchema.properties ?? {})).toEqual([
+      'endpoint',
+      'token',
+    ]);
+
+    expect(byKey('to', 'wordpress').optionsSchema).toMatchObject({
+      required: ['endpoint', 'username', 'password'],
+      properties: {
+        endpoint: { 'x-elog-env': 'WORDPRESS_ENDPOINT' },
+        username: { 'x-elog-env': 'WORDPRESS_USERNAME' },
+        password: { 'x-elog-env': 'WORDPRESS_PASSWORD', 'x-elog-secret': true },
+      },
+    });
+    expect(Object.keys(byKey('to', 'wordpress').optionsSchema.properties ?? {})).toEqual([
+      'endpoint',
+      'username',
+      'password',
+    ]);
+
+    expect(byKey('to', 'confluence').optionsSchema).toMatchObject({
+      required: ['user', 'password', 'baseUrl', 'spaceKey', 'rootPageId'],
+      properties: {
+        user: { 'x-elog-env': 'CONFLUENCE_USER' },
+        password: { 'x-elog-env': 'CONFLUENCE_PASSWORD', 'x-elog-secret': true },
+        baseUrl: { 'x-elog-env': 'CONFLUENCE_BASE_URL' },
+        spaceKey: { 'x-elog-env': 'CONFLUENCE_SPACE_KEY' },
+        rootPageId: { 'x-elog-env': 'CONFLUENCE_ROOT_PAGE_ID' },
+      },
+    });
+    expect(Object.keys(byKey('to', 'confluence').optionsSchema.properties ?? {})).toEqual([
+      'user',
+      'password',
+      'baseUrl',
+      'spaceKey',
+      'rootPageId',
+    ]);
   });
 });
 
