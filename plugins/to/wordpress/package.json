@@ -28,13 +28,8 @@
       "optional": true
     }
   },
-  "dependencies": {
-    "highlight.js": "~11.11.1",
-    "markdown-it": "~14.2.0"
-  },
   "devDependencies": {
     "@elog/cli": "workspace:*",
-    "@types/markdown-it": "~14.1.2",
     "@types/node": "~22.19.19",
     "tsdown": "^0.22.3",
     "typescript": "~6.0.3",

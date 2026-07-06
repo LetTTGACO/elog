@@ -305,7 +305,7 @@ export default class extends Context {
       params.content.content = doc.body;
       const hasRawBody = doc.rawBody !== undefined;
       params.content.raw = hasRawBody ? doc.rawBody! : doc.body;
-      params.content.rawType = hasRawBody ? (doc.rawBodyType ?? 'markdown') : 'html';
+      params.content.rawType = hasRawBody ? (doc.rawBodyType ?? 'html') : 'html';
       const postDate = getPostDate(doc, this.ctx.logger.warn);
       if (postDate) {
         params.post.metadata.creationTimestamp = postDate;

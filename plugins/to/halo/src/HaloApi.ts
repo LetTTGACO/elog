@@ -8,7 +8,6 @@ import type {
   CategoryList,
   Content,
   ListedPostList,
-  Policy,
   Post,
   PostRequest,
   Tag,
@@ -69,7 +68,7 @@ export default class HaloApi extends Context {
   }
 
   /**
-   * send api request to yuque
+   * send api request to Halo
    * @param api
    * @param reqOpts
    */
@@ -269,15 +268,6 @@ export default class HaloApi extends Context {
       `/apis/api.console.halo.run/v1alpha1/posts/${docId}/unpublish`,
       {
         method: 'PUT',
-      },
-    );
-  }
-
-  async getPolicy(): Promise<Policy> {
-    return this.requestInternal<Policy>(
-      `/apis/storage.halo.run/v1alpha1/policies/${this.config.policyName}`,
-      {
-        method: 'GET',
       },
     );
   }

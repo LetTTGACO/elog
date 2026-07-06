@@ -135,6 +135,23 @@ describe('HaloDeploy', () => {
     expect(params.content.rawType).toBe('markdown');
   });
 
+  it('treats raw body without raw body type as HTML editable source content', async () => {
+    const ctx = createCtx();
+    const api = createApi();
+    const deploy = createDeploy(ctx, api);
+
+    await deploy.deploy([
+      {
+        ...createDoc({ categories: [], tags: [] }),
+        rawBody: '<p>Hello source</p>',
+      },
+    ]);
+
+    const params = api.createPost.mock.calls[0][0];
+    expect(params.content.raw).toBe('<p>Hello source</p>');
+    expect(params.content.rawType).toBe('html');
+  });
+
   it('falls back to HTML body as editable source content', async () => {
     const ctx = createCtx();
     const api = createApi();

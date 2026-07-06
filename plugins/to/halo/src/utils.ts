@@ -35,26 +35,6 @@ export function getNoRepValues(
   };
 }
 
-interface AnyObject {
-  [key: string]: any;
-}
-
-/**
- * 删除对象中的空属性
- * @param obj
- */
-export const removeEmptyProperties = (obj: AnyObject): AnyObject => {
-  const filteredObj: AnyObject = {};
-
-  Object.entries(obj).forEach(([key, value]) => {
-    if (value !== null && value !== undefined && value !== '' && value.length !== 0) {
-      filteredObj[key] = value;
-    }
-  });
-
-  return filteredObj;
-};
-
 export function getIds(items: any, map: any, onMissing?: (item: string) => void) {
   if (!items) return [];
   let list = items;

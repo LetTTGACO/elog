@@ -25,7 +25,7 @@ export default class ConfluenceApi extends Context {
   }
 
   /**
-   * send api request to yuque
+   * send api request to Confluence
    * @param api
    * @param reqOpts
    */
