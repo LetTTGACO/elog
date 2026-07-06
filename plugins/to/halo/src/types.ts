@@ -11,5 +11,4 @@ export interface HaloConfig {
   /** 组名称 */
   groupName?: string;
   enableUploadImage?: boolean;
-  needUploadImage?: boolean;
 }

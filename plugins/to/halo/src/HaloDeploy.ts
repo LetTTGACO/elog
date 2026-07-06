@@ -156,7 +156,7 @@ export default class extends Context {
       }
     }
     for (let doc of docDetailList) {
-      if (this.config.enableUploadImage ?? this.config.needUploadImage) {
+      if (this.config.enableUploadImage) {
         // 收集文档图片
         const urlList = this.ctx.image.getUrlListFromContent(doc.body);
         // 封面图

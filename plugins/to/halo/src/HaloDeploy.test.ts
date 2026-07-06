@@ -305,16 +305,6 @@ describe('HaloDeploy', () => {
     expect(api.unpublishPost).not.toHaveBeenCalled();
   });
 
-  it('uses the old image upload config name when the new name is absent', async () => {
-    const ctx = createCtx();
-    const api = createApi();
-    const deploy = createDeploy(ctx, api, { needUploadImage: true });
-
-    await deploy.deploy([createDoc({ categories: [], tags: [] })]);
-
-    expect(api.uploadAttachment).toHaveBeenCalledOnce();
-  });
-
   it('uses existing posts from aggregated list reads instead of creating duplicates', async () => {
     const ctx = createCtx();
     const api = createApi({
