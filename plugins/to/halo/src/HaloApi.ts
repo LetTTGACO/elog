@@ -15,6 +15,42 @@ import type {
   TagList,
 } from '@halo-dev/api-client';
 
+const LIST_PAGE_SIZE = 100;
+const ATTACHMENT_PERMALINK_MAX_ATTEMPTS = 30;
+const ATTACHMENT_PERMALINK_POLL_INTERVAL_MS = 1000;
+
+interface HaloListPage {
+  items: any[];
+  hasNext?: boolean;
+  last?: boolean;
+  page?: number;
+  size?: number;
+  total?: number;
+  totalPages?: number;
+}
+
+interface RequestOptions {
+  data?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
+function hasMorePages(list: HaloListPage, requestedPage: number) {
+  if (list.size === 0) return false;
+  if (typeof list.totalPages === 'number' && list.totalPages > 0) {
+    return requestedPage < list.totalPages;
+  }
+  if (typeof list.hasNext === 'boolean') return list.hasNext;
+  if (typeof list.last === 'boolean') return !list.last;
+  if (typeof list.total === 'number' && typeof list.size === 'number') {
+    return requestedPage * list.size < list.total;
+  }
+  return false;
+}
+
+async function wait(ms: number) {
+  await new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export default class HaloApi extends Context {
   config: HaloConfig;
   constructor(config: HaloConfig, ctx: PluginContext) {
@@ -58,11 +94,45 @@ export default class HaloApi extends Context {
     return res.data;
   }
 
+  private async requestPagedList<T extends HaloListPage>(
+    api: string,
+    reqOpts: RequestOptions,
+  ): Promise<T> {
+    let page = 1;
+    let currentPage = await this.requestInternal<T>(api, {
+      ...reqOpts,
+      data: {
+        ...(reqOpts.data ?? {}),
+        page,
+        size: LIST_PAGE_SIZE,
+      },
+    });
+    const items = [...currentPage.items];
+
+    while (hasMorePages(currentPage, page)) {
+      page += 1;
+      currentPage = await this.requestInternal<T>(api, {
+        ...reqOpts,
+        data: {
+          ...(reqOpts.data ?? {}),
+          page,
+          size: LIST_PAGE_SIZE,
+        },
+      });
+      items.push(...currentPage.items);
+    }
+
+    return {
+      ...currentPage,
+      items,
+    };
+  }
+
   /**
    * 获取文档列表
    */
   async getPostList() {
-    return this.requestInternal<ListedPostList>('/apis/api.console.halo.run/v1alpha1/posts', {
+    return this.requestPagedList<ListedPostList>('/apis/api.console.halo.run/v1alpha1/posts', {
       method: 'GET',
       data: {
         labelSelector: 'content.halo.run/deleted=false',
@@ -74,7 +144,7 @@ export default class HaloApi extends Context {
    * 获取Categories列表
    */
   async getCategories() {
-    return this.requestInternal<CategoryList>('/apis/content.halo.run/v1alpha1/categories', {
+    return this.requestPagedList<CategoryList>('/apis/content.halo.run/v1alpha1/categories', {
       method: 'GET',
     });
   }
@@ -93,7 +163,7 @@ export default class HaloApi extends Context {
    * 获取Tags列表
    */
   async getTags() {
-    return this.requestInternal<TagList>('/apis/content.halo.run/v1alpha1/tags', {
+    return this.requestPagedList<TagList>('/apis/content.halo.run/v1alpha1/tags', {
       method: 'GET',
     });
   }
@@ -112,9 +182,12 @@ export default class HaloApi extends Context {
    * 获取附件列表
    */
   async getAttachments() {
-    return this.requestInternal<AttachmentList>('/apis/api.console.halo.run/v1alpha1/attachments', {
-      method: 'GET',
-    });
+    return this.requestPagedList<AttachmentList>(
+      '/apis/api.console.halo.run/v1alpha1/attachments',
+      {
+        method: 'GET',
+      },
+    );
   }
 
   /**
@@ -214,20 +287,18 @@ export default class HaloApi extends Context {
    * @param name
    */
   async getAttachmentPermalink(name: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const fetchPermalink = () => {
-        this.getAttachment(name)
-          .then((response) => {
-            const permalink = response.status?.permalink;
-            if (permalink) {
-              resolve(permalink);
-            } else {
-              setTimeout(fetchPermalink, 1000);
-            }
-          })
-          .catch((error) => reject(error));
-      };
-      fetchPermalink();
-    });
+    for (let attempt = 1; attempt <= ATTACHMENT_PERMALINK_MAX_ATTEMPTS; attempt += 1) {
+      const response = await this.getAttachment(name);
+      const permalink = response.status?.permalink;
+      if (permalink) {
+        return permalink;
+      }
+      if (attempt < ATTACHMENT_PERMALINK_MAX_ATTEMPTS) {
+        await wait(ATTACHMENT_PERMALINK_POLL_INTERVAL_MS);
+      }
+    }
+    throw new Error(
+      `Timed out waiting for Halo attachment permalink for ${name} after ${ATTACHMENT_PERMALINK_MAX_ATTEMPTS} attempts`,
+    );
   }
 }

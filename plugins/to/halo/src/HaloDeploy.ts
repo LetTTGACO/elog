@@ -209,9 +209,10 @@ export default class extends Context {
                 doc.properties.cover = imageUrl;
               }
             } catch (e: any) {
+              const reason = e?.message ? `，${e.message}` : '';
               this.ctx.logger.warn(
                 '跳过',
-                `${doc?.properties?.title} 存在上传图片失败：${image.data}`,
+                `${doc?.properties?.title} 存在上传图片失败：${image.data}${reason}`,
               );
               this.ctx.logger.debug(e);
             }
