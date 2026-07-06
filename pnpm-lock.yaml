@@ -546,6 +546,34 @@ importers:
         specifier: ~6.0.3
         version: 6.0.3
 
+  plugins/transform/markdown-to-html:
+    dependencies:
+      highlight.js:
+        specifier: ~11.11.1
+        version: 11.11.1
+      markdown-it:
+        specifier: ~14.2.0
+        version: 14.2.0
+    devDependencies:
+      '@elog/cli':
+        specifier: workspace:*
+        version: link:../../../packages/elog
+      '@types/markdown-it':
+        specifier: ~14.1.2
+        version: 14.1.2
+      '@types/node':
+        specifier: ~22.19.19
+        version: 22.19.19
+      tsdown:
+        specifier: ^0.22.3
+        version: 0.22.3(typescript@6.0.3)
+      typescript:
+        specifier: ~6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@types/node@22.19.19)(jsdom@21.1.2)(vite@8.0.13(@types/node@22.19.19)(esbuild@0.28.1)(yaml@2.9.0))
+
   tests/e2e:
     dependencies:
       '@elog/cli':
