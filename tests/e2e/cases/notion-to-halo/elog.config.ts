@@ -28,7 +28,7 @@ export default defineConfig({
   cacheFilePath: e2eProfile.cacheFile,
   from: fromNotion({
     token: process.env.ELOG_E2E_NOTION_TOKEN,
-    databaseId: process.env.ELOG_E2E_NOTION_DATABASE_ID,
+    databaseId: process.env.ELOG_E2E_NOTION_HALO_DATABASE_ID,
   }),
   plugins: [
     imageR2({
@@ -38,6 +38,7 @@ export default defineConfig({
       bucket: process.env.ELOG_E2E_R2_BUCKET!,
       endpoint: process.env.ELOG_E2E_R2_ENDPOINT!,
       prefixKey: e2eProfile.image.prefixKey,
+      propertyImageFields: ['cover'],
     }),
     markdownToHtml(),
   ],

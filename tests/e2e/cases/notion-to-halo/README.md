@@ -2,19 +2,20 @@
 
 ## 测试目的
 
-这个 case 用来验证 Notion 文档可以经过 Markdown-to-HTML transform 后部署到真实 Halo 站点。Halo 当前不在稳定发布矩阵中，这个 case 更偏手动验收和兼容性观察。
+这个 case 用来验证专用 Notion-Halo 测试数据库中的文档可以经过 Markdown-to-HTML transform 后部署到真实 Halo 站点。
 
 ## 覆盖范围
 
-- `fromNotion` 可以读取基础 Notion 测试数据库。
-- `imageR2` 会先把 Notion 图片替换成自有 R2 图床地址，避免 Halo 前台保留不可长期访问的 Notion 临时图片链接。
+- `fromNotion` 可以读取专用于 Halo 部署链路的 Notion 测试数据库。
+- `imageR2` 会先把 Notion 正文图片和属性中的 `cover` 替换成自有 R2 图床地址，避免 Halo 前台保留不可长期访问的 Notion 临时图片链接。
 - `markdownToHtml` 会把 Markdown 文档转换成 Halo target 需要的 HTML body。
 - `toHalo` 可以用 endpoint/token 完成真实部署。
 - 第二次运行应命中无变化或跳过逻辑。
 
 ## Fixture 要求
 
-- `ELOG_E2E_NOTION_DATABASE_ID` 指向稳定的基础 Notion 测试数据库。
+- `ELOG_E2E_NOTION_HALO_DATABASE_ID` 指向专用于 Notion -> Halo 流程的稳定 Notion 测试数据库。
+- Notion-Halo fixture 中的文章包含 `cover` 属性，用来验证属性图片也会被 R2 图床替换。
 - `ELOG_E2E_HALO_ENDPOINT` 和 `ELOG_E2E_HALO_TOKEN` 指向可写入的 Halo 测试站点。
 - R2 环境变量指向可写入的测试 bucket。
 - Halo 站点中的测试文章允许被 e2e 创建或更新。
