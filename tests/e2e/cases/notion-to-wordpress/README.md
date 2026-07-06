@@ -36,5 +36,5 @@ plugins: [imageR2(...), markdownToHtml()]
 ## 不覆盖
 
 - WordPress 发布矩阵或 npm 发布资格。
-- WordPress 图片上传，当前配置固定 `enableUploadImage: false`。
+- WordPress 自身媒体库上传；默认未配置 `enableUploadImage`，因此不覆盖该路径。
 - Notion catalog 目录输出。

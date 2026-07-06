@@ -7,7 +7,7 @@
 ## 覆盖范围
 
 - `fromNotion` 可以读取基础 Notion 测试数据库。
-- `catalog: false` 下文档会直接输出到本地目标目录。
+- 未启用 catalog 时文档会直接输出到本地目标目录。
 - `imageLocal` 会把图片写入本地 `images` 目录并替换 Markdown 图片地址。
 - `toLocal` 会生成带 Front Matter 的 Markdown。
 - 第二次运行应命中无变化或跳过逻辑。

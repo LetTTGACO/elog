@@ -29,7 +29,6 @@ export default defineConfig({
   from: fromNotion({
     token: process.env.ELOG_E2E_NOTION_TOKEN,
     databaseId: process.env.ELOG_E2E_NOTION_DATABASE_ID,
-    catalog: false,
   }),
   plugins: [
     imageR2({
@@ -46,6 +45,5 @@ export default defineConfig({
     endpoint: process.env.ELOG_E2E_WORDPRESS_ENDPOINT!,
     username: process.env.ELOG_E2E_WORDPRESS_USERNAME!,
     password: process.env.ELOG_E2E_WORDPRESS_PASSWORD!,
-    enableUploadImage: false,
   }),
 });

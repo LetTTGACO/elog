@@ -53,7 +53,6 @@ export default defineConfig({
     token: process.env.ELOG_E2E_YUQUE_TOKEN,
     login: process.env.ELOG_E2E_YUQUE_LOGIN,
     repo: process.env.ELOG_E2E_YUQUE_REPO,
-    onlyPublic: false,
   }),
   plugins:
     e2eProfile.image.kind === 'local'
@@ -78,7 +77,6 @@ export default defineConfig({
   to: toLocal({
     outputDir: e2eProfile.docOutputDir,
     keepToc: true,
-    filename: 'title',
     frontMatter: { enable: true },
   }),
 });

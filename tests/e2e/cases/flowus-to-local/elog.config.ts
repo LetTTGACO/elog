@@ -76,14 +76,10 @@ export default defineConfig({
   cacheFilePath: e2eProfile.cacheFile,
   from: fromFlowUs({
     tablePageId: env.ELOG_E2E_FLOWUS_TABLE_PAGE_ID,
-    filter: false,
-    sort: false,
-    catalog: false,
   }),
   plugins: createImagePlugins(e2eProfile.image),
   to: toLocal({
     outputDir: e2eProfile.docOutputDir,
-    filename: 'title',
     frontMatter: { enable: true },
   }),
 });

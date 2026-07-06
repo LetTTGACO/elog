@@ -52,7 +52,6 @@ export default defineConfig({
   from: fromNotion({
     token: process.env.ELOG_E2E_NOTION_TOKEN,
     databaseId: process.env.ELOG_E2E_NOTION_DATABASE_ID,
-    catalog: false,
   }),
   plugins:
     e2eProfile.image.kind === 'local'
@@ -77,7 +76,6 @@ export default defineConfig({
         : [],
   to: toLocal({
     outputDir: e2eProfile.docOutputDir,
-    filename: 'title',
     frontMatter: { enable: true },
   }),
 });

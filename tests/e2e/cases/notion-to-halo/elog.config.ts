@@ -29,7 +29,6 @@ export default defineConfig({
   from: fromNotion({
     token: process.env.ELOG_E2E_NOTION_TOKEN,
     databaseId: process.env.ELOG_E2E_NOTION_DATABASE_ID,
-    catalog: false,
   }),
   plugins: [
     imageR2({
@@ -45,6 +44,5 @@ export default defineConfig({
   to: toHalo({
     endpoint: process.env.ELOG_E2E_HALO_ENDPOINT!,
     token: process.env.ELOG_E2E_HALO_TOKEN!,
-    enableUploadImage: false,
   }),
 });

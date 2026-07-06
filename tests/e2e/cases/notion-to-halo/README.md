@@ -35,6 +35,6 @@ plugins: [imageR2(...), markdownToHtml()]
 
 ## 不覆盖
 
-- Halo 自身附件上传，当前配置固定 `enableUploadImage: false`。
+- Halo 自身附件上传；默认未配置 `enableUploadImage`，因此不覆盖该路径。
 - Halo 存储策略和分组参数；这些由插件单测覆盖。
 - Notion catalog 目录输出。

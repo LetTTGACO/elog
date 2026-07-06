@@ -57,7 +57,6 @@ export default defineConfig({
   ],
   to: toLocal({
     outputDir: e2eProfile.docOutputDir,
-    filename: 'title',
     keepToc: true,
     frontMatter: { enable: true },
   }),

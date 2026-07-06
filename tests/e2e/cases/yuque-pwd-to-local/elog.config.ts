@@ -150,13 +150,11 @@ export default defineConfig({
     password: process.env.ELOG_E2E_YUQUE_PWD,
     login: process.env.ELOG_E2E_YUQUE_LOGIN,
     repo: process.env.ELOG_E2E_YUQUE_REPO_TOC,
-    onlyPublic: false,
   }),
   plugins: createImagePlugins(e2eProfile.image),
   to: toLocal({
     outputDir: e2eProfile.docOutputDir,
     keepToc: true,
-    filename: 'title',
     frontMatter: { enable: true },
   }),
 });
