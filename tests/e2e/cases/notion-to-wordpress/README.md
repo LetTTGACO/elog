@@ -7,6 +7,7 @@
 ## 覆盖范围
 
 - `fromNotion` 可以读取基础 Notion 测试数据库。
+- `imageR2` 会先把 Notion 图片替换成自有 R2 图床地址，避免 WordPress 前台保留不可长期访问的 Notion 临时图片链接。
 - `markdownToHtml` 会把 Markdown 文档转换成 WordPress target 需要的 HTML body。
 - `toWordPress` 可以用 endpoint/username/password 完成真实部署。
 - 第二次运行应命中无变化或跳过逻辑。
@@ -15,32 +16,22 @@
 
 - `ELOG_E2E_NOTION_DATABASE_ID` 指向稳定的基础 Notion 测试数据库。
 - WordPress 环境变量指向可写入的测试站点。
+- R2 环境变量指向可写入的测试 bucket。
 - 测试站点中的文章允许被 e2e 创建或更新。
 
-## 配置切换
+## 图片策略
 
-这个 case 默认 `e2eProfile.image.kind` 是 `none`，只测 Notion -> Markdown-to-HTML -> WordPress 基础部署。
-
-如果要临时加图床 transform，编辑 `tests/e2e/cases/notion-to-wordpress/elog.config.ts` 里的 `e2eProfile.image`：
+这个 case 固定使用 R2 图床：
 
 ```ts
-image: {
-  kind: 'local',
-  outputDir: 'images',
-  prefixKey: '../images',
-  expectFiles: true,
-}
+plugins: [imageR2(...), markdownToHtml()]
 ```
 
-或改成 R2：
+这样做是为了避免 WordPress 前台保留 Notion 的临时或受限图片链接。不要在这个远端 CMS case 里使用本地图床：本地图床会生成本机相对路径，部署到 WordPress 后前台通常无法访问。
 
-```ts
-image: {
-  kind: 'r2',
-}
-```
+如果想改成 WordPress 自身媒体库上传，需要移除 `imageR2(...)` transform，同时在 `toWordPress({ ... })` 里设置 `enableUploadImage: true`。这个路径依赖真实 WordPress 媒体上传权限，当前不是默认 e2e 覆盖面。
 
-选择 R2 时，需要提供 `ELOG_E2E_R2_HOST`、`ELOG_E2E_R2_ACCESS_KEY_ID`、`ELOG_E2E_R2_SECRET_ACCESS_KEY`、`ELOG_E2E_R2_BUCKET`、`ELOG_E2E_R2_ENDPOINT`。这里的图床 transform 发生在部署前；WordPress 自身媒体上传仍然由 `toWordPress({ enableUploadImage })` 控制，当前固定为 `false`。
+运行这个 case 需要提供 `ELOG_E2E_R2_HOST`、`ELOG_E2E_R2_ACCESS_KEY_ID`、`ELOG_E2E_R2_SECRET_ACCESS_KEY`、`ELOG_E2E_R2_BUCKET`、`ELOG_E2E_R2_ENDPOINT`。R2 上传前缀在同一个文件的 `e2eProfile.image.prefixKey` 里配置。
 
 ## 不覆盖
 

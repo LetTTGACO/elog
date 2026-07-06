@@ -14,8 +14,25 @@ type E2eImageProfile =
     }
   | {
       kind: 'r2';
+      prefixKey: string;
       expectFiles?: false;
     };
+
+type E2eImageKind = E2eImageProfile['kind'];
+const docOutputDir = 'docs';
+const imageProfiles: Record<E2eImageKind, E2eImageProfile> = {
+  none: { kind: 'none' },
+  local: {
+    kind: 'local',
+    outputDir: 'images',
+    prefixKey: '../images',
+    expectFiles: true,
+  },
+  r2: {
+    kind: 'r2',
+    prefixKey: 'elog-e2e/yuque-token/',
+  },
+};
 
 export const e2eProfile: {
   id: string;
@@ -25,13 +42,8 @@ export const e2eProfile: {
 } = {
   id: 'yuque-token-to-local',
   cacheFile: 'elog.cache.json',
-  docOutputDir: 'docs',
-  image: {
-    kind: 'local',
-    outputDir: 'images',
-    prefixKey: '../images',
-    expectFiles: true,
-  },
+  docOutputDir,
+  image: imageProfiles.local,
 };
 
 export default defineConfig({
@@ -59,7 +71,7 @@ export default defineConfig({
               secretAccessKey: process.env.ELOG_E2E_R2_SECRET_ACCESS_KEY!,
               bucket: process.env.ELOG_E2E_R2_BUCKET!,
               endpoint: process.env.ELOG_E2E_R2_ENDPOINT!,
-              prefixKey: 'elog-e2e/yuque-token/',
+              prefixKey: e2eProfile.image.prefixKey,
             }),
           ]
         : [],

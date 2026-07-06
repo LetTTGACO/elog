@@ -20,35 +20,27 @@
 
 ## 配置切换
 
-这个 case 默认在 `tests/e2e/cases/notion-to-local/elog.config.ts` 的 `e2eProfile.image` 使用本地图床：
+图床切换点在 `tests/e2e/cases/notion-to-local/elog.config.ts` 的 `e2eProfile.image`。
+
+默认使用本地图床：
 
 ```ts
-image: {
-  kind: 'local',
-  outputDir: 'images',
-  prefixKey: '../images',
-  expectFiles: true,
-}
+image: imageProfiles.local,
 ```
 
-如果要关闭图床 transform，把同一处改成：
+如果要关闭图床 transform，改成：
 
 ```ts
-image: {
-  kind: 'none',
-}
+image: imageProfiles.none,
 ```
 
-如果要切到 R2，把同一处改成：
+如果要切到 R2，改成：
 
 ```ts
-image: {
-  kind: 'r2',
-  expectFiles: false,
-}
+image: imageProfiles.r2,
 ```
 
-选择 R2 时，需要提供 `ELOG_E2E_R2_HOST`、`ELOG_E2E_R2_ACCESS_KEY_ID`、`ELOG_E2E_R2_SECRET_ACCESS_KEY`、`ELOG_E2E_R2_BUCKET`、`ELOG_E2E_R2_ENDPOINT`。R2 上传前缀目前在同一个文件的 `imageR2({ prefixKey: 'elog-e2e/notion/' })` 里配置。
+选择 R2 时，需要提供 `ELOG_E2E_R2_HOST`、`ELOG_E2E_R2_ACCESS_KEY_ID`、`ELOG_E2E_R2_SECRET_ACCESS_KEY`、`ELOG_E2E_R2_BUCKET`、`ELOG_E2E_R2_ENDPOINT`。R2 上传前缀在同一个文件的 `imageProfiles.r2.prefixKey` 里配置。
 
 ## 不覆盖
 
