@@ -2,7 +2,7 @@ import type { HaloConfig } from './types';
 import type { DocDetail, PluginContext } from '@elog/cli';
 import HaloApi from './HaloApi';
 import { slugify } from 'transliteration';
-import { delay, getIds, getNoRepValues, htmlAdapter } from './utils';
+import { delay, getIds, getNoRepValues } from './utils';
 import type { PostRequest } from '@halo-dev/api-client';
 import Context from './Context';
 
@@ -28,6 +28,17 @@ function getPostDate(doc: DocDetail, warn: PluginContext['logger']['warn']) {
   return date.toISOString();
 }
 
+function assertHtmlBodyTypes(docs: DocDetail[], error: PluginContext['logger']['error']) {
+  for (const doc of docs) {
+    const bodyType = doc.bodyType ?? 'markdown';
+    if (bodyType !== 'html') {
+      error(
+        `Halo target expects HTML Document Body, received ${bodyType} for ${doc.properties.title}. Add the Markdown-to-HTML Body Transform before deploying to Halo.`,
+      );
+    }
+  }
+}
+
 export default class extends Context {
   private readonly config: HaloConfig;
   private readonly api: HaloApi;
@@ -42,6 +53,7 @@ export default class extends Context {
     if (docs.length === 0) {
       this.ctx.logger.error('没有可部署的文档');
     }
+    assertHtmlBodyTypes(docs, this.ctx.logger.error);
     const docDetailList = JSON.parse(JSON.stringify(docs)) as DocDetail[];
 
     this.ctx.logger.success('正在部署到 Halo...');
@@ -214,10 +226,6 @@ export default class extends Context {
           }
         }
       }
-      // markdown转 Html
-      const mdBody = doc.body;
-      doc.body = htmlAdapter(doc);
-
       // 上传文档
       let params: PostRequest = {
         post: {
@@ -294,6 +302,9 @@ export default class extends Context {
       }
       // 覆盖文档内容
       params.content.content = doc.body;
+      const hasRawBody = doc.rawBody !== undefined;
+      params.content.raw = hasRawBody ? doc.rawBody! : doc.body;
+      params.content.rawType = hasRawBody ? (doc.rawBodyType ?? 'markdown') : 'html';
       const postDate = getPostDate(doc, this.ctx.logger.warn);
       if (postDate) {
         params.post.metadata.creationTimestamp = postDate;
@@ -301,13 +312,6 @@ export default class extends Context {
       }
       const shouldPublish = readBoolean(doc.properties.publish, true);
       params.post.spec.publish = shouldPublish;
-      if (this.config.rowType === 'markdown') {
-        params.content.raw = mdBody;
-        params.content.rawType = 'markdown';
-      } else {
-        params.content.rawType = 'html';
-        params.content.raw = doc.body;
-      }
       // 判断文档是否存在 halo
       let saved = false;
       if (!item) {

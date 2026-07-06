@@ -1,5 +1,4 @@
 import type { DocDetail } from '@elog/cli';
-import MarkdownIt from 'markdown-it';
 
 interface NoRepValues {
   tags: string[];
@@ -56,20 +55,6 @@ export const removeEmptyProperties = (obj: AnyObject): AnyObject => {
   return filteredObj;
 };
 
-/**
- * markdown转html（无代码高亮）
- * @param doc
- */
-export function htmlAdapter(doc: DocDetail) {
-  let { body } = doc;
-  return new MarkdownIt({
-    html: true,
-    xhtmlOut: true,
-    breaks: true,
-    linkify: true,
-    typographer: true,
-  }).render(body);
-}
 export function getIds(items: any, map: any, onMissing?: (item: string) => void) {
   if (!items) return [];
   let list = items;

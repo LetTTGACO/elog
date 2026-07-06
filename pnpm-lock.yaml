@@ -308,9 +308,6 @@ importers:
 
   plugins/to/halo:
     dependencies:
-      markdown-it:
-        specifier: ~14.2.0
-        version: 14.2.0
       transliteration:
         specifier: ~2.3.5
         version: 2.3.5
@@ -321,9 +318,6 @@ importers:
       '@halo-dev/api-client':
         specifier: 2.10.0
         version: 2.10.0
-      '@types/markdown-it':
-        specifier: ~14.1.2
-        version: 14.1.2
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19

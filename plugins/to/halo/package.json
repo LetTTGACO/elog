@@ -29,13 +29,11 @@
     }
   },
   "dependencies": {
-    "markdown-it": "~14.2.0",
     "transliteration": "~2.3.5"
   },
   "devDependencies": {
     "@elog/cli": "workspace:*",
     "@halo-dev/api-client": "2.10.0",
-    "@types/markdown-it": "~14.1.2",
     "@types/node": "~22.19.19",
     "tsdown": "^0.22.3",
     "typescript": "~6.0.3",

@@ -69,7 +69,8 @@ function createDoc(properties: Partial<DocDetail['properties']> = {}): DocDetail
     id: 'doc-1',
     title: 'Doc 1',
     updateTime: 1,
-    body: '# Hello',
+    body: '<h1>Hello</h1>',
+    bodyType: 'html',
     properties: {
       title: 'Doc 1',
       urlname: 'doc-1',
@@ -99,6 +100,78 @@ function createDeploy(ctx: PluginContext, api: ReturnType<typeof createApi>, con
 describe('HaloDeploy', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  it('sends HTML body as rendered post content', async () => {
+    const ctx = createCtx();
+    const api = createApi();
+    const deploy = createDeploy(ctx, api);
+
+    await deploy.deploy([createDoc({ categories: [], tags: [] })]);
+
+    const params = api.createPost.mock.calls[0][0];
+    expect(params.content.content).toBe('<h1>Hello</h1>');
+  });
+
+  it('uses raw body metadata as editable source content', async () => {
+    const ctx = createCtx();
+    const api = createApi();
+    const deploy = createDeploy(ctx, api);
+
+    await deploy.deploy([
+      {
+        ...createDoc({ categories: [], tags: [] }),
+        rawBody: '# Hello',
+        rawBodyType: 'markdown',
+      },
+    ]);
+
+    const params = api.createPost.mock.calls[0][0];
+    expect(params.content.raw).toBe('# Hello');
+    expect(params.content.rawType).toBe('markdown');
+  });
+
+  it('falls back to HTML body as editable source content', async () => {
+    const ctx = createCtx();
+    const api = createApi();
+    const deploy = createDeploy(ctx, api);
+
+    await deploy.deploy([createDoc({ categories: [], tags: [] })]);
+
+    const params = api.createPost.mock.calls[0][0];
+    expect(params.content.raw).toBe('<h1>Hello</h1>');
+    expect(params.content.rawType).toBe('html');
+  });
+
+  it('rejects Markdown body input before Halo side effects', async () => {
+    const ctx = createCtx();
+    const api = createApi();
+    const deploy = createDeploy(ctx, api);
+
+    await expect(
+      deploy.deploy([
+        {
+          ...createDoc({ categories: [], tags: [] }),
+          body: '# Hello',
+          bodyType: 'markdown',
+        },
+      ]),
+    ).rejects.toThrow('Markdown-to-HTML Body Transform');
+
+    expect(api.getPostList).not.toHaveBeenCalled();
+    expect(api.createPost).not.toHaveBeenCalled();
+  });
+
+  it('rejects missing body type as Markdown before Halo side effects', async () => {
+    const ctx = createCtx();
+    const api = createApi();
+    const deploy = createDeploy(ctx, api);
+    const { bodyType: _bodyType, ...doc } = createDoc({ categories: [], tags: [] });
+
+    await expect(deploy.deploy([doc])).rejects.toThrow('Markdown-to-HTML Body Transform');
+
+    expect(api.getPostList).not.toHaveBeenCalled();
+    expect(api.createPost).not.toHaveBeenCalled();
   });
 
   it('writes document dates and parses boolean-like properties', async () => {

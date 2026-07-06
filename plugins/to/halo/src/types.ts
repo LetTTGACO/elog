@@ -12,5 +12,4 @@ export interface HaloConfig {
   groupName?: string;
   enableUploadImage?: boolean;
   needUploadImage?: boolean;
-  rowType?: string;
 }
