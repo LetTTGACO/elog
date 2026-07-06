@@ -1,6 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { expect } from 'vitest';
+import {
+  imageExpectedFromProfile,
+  imageRequiredEnvFromProfile,
+} from '../../src/helpers/image-expected';
 import type { SyncCase } from '../../src/helpers/types';
 import { e2eProfile } from './elog.config';
 
@@ -24,17 +28,14 @@ const syncCase: SyncCase = {
     'ELOG_E2E_FEISHU_APP_ID',
     'ELOG_E2E_FEISHU_APP_SECRET',
     'ELOG_E2E_FEISHU_SPACE_FOLDER_TOKEN',
-    'ELOG_E2E_R2_HOST',
-    'ELOG_E2E_R2_ACCESS_KEY_ID',
-    'ELOG_E2E_R2_SECRET_ACCESS_KEY',
-    'ELOG_E2E_R2_BUCKET',
-    'ELOG_E2E_R2_ENDPOINT',
+    ...imageRequiredEnvFromProfile(e2eProfile.image),
   ],
   configFile: 'elog.config.ts',
   expected: {
     cacheFile: e2eProfile.cacheFile,
     outputDir: e2eProfile.docOutputDir,
     minMarkdownFiles: 1,
+    ...imageExpectedFromProfile(e2eProfile.image),
   },
   assert({ secondRun, workspace }) {
     const host = process.env.ELOG_E2E_R2_HOST!.replace(/^https?:\/\//, '').replace(/\/+$/, '');

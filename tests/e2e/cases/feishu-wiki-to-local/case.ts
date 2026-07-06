@@ -1,6 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { expect } from 'vitest';
+import {
+  imageExpectedFromProfile,
+  imageRequiredEnvFromProfile,
+} from '../../src/helpers/image-expected';
 import type { SyncCase } from '../../src/helpers/types';
 import { e2eProfile } from './elog.config';
 
@@ -20,14 +24,18 @@ function collectFiles(directory: string): string[] {
 const syncCase: SyncCase = {
   id: e2eProfile.id,
   title: 'Feishu Wiki source -> local image transform -> local deploy',
-  requiredEnv: ['ELOG_E2E_FEISHU_APP_ID', 'ELOG_E2E_FEISHU_APP_SECRET', 'ELOG_E2E_FEISHU_WIKI_ID'],
+  requiredEnv: [
+    'ELOG_E2E_FEISHU_APP_ID',
+    'ELOG_E2E_FEISHU_APP_SECRET',
+    'ELOG_E2E_FEISHU_WIKI_ID',
+    ...imageRequiredEnvFromProfile(e2eProfile.image),
+  ],
   configFile: 'elog.config.ts',
   expected: {
     cacheFile: e2eProfile.cacheFile,
     outputDir: e2eProfile.docOutputDir,
     minMarkdownFiles: 1,
-    imageDir: e2eProfile.image.outputDir,
-    minImageFiles: 1,
+    ...imageExpectedFromProfile(e2eProfile.image),
   },
   assert({ secondRun, workspace }) {
     const imageFiles = collectFiles(path.join(workspace, e2eProfile.image.outputDir));

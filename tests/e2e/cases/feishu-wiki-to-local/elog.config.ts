@@ -3,13 +3,27 @@ import fromFeishuWiki from '@elog/plugin-from-feishu-wiki';
 import imageLocal from '@elog/plugin-transform-image-local';
 import toLocal from '@elog/plugin-to-local';
 
-export const e2eProfile = {
+export type E2eImageProfile = {
+  kind: 'local';
+  outputDir: string;
+  prefixKey: string;
+  expectFiles?: boolean;
+};
+
+export const e2eProfile: {
+  id: string;
+  cacheFile: string;
+  docOutputDir: string;
+  image: E2eImageProfile;
+} = {
   id: 'feishu-wiki-to-local',
   cacheFile: 'elog.cache.json',
   docOutputDir: 'docs',
   image: {
+    kind: 'local',
     outputDir: 'images',
     prefixKey: '../images',
+    expectFiles: true,
   },
 };
 

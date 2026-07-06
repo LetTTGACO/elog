@@ -3,11 +3,25 @@ import fromFeishuSpace from '@elog/plugin-from-feishu-space';
 import imageR2 from '@elog/plugin-transform-image-r2';
 import toLocal from '@elog/plugin-to-local';
 
-export const e2eProfile = {
+export type E2eImageProfile = {
+  kind: 'r2';
+  prefixKey: string;
+  expectFiles?: false;
+};
+
+export const e2eProfile: {
+  id: string;
+  cacheFile: string;
+  docOutputDir: string;
+  image: E2eImageProfile;
+} = {
   id: 'feishu-space-r2-to-local',
   cacheFile: 'elog.cache.json',
   docOutputDir: 'docs',
-  imagePrefixKey: 'elog-e2e/feishu-space/',
+  image: {
+    kind: 'r2',
+    prefixKey: 'elog-e2e/feishu-space/',
+  },
 };
 
 export default defineConfig({
@@ -27,7 +41,7 @@ export default defineConfig({
       bucket: process.env.ELOG_E2E_R2_BUCKET,
       endpoint: process.env.ELOG_E2E_R2_ENDPOINT,
       region: process.env.ELOG_E2E_R2_REGION,
-      prefixKey: e2eProfile.imagePrefixKey,
+      prefixKey: e2eProfile.image.prefixKey,
     }),
   ],
   to: toLocal({
