@@ -103,7 +103,8 @@ class WikiRenderer extends MarkdownRenderer {
   }
 }
 
-export const md2Wiki = (markdown: string) => {
+export const md2Wiki = (markdown: string): string => {
   const wikiRenderer = new WikiRenderer();
-  return marked.parse(markdown, { renderer: wikiRenderer });
+  const tokens = marked.lexer(markdown);
+  return marked.parser(tokens, { renderer: wikiRenderer });
 };
