@@ -52,7 +52,7 @@ export default class HaloApi extends Context {
       },
     };
     const res = await this.ctx.http<T>(url, opts);
-    if (res.status !== 200 && res.status !== 201) {
+    if (typeof res.status !== 'number' || res.status < 200 || res.status >= 300) {
       this.ctx.logger.error(JSON.stringify(res.data));
     }
     return res.data;

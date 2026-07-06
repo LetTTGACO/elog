@@ -70,14 +70,19 @@ export function htmlAdapter(doc: DocDetail) {
     typographer: true,
   }).render(body);
 }
-export function getIds(items: any, map: any) {
+export function getIds(items: any, map: any, onMissing?: (item: string) => void) {
   if (!items) return [];
   let list = items;
   if (typeof items === 'string') {
     list = [items];
   }
-  return list.map((item: any) => {
-    return map[item].metadata.name;
+  return list.flatMap((item: any) => {
+    const name = map[item]?.metadata?.name;
+    if (!name) {
+      onMissing?.(item);
+      return [];
+    }
+    return [name];
   });
 }
 

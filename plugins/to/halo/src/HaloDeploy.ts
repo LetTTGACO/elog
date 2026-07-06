@@ -6,6 +6,28 @@ import { delay, getIds, getNoRepValues, htmlAdapter } from './utils';
 import type { PostRequest } from '@halo-dev/api-client';
 import Context from './Context';
 
+function readBoolean(value: unknown, defaultValue: boolean) {
+  if (value === undefined || value === null || value === '') return defaultValue;
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    if (normalized === 'true') return true;
+    if (normalized === 'false') return false;
+  }
+  return Boolean(value);
+}
+
+function getPostDate(doc: DocDetail, warn: PluginContext['logger']['warn']) {
+  const value = doc.properties.date;
+  if (value === undefined || value === null || value === '') return undefined;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    warn(`${doc.properties.title} 文档日期无效，跳过日期同步: ${value}`);
+    return undefined;
+  }
+  return date.toISOString();
+}
+
 export default class extends Context {
   private readonly config: HaloConfig;
   private readonly api: HaloApi;
@@ -122,7 +144,7 @@ export default class extends Context {
       }
     }
     for (let doc of docDetailList) {
-      if (this.config.enableUploadImage) {
+      if (this.config.enableUploadImage ?? this.config.needUploadImage) {
         // 收集文档图片
         const urlList = this.ctx.image.getUrlListFromContent(doc.body);
         // 封面图
@@ -249,24 +271,21 @@ export default class extends Context {
       // 覆盖文档摘要
       params.post.spec.excerpt.raw = doc.properties.excerpt;
       // 是否自动生成文档摘要
-      const autoExcerpt = doc.properties.autoExcerpt;
-      params.post.spec.excerpt.autoGenerate =
-        (typeof autoExcerpt === 'string' && autoExcerpt === 'true') ||
-        (typeof autoExcerpt === 'boolean' && autoExcerpt);
+      params.post.spec.excerpt.autoGenerate = readBoolean(
+        doc.properties.autoExcerpt,
+        params.post.spec.excerpt.autoGenerate ?? true,
+      );
       // 覆盖文档是否置顶
-      const pinned = doc.properties.pinned;
-      params.post.spec.pinned =
-        (typeof pinned === 'string' && pinned === 'true') ||
-        (typeof pinned === 'boolean' && pinned);
+      params.post.spec.pinned = readBoolean(doc.properties.pinned, false);
       // 覆盖文档是否公开
-      if (doc.properties.public === undefined) {
-        params.post.spec.visible = 'PUBLIC';
-      } else {
-        params.post.spec.visible = doc.properties.public ? 'PUBLIC' : 'PRIVATE';
-      }
+      params.post.spec.visible = readBoolean(doc.properties.public, true) ? 'PUBLIC' : 'PRIVATE';
       // 覆盖文档分类和标签
-      const categoryIds = getIds(doc.properties.categories, categoryMap);
-      const tagIds = getIds(doc.properties.tags, tagMap);
+      const categoryIds = getIds(doc.properties.categories, categoryMap, (category) =>
+        this.ctx.logger.warn(`${category} 分类不存在，已跳过该文档关联`),
+      );
+      const tagIds = getIds(doc.properties.tags, tagMap, (tag) =>
+        this.ctx.logger.warn(`${tag} 标签不存在，已跳过该文档关联`),
+      );
       if (doc.properties.tags) {
         params.post.spec.tags = tagIds;
       }
@@ -275,6 +294,13 @@ export default class extends Context {
       }
       // 覆盖文档内容
       params.content.content = doc.body;
+      const postDate = getPostDate(doc, this.ctx.logger.warn);
+      if (postDate) {
+        params.post.metadata.creationTimestamp = postDate;
+        params.post.spec.publishTime = postDate;
+      }
+      const shouldPublish = readBoolean(doc.properties.publish, true);
+      params.post.spec.publish = shouldPublish;
       if (this.config.rowType === 'markdown') {
         params.content.raw = mdBody;
         params.content.rawType = 'markdown';
@@ -283,11 +309,13 @@ export default class extends Context {
         params.content.raw = doc.body;
       }
       // 判断文档是否存在 halo
+      let saved = false;
       if (!item) {
         // 不存在，走新增流程
         try {
           await this.api.createPost(params);
           this.ctx.logger.info('新增文档', doc.properties.title);
+          saved = true;
         } catch (e: any) {
           this.ctx.logger.warn(`新增 ${doc.properties.title} 文档失败: ${e.message}`);
         }
@@ -302,18 +330,17 @@ export default class extends Context {
           // 更新内容信息
           await this.api.updatePostContent(doc.id, params.content);
           this.ctx.logger.info('更新文档', doc.properties.title);
+          saved = true;
         } catch (e: any) {
           this.ctx.logger.warn(`更新 ${doc.properties.title} 文档失败: ${e.message}`);
           this.ctx.logger.debug(e);
         }
       }
+      if (!saved) {
+        continue;
+      }
       // 发布文档
-      const publish = doc.properties.publish;
-      if (
-        publish === undefined ||
-        (typeof publish === 'string' && publish === 'true') ||
-        (typeof publish === 'boolean' && publish)
-      ) {
+      if (shouldPublish) {
         await this.api.publishPost(doc.id);
         this.ctx.logger.info('发布文档', doc.properties.title);
       } else {

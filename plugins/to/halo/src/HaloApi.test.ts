@@ -27,6 +27,42 @@ function createCtx() {
 }
 
 describe('HaloApi', () => {
+  it('accepts any 2xx response', async () => {
+    const { ctx, http } = createCtx();
+    http.mockResolvedValueOnce({
+      status: 204,
+      headers: {},
+      data: undefined,
+    });
+    const api = new HaloApi(
+      {
+        endpoint: 'https://halo.example',
+        token: 'token',
+      },
+      ctx,
+    );
+
+    await expect(api.publishPost('post-1')).resolves.toBeUndefined();
+  });
+
+  it('fails on non-2xx responses', async () => {
+    const { ctx, http } = createCtx();
+    http.mockResolvedValueOnce({
+      status: 400,
+      headers: {},
+      data: { message: 'bad request' },
+    });
+    const api = new HaloApi(
+      {
+        endpoint: 'https://halo.example',
+        token: 'token',
+      },
+      ctx,
+    );
+
+    await expect(api.publishPost('post-1')).rejects.toThrow('bad request');
+  });
+
   it('uploads attachments with native FormData', async () => {
     const { ctx, http } = createCtx();
     const api = new HaloApi(
