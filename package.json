@@ -30,6 +30,7 @@
     "e2e:feishu-wiki-local": "pnpm --filter @elog/e2e test:feishu-wiki-local",
     "e2e:feishu-space-r2-local": "pnpm --filter @elog/e2e test:feishu-space-r2-local",
     "e2e:notion-local": "pnpm --filter @elog/e2e test:notion-local",
+    "e2e:notion-catalog-local": "pnpm --filter @elog/e2e test:notion-catalog-local",
     "e2e:yuque-pwd-local": "pnpm --filter @elog/e2e test:yuque-pwd-local",
     "e2e:yuque-token-local": "pnpm --filter @elog/e2e test:yuque-token-local",
     "e2e:notion-wordpress": "pnpm --filter @elog/e2e test:notion-wordpress",
