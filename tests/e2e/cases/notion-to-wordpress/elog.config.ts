@@ -1,10 +1,11 @@
-import { defineConfig } from '@elog/cli';
+import { defineConfig, type ElogConfig, type TransformPlugin } from '@elog/cli';
 import fromNotion from '@elog/plugin-from-notion';
 import imageLocal from '@elog/plugin-transform-image-local';
 import imageR2 from '@elog/plugin-transform-image-r2';
+import markdownToHtml from '@elog/plugin-transform-markdown-to-html';
 import toWordPress from '@elog/plugin-to-wordpress';
 
-type E2eImageProfile =
+export type E2eImageProfile =
   | { kind: 'none' }
   | {
       kind: 'local';
@@ -17,11 +18,13 @@ type E2eImageProfile =
       expectFiles?: false;
     };
 
-export const e2eProfile: {
+export interface E2eProfile {
   id: string;
   cacheFile: string;
   image: E2eImageProfile;
-} = {
+}
+
+export const e2eProfile: E2eProfile = {
   id: 'notion-to-wordpress',
   cacheFile: 'elog.cache.json',
   image: {
@@ -29,24 +32,17 @@ export const e2eProfile: {
   },
 };
 
-export default defineConfig({
-  id: e2eProfile.id,
-  cacheFilePath: e2eProfile.cacheFile,
-  from: fromNotion({
-    token: process.env.ELOG_E2E_NOTION_TOKEN,
-    databaseId: process.env.ELOG_E2E_NOTION_DATABASE_ID,
-    catalog: false,
-  }),
-  plugins:
-    e2eProfile.image.kind === 'local'
+function createImageTransforms(image: E2eImageProfile): TransformPlugin[] {
+  const imageTransforms =
+    image.kind === 'local'
       ? [
           imageLocal({
-            outputDir: e2eProfile.image.outputDir,
-            prefixKey: e2eProfile.image.prefixKey,
+            outputDir: image.outputDir,
+            prefixKey: image.prefixKey,
             propertyImageFields: ['cover'],
           }),
         ]
-      : e2eProfile.image.kind === 'r2'
+      : image.kind === 'r2'
         ? [
             imageR2({
               host: process.env.ELOG_E2E_R2_HOST!,
@@ -57,11 +53,28 @@ export default defineConfig({
               prefixKey: 'elog-e2e/notion/',
             }),
           ]
-        : [],
-  to: toWordPress({
-    endpoint: process.env.ELOG_E2E_WORDPRESS_ENDPOINT!,
-    username: process.env.ELOG_E2E_WORDPRESS_USERNAME!,
-    password: process.env.ELOG_E2E_WORDPRESS_PASSWORD!,
-    enableUploadImage: false,
-  }),
-});
+        : [];
+
+  return [...imageTransforms, markdownToHtml()];
+}
+
+export function createNotionToWordPressConfig(profile: E2eProfile = e2eProfile): ElogConfig {
+  return defineConfig({
+    id: profile.id,
+    cacheFilePath: profile.cacheFile,
+    from: fromNotion({
+      token: process.env.ELOG_E2E_NOTION_TOKEN,
+      databaseId: process.env.ELOG_E2E_NOTION_DATABASE_ID,
+      catalog: false,
+    }),
+    plugins: createImageTransforms(profile.image),
+    to: toWordPress({
+      endpoint: process.env.ELOG_E2E_WORDPRESS_ENDPOINT!,
+      username: process.env.ELOG_E2E_WORDPRESS_USERNAME!,
+      password: process.env.ELOG_E2E_WORDPRESS_PASSWORD!,
+      enableUploadImage: false,
+    }),
+  }) as ElogConfig;
+}
+
+export default createNotionToWordPressConfig();

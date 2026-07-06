@@ -33,6 +33,7 @@
     "@elog/plugin-transform-image-qiniu": "workspace:*",
     "@elog/plugin-transform-image-r2": "workspace:*",
     "@elog/plugin-transform-image-upyun": "workspace:*",
+    "@elog/plugin-transform-markdown-to-html": "workspace:*",
     "@elog/plugin-to-halo": "workspace:*",
     "@elog/plugin-to-local": "workspace:*",
     "@elog/plugin-to-wordpress": "workspace:*"

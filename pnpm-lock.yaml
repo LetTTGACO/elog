@@ -645,6 +645,9 @@ importers:
       '@elog/plugin-transform-image-upyun':
         specifier: workspace:*
         version: link:../../plugins/transform/image-upyun
+      '@elog/plugin-transform-markdown-to-html':
+        specifier: workspace:*
+        version: link:../../plugins/transform/markdown-to-html
     devDependencies:
       '@types/node':
         specifier: ~22.19.19
