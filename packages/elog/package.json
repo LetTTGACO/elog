@@ -20,6 +20,7 @@
   },
   "scripts": {
     "build": "tsdown",
+    "typecheck": "tsc -p tsconfig.json --noEmit --pretty false",
     "test": "vitest run --passWithNoTests"
   },
   "bin": {

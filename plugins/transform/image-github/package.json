@@ -16,7 +16,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "build": "tsdown"
+    "build": "tsdown",
+    "typecheck": "tsc -p tsconfig.json --noEmit --pretty false"
   },
   "peerDependencies": {
     "@elog/cli": "^1.0.0-beta.1"

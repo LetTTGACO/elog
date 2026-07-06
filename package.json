@@ -18,6 +18,7 @@
   },
   "scripts": {
     "build": "nx run-many -t build",
+    "typecheck": "nx run-many -t typecheck",
     "test": "nx run-many -t test --exclude=@elog/e2e",
     "release:beta:dry-run": "NPM_CONFIG_TAG=beta nx release --dry-run --preid=beta",
     "release:beta": "NPM_CONFIG_TAG=beta nx release --preid=beta --yes",

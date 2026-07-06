@@ -9,6 +9,11 @@
     "test": {
       "dependsOn": ["^build"],
       "outputs": []
+    },
+    "typecheck": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "outputs": []
     }
   },
   "release": {

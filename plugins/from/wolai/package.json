@@ -17,7 +17,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "build": "tsdown"
+    "build": "tsdown",
+    "typecheck": "tsc -p tsconfig.json --noEmit --pretty false"
   },
   "author": "",
   "license": "MIT",

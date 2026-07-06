@@ -75,7 +75,7 @@ describe('release configuration', () => {
     const nxJson = readJson<{ release: { projects: string[] } }>('nx.json');
 
     expect(nxJson.release.projects).toEqual(publicReleaseProjects);
-    expect(nxJson.release.projects).not.toEqual(expect.arrayContaining(privatePluginProjects));
+    expect(nxJson.release.projects).not.toEqual(expect.arrayContaining([...privatePluginProjects]));
 
     for (const project of privatePluginProjects) {
       const packageDir = `plugins/from/${project.replace('@elog/plugin-from-', '')}`;

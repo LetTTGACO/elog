@@ -26,7 +26,9 @@ Main package families:
 ```bash
 pnpm install
 pnpm build
+pnpm typecheck
 pnpm test
+pnpm --filter @elog/cli typecheck
 pnpm --filter @elog/cli test
 
 # E2E entry points
@@ -41,8 +43,10 @@ pnpm e2e:notion-halo
 Build/test defaults:
 
 - Root build: `nx run-many -t build`
+- Root typecheck: `nx run-many -t typecheck`
 - Root test: `nx run-many -t test --exclude=@elog/e2e`
 - Per-package build: `tsdown`
+- Per-package typecheck: `tsc -p tsconfig.json --noEmit --pretty false`
 - Nx build output: `{projectRoot}/dist`
 
 Do not commit generated `dist/**`, `.nx/cache/**`, e2e `.tmp/**`, local docs,

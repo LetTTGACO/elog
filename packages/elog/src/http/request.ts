@@ -1,5 +1,9 @@
-import { ofetch } from 'ofetch';
+import { ofetch, type FetchOptions, type SearchParameters } from 'ofetch';
 import out from '../logging/logger';
+
+type RequestResponseType = 'json' | 'text' | 'arrayBuffer';
+type RequestBody = FetchOptions<RequestResponseType>['body'];
+type RequestData = RequestBody | SearchParameters;
 
 export interface HttpClientResponse<T> {
   status: number;
@@ -9,14 +13,14 @@ export interface HttpClientResponse<T> {
 
 export interface RequestOptions {
   method?: string;
-  data?: unknown;
+  data?: RequestData;
   auth?: string;
   headers?: Record<string, string>;
   dataType?: 'json' | 'text' | 'buffer';
   contentType?: 'json';
   timeout?: number;
-  stream?: unknown;
-  body?: unknown;
+  stream?: RequestBody;
+  body?: RequestBody;
 }
 
 function hasHeader(headers: Record<string, string>, name: string) {
@@ -47,9 +51,9 @@ export default async <T>(
   const method = (reqOpts.method || 'GET').toUpperCase();
   const isGetLike = method === 'GET' || method === 'HEAD';
   const dataType = reqOpts.dataType || 'json';
-  const responseType = dataType === 'buffer' ? 'arrayBuffer' : dataType;
+  const responseType: RequestResponseType = dataType === 'buffer' ? 'arrayBuffer' : dataType;
   const timeout = Number(reqOpts.timeout || process.env?.REQUEST_TIMEOUT || 60000) || 60000;
-  const headers = {
+  const headers: Record<string, string> = {
     'User-Agent': 'Elog',
     ...reqOpts.headers,
   };
@@ -68,14 +72,15 @@ export default async <T>(
     headers['content-type'] = 'application/json';
   }
 
-  const body =
+  const query = isGetLike ? (reqOpts.data as SearchParameters | undefined) : undefined;
+  const body: RequestBody =
     reqOpts.body ??
     reqOpts.stream ??
     (shouldSendJsonBody ? JSON.stringify(reqOpts.data) : isGetLike ? undefined : reqOpts.data);
 
   const opts = {
     method,
-    query: isGetLike ? reqOpts.data : undefined,
+    query,
     body,
     headers,
     responseType,

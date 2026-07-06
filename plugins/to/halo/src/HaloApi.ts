@@ -203,7 +203,7 @@ export default class HaloApi extends Context {
    */
   async uploadAttachment(buffer: Buffer, filename: string) {
     const form = new FormData();
-    form.set('file', new Blob([buffer]), filename);
+    form.set('file', new Blob([Uint8Array.from(buffer)]), filename);
     form.set('policyName', this.config.policyName || '');
     form.set('groupName', this.config.groupName || '');
     return this.requestInternal<Attachment>(
