@@ -68,7 +68,7 @@ export const e2eProfile: {
   id: 'flowus-to-local',
   cacheFile: 'elog.cache.json',
   docOutputDir,
-  image: imageProfiles.local,
+  image: imageProfiles.r2,
 };
 
 export default defineConfig({

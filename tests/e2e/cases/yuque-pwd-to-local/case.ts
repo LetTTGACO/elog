@@ -31,6 +31,25 @@ function toPosixPath(filePath: string): string {
   return filePath.split(path.sep).join('/');
 }
 
+function readMarkdownOutput(workspace: string): string {
+  return collectMarkdownFiles(path.join(workspace, e2eProfile.docOutputDir))
+    .map((file) => fs.readFileSync(file, 'utf8'))
+    .join('\n');
+}
+
+function expectR2ImageLinks(workspace: string): void {
+  if (e2eProfile.image.kind !== 'r2') return;
+
+  const host = process.env.ELOG_E2E_R2_HOST;
+  if (!host) {
+    throw new Error('ELOG_E2E_R2_HOST is required for Yuque password R2 e2e');
+  }
+
+  expect(readMarkdownOutput(workspace)).toContain(
+    host.replace(/^https?:\/\//, '').replace(/\/+$/, ''),
+  );
+}
+
 function expectPathFollowDocImageLinks(workspace: string): void {
   if (e2eProfile.image.kind !== 'local' || !e2eProfile.image.pathFollowDoc?.enable) {
     return;
@@ -88,6 +107,7 @@ const syncCase: SyncCase = {
     ...imageExpectedFromProfile(e2eProfile.image),
   },
   assert({ secondRun, workspace }) {
+    expectR2ImageLinks(workspace);
     expectPathFollowDocImageLinks(workspace);
     expect(secondRun.combinedOutput).toMatch(/skipped|no-change|无变化|跳过|synced 0/i);
   },

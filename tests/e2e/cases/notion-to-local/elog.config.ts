@@ -5,7 +5,6 @@ import imageR2 from '@elog/plugin-transform-image-r2';
 import toLocal from '@elog/plugin-to-local';
 
 type E2eImageProfile =
-  | { kind: 'none' }
   | {
       kind: 'local';
       outputDir: string;
@@ -21,7 +20,6 @@ type E2eImageProfile =
 type E2eImageKind = E2eImageProfile['kind'];
 const docOutputDir = 'docs';
 const imageProfiles: Record<E2eImageKind, E2eImageProfile> = {
-  none: { kind: 'none' },
   local: {
     kind: 'local',
     outputDir: 'images',
@@ -43,7 +41,7 @@ export const e2eProfile: {
   id: 'notion-to-local',
   cacheFile: 'elog.cache.json',
   docOutputDir,
-  image: imageProfiles.local,
+  image: imageProfiles.r2,
 };
 
 export default defineConfig({
@@ -62,18 +60,16 @@ export default defineConfig({
             propertyImageFields: ['cover'],
           }),
         ]
-      : e2eProfile.image.kind === 'r2'
-        ? [
-            imageR2({
-              host: process.env.ELOG_E2E_R2_HOST!,
-              accessKeyId: process.env.ELOG_E2E_R2_ACCESS_KEY_ID!,
-              secretAccessKey: process.env.ELOG_E2E_R2_SECRET_ACCESS_KEY!,
-              bucket: process.env.ELOG_E2E_R2_BUCKET!,
-              endpoint: process.env.ELOG_E2E_R2_ENDPOINT!,
-              prefixKey: e2eProfile.image.prefixKey,
-            }),
-          ]
-        : [],
+      : [
+          imageR2({
+            host: process.env.ELOG_E2E_R2_HOST!,
+            accessKeyId: process.env.ELOG_E2E_R2_ACCESS_KEY_ID!,
+            secretAccessKey: process.env.ELOG_E2E_R2_SECRET_ACCESS_KEY!,
+            bucket: process.env.ELOG_E2E_R2_BUCKET!,
+            endpoint: process.env.ELOG_E2E_R2_ENDPOINT!,
+            prefixKey: e2eProfile.image.prefixKey,
+          }),
+        ],
   to: toLocal({
     outputDir: e2eProfile.docOutputDir,
     frontMatter: { enable: true },

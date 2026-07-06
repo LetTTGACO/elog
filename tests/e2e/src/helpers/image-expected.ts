@@ -1,7 +1,6 @@
 import type { SyncCaseExpected } from './types';
 
 export type E2eImageProfile =
-  | { kind: 'none' }
   | {
       kind: 'local';
       outputDir: string;
@@ -18,7 +17,6 @@ export type E2eImageProfile =
     };
 
 const requiredEnvByImageKind: Record<E2eImageProfile['kind'], string[]> = {
-  none: [],
   local: [],
   b2: [
     'ELOG_E2E_B2_HOST',
