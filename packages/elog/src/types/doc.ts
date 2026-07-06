@@ -21,6 +21,8 @@ export interface DocStructure {
   [key: string]: any;
 }
 
+export type BodyType = 'markdown' | 'html' | 'confluence-wiki';
+
 /** 缓存内部扩展字段，记录文档同步状态和更新位置。 */
 export interface DocExt {
   _index: number;
@@ -38,6 +40,12 @@ export interface DocDetail {
   updateTime: number;
   /** 实际部署时的文档字符串 */
   body: string;
+  /** 文档正文格式，缺省按 Markdown 兼容旧工作流。 */
+  bodyType?: BodyType;
+  /** 平台可编辑源码等原始正文，缓存写入时会剥离。 */
+  rawBody?: string;
+  /** 原始正文格式 */
+  rawBodyType?: BodyType;
   /** 文档属性 */
   properties: DocProperties;
   /** 文档原本的目录信息 */

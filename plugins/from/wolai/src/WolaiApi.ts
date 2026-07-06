@@ -259,6 +259,7 @@ export default class WolaiApi extends ElogBaseContext {
       id: row.block_id,
       properties: row.properties as DocProperties,
       body,
+      bodyType: 'markdown',
       updateTime: row.edited_time,
       title: row.properties.title,
     };

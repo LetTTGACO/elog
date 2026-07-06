@@ -90,6 +90,7 @@ export default class YuqueClient extends ElogFromContext {
         id: doc.id,
         title: doc.title,
         body: newBody,
+        bodyType: 'markdown',
         properties,
         updateTime: new Date(doc.updated_at).getTime(),
         docStructure: doc.docStructure,

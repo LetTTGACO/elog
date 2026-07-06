@@ -185,6 +185,7 @@ export default class FlowUsApi extends ElogBaseContext {
       properties: page.properties,
       updateTime: page.updated,
       body,
+      bodyType: 'markdown',
       docStructure: catalog,
       title: page.properties.title,
     };

@@ -229,6 +229,7 @@ export default class NotionApi extends ElogBaseContext {
       title: page.properties.title,
       properties: page.properties,
       body,
+      bodyType: 'markdown',
       updateTime: timestamp,
       docStructure,
     } as DocDetail;

@@ -35,19 +35,34 @@ describe('CacheStore', () => {
     expect(store.cachedDocList).toEqual([]);
   });
 
-  it('updates and writes cache without body', () => {
+  it('updates and writes cache without body content while keeping body metadata', () => {
     tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'elog-cache-'));
     const cacheFile = path.join(tempDir, 'elog.cache.json');
     const store = new CacheStore({ disabled: false, writeDisabled: false, filePath: cacheFile });
 
-    store.update([makeDoc('a')], {
-      a: { _updateIndex: -1, _status: DocStatus.NEW },
-    });
+    store.update(
+      [
+        {
+          ...makeDoc('a'),
+          bodyType: 'html',
+          rawBody: '# a',
+          rawBodyType: 'markdown',
+        },
+      ],
+      {
+        a: { _updateIndex: -1, _status: DocStatus.NEW },
+      },
+    );
     store.write([{ id: 'a', updateTime: 1 }]);
 
     const cache = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
-    expect(cache.cachedDocList[0].id).toBe('a');
+    expect(cache.cachedDocList[0]).toMatchObject({
+      id: 'a',
+      bodyType: 'html',
+      rawBodyType: 'markdown',
+    });
     expect(cache.cachedDocList[0]).not.toHaveProperty('body');
+    expect(cache.cachedDocList[0]).not.toHaveProperty('rawBody');
     expect(cache.sortedDocList).toEqual([{ id: 'a', updateTime: 1 }]);
   });
 

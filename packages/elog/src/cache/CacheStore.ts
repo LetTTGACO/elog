@@ -56,7 +56,7 @@ export class CacheStore {
     }
   }
 
-  /** 写入缓存时剥离正文，避免缓存文件过大并减少敏感内容落盘。 */
+  /** 写入缓存时剥离正文和原始正文，避免缓存文件过大并减少敏感内容落盘。 */
   write<T>(sortedDocList: SortedDoc<T>[] = []) {
     if (this.config.writeDisabled) {
       return;
@@ -67,7 +67,7 @@ export class CacheStore {
       cachedDocList: this.cachedDocList
         .filter((item) => sortedDocIds.has(item.id))
         .map((item) => {
-          const { body: _body, ...docWithoutBody } = item;
+          const { body: _body, rawBody: _rawBody, ...docWithoutBody } = item;
           return docWithoutBody;
         }),
       sortedDocList,

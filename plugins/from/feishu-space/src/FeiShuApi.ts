@@ -84,6 +84,7 @@ export default class FeiShuApi extends ElogBaseContext {
       properties,
       title: doc.title,
       body: newBody,
+      bodyType: 'markdown',
       updateTime: doc.updated,
       docStructure: doc.catalog,
     };
