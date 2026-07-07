@@ -1,4 +1,4 @@
-import type { ElogConfig } from '@elog/cli';
+import type { ElogConfig } from '@elog/core';
 import { describe, expect, it } from 'vitest';
 import haloConfig from '../cases/notion-to-halo/elog.config';
 import wordpressConfig from '../cases/notion-to-wordpress/elog.config';

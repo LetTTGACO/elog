@@ -22,6 +22,8 @@
   },
   "dependencies": {
     "@elog/cli": "workspace:*",
+    "@elog/core": "workspace:*",
+    "@elog/plugin-sdk": "workspace:*",
     "@elog/plugin-from-feishu-space": "workspace:*",
     "@elog/plugin-from-feishu-wiki": "workspace:*",
     "@elog/plugin-from-flowus": "workspace:*",

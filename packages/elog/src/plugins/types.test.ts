@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { ElogPluginError } from './errors';
-import type { PluginContext as RootPluginContext, RuntimePluginContext } from '../index';
 import type { ElogPlugin, PluginContext } from './types';
 
 describe('plugin contract', () => {
@@ -31,29 +30,5 @@ describe('plugin contract', () => {
     ];
 
     expect(contextKeys).toEqual(['workflow', 'logger', 'http', 'cache', 'image']);
-  });
-
-  it('exports the grouped plugin context from the package root', () => {
-    const rootContextKeys: Array<keyof RootPluginContext> = [
-      'workflow',
-      'logger',
-      'http',
-      'cache',
-      'image',
-    ];
-
-    expect(rootContextKeys).toEqual(['workflow', 'logger', 'http', 'cache', 'image']);
-  });
-
-  it('exports the grouped plugin context from the package root under an alias', () => {
-    const rootContextKeys: Array<keyof RuntimePluginContext> = [
-      'workflow',
-      'logger',
-      'http',
-      'cache',
-      'image',
-    ];
-
-    expect(rootContextKeys).toEqual(['workflow', 'logger', 'http', 'cache', 'image']);
   });
 });

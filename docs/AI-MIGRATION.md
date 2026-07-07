@@ -61,15 +61,15 @@ elog sync -c elog.config.1x.ts
 
 ## 依赖迁移规则
 
-1. 核心包使用 `@elog/cli`。
-2. 生成依赖前先执行 `npm view @elog/cli version`，把返回的版本号写入
+1. CLI 运行包使用 `@elog/cli`，配置作者入口使用 `@elog/core`。
+2. 生成依赖前先执行 `npm view @elog/cli version` 和 `npm view @elog/core version`，把返回的版本号写入
    `package.json`；不要凭记忆写版本号，也不要默认写成 `latest`。
 3. 按实际用到的插件添加依赖，不要一次装全平台插件。
 4. 如果字段映射附录没有覆盖到某个插件包名，以 [LetTTGACO/elog](https://github.com/LetTTGACO/elog) 最新实现为准。
 
 生成依赖列表时按这条规则：
 
-- 一定包含 `@elog/cli`。
+- 一定包含 `@elog/cli` 和 `@elog/core`。
 - 按 `write.platform` 增加一个来源插件包。
 - 一定包含 `@elog/plugin-to-local`。
 - 仅当 `image.enable: true` 时，按 `image.platform` 增加一个图片插件包。
@@ -134,7 +134,7 @@ elog sync -c elog.config.1x.ts
 
 | 旧配置事实 | 新 import |
 | --- | --- |
-| 任意支持路径 | `defineConfig` from `@elog/cli` |
+| 任意支持路径 | `defineConfig` from `@elog/core` |
 | Notion 来源 | `fromNotion` from `@elog/plugin-from-notion` |
 | 语雀 Token 来源 | `fromYuque` from `@elog/plugin-from-yuque-token` |
 | 语雀账号密码来源 | `fromYuque` from `@elog/plugin-from-yuque-pwd` |

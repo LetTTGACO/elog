@@ -620,6 +620,9 @@ importers:
       '@elog/cli':
         specifier: workspace:*
         version: link:../../packages/elog
+      '@elog/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@elog/plugin-from-feishu-space':
         specifier: workspace:*
         version: link:../../plugins/from/feishu-space
@@ -638,6 +641,9 @@ importers:
       '@elog/plugin-from-yuque-token':
         specifier: workspace:*
         version: link:../../plugins/from/yuque-token
+      '@elog/plugin-sdk':
+        specifier: workspace:*
+        version: link:../../packages/plugin-sdk
       '@elog/plugin-to-halo':
         specifier: workspace:*
         version: link:../../plugins/to/halo

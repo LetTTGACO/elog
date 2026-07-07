@@ -1,9 +1,5 @@
 import * as fs from 'node:fs';
-import type {
-  FromPlugin,
-  ToPlugin,
-  TransformPlugin,
-} from '../../../packages/elog/src/plugins/types';
+import type { FromPlugin, ToPlugin, TransformPlugin } from '@elog/plugin-sdk';
 
 export const fromFixture: FromPlugin = {
   name: 'from:fixture',

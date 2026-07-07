@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { replaceImagesFunc } from './replace';
-import type { DocDetail, ImageUploader } from '..';
+import type { DocDetail, ImageUploader } from '@elog/plugin-sdk';
 
 const requestMock = vi.hoisted(() => vi.fn());
 

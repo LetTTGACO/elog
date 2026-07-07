@@ -1,4 +1,4 @@
-import { defineConfig } from '@elog/cli';
+import { defineConfig } from '@elog/core';
 import fromYuque from '@elog/plugin-from-yuque-token';
 import imageLocal from '@elog/plugin-transform-image-local';
 import imageR2 from '@elog/plugin-transform-image-r2';

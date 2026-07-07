@@ -1,4 +1,4 @@
-import { defineConfig } from '@elog/cli';
+import { defineConfig } from '@elog/core';
 import fromFeishuWiki from '@elog/plugin-from-feishu-wiki';
 import imageLocal from '@elog/plugin-transform-image-local';
 import toLocal from '@elog/plugin-to-local';
