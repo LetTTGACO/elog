@@ -1,3 +1,9 @@
+## 1.0.0-beta.3 (2026-07-07)
+
+### 🧱 Updated Dependencies
+
+- Updated @elog/cli to 1.0.0-beta.3
+
 ## 1.0.0-beta.2 (2026-07-03)
 
 ### 🧱 Updated Dependencies
