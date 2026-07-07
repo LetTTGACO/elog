@@ -19,3 +19,11 @@ _Avoid_: Document Body, body_html
 **Body Transform**:
 A transform plugin that changes the Document Body from one Body Type to another, updates the Body Type, and may preserve the previous Document Body as Raw Body.
 _Avoid_: Adapter, formatExt, target formatter
+
+**Plugin SDK**:
+The package of stable plugin contracts and author-facing helpers shared by source, transform, and target plugins.
+_Avoid_: Plugin API, plugin kit, shared
+
+**Core**:
+The public package that owns Elog workflow execution, configuration resolution, cache coordination, and programmatic sync without any CLI command behavior.
+_Avoid_: CLI, runtime package, engine
