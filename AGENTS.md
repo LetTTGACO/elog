@@ -15,7 +15,9 @@ download (from plugin) -> transform (middleware plugins) -> deploy (to plugins)
 
 Main package families:
 
-- `packages/elog`: core engine, CLI, config loading, runtime, shared plugin context.
+- `packages/elog`: CLI commands, init/export behavior, terminal reporting, plugin registry.
+- `packages/core`: config loading/resolution, workflow runtime, cache coordination, sync entrypoints.
+- `packages/plugin-sdk`: plugin contracts, document/image types, plugin context helpers, plugin-facing utilities.
 - `plugins/from/*`: source plugins such as Notion, Feishu, FlowUs, Yuque, Wolai.
 - `plugins/transform/*`: image replacement/rehosting plugins.
 - `plugins/to/*`: deploy plugins such as local, Halo, WordPress, Confluence.
@@ -156,8 +158,8 @@ build, or e2e verification command instead.
 - Private packages must stay private and out of release projects.
 - `version.updateDependents` is `never`; shared compatibility is handled by
   semver ranges.
-- Do not publish or bump `@elog/cli` just because a plugin or `@elog/shared`
-  changed.
+- Do not publish or bump `@elog/cli` just because a plugin or another public
+  package changed.
 - The one-time bootstrap release has already been completed; do not run it again.
 
 ## Coding Conventions

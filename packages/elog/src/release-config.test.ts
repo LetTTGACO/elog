@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { execFileSync } from 'child_process';
 import path from 'path';
 import { describe, expect, it } from 'vitest';
 
@@ -20,8 +21,8 @@ function readJson<T>(relativePath: string): T {
   return JSON.parse(fs.readFileSync(path.join(repoRoot, relativePath), 'utf8')) as T;
 }
 
-function discoverPluginPackageDirs(): string[] {
-  return ['plugins/from', 'plugins/transform', 'plugins/to'].flatMap((parentDir) => {
+function discoverPackageDirs(parentDirs: string[]): string[] {
+  return parentDirs.flatMap((parentDir) => {
     const absoluteParentDir = path.join(repoRoot, parentDir);
     return fs
       .readdirSync(absoluteParentDir, { withFileTypes: true })
@@ -29,6 +30,20 @@ function discoverPluginPackageDirs(): string[] {
       .map((entry) => path.join(parentDir, entry.name))
       .filter((packageDir) => fs.existsSync(path.join(repoRoot, packageDir, 'package.json')));
   });
+}
+
+function discoverPluginPackageDirs(): string[] {
+  return discoverPackageDirs(['plugins/from', 'plugins/transform', 'plugins/to']);
+}
+
+function discoverWorkspacePackageDirs(): string[] {
+  return discoverPackageDirs([
+    'packages',
+    'plugins/from',
+    'plugins/transform',
+    'plugins/to',
+    'tests',
+  ]);
 }
 
 const publicPublishConfig = {
@@ -40,8 +55,8 @@ const newlyPublicPackages = ['plugins/transform/markdown-to-html', 'plugins/to/h
 
 const publicReleaseProjects = [
   '@elog/cli',
+  '@elog/core',
   '@elog/plugin-sdk',
-  '@elog/shared',
   '@elog/plugin-from-notion',
   '@elog/plugin-from-feishu-wiki',
   '@elog/plugin-from-feishu-space',
@@ -59,6 +74,8 @@ const publicReleaseProjects = [
   '@elog/plugin-to-local',
   '@elog/plugin-to-halo',
 ] as const;
+
+const retiredPublicProjects = ['@elog/shared'] as const;
 
 const privatePluginPackages = [
   { project: '@elog/plugin-from-flowus', packageDir: 'plugins/from/flowus' },
@@ -98,17 +115,68 @@ describe('release configuration', () => {
     }
   });
 
+  it('keeps Shared out of every workspace package manifest', () => {
+    for (const packageDir of discoverWorkspacePackageDirs()) {
+      const pkg = readJson<PackageJson>(path.join(packageDir, 'package.json'));
+
+      expect(pkg.dependencies?.['@elog/shared'], packageDir).toBeUndefined();
+      expect(pkg.peerDependencies?.['@elog/shared'], packageDir).toBeUndefined();
+      expect(pkg.peerDependenciesMeta?.['@elog/shared'], packageDir).toBeUndefined();
+      expect(pkg.devDependencies?.['@elog/shared'], packageDir).toBeUndefined();
+    }
+  });
+
   it('releases exactly the 1.0 public support matrix packages', () => {
-    const nxJson = readJson<{ release: { projects: string[] } }>('nx.json');
+    const nxJson = readJson<{
+      release: {
+        projects: string[];
+        projectsRelationship: string;
+        version: { updateDependents: string };
+      };
+    }>('nx.json');
     const privatePluginProjects = privatePluginPackages.map(({ project }) => project);
 
     expect(nxJson.release.projects).toEqual(publicReleaseProjects);
+    expect(nxJson.release.projects).not.toEqual(expect.arrayContaining([...retiredPublicProjects]));
     expect(nxJson.release.projects).not.toEqual(expect.arrayContaining(privatePluginProjects));
+    expect(nxJson.release.projectsRelationship).toBe('independent');
+    expect(nxJson.release.version.updateDependents).toBe('never');
 
     for (const { project, packageDir } of privatePluginPackages) {
       const pkg = readJson<PackageJson>(path.join(packageDir, 'package.json'));
 
       expect(pkg.private, project).toBe(true);
     }
+  });
+
+  it('removes the retired Shared package from the workspace', () => {
+    expect(fs.existsSync(path.join(repoRoot, 'packages/shared/package.json'))).toBe(false);
+  });
+
+  it('keeps CLI registry-only changes from affecting first-party plugins through CLI', () => {
+    const affected = JSON.parse(
+      execFileSync(
+        'pnpm',
+        [
+          'nx',
+          'show',
+          'projects',
+          '--affected',
+          '--files',
+          'packages/elog/src/commands/init/registry.ts',
+        ],
+        {
+          cwd: repoRoot,
+          encoding: 'utf8',
+          env: { ...process.env, NX_DAEMON: 'false' },
+        },
+      ),
+    ) as string[];
+    const pluginProjects = discoverPluginPackageDirs().map(
+      (packageDir) => readJson<{ name: string }>(path.join(packageDir, 'package.json')).name,
+    );
+
+    expect(affected).toContain('@elog/cli');
+    expect(affected).not.toEqual(expect.arrayContaining(pluginProjects));
   });
 });

@@ -19,8 +19,8 @@
   "release": {
     "projects": [
       "@elog/cli",
+      "@elog/core",
       "@elog/plugin-sdk",
-      "@elog/shared",
       "@elog/plugin-from-notion",
       "@elog/plugin-from-feishu-wiki",
       "@elog/plugin-from-feishu-space",
