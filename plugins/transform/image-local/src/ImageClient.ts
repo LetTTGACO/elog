@@ -1,5 +1,5 @@
-import type { DocDetail, ImageUploader, PluginContext } from '@elog/cli';
-import { ElogImageContext } from '@elog/cli';
+import { ElogImageContext } from '@elog/plugin-sdk';
+import type { DocDetail, ImageUploader, PluginContext } from '@elog/plugin-sdk';
 import type { ImageLocalConfig } from './types';
 import path from 'path';
 import fs from 'fs';

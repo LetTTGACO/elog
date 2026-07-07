@@ -4,7 +4,7 @@ import asyncPool from 'tiny-async-pool';
 import { filterDocs } from './filter';
 
 export { filterDocs } from './filter';
-export type { DocStatusMap } from './filter';
+export type { DocSyncStatusMap } from './filter';
 
 /**
  * 批量执行请求（异步池），统一把 tiny-async-pool 的异步迭代结果收集成数组。

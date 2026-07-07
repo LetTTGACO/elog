@@ -1,5 +1,5 @@
 import { FlowUsConfig } from './types';
-import { DownloadResult, ElogFromContext, PluginContext } from '@elog/cli';
+import { ElogFromContext, type DownloadResult, type PluginContext } from '@elog/plugin-sdk';
 import FlowUsApi from './FlowUsApi';
 
 export default class FlowUsClient extends ElogFromContext {

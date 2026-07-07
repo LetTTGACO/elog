@@ -2,7 +2,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { DocStatus } from '../const';
+import { DocSyncStatus } from '../const';
 import type { ElogPluginError } from '../plugins/errors';
 import type { FromPlugin, ToPlugin } from '../plugins/types';
 import type { RuntimeWorkflowConfig } from './types';
@@ -30,7 +30,7 @@ function makeWorkflow(
           },
         ],
         sortedDocList: [{ id, updateTime: 1 }],
-        docStatusMap: { [id]: { _updateIndex: -1, _status: DocStatus.NEW } },
+        docStatusMap: { [id]: { _updateIndex: -1, _status: DocSyncStatus.NEW } },
       };
     },
   };

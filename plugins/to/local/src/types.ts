@@ -1,4 +1,4 @@
-import { DocDetail } from '@elog/cli';
+import type { DocDetail } from '@elog/plugin-sdk';
 
 /**
  * local 配置

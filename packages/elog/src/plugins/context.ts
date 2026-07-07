@@ -7,6 +7,7 @@ import {
   genUniqueIdFromUrl,
   getBaseUrl,
   getBufferFromUrl,
+  getImageDataUrl,
   getFileType,
   getFileTypeFromBuffer,
   getFileTypeFromUrl,
@@ -46,6 +47,7 @@ export function createPluginContext(options: {
       getBaseUrl,
       getFileType,
       getBufferFromUrl,
+      getImageDataUrl,
       formatImagePrefix,
     },
   };

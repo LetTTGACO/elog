@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { DocStatus } from '../const';
+import { DocSyncStatus } from '../const';
 import { filterDocs } from './filter';
 import out from '../logging/logger';
 import type { DocDetail } from '../types/doc';
@@ -21,7 +21,7 @@ describe('filterDocs', () => {
     const result = filterDocs([], [{ id: 'new', updateTime: 1, properties: { title: 'New' } }]);
 
     expect(result.docList).toHaveLength(1);
-    expect(result.docStatusMap.new._status).toBe(DocStatus.NEW);
+    expect(result.docStatusMap.new._status).toBe(DocSyncStatus.NEW);
   });
 
   it('returns updated docs', () => {
@@ -31,7 +31,7 @@ describe('filterDocs', () => {
     );
 
     expect(result.docList).toHaveLength(1);
-    expect(result.docStatusMap.cached._status).toBe(DocStatus.UPDATE);
+    expect(result.docStatusMap.cached._status).toBe(DocSyncStatus.UPDATE);
   });
 
   it('returns original cache index when stale cached docs are filtered out', () => {
@@ -50,20 +50,20 @@ describe('filterDocs', () => {
 
     expect(result.docStatusMap.cached).toEqual({
       _updateIndex: 1,
-      _status: DocStatus.UPDATE,
+      _status: DocSyncStatus.UPDATE,
     });
   });
 
   it('retries previously failed docs', () => {
     const warn = vi.spyOn(out, 'warn').mockImplementation(() => {});
-    const failedDoc = { ...cachedDoc, _status: DocStatus.DOC_ERROR };
+    const failedDoc = { ...cachedDoc, _status: DocSyncStatus.DOC_ERROR };
     const result = filterDocs(
       [failedDoc],
       [{ id: 'cached', updateTime: 1, properties: { title: 'Cached' } }],
     );
 
     expect(result.docList).toHaveLength(1);
-    expect(result.docStatusMap.cached._status).toBe(DocStatus.UPDATE);
+    expect(result.docStatusMap.cached._status).toBe(DocSyncStatus.UPDATE);
     expect(warn).toHaveBeenCalledWith(
       '上次同步时【Cached】存在图片/文档下载失败，本次将尝试重新同步。如果并不需要当前文档参与本次同步，请在缓存文件（默认为 elog.cache.json）中找到此文档并删除 _status 字段',
     );
@@ -75,7 +75,7 @@ describe('filterDocs', () => {
     const malformedDoc = {
       ...cachedDoc,
       properties: undefined,
-      _status: DocStatus.DOC_ERROR,
+      _status: DocSyncStatus.DOC_ERROR,
     } as unknown as DocDetail;
 
     const result = filterDocs(

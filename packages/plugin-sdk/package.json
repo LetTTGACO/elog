@@ -1,36 +1,36 @@
 {
-  "name": "@elog/plugin-from-flowus",
+  "name": "@elog/plugin-sdk",
   "version": "1.0.0-beta.0",
+  "description": "",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LetTTGACO/elog.git",
-    "directory": "plugins/from/flowus"
+    "directory": "packages/plugin-sdk"
   },
-  "private": true,
-  "description": "",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
     "build": "tsdown",
-    "typecheck": "tsc -p tsconfig.json --noEmit --pretty false"
+    "typecheck": "tsc -p tsconfig.json --noEmit --pretty false",
+    "test": "vitest run --passWithNoTests"
   },
-  "author": "",
-  "license": "MIT",
   "dependencies": {
-    "@elog/plugin-sdk": "workspace:^",
-    "@flowusx/flowus-client": "^0.0.5-beta.4",
-    "@flowusx/flowus-to-md": "^0.0.5-beta.4"
+    "tiny-async-pool": "~2.1.0"
   },
   "devDependencies": {
-    "@flowusx/flowus-types": "^0.0.5-beta.3",
     "@types/node": "~22.19.19",
+    "@types/tiny-async-pool": "^2.0.3",
     "tsdown": "^0.22.3",
-    "typescript": "~6.0.3"
+    "typescript": "~6.0.3",
+    "vitest": "^4.1.9"
   }
 }

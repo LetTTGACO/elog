@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import { createRequire } from 'module';
-import { DocStatus } from '../const';
+import { DocSyncStatus } from '../const';
 import type { DocDetail, SortedDoc } from '../types/doc';
 import type { CacheConfig } from '../runtime/types';
-import type { DocStatusMap } from '../doc/filter';
+import type { DocSyncStatusMap } from '../doc/filter';
 import out from '../logging/logger';
 
 const require = createRequire(import.meta.url);
@@ -38,7 +38,7 @@ export class CacheStore {
   }
 
   /** 根据增量判定结果更新内存缓存，新增和更新文档复用同一批下载结果。 */
-  update(docList: DocDetail[], docStatusMap: DocStatusMap) {
+  update(docList: DocDetail[], docStatusMap: DocSyncStatusMap) {
     for (const doc of docList) {
       const status = docStatusMap[doc.id];
       // 来源插件可能返回不参与缓存更新的文档，这里保持跳过而不是报错。
@@ -46,9 +46,9 @@ export class CacheStore {
         continue;
       }
 
-      const cacheDoc = doc.error === 1 ? { ...doc, _status: DocStatus.IMAGE_ERROR } : doc;
+      const cacheDoc = doc.error === 1 ? { ...doc, _status: DocSyncStatus.IMAGE_ERROR } : doc;
 
-      if (status._status === DocStatus.NEW) {
+      if (status._status === DocSyncStatus.NEW) {
         this.cachedDocList.push(cacheDoc);
       } else {
         this.cachedDocList[status._updateIndex] = cacheDoc;

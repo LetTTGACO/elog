@@ -1,4 +1,4 @@
-import type { ToPlugin } from '@elog/cli';
+import type { ToPlugin } from '@elog/plugin-sdk';
 import LocalDeploy from './LocalDeploy';
 import type { LocalConfig } from './types';
 

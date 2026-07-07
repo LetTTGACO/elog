@@ -28,6 +28,7 @@ const newlyPublicPackages = ['plugins/transform/markdown-to-html', 'plugins/to/h
 
 const publicReleaseProjects = [
   '@elog/cli',
+  '@elog/plugin-sdk',
   '@elog/shared',
   '@elog/plugin-from-notion',
   '@elog/plugin-from-feishu-wiki',

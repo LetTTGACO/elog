@@ -26,6 +26,9 @@ importers:
 
   packages/elog:
     dependencies:
+      '@elog/plugin-sdk':
+        specifier: workspace:^
+        version: link:../plugin-sdk
       bundle-require:
         specifier: ^5.1.0
         version: 5.1.0(esbuild@0.28.1)
@@ -53,6 +56,28 @@ importers:
       ofetch:
         specifier: ~1.5.1
         version: 1.5.1
+      tiny-async-pool:
+        specifier: ~2.1.0
+        version: 2.1.0
+    devDependencies:
+      '@types/node':
+        specifier: ~22.19.19
+        version: 22.19.19
+      '@types/tiny-async-pool':
+        specifier: ^2.0.3
+        version: 2.0.3
+      tsdown:
+        specifier: ^0.22.3
+        version: 0.22.3(typescript@6.0.3)
+      typescript:
+        specifier: ~6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@types/node@22.19.19)(jsdom@21.1.2)(vite@8.0.13(@types/node@22.19.19)(esbuild@0.28.1)(yaml@2.9.0))
+
+  packages/plugin-sdk:
+    dependencies:
       tiny-async-pool:
         specifier: ~2.1.0
         version: 2.1.0
@@ -158,9 +183,9 @@ importers:
 
   plugins/from/flowus:
     dependencies:
-      '@elog/shared':
+      '@elog/plugin-sdk':
         specifier: workspace:^
-        version: link:../../../packages/shared
+        version: link:../../../packages/plugin-sdk
       '@flowusx/flowus-client':
         specifier: ^0.0.5-beta.4
         version: 0.0.5-beta.4
@@ -168,9 +193,6 @@ importers:
         specifier: ^0.0.5-beta.4
         version: 0.0.5-beta.5
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@flowusx/flowus-types':
         specifier: ^0.0.5-beta.3
         version: 0.0.5-beta.4
@@ -332,13 +354,13 @@ importers:
 
   plugins/to/local:
     dependencies:
+      '@elog/plugin-sdk':
+        specifier: workspace:^
+        version: link:../../../packages/plugin-sdk
       gray-matter:
         specifier: ~4.0.3
         version: 4.0.3
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
@@ -430,10 +452,11 @@ importers:
         version: 6.0.3
 
   plugins/transform/image-local:
+    dependencies:
+      '@elog/plugin-sdk':
+        specifier: workspace:^
+        version: link:../../../packages/plugin-sdk
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19

@@ -2,7 +2,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { DocStatus } from '../const';
+import { DocSyncStatus } from '../const';
 import { CacheStore } from './CacheStore';
 import type { DocDetail } from '../types/doc';
 
@@ -50,7 +50,7 @@ describe('CacheStore', () => {
         },
       ],
       {
-        a: { _updateIndex: -1, _status: DocStatus.NEW },
+        a: { _updateIndex: -1, _status: DocSyncStatus.NEW },
       },
     );
     store.write([{ id: 'a', updateTime: 1 }]);
@@ -72,12 +72,12 @@ describe('CacheStore', () => {
     const store = new CacheStore({ disabled: false, writeDisabled: false, filePath: cacheFile });
 
     store.update([{ ...makeDoc('a'), error: 1 }], {
-      a: { _updateIndex: -1, _status: DocStatus.NEW },
+      a: { _updateIndex: -1, _status: DocSyncStatus.NEW },
     });
     store.write([{ id: 'a', updateTime: 1 }]);
 
     const cache = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
-    expect(cache.cachedDocList[0]._status).toBe(DocStatus.IMAGE_ERROR);
+    expect(cache.cachedDocList[0]._status).toBe(DocSyncStatus.IMAGE_ERROR);
   });
 
   it('loads enabled cache and updates existing cached docs', () => {
@@ -97,7 +97,7 @@ describe('CacheStore', () => {
     expect(store.cachedDocList[0].id).toBe('existing');
 
     store.update([{ ...makeDoc('existing'), updateTime: 2, body: 'updated-body' }], {
-      existing: { _updateIndex: 0, _status: DocStatus.UPDATE },
+      existing: { _updateIndex: 0, _status: DocSyncStatus.UPDATE },
     });
     store.write([{ id: 'existing', updateTime: 2 }]);
 
