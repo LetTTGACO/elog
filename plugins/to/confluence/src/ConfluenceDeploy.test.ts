@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { DocDetail, PluginContext } from '@elog/cli';
+import type { DocDetail, PluginContext } from '@elog/plugin-sdk';
 import ConfluenceDeploy from './ConfluenceDeploy';
 
 function createCtx() {

@@ -21,20 +21,11 @@
   },
   "author": "",
   "license": "MIT",
-  "peerDependencies": {
-    "@elog/cli": "^1.0.0-beta.1"
-  },
-  "peerDependenciesMeta": {
-    "@elog/cli": {
-      "optional": true
-    }
-  },
   "dependencies": {
-    "@elog/shared": "workspace:^",
+    "@elog/plugin-sdk": "workspace:^",
     "front-matter": "~4.0.2"
   },
   "devDependencies": {
-    "@elog/cli": "workspace:*",
     "@types/node": "~22.19.19",
     "tsdown": "^0.22.3",
     "typescript": "~6.0.3"

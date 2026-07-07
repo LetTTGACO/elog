@@ -1,4 +1,4 @@
-import type { TransformPlugin } from '@elog/cli';
+import type { TransformPlugin } from '@elog/plugin-sdk';
 import hljs from 'highlight.js';
 import MarkdownIt from 'markdown-it';
 

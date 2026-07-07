@@ -8,6 +8,7 @@ type PackageJson = {
     access?: string;
     registry?: string;
   };
+  dependencies?: Record<string, string>;
   peerDependencies?: Record<string, string>;
   peerDependenciesMeta?: Record<string, { optional?: boolean }>;
   devDependencies?: Record<string, string>;
@@ -17,6 +18,17 @@ const repoRoot = path.resolve(process.cwd(), '../..');
 
 function readJson<T>(relativePath: string): T {
   return JSON.parse(fs.readFileSync(path.join(repoRoot, relativePath), 'utf8')) as T;
+}
+
+function discoverPluginPackageDirs(): string[] {
+  return ['plugins/from', 'plugins/transform', 'plugins/to'].flatMap((parentDir) => {
+    const absoluteParentDir = path.join(repoRoot, parentDir);
+    return fs
+      .readdirSync(absoluteParentDir, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => path.join(parentDir, entry.name))
+      .filter((packageDir) => fs.existsSync(path.join(repoRoot, packageDir, 'package.json')));
+  });
 }
 
 const publicPublishConfig = {
@@ -66,9 +78,23 @@ describe('release configuration', () => {
 
       expect(pkg.private, packageDir).toBeUndefined();
       expect(pkg.publishConfig, packageDir).toEqual(publicPublishConfig);
-      expect(pkg.peerDependencies?.['@elog/cli'], packageDir).toBe('^1.0.0-beta.1');
-      expect(pkg.peerDependenciesMeta?.['@elog/cli'], packageDir).toEqual({ optional: true });
-      expect(pkg.devDependencies?.['@elog/cli'], packageDir).toBe('workspace:*');
+      expect(pkg.dependencies?.['@elog/plugin-sdk'], packageDir).toBe('workspace:^');
+    }
+  });
+
+  it('keeps every repository plugin depending on the Plugin SDK instead of CLI or Shared', () => {
+    for (const packageDir of discoverPluginPackageDirs()) {
+      const pkg = readJson<PackageJson>(path.join(packageDir, 'package.json'));
+
+      expect(pkg.dependencies?.['@elog/plugin-sdk'], packageDir).toBe('workspace:^');
+      expect(pkg.dependencies?.['@elog/cli'], packageDir).toBeUndefined();
+      expect(pkg.dependencies?.['@elog/shared'], packageDir).toBeUndefined();
+      expect(pkg.peerDependencies?.['@elog/cli'], packageDir).toBeUndefined();
+      expect(pkg.peerDependencies?.['@elog/shared'], packageDir).toBeUndefined();
+      expect(pkg.peerDependenciesMeta?.['@elog/cli'], packageDir).toBeUndefined();
+      expect(pkg.peerDependenciesMeta?.['@elog/shared'], packageDir).toBeUndefined();
+      expect(pkg.devDependencies?.['@elog/cli'], packageDir).toBeUndefined();
+      expect(pkg.devDependencies?.['@elog/shared'], packageDir).toBeUndefined();
     }
   });
 

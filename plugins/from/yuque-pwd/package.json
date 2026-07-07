@@ -22,22 +22,13 @@
   },
   "author": "",
   "license": "MIT",
-  "peerDependencies": {
-    "@elog/cli": "^1.0.0-beta.1"
-  },
-  "peerDependenciesMeta": {
-    "@elog/cli": {
-      "optional": true
-    }
-  },
   "dependencies": {
-    "@elog/shared": "workspace:^",
+    "@elog/plugin-sdk": "workspace:^",
     "front-matter": "~4.0.2",
     "jsdom": "^21.1.2",
     "jsencrypt-node": "~1.0.4"
   },
   "devDependencies": {
-    "@elog/cli": "workspace:*",
     "@types/jsdom": "21.1.2",
     "@types/node": "~22.19.19",
     "vitest": "^4.1.9",

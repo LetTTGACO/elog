@@ -1,4 +1,4 @@
-import { DocDetail, ElogBaseContext, PluginContext, SortedDoc } from '@elog/cli';
+import { DocDetail, ElogBaseContext, PluginContext, SortedDoc } from '@elog/plugin-sdk';
 import { FeiShuClient as FeiShuSDK } from '@feishux/api';
 import { FeiShuToMarkdown } from '@feishux/doc-to-md';
 import { FeiShuConfig, FeiShuDoc } from './types';

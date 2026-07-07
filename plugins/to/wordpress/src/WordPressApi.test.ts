@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { PluginContext } from '@elog/cli';
+import type { PluginContext } from '@elog/plugin-sdk';
 import WordPressApi from './WordPressApi';
 
 type MockHttpResponse = {

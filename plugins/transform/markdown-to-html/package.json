@@ -20,20 +20,12 @@
     "typecheck": "tsc -p tsconfig.json --noEmit --pretty false",
     "test": "vitest run --passWithNoTests"
   },
-  "peerDependencies": {
-    "@elog/cli": "^1.0.0-beta.1"
-  },
-  "peerDependenciesMeta": {
-    "@elog/cli": {
-      "optional": true
-    }
-  },
   "dependencies": {
+    "@elog/plugin-sdk": "workspace:^",
     "highlight.js": "~11.11.1",
     "markdown-it": "~14.2.0"
   },
   "devDependencies": {
-    "@elog/cli": "workspace:*",
     "@types/markdown-it": "~14.1.2",
     "@types/node": "~22.19.19",
     "tsdown": "^0.22.3",

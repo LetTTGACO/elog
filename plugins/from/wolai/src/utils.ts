@@ -6,8 +6,8 @@ import {
   WoLaiTableRow,
 } from './types';
 import { WolaiSortDirectionEnum } from './const';
-import { DocDetail, DocProperties, DocStructure, SortedDoc } from '@elog/cli';
-import { formatTime } from '@elog/shared';
+import { DocDetail, DocProperties, DocStructure, SortedDoc } from '@elog/plugin-sdk';
+import { formatTime } from '@elog/plugin-sdk';
 
 /**
  * 获取元数据Val

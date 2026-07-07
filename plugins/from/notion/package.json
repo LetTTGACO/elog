@@ -22,21 +22,12 @@
   },
   "author": "",
   "license": "MIT",
-  "peerDependencies": {
-    "@elog/cli": "^1.0.0-beta.1"
-  },
-  "peerDependenciesMeta": {
-    "@elog/cli": {
-      "optional": true
-    }
-  },
   "dependencies": {
-    "@elog/shared": "workspace:^",
+    "@elog/plugin-sdk": "workspace:^",
     "@notionhq/client": "~5.22.0",
     "notion-to-md": "3.1.9"
   },
   "devDependencies": {
-    "@elog/cli": "workspace:*",
     "@types/node": "~22.19.19",
     "tsdown": "^0.22.3",
     "typescript": "~6.0.3",

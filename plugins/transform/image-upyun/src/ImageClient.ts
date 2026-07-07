@@ -1,4 +1,4 @@
-import { DocDetail, ElogImageContext, PluginContext } from '@elog/cli';
+import { DocDetail, ElogImageContext, PluginContext } from '@elog/plugin-sdk';
 import { ImageUPYunConfig } from './types';
 import UPYunApi from './ImageApi';
 

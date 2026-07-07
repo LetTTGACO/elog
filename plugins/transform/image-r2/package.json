@@ -20,19 +20,11 @@
     "typecheck": "tsc -p tsconfig.json --noEmit --pretty false",
     "test": "vitest run --passWithNoTests"
   },
-  "peerDependencies": {
-    "@elog/cli": "^1.0.0-beta.1"
-  },
-  "peerDependenciesMeta": {
-    "@elog/cli": {
-      "optional": true
-    }
-  },
   "dependencies": {
+    "@elog/plugin-sdk": "workspace:^",
     "@aws-sdk/client-s3": "3.445.0"
   },
   "devDependencies": {
-    "@elog/cli": "workspace:*",
     "@types/node": "~22.19.19",
     "tsdown": "^0.22.3",
     "typescript": "~6.0.3",

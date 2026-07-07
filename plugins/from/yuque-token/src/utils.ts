@@ -1,7 +1,7 @@
 import frontMatter from 'front-matter';
 import type { NormalizedYuqueDoc, YuqueDoc } from './types';
-import type { PluginContext, DocProperties } from '@elog/cli';
-import { formatTime } from '@elog/shared';
+import type { PluginContext, DocProperties } from '@elog/plugin-sdk';
+import { formatTime } from '@elog/plugin-sdk';
 
 /**
  * 生成元数据

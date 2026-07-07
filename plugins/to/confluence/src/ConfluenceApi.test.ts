@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { DocDetail, PluginContext } from '@elog/cli';
+import type { DocDetail, PluginContext } from '@elog/plugin-sdk';
 import ConfluenceApi from './ConfluenceApi';
 
 function createCtx() {

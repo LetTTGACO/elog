@@ -1,5 +1,5 @@
 import { YuqueCatalog, YuqueDoc, YuqueWithPwdConfig } from './types';
-import { ElogBaseContext, PluginContext } from '@elog/cli';
+import { ElogBaseContext, PluginContext } from '@elog/plugin-sdk';
 import { encrypt } from './utils';
 import { JSDOM } from 'jsdom';
 

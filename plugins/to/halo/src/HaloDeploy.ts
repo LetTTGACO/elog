@@ -1,5 +1,5 @@
 import type { HaloConfig } from './types';
-import type { DocDetail, PluginContext } from '@elog/cli';
+import type { DocDetail, PluginContext } from '@elog/plugin-sdk';
 import HaloApi from './HaloApi';
 import { slugify } from 'transliteration';
 import { delay, getIds, getNoRepValues } from './utils';

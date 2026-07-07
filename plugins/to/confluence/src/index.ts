@@ -1,4 +1,4 @@
-import type { ToPlugin } from '@elog/cli';
+import type { ToPlugin } from '@elog/plugin-sdk';
 import ConfluenceDeploy from './ConfluenceDeploy';
 import type { ConfluenceConfig } from './types';
 

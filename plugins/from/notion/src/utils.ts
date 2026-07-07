@@ -1,6 +1,6 @@
 import { NotionDoc } from './types';
-import { DocProperties } from '@elog/cli';
-import { formatTime } from '@elog/shared';
+import { DocProperties } from '@elog/plugin-sdk';
+import { formatTime } from '@elog/plugin-sdk';
 
 /**
  * 获取元数据Val

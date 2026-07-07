@@ -1,4 +1,4 @@
-import type { DocStructure } from '@elog/cli';
+import type { DocStructure } from '@elog/plugin-sdk';
 
 /**
  * @see https://www.yuque.com/yuque/developer/userserializer

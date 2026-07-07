@@ -1,5 +1,5 @@
 import { ImageGithubConfig } from './types';
-import { ElogBaseContext, PluginContext } from '@elog/cli';
+import { ElogBaseContext, PluginContext } from '@elog/plugin-sdk';
 
 export default class GithubApi extends ElogBaseContext {
   private readonly config: ImageGithubConfig;

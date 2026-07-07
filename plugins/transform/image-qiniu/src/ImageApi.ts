@@ -1,5 +1,5 @@
 import { ImageQiniuConfig } from './types';
-import { ElogBaseContext, PluginContext } from '@elog/cli';
+import { ElogBaseContext, PluginContext } from '@elog/plugin-sdk';
 import qiniu from 'qiniu';
 
 export default class QiniuApi extends ElogBaseContext {

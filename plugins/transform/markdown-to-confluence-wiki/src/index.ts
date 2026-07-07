@@ -1,4 +1,4 @@
-import type { TransformPlugin } from '@elog/cli';
+import type { TransformPlugin } from '@elog/plugin-sdk';
 import { md2Wiki } from './WikiRender';
 
 export default function markdownToConfluenceWiki(): TransformPlugin {

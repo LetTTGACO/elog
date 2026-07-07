@@ -1,5 +1,5 @@
 import { COSOptions } from 'cos-nodejs-sdk-v5';
-import { ImageBaseConfig } from '@elog/cli';
+import { ImageBaseConfig } from '@elog/plugin-sdk';
 
 export interface ImageCOSInnerConfig extends COSOptions {
   /** 自定义域名 */

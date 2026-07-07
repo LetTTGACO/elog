@@ -1,5 +1,5 @@
 import { WolaiSortPresetEnum } from './const';
-import { DocProperties, FromPluginBaseConfig } from '@elog/cli';
+import { DocProperties, FromPluginBaseConfig } from '@elog/plugin-sdk';
 export interface WoLaiConfig extends FromPluginBaseConfig {
   token: string;
   /** 文档ID */

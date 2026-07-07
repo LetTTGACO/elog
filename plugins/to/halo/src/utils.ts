@@ -1,4 +1,4 @@
-import type { DocDetail } from '@elog/cli';
+import type { DocDetail } from '@elog/plugin-sdk';
 
 interface NoRepValues {
   tags: string[];

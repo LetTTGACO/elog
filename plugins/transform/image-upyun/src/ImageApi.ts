@@ -1,5 +1,5 @@
 import { ImageUPYunConfig } from './types';
-import { ElogBaseContext, PluginContext } from '@elog/cli';
+import { ElogBaseContext, PluginContext } from '@elog/plugin-sdk';
 import UPYun from 'upyun';
 
 export default class UPYunApi extends ElogBaseContext {

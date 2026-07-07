@@ -1,5 +1,5 @@
 import { ImageOSSConfig } from './types';
-import { ElogBaseContext, PluginContext } from '@elog/cli';
+import { ElogBaseContext, PluginContext } from '@elog/plugin-sdk';
 import OSS from 'ali-oss';
 
 export default class OSSApi extends ElogBaseContext {

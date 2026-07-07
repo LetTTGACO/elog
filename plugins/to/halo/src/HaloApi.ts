@@ -1,6 +1,6 @@
 import { HaloConfig } from './types';
 import Context from './Context';
-import type { PluginContext } from '@elog/cli';
+import type { PluginContext } from '@elog/plugin-sdk';
 import type {
   Category,
   CategoryList,

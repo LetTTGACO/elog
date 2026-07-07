@@ -1,4 +1,4 @@
-import { ImageBaseConfig } from '@elog/cli';
+import { ImageBaseConfig } from '@elog/plugin-sdk';
 
 export interface ImageUPYunConfig extends ImageBaseConfig {
   /** 自定义域名 */

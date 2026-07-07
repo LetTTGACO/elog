@@ -20,19 +20,11 @@
     "typecheck": "tsc -p tsconfig.json --noEmit --pretty false",
     "test": "vitest run --passWithNoTests"
   },
-  "peerDependencies": {
-    "@elog/cli": "^1.0.0-beta.1"
-  },
-  "peerDependenciesMeta": {
-    "@elog/cli": {
-      "optional": true
-    }
-  },
   "dependencies": {
+    "@elog/plugin-sdk": "workspace:^",
     "transliteration": "~2.3.5"
   },
   "devDependencies": {
-    "@elog/cli": "workspace:*",
     "@halo-dev/api-client": "2.10.0",
     "@types/node": "~22.19.19",
     "tsdown": "^0.22.3",

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import COSApi from './ImageApi';
-import type { PluginContext } from '@elog/cli';
+import type { PluginContext } from '@elog/plugin-sdk';
 
 const headObjectMock = vi.hoisted(() => vi.fn());
 const putObjectMock = vi.hoisted(() => vi.fn());

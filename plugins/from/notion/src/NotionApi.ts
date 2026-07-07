@@ -5,7 +5,13 @@ import type {
   NotionQueryParams,
   NotionSort,
 } from './types';
-import { DocDetail, DocStructure, ElogBaseContext, PluginContext, SortedDoc } from '@elog/cli';
+import {
+  DocDetail,
+  DocStructure,
+  ElogBaseContext,
+  PluginContext,
+  SortedDoc,
+} from '@elog/plugin-sdk';
 import { Client as NotionClient } from '@notionhq/client';
 import { NotionToMarkdown } from 'notion-to-md';
 import { NotionSortDirectionEnum, NotionSortPresetEnum } from './const';

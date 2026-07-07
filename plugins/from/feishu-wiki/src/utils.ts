@@ -1,6 +1,6 @@
 import { FeiShuDoc } from './types';
 import frontMatter from 'front-matter';
-import { formatTime } from '@elog/shared';
+import { formatTime } from '@elog/plugin-sdk';
 
 /**
  * 生成元数据

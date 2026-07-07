@@ -5,7 +5,7 @@ import type {
   YuqueDocListResponse,
   YuqueWithTokenConfig,
 } from './types';
-import { ElogBaseContext, PluginContext } from '@elog/cli';
+import { ElogBaseContext, PluginContext } from '@elog/plugin-sdk';
 
 export default class YuqueApi extends ElogBaseContext {
   private readonly config: YuqueWithTokenConfig;

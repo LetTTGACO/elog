@@ -1,4 +1,4 @@
-import type { ToPlugin } from '@elog/cli';
+import type { ToPlugin } from '@elog/plugin-sdk';
 import WordPressDeploy from './WordPressDeploy';
 import type { WordPressConfig } from './types';
 

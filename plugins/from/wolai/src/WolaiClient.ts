@@ -1,4 +1,4 @@
-import { DownloadResult, ElogFromContext, PluginContext } from '@elog/cli';
+import { DownloadResult, ElogFromContext, PluginContext } from '@elog/plugin-sdk';
 import WolaiApi from './WolaiApi';
 import { WoLaiConfig } from './types';
 

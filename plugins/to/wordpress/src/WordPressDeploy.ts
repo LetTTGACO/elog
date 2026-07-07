@@ -5,7 +5,7 @@ import type {
   WordPressConfig,
   WordPressPost,
 } from './types';
-import type { DocDetail, PluginContext } from '@elog/cli';
+import type { DocDetail, PluginContext } from '@elog/plugin-sdk';
 import WordPressApi from './WordPressApi';
 import Context from './Context';
 import { getHtmlImageUrlsFromContent, getNoRepValues, removeEmptyProperties } from './utils';

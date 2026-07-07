@@ -19,19 +19,11 @@
     "build": "tsdown",
     "typecheck": "tsc -p tsconfig.json --noEmit --pretty false"
   },
-  "peerDependencies": {
-    "@elog/cli": "^1.0.0-beta.1"
-  },
-  "peerDependenciesMeta": {
-    "@elog/cli": {
-      "optional": true
-    }
-  },
   "dependencies": {
+    "@elog/plugin-sdk": "workspace:^",
     "ali-oss": "~6.23.0"
   },
   "devDependencies": {
-    "@elog/cli": "workspace:*",
     "@types/ali-oss": "~6.23.3",
     "@types/node": "~22.19.19",
     "tsdown": "^0.22.3",

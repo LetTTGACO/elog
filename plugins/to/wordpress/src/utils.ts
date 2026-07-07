@@ -1,4 +1,4 @@
-import type { DocDetail, ImageUrl } from '@elog/cli';
+import type { DocDetail, ImageUrl } from '@elog/plugin-sdk';
 import { AnyObject, NoRepValues } from './types';
 
 export function getHtmlImageUrlsFromContent(

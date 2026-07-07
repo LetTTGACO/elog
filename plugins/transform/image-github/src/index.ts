@@ -1,4 +1,4 @@
-import type { TransformPlugin } from '@elog/cli';
+import type { TransformPlugin } from '@elog/plugin-sdk';
 import ImageClient from './ImageClient';
 import type { ImageGithubConfig } from './types';
 

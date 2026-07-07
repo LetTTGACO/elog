@@ -19,19 +19,11 @@
     "build": "tsdown",
     "typecheck": "tsc -p tsconfig.json --noEmit --pretty false"
   },
-  "peerDependencies": {
-    "@elog/cli": "^1.0.0-beta.1"
-  },
-  "peerDependenciesMeta": {
-    "@elog/cli": {
-      "optional": true
-    }
-  },
   "dependencies": {
+    "@elog/plugin-sdk": "workspace:^",
     "upyun": "~3.4.6"
   },
   "devDependencies": {
-    "@elog/cli": "workspace:*",
     "@types/node": "~22.19.19",
     "@types/upyun": "~3.4.3",
     "tsdown": "^0.22.3",

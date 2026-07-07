@@ -158,9 +158,9 @@ importers:
 
   plugins/from/feishu-space:
     dependencies:
-      '@elog/shared':
+      '@elog/plugin-sdk':
         specifier: workspace:^
-        version: link:../../../packages/shared
+        version: link:../../../packages/plugin-sdk
       '@feishux/api':
         specifier: ^0.4.0
         version: 0.4.0
@@ -171,9 +171,6 @@ importers:
         specifier: ~4.0.2
         version: 4.0.2
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@feishux/shared':
         specifier: ^0.4.0
         version: 0.4.0
@@ -192,9 +189,9 @@ importers:
 
   plugins/from/feishu-wiki:
     dependencies:
-      '@elog/shared':
+      '@elog/plugin-sdk':
         specifier: workspace:^
-        version: link:../../../packages/shared
+        version: link:../../../packages/plugin-sdk
       '@feishux/api':
         specifier: ^0.4.0
         version: 0.4.0
@@ -205,9 +202,6 @@ importers:
         specifier: ~4.0.2
         version: 4.0.2
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@feishux/shared':
         specifier: ^0.4.0
         version: 0.4.0
@@ -251,9 +245,9 @@ importers:
 
   plugins/from/notion:
     dependencies:
-      '@elog/shared':
+      '@elog/plugin-sdk':
         specifier: workspace:^
-        version: link:../../../packages/shared
+        version: link:../../../packages/plugin-sdk
       '@notionhq/client':
         specifier: ~5.22.0
         version: 5.22.0
@@ -261,9 +255,6 @@ importers:
         specifier: 3.1.9
         version: 3.1.9
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
@@ -279,13 +270,10 @@ importers:
 
   plugins/from/wolai:
     dependencies:
-      '@elog/shared':
+      '@elog/plugin-sdk':
         specifier: workspace:^
-        version: link:../../../packages/shared
+        version: link:../../../packages/plugin-sdk
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
@@ -298,9 +286,9 @@ importers:
 
   plugins/from/yuque-pwd:
     dependencies:
-      '@elog/shared':
+      '@elog/plugin-sdk':
         specifier: workspace:^
-        version: link:../../../packages/shared
+        version: link:../../../packages/plugin-sdk
       front-matter:
         specifier: ~4.0.2
         version: 4.0.2
@@ -311,9 +299,6 @@ importers:
         specifier: ~1.0.4
         version: 1.0.4
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@types/jsdom':
         specifier: 21.1.2
         version: 21.1.2
@@ -332,16 +317,13 @@ importers:
 
   plugins/from/yuque-token:
     dependencies:
-      '@elog/shared':
+      '@elog/plugin-sdk':
         specifier: workspace:^
-        version: link:../../../packages/shared
+        version: link:../../../packages/plugin-sdk
       front-matter:
         specifier: ~4.0.2
         version: 4.0.2
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
@@ -353,10 +335,11 @@ importers:
         version: 6.0.3
 
   plugins/to/confluence:
+    dependencies:
+      '@elog/plugin-sdk':
+        specifier: workspace:^
+        version: link:../../../packages/plugin-sdk
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
@@ -372,13 +355,13 @@ importers:
 
   plugins/to/halo:
     dependencies:
+      '@elog/plugin-sdk':
+        specifier: workspace:^
+        version: link:../../../packages/plugin-sdk
       transliteration:
         specifier: ~2.3.5
         version: 2.3.5
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@halo-dev/api-client':
         specifier: 2.10.0
         version: 2.10.0
@@ -415,10 +398,11 @@ importers:
         version: 6.0.3
 
   plugins/to/wordpress:
+    dependencies:
+      '@elog/plugin-sdk':
+        specifier: workspace:^
+        version: link:../../../packages/plugin-sdk
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
@@ -434,13 +418,13 @@ importers:
 
   plugins/transform/image-b2:
     dependencies:
+      '@elog/plugin-sdk':
+        specifier: workspace:^
+        version: link:../../../packages/plugin-sdk
       backblaze-b2:
         specifier: ^1.7.0
         version: 1.7.1
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@types/backblaze-b2':
         specifier: ^1.5.6
         version: 1.5.6
@@ -459,13 +443,13 @@ importers:
 
   plugins/transform/image-cos:
     dependencies:
+      '@elog/plugin-sdk':
+        specifier: workspace:^
+        version: link:../../../packages/plugin-sdk
       cos-nodejs-sdk-v5:
         specifier: ~2.15.4
         version: 2.15.4
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
@@ -480,10 +464,11 @@ importers:
         version: 4.1.9(@types/node@22.19.19)(jsdom@21.1.2)(vite@8.0.13(@types/node@22.19.19)(esbuild@0.28.1)(yaml@2.9.0))
 
   plugins/transform/image-github:
+    dependencies:
+      '@elog/plugin-sdk':
+        specifier: workspace:^
+        version: link:../../../packages/plugin-sdk
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
@@ -512,13 +497,13 @@ importers:
 
   plugins/transform/image-oss:
     dependencies:
+      '@elog/plugin-sdk':
+        specifier: workspace:^
+        version: link:../../../packages/plugin-sdk
       ali-oss:
         specifier: ~6.23.0
         version: 6.23.0
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@types/ali-oss':
         specifier: ~6.23.3
         version: 6.23.3
@@ -534,13 +519,13 @@ importers:
 
   plugins/transform/image-qiniu:
     dependencies:
+      '@elog/plugin-sdk':
+        specifier: workspace:^
+        version: link:../../../packages/plugin-sdk
       qiniu:
         specifier: ~7.15.2
         version: 7.15.2
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
@@ -556,10 +541,10 @@ importers:
       '@aws-sdk/client-s3':
         specifier: 3.445.0
         version: 3.445.0
+      '@elog/plugin-sdk':
+        specifier: workspace:^
+        version: link:../../../packages/plugin-sdk
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
@@ -575,13 +560,13 @@ importers:
 
   plugins/transform/image-upyun:
     dependencies:
+      '@elog/plugin-sdk':
+        specifier: workspace:^
+        version: link:../../../packages/plugin-sdk
       upyun:
         specifier: ~3.4.6
         version: 3.4.6
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
@@ -597,13 +582,13 @@ importers:
 
   plugins/transform/markdown-to-confluence-wiki:
     dependencies:
+      '@elog/plugin-sdk':
+        specifier: workspace:^
+        version: link:../../../packages/plugin-sdk
       marked:
         specifier: ~12.0.1
         version: 12.0.1
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
@@ -619,6 +604,9 @@ importers:
 
   plugins/transform/markdown-to-html:
     dependencies:
+      '@elog/plugin-sdk':
+        specifier: workspace:^
+        version: link:../../../packages/plugin-sdk
       highlight.js:
         specifier: ~11.11.1
         version: 11.11.1
@@ -626,9 +614,6 @@ importers:
         specifier: ~14.2.0
         version: 14.2.0
     devDependencies:
-      '@elog/cli':
-        specifier: workspace:*
-        version: link:../../../packages/elog
       '@types/markdown-it':
         specifier: ~14.1.2
         version: 14.1.2
