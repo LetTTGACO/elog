@@ -2,8 +2,6 @@ import { HaloConfig } from './types';
 import Context from './Context';
 import type { PluginContext } from '@elog/cli';
 import type {
-  Attachment,
-  AttachmentList,
   Category,
   CategoryList,
   Content,
@@ -15,8 +13,6 @@ import type {
 } from '@halo-dev/api-client';
 
 const LIST_PAGE_SIZE = 100;
-const ATTACHMENT_PERMALINK_MAX_ATTEMPTS = 30;
-const ATTACHMENT_PERMALINK_POLL_INTERVAL_MS = 1000;
 
 interface HaloListPage {
   items: any[];
@@ -46,10 +42,6 @@ function hasMorePages(list: HaloListPage, requestedPage: number) {
   return false;
 }
 
-async function wait(ms: number) {
-  await new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 export default class HaloApi extends Context {
   config: HaloConfig;
   constructor(config: HaloConfig, ctx: PluginContext) {
@@ -60,10 +52,6 @@ export default class HaloApi extends Context {
     }
     if (!this.config.token) {
       this.ctx.logger.error('缺少Halo个人令牌 token');
-    }
-    if (!this.config.policyName) {
-      this.ctx.logger.warn('注意', '未指定存储策略，将使用默认策略上传图片');
-      this.config.policyName = 'default-policy';
     }
   }
 
@@ -178,44 +166,6 @@ export default class HaloApi extends Context {
   }
 
   /**
-   * 获取附件列表
-   */
-  async getAttachments() {
-    return this.requestPagedList<AttachmentList>(
-      '/apis/api.console.halo.run/v1alpha1/attachments',
-      {
-        method: 'GET',
-      },
-    );
-  }
-
-  /**
-   * 获取单个附件
-   */
-  async getAttachment(name: string) {
-    return this.requestInternal<Attachment>(`/apis/storage.halo.run/v1alpha1/attachments/${name}`, {
-      method: 'GET',
-    });
-  }
-
-  /**
-   * 上传附件
-   */
-  async uploadAttachment(buffer: Buffer, filename: string) {
-    const form = new FormData();
-    form.set('file', new Blob([Uint8Array.from(buffer)]), filename);
-    form.set('policyName', this.config.policyName || '');
-    form.set('groupName', this.config.groupName || '');
-    return this.requestInternal<Attachment>(
-      '/apis/api.console.halo.run/v1alpha1/attachments/upload',
-      {
-        method: 'POST',
-        body: form,
-      },
-    );
-  }
-
-  /**
    * 更新单篇文档内容
    */
   async updatePostContent(docId: string, params: Content) {
@@ -269,26 +219,6 @@ export default class HaloApi extends Context {
       {
         method: 'PUT',
       },
-    );
-  }
-
-  /**
-   * 获取附件链接
-   * @param name
-   */
-  async getAttachmentPermalink(name: string): Promise<string> {
-    for (let attempt = 1; attempt <= ATTACHMENT_PERMALINK_MAX_ATTEMPTS; attempt += 1) {
-      const response = await this.getAttachment(name);
-      const permalink = response.status?.permalink;
-      if (permalink) {
-        return permalink;
-      }
-      if (attempt < ATTACHMENT_PERMALINK_MAX_ATTEMPTS) {
-        await wait(ATTACHMENT_PERMALINK_POLL_INTERVAL_MS);
-      }
-    }
-    throw new Error(
-      `Timed out waiting for Halo attachment permalink for ${name} after ${ATTACHMENT_PERMALINK_MAX_ATTEMPTS} attempts`,
     );
   }
 }

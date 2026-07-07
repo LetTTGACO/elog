@@ -6,9 +6,4 @@ export interface HaloConfig {
   endpoint: string;
   /** Halo个人令牌 */
   token: string;
-  /** 存储策略名称 */
-  policyName?: string;
-  /** 组名称 */
-  groupName?: string;
-  enableUploadImage?: boolean;
 }

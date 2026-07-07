@@ -40,12 +40,10 @@ function assertHtmlBodyTypes(docs: DocDetail[], error: PluginContext['logger']['
 }
 
 export default class extends Context {
-  private readonly config: HaloConfig;
   private readonly api: HaloApi;
 
   constructor(config: HaloConfig, ctx: PluginContext) {
     super(ctx);
-    this.config = config;
     this.api = new HaloApi(config, ctx);
   }
 
@@ -80,17 +78,6 @@ export default class extends Context {
     // List转Map
     tags.items.forEach((item) => {
       tagMap[item.spec.displayName] = item;
-    });
-
-    let imageMap: any = {};
-
-    // 获取图片
-    const images = await this.api.getAttachments();
-
-    images.items.forEach((item) => {
-      if (item.spec.displayName) {
-        imageMap[item.spec.displayName] = item;
-      }
     });
 
     const noRepValues = getNoRepValues(docDetailList, 'tags', 'categories');
@@ -156,77 +143,6 @@ export default class extends Context {
       }
     }
     for (let doc of docDetailList) {
-      if (this.config.enableUploadImage) {
-        // 收集文档图片
-        const urlList = this.ctx.image.getUrlListFromContent(doc.body);
-        // 封面图
-        const cover = doc.properties.cover;
-        if (cover) {
-          urlList.push(this.ctx.image.getBaseUrl(cover));
-        }
-        for (const image of urlList) {
-          // 生成文件名
-          const fileName = this.ctx.image.genUniqueIdFromUrl(image.data, 28);
-          // 生成文件名后缀
-          const fileType = await this.ctx.image.getFileType(image.data);
-          if (!fileType) {
-            this.ctx.logger.warn(
-              `${doc?.properties?.title} 存在获取图片类型失败，跳过：${image.data}`,
-            );
-            continue;
-          }
-          // 完整文件名
-          const fullName = `${fileName}.${fileType.type}`;
-          // 检查Halo是否存在该文件
-          const item = imageMap[fullName];
-          if (!item) {
-            // 上传
-            // 获取 buffer
-            const buffer = await this.ctx.image.getBufferFromUrl(image.originalUrl);
-            if (!buffer) {
-              this.ctx.logger.warn(
-                '跳过',
-                `${doc?.properties?.title} 存在获取图片内容失败：${image.data}`,
-              );
-              continue;
-            }
-            try {
-              const attachment = await this.api.uploadAttachment(buffer, fullName);
-              const imageUrl = await this.api.getAttachmentPermalink(attachment.metadata.name);
-              this.ctx.logger.info('上传成功', imageUrl);
-              // 记录最新的
-              imageMap[fullName] = {
-                ...attachment,
-                status: {
-                  ...attachment.status,
-                  permalink: imageUrl,
-                },
-              };
-              // 替换文档中的图片路径
-              doc.body = doc.body.replace(image.originalUrl, imageUrl);
-              // 替换属性中的图片
-              if (image.originalUrl === cover) {
-                doc.properties.cover = imageUrl;
-              }
-            } catch (e: any) {
-              const reason = e?.message ? `，${e.message}` : '';
-              this.ctx.logger.warn(
-                '跳过',
-                `${doc?.properties?.title} 存在上传图片失败：${image.data}${reason}`,
-              );
-              this.ctx.logger.debug(e);
-            }
-          } else {
-            this.ctx.logger.info('忽略上传', `图片已存在: ${item.status.permalink}`);
-            // 替换文档中的图片路径
-            doc.body = doc.body.replace(image.originalUrl, item.status.permalink);
-            // 替换属性中的图片
-            if (image.originalUrl === cover) {
-              doc.properties.cover = item.status.permalink;
-            }
-          }
-        }
-      }
       // 上传文档
       let params: PostRequest = {
         post: {

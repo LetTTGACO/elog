@@ -30,12 +30,9 @@ plugins: [imageR2(...), markdownToHtml()]
 
 这样做是为了避免 Halo 前台保留 Notion 的临时或受限图片链接。不要在这个远端 CMS case 里使用本地图床：本地图床会生成本机相对路径，部署到 Halo 后前台通常无法访问。
 
-如果想改成 Halo 自身附件上传，需要移除 `imageR2(...)` transform，同时在 `toHalo({ ... })` 里设置 `enableUploadImage: true`，并按需要设置 `policyName`、`groupName`。这个路径依赖真实 Halo 存储策略，当前不是默认 e2e 覆盖面。
-
 运行这个 case 需要提供 `ELOG_E2E_R2_HOST`、`ELOG_E2E_R2_ACCESS_KEY_ID`、`ELOG_E2E_R2_SECRET_ACCESS_KEY`、`ELOG_E2E_R2_BUCKET`、`ELOG_E2E_R2_ENDPOINT`。R2 上传前缀在同一个文件的 `e2eProfile.image.prefixKey` 里配置。
 
 ## 不覆盖
 
-- Halo 自身附件上传；默认未配置 `enableUploadImage`，因此不覆盖该路径。
-- Halo 存储策略和分组参数；这些由插件单测覆盖。
+- Halo 自身附件上传；`toHalo` 不再内置该路径，图片应在 transform 阶段处理。
 - Notion catalog 目录输出。

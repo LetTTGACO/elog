@@ -24,17 +24,7 @@ function createCtx() {
     },
     http: vi.fn() as unknown as PluginContext['http'],
     cache: { docList: [] },
-    image: {
-      getUrlListFromContent: vi
-        .fn()
-        .mockReturnValue([
-          { data: 'https://example.com/a.png', originalUrl: 'https://example.com/a.png' },
-        ]),
-      getBaseUrl: vi.fn((url: string) => ({ data: url, originalUrl: url })),
-      genUniqueIdFromUrl: vi.fn().mockReturnValue('image-id'),
-      getFileType: vi.fn().mockResolvedValue({ type: 'png' }),
-      getBufferFromUrl: vi.fn().mockResolvedValue(Buffer.from('image')),
-    } as unknown as PluginContext['image'],
+    image: {} as PluginContext['image'],
   };
   return ctx;
 }
@@ -52,13 +42,6 @@ function createApi(overrides: Record<string, unknown> = {}) {
       ...tag,
       metadata: { name: tag.spec.displayName },
     })),
-    getAttachments: vi.fn().mockResolvedValue({ items: [] }),
-    uploadAttachment: vi.fn().mockResolvedValue({
-      metadata: { name: 'attachment-1' },
-      status: {},
-      spec: { displayName: 'image-id.png' },
-    }),
-    getAttachmentPermalink: vi.fn().mockResolvedValue('https://halo.example/image-id.png'),
     createPost: vi.fn().mockResolvedValue({}),
     updatePostInfo: vi.fn().mockResolvedValue({}),
     updatePostContent: vi.fn().mockResolvedValue({}),
@@ -333,59 +316,5 @@ describe('HaloDeploy', () => {
         metadata: expect.objectContaining({ name: 'doc-1' }),
       }),
     );
-  });
-
-  it('uses existing attachments from aggregated list reads instead of uploading duplicates', async () => {
-    const ctx = createCtx();
-    const api = createApi({
-      getAttachments: vi.fn().mockResolvedValueOnce({
-        items: [
-          {
-            spec: { displayName: 'image-id.png' },
-            status: { permalink: 'https://halo.example/existing-image.png' },
-          },
-        ],
-      }),
-    });
-    const deploy = createDeploy(ctx, api, { enableUploadImage: true });
-
-    await deploy.deploy([
-      {
-        ...createDoc({ categories: [], tags: [] }),
-        body: '<img src="https://example.com/a.png">',
-      },
-    ]);
-
-    const params = api.createPost.mock.calls[0][0];
-    expect(api.uploadAttachment).not.toHaveBeenCalled();
-    expect(params.content.content).toBe('<img src="https://halo.example/existing-image.png">');
-    expect(ctx.logger.info).toHaveBeenCalledWith(
-      '忽略上传',
-      '图片已存在: https://halo.example/existing-image.png',
-    );
-  });
-
-  it('warns with the permalink timeout when uploaded attachment processing does not finish', async () => {
-    const ctx = createCtx();
-    const api = createApi({
-      getAttachmentPermalink: vi
-        .fn()
-        .mockRejectedValueOnce(
-          new Error(
-            'Timed out waiting for Halo attachment permalink for attachment-1 after 30 attempts',
-          ),
-        ),
-    });
-    const deploy = createDeploy(ctx, api, { enableUploadImage: true });
-
-    await deploy.deploy([createDoc({ categories: [], tags: [] })]);
-
-    expect(ctx.logger.warn).toHaveBeenCalledWith(
-      '跳过',
-      expect.stringContaining(
-        'Timed out waiting for Halo attachment permalink for attachment-1 after 30 attempts',
-      ),
-    );
-    expect(api.createPost).toHaveBeenCalledOnce();
   });
 });
