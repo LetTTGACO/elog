@@ -2,7 +2,7 @@ import { DocDetail, ElogBaseContext, PluginContext, SortedDoc } from '@elog/cli'
 import { FeiShuClient as FeiShuSDK } from '@feishux/api';
 import { FeiShuToMarkdown } from '@feishux/doc-to-md';
 import { FeiShuConfig, FeiShuDoc } from './types';
-import { IWikiNode } from '@feishux/shared';
+import type { IWikiNode } from '@feishux/shared';
 import { getProps } from './utils';
 
 export default class FeiShuApi extends ElogBaseContext {

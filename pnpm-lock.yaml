@@ -94,14 +94,11 @@ importers:
         specifier: workspace:^
         version: link:../../../packages/shared
       '@feishux/api':
-        specifier: ^0.3.1
-        version: 0.3.3
+        specifier: ^0.4.0
+        version: 0.4.0
       '@feishux/doc-to-md':
-        specifier: ^0.3.1
-        version: 0.3.3
-      '@feishux/shared':
-        specifier: ^0.3.1
-        version: 0.3.3
+        specifier: ^0.4.0
+        version: 0.4.0
       front-matter:
         specifier: ~4.0.2
         version: 4.0.2
@@ -109,6 +106,9 @@ importers:
       '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
+      '@feishux/shared':
+        specifier: ^0.4.0
+        version: 0.4.0
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
@@ -128,14 +128,11 @@ importers:
         specifier: workspace:^
         version: link:../../../packages/shared
       '@feishux/api':
-        specifier: ^0.3.1
-        version: 0.3.3
+        specifier: ^0.4.0
+        version: 0.4.0
       '@feishux/doc-to-md':
-        specifier: ^0.3.1
-        version: 0.3.3
-      '@feishux/shared':
-        specifier: ^0.3.1
-        version: 0.3.3
+        specifier: ^0.4.0
+        version: 0.4.0
       front-matter:
         specifier: ~4.0.2
         version: 4.0.2
@@ -143,6 +140,9 @@ importers:
       '@elog/cli':
         specifier: workspace:*
         version: link:../../../packages/elog
+      '@feishux/shared':
+        specifier: ^0.4.0
+        version: 0.4.0
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
@@ -1564,14 +1564,17 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@feishux/api@0.3.3':
-    resolution: {integrity: sha512-zak6D9LjFR38gSQWPPdylZmoNRoTswQXUp0UD0nDG4jWrM6PyZj4Y4MrbVuWxm6pP5haDVCsVkkZbZcTbUJLWA==}
+  '@feishux/api@0.4.0':
+    resolution: {integrity: sha512-B6VHmU25XU5B9avL9V0+qqe9RSKHRF2l7D08ZN0RIu4B1l8F2EFwVe1pLqeOrcddUtE2PB8O17WpcA+7SDtvnQ==}
+    engines: {node: '>=20.18.1'}
 
-  '@feishux/doc-to-md@0.3.3':
-    resolution: {integrity: sha512-sBRqEkINEwfWST5XRFX1XrEMvksCs2bnwymJ2/TRiHKiVey+0HWdMa0NrJXIaJiISDRYOMpYpVW4kXwK7tk+og==}
+  '@feishux/doc-to-md@0.4.0':
+    resolution: {integrity: sha512-M0cCFJw6k5Tf0iKRAzf+slhyP2enQSdh9Jfgd7tORZIFHWedOmZoJK8fK5aBISV+ASxs5iotsYSZh0xTFzPRLw==}
+    engines: {node: '>=20.18.1'}
 
-  '@feishux/shared@0.3.3':
-    resolution: {integrity: sha512-NE8a5BCW5xdrtkJi2cg14TEd9NR6yosV0fwyI5v+Q9pSJhRLp03N4rScWCR8xTIzk+dRMYxIPTCIj+z7wSaLfg==}
+  '@feishux/shared@0.4.0':
+    resolution: {integrity: sha512-2Xa7zG5Eko20Rdzxg7BWMawN9Q4bpEAiVklxiLLMtIUnGfAVaYRkgK85LGmi+31WGdqPVXypLrEhey1Ls09vRg==}
+    engines: {node: '>=20.18.1'}
 
   '@flowusx/flowus-client@0.0.5-beta.4':
     resolution: {integrity: sha512-LF50P4PMFCLXjXjnp8alT0VTfvPyUgT7PcGg05sI8O6IqBX7JorqQw3trxyxvcSKO58eprn01a6NQeN5L2BYwA==}
@@ -4248,6 +4251,10 @@ packages:
   tweetnacl@0.14.5:
     resolution: {integrity: sha512-KXXFFdAbFXY4geFIwoyNK+f5Z1b7swfXABfL7HXCmoIWMKU3dmS26672A4EeQtDzLKy7SXmfBu51JolvEKwtGA==}
 
+  type-fest@4.41.0:
+    resolution: {integrity: sha512-TeTSQ6H5YHvpqVwBRcnLDCBnDOHWYu7IvGbHT6N8AOymcr9PJGjc1GTtiWZTYg0NCgYwvnYWEkVChQAr9bjfwA==}
+    engines: {node: '>=16'}
+
   typescript@4.9.4:
     resolution: {integrity: sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==}
     engines: {node: '>=4.2.0'}
@@ -4273,6 +4280,10 @@ packages:
   undici@5.21.2:
     resolution: {integrity: sha512-f6pTQ9RF4DQtwoWSaC42P/NKlUjvezVvd9r155ohqkwFNRyBKM3f3pcty3ouusefNRyM25XhIQEbeQ46sZDJfQ==}
     engines: {node: '>=12.18'}
+
+  undici@7.28.0:
+    resolution: {integrity: sha512-cRZYrTDwWznlnRiPjggAGxZXanty6M8RV1ff8Wm4LWXBp7/IG8v5DnOm74DtUBp9OONpK75YlPnIjQqX0dBDtA==}
+    engines: {node: '>=20.18.1'}
 
   unescape@1.0.1:
     resolution: {integrity: sha512-O0+af1Gs50lyH1nUu3ZyYS1cRh01Q/kUKatTOkSs7jukXE6/NebucDVxyiDsA9AQ4JC1V1jUH9EO8JX2nMDgGQ==}
@@ -4326,6 +4337,10 @@ packages:
   urllib@3.13.2:
     resolution: {integrity: sha512-Z9yWZ9IFOTBGZcEzcAiJYvpPnUXoQlh5Qss0cOHUuTrwfk4vgivYLDLe0FLM/8HUF8tLeG3vu3lVxlSykoII+g==}
     engines: {node: '>= 14.19.3'}
+
+  urllib@4.9.0:
+    resolution: {integrity: sha512-Rp3DBvVqy9arSTMH6oN5N7OAN01U3dQ2xc19AadP86MzC4j67MDeqOup5shpWnjkDVGWfLfWPOd8CyqOtd6u3w==}
+    engines: {node: '>= 18.19.0'}
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
@@ -4550,6 +4565,10 @@ packages:
   yargs@17.7.2:
     resolution: {integrity: sha512-7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w==}
     engines: {node: '>=12'}
+
+  ylru@2.0.0:
+    resolution: {integrity: sha512-T6hTrKcr9lKeUG0MQ/tO72D3UGptWVohgzpHG8ljU1jeBt2RCjcWxvsTPD8ZzUq1t1FvwROAw1kxg2euvg/THg==}
+    engines: {node: '>= 18.19.0'}
 
 snapshots:
 
@@ -5885,23 +5904,23 @@ snapshots:
   '@esbuild/win32-x64@0.28.1':
     optional: true
 
-  '@feishux/api@0.3.3':
+  '@feishux/api@0.4.0':
     dependencies:
-      '@feishux/shared': 0.3.3
+      '@feishux/shared': 0.4.0
 
-  '@feishux/doc-to-md@0.3.3':
+  '@feishux/doc-to-md@0.4.0':
     dependencies:
-      '@feishux/api': 0.3.3
-      '@feishux/shared': 0.3.3
+      '@feishux/api': 0.4.0
+      '@feishux/shared': 0.4.0
       markdown-table: 2.0.0
 
-  '@feishux/shared@0.3.3':
+  '@feishux/shared@0.4.0':
     dependencies:
       chalk: 4.1.2
       lodash: 4.18.1
       shelljs: 0.8.5
       tslib: 2.8.1
-      urllib: 3.13.2
+      urllib: 4.9.0
 
   '@flowusx/flowus-client@0.0.5-beta.4':
     dependencies:
@@ -8712,6 +8731,8 @@ snapshots:
 
   tweetnacl@0.14.5: {}
 
+  type-fest@4.41.0: {}
+
   typescript@4.9.4: {}
 
   typescript@6.0.3: {}
@@ -8730,6 +8751,8 @@ snapshots:
   undici@5.21.2:
     dependencies:
       busboy: 1.6.0
+
+  undici@7.28.0: {}
 
   unescape@1.0.1:
     dependencies:
@@ -8800,6 +8823,16 @@ snapshots:
       mime-types: 2.1.35
       pump: 3.0.4
       undici: 5.21.2
+
+  urllib@4.9.0:
+    dependencies:
+      form-data: 4.0.6
+      formstream: 1.5.2
+      mime-types: 2.1.35
+      qs: 6.15.3
+      type-fest: 4.41.0
+      undici: 7.28.0
+      ylru: 2.0.0
 
   util-deprecate@1.0.2: {}
 
@@ -8957,3 +8990,5 @@ snapshots:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 21.1.1
+
+  ylru@2.0.0: {}
