@@ -188,17 +188,19 @@ build, or e2e verification command instead.
 
 ## Useful Files
 
-- `packages/elog/src/runtime/WorkflowRunner.ts`
-- `packages/elog/src/runtime/Graph.ts`
-- `packages/elog/src/runtime/PluginDriver.ts`
-- `packages/elog/src/cache/CacheStore.ts`
-- `packages/elog/src/plugins/context.ts`
-- `packages/elog/src/plugins/types.ts`
-- `packages/elog/src/config/resolve.ts`
-- `packages/elog/src/config/load.ts`
-- `packages/elog/src/node-entry.ts`
-- `packages/elog/src/doc/filter.ts`
-- `packages/elog/src/image/replace.ts`
+- `packages/core/src/runtime/WorkflowRunner.ts`
+- `packages/core/src/runtime/Graph.ts`
+- `packages/core/src/runtime/PluginDriver.ts`
+- `packages/core/src/cache/CacheStore.ts`
+- `packages/core/src/plugins/context.ts`
+- `packages/core/src/config/resolve.ts`
+- `packages/core/src/config/load.ts`
+- `packages/core/src/index.ts`
+- `packages/plugin-sdk/src/plugin.ts`
+- `packages/plugin-sdk/src/doc.ts`
+- `packages/plugin-sdk/src/source.ts`
+- `packages/plugin-sdk/src/context-helpers/ImageContext.ts`
+- `packages/elog/src/commands/sync/command.ts`
 - `tests/fixtures/basic-config/elog.config.ts`
 
 ## Agent skills

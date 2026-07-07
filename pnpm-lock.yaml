@@ -69,46 +69,19 @@ importers:
       '@elog/core':
         specifier: workspace:^
         version: link:../core
-      '@elog/plugin-sdk':
-        specifier: workspace:^
-        version: link:../plugin-sdk
-      bundle-require:
-        specifier: ^5.1.0
-        version: 5.1.0(esbuild@0.28.1)
       chalk:
         specifier: ~5.6.2
         version: 5.6.2
       commander:
         specifier: ~15.0.0
         version: 15.0.0
-      dotenv:
-        specifier: ~17.4.2
-        version: 17.4.2
-      esbuild:
-        specifier: 0.28.1
-        version: 0.28.1
-      image-size:
-        specifier: ~2.0.2
-        version: 2.0.2
       inquirer:
         specifier: ~14.0.2
         version: 14.0.2(@types/node@22.19.19)
-      joycon:
-        specifier: 3.1.1
-        version: 3.1.1
-      ofetch:
-        specifier: ~1.5.1
-        version: 1.5.1
-      tiny-async-pool:
-        specifier: ~2.1.0
-        version: 2.1.0
     devDependencies:
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
-      '@types/tiny-async-pool':
-        specifier: ^2.0.3
-        version: 2.0.3
       tsdown:
         specifier: ^0.22.3
         version: 0.22.3(typescript@6.0.3)

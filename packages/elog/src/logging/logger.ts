@@ -1,11 +1,11 @@
 import chalk from 'chalk';
-import { LogLevel } from '../types/log';
 import {
   LOGLEVEL_DEBUG,
   LOGLEVEL_ERROR,
   LOGLEVEL_INFO,
   LOGLEVEL_SUCCESS,
   LOGLEVEL_WARN,
+  type LogLevel,
 } from './levels';
 import * as process from 'process';
 

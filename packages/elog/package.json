@@ -28,21 +28,12 @@
   },
   "dependencies": {
     "@elog/core": "workspace:^",
-    "@elog/plugin-sdk": "workspace:^",
-    "bundle-require": "^5.1.0",
     "chalk": "~5.6.2",
     "commander": "~15.0.0",
-    "dotenv": "~17.4.2",
-    "esbuild": "0.28.1",
-    "image-size": "~2.0.2",
-    "inquirer": "~14.0.2",
-    "joycon": "3.1.1",
-    "ofetch": "~1.5.1",
-    "tiny-async-pool": "~2.1.0"
+    "inquirer": "~14.0.2"
   },
   "devDependencies": {
     "@types/node": "~22.19.19",
-    "@types/tiny-async-pool": "^2.0.3",
     "tsdown": "^0.22.3",
     "typescript": "~6.0.3",
     "vitest": "^4.1.9"
