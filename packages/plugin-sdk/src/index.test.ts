@@ -62,7 +62,7 @@ describe('plugin sdk public surface', () => {
     delete process.env.TIME_ZONE;
   });
 
-  it('exports plugin helper classes and renamed document sync status values', () => {
+  it('exports plugin helper classes and document sync status values', () => {
     const base = new ElogBaseContext(createContext());
     const plugin: ToPlugin = {
       name: 'to:test',

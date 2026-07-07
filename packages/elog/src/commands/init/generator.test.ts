@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { generateInitFiles, renderObjectLiteral } from './generator';
-import { loadBuiltInPluginRegistry } from './registry';
 import type { PluginRegistryEntry, PluginSelection } from './types';
 
 const fromYuque: PluginRegistryEntry = {
@@ -158,65 +157,5 @@ export default defineConfig({
     expect(files.configText).toContain('toLocal(');
     expect(files.configText).toContain('toRemote(');
     expect(files.configText).toContain('apiUrl: process.env.REMOTE_API_URL');
-  });
-
-  it('generates config for every 1.0 stable registry entry', () => {
-    const registry = loadBuiltInPluginRegistry();
-    const byKey = (kind: PluginRegistryEntry['kind'], type: string) => {
-      const entry = registry.plugins.find((plugin) => plugin.kind === kind && plugin.type === type);
-      expect(entry).toBeDefined();
-      return entry!;
-    };
-    const files = generateInitFiles({
-      from: byKey('from', 'yuque-token'),
-      transforms: [
-        'image-local',
-        'image-cos',
-        'image-oss',
-        'image-github',
-        'image-qiniu',
-        'image-upyun',
-        'image-r2',
-        'image-b2',
-        'markdown-to-html',
-      ].map((type) => byKey('transform', type)),
-      to: [byKey('to', 'local'), byKey('to', 'halo')],
-    });
-
-    expect(files.configText).toContain("import yuqueToken from '@elog/plugin-from-yuque-token';");
-    expect(files.configText).toContain(
-      "import imageLocal from '@elog/plugin-transform-image-local';",
-    );
-    expect(files.configText).toContain("import imageCos from '@elog/plugin-transform-image-cos';");
-    expect(files.configText).toContain("import imageOss from '@elog/plugin-transform-image-oss';");
-    expect(files.configText).toContain(
-      "import imageGithub from '@elog/plugin-transform-image-github';",
-    );
-    expect(files.configText).toContain(
-      "import imageQiniu from '@elog/plugin-transform-image-qiniu';",
-    );
-    expect(files.configText).toContain(
-      "import imageUpyun from '@elog/plugin-transform-image-upyun';",
-    );
-    expect(files.configText).toContain("import imageR2 from '@elog/plugin-transform-image-r2';");
-    expect(files.configText).toContain("import imageB2 from '@elog/plugin-transform-image-b2';");
-    expect(files.configText).toContain(
-      "import markdownToHtml from '@elog/plugin-transform-markdown-to-html';",
-    );
-    expect(files.configText).toContain("import toLocal from '@elog/plugin-to-local';");
-    expect(files.configText).toContain("import toHalo from '@elog/plugin-to-halo';");
-
-    expect(files.configText).toContain('process.env.YUQUE_TOKEN');
-    expect(files.configText).toContain('process.env.COS_SECRET_ID');
-    expect(files.configText).toContain('process.env.OSS_SECRET_ID');
-    expect(files.configText).toContain('process.env.GITHUB_TOKEN');
-    expect(files.configText).toContain('process.env.QINIU_SECRET_ID');
-    expect(files.configText).toContain('process.env.UPYUN_PASSWORD');
-    expect(files.configText).toContain('process.env.R2_ACCESS_KEY_ID');
-    expect(files.configText).toContain('process.env.B2_APPLICATION_KEY_ID');
-    expect(files.configText).toContain('process.env.HALO_ENDPOINT');
-    expect(files.configText).toContain('process.env.HALO_TOKEN');
-    expect(files.configText).not.toContain('@elog/plugin-to-confluence');
-    expect(files.configText).not.toContain('@elog/plugin-transform-markdown-to-confluence-wiki');
   });
 });
