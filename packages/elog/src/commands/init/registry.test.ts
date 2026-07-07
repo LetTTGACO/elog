@@ -180,6 +180,12 @@ describe('loadBuiltInPluginRegistry', () => {
         packageName: '@elog/plugin-to-local',
         importName: 'toLocal',
       },
+      {
+        kind: 'to',
+        type: 'halo',
+        packageName: '@elog/plugin-to-halo',
+        importName: 'toHalo',
+      },
     ] as const;
 
     const registry = loadBuiltInPluginRegistry();
@@ -189,7 +195,6 @@ describe('loadBuiltInPluginRegistry', () => {
     expect(registry.plugins).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({ kind: 'transform', type: 'markdown-to-confluence-wiki' }),
-        expect.objectContaining({ kind: 'to', type: 'halo' }),
         expect.objectContaining({ kind: 'to', type: 'confluence' }),
       ]),
     );
@@ -211,6 +216,34 @@ describe('loadBuiltInPluginRegistry', () => {
         additionalProperties: false,
       },
     });
+  });
+
+  it('exposes Halo target schema without built-in image upload options', () => {
+    const registry = loadBuiltInPluginRegistry();
+    const halo = registry.plugins.find((plugin) => plugin.kind === 'to' && plugin.type === 'halo');
+
+    expect(halo).toMatchObject({
+      displayName: 'Halo',
+      packageName: '@elog/plugin-to-halo',
+      importName: 'toHalo',
+      optionsSchema: {
+        type: 'object',
+        required: ['endpoint', 'token'],
+        properties: {
+          endpoint: {
+            title: 'Halo 站点地址',
+            'x-elog-env': 'HALO_ENDPOINT',
+          },
+          token: {
+            title: 'Halo 个人令牌',
+            'x-elog-env': 'HALO_TOKEN',
+            'x-elog-secret': true,
+          },
+        },
+        additionalProperties: false,
+      },
+    });
+    expect(halo?.optionsSchema.properties).not.toHaveProperty('enableUploadImage');
   });
 });
 

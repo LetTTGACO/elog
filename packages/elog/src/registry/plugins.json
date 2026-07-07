@@ -855,6 +855,39 @@
         },
         "additionalProperties": false
       }
+    },
+    {
+      "kind": "to",
+      "type": "halo",
+      "displayName": "Halo",
+      "packageName": "@elog/plugin-to-halo",
+      "importName": "toHalo",
+      "optionsSchema": {
+        "type": "object",
+        "required": ["endpoint", "token"],
+        "properties": {
+          "endpoint": {
+            "type": "string",
+            "title": "Halo 站点地址",
+            "x-elog-env": "HALO_ENDPOINT",
+            "x-elog-prompt": {
+              "type": "input",
+              "message": "请输入 Halo 站点地址"
+            }
+          },
+          "token": {
+            "type": "string",
+            "title": "Halo 个人令牌",
+            "x-elog-env": "HALO_TOKEN",
+            "x-elog-secret": true,
+            "x-elog-prompt": {
+              "type": "password",
+              "message": "请输入 Halo 个人令牌"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
     }
   ]
 }

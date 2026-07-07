@@ -180,7 +180,7 @@ export default defineConfig({
         'image-b2',
         'markdown-to-html',
       ].map((type) => byKey('transform', type)),
-      to: [byKey('to', 'local')],
+      to: [byKey('to', 'local'), byKey('to', 'halo')],
     });
 
     expect(files.configText).toContain("import yuqueToken from '@elog/plugin-from-yuque-token';");
@@ -204,6 +204,7 @@ export default defineConfig({
       "import markdownToHtml from '@elog/plugin-transform-markdown-to-html';",
     );
     expect(files.configText).toContain("import toLocal from '@elog/plugin-to-local';");
+    expect(files.configText).toContain("import toHalo from '@elog/plugin-to-halo';");
 
     expect(files.configText).toContain('process.env.YUQUE_TOKEN');
     expect(files.configText).toContain('process.env.COS_SECRET_ID');
@@ -213,7 +214,8 @@ export default defineConfig({
     expect(files.configText).toContain('process.env.UPYUN_PASSWORD');
     expect(files.configText).toContain('process.env.R2_ACCESS_KEY_ID');
     expect(files.configText).toContain('process.env.B2_APPLICATION_KEY_ID');
-    expect(files.configText).not.toContain('@elog/plugin-to-halo');
+    expect(files.configText).toContain('process.env.HALO_ENDPOINT');
+    expect(files.configText).toContain('process.env.HALO_TOKEN');
     expect(files.configText).not.toContain('@elog/plugin-to-confluence');
     expect(files.configText).not.toContain('@elog/plugin-transform-markdown-to-confluence-wiki');
   });

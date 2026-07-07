@@ -34,7 +34,8 @@
       "@elog/plugin-transform-image-r2",
       "@elog/plugin-transform-image-b2",
       "@elog/plugin-transform-markdown-to-html",
-      "@elog/plugin-to-local"
+      "@elog/plugin-to-local",
+      "@elog/plugin-to-halo"
     ],
     "projectsRelationship": "independent",
     "releaseTag": {
