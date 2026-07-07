@@ -25,6 +25,14 @@
 
 `pnpm e2e:stable` 会运行稳定同步矩阵，包括 `notion-to-halo`。`stable: false` 的手动/可选用例（例如 WordPress、FlowUs）不会被稳定矩阵选中。
 
+发布前如果要提前发现 Node 24 兼容问题，用 Node 24 手动跑稳定矩阵：
+
+```bash
+nvm exec 24 pnpm e2e:stable
+```
+
+这条命令会走真实平台 e2e，只适合本地发布前验证，不作为默认 CI 必跑项。
+
 如果某个用例缺少环境变量，Vitest 会跳过它。
 
 ## 环境变量
