@@ -50,6 +50,20 @@ const imageProfiles: Record<E2eImageKind, E2eImageProfile> = {
   upyun: { kind: 'upyun', prefixKey: cloudPrefixKey },
 };
 
+function selectImageProfile(): E2eImageProfile {
+  const imageKind = env.ELOG_E2E_IMAGE ?? 'local';
+
+  if (!(imageKind in imageProfiles)) {
+    throw new Error(
+      `Unsupported ELOG_E2E_IMAGE "${imageKind}". Expected one of: ${Object.keys(
+        imageProfiles,
+      ).join(', ')}`,
+    );
+  }
+
+  return imageProfiles[imageKind as E2eImageKind];
+}
+
 function createImagePlugins(image: E2eImageProfile): TransformPlugin[] {
   if (image.kind === 'local') {
     return [
@@ -137,7 +151,7 @@ export const e2eProfile: {
   id: 'yuque-pwd-to-local',
   cacheFile: 'elog.cache.json',
   docOutputDir,
-  image: imageProfiles.local,
+  image: selectImageProfile(),
 };
 
 export default defineConfig({

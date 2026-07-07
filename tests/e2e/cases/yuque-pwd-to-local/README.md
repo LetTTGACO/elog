@@ -23,25 +23,25 @@
 
 ## 配置切换
 
-图床切换点在 `tests/e2e/cases/yuque-pwd-to-local/elog.config.ts` 的 `e2eProfile.image`：
+默认图床是 `local`。临时切换图床时，运行测试前设置 `ELOG_E2E_IMAGE`：
 
-```ts
-image: imageProfiles.local,
+```bash
+ELOG_E2E_IMAGE=r2 pnpm run test:yuque-pwd-local
 ```
 
-要切到 R2，改成：
+可选值包括 `local`、`b2`、`cos`、`github`、`oss`、`qiniu`、`r2`、`upyun`。`case.ts` 会根据 `e2eProfile.image.kind` 自动追加对应图床环境变量；这些环境变量定义在 `tests/e2e/src/helpers/image-expected.ts` 的 `requiredEnvByImageKind`。
+
+图床切换点仍然集中在 `tests/e2e/cases/yuque-pwd-to-local/elog.config.ts`：
 
 ```ts
-image: imageProfiles.r2,
+image: selectImageProfile(),
 ```
 
-要切到其他云图床，改成对应 profile：
+如果想固定默认图床，也可以直接改成对应 profile：
 
 ```ts
 image: imageProfiles.oss,
 ```
-
-可选值包括 `local`、`b2`、`cos`、`github`、`oss`、`qiniu`、`r2`、`upyun`。`case.ts` 会根据 `e2eProfile.image.kind` 自动追加对应图床环境变量；这些环境变量定义在 `tests/e2e/src/helpers/image-expected.ts` 的 `requiredEnvByImageKind`。
 
 如果切到云图床，上传前缀默认来自同一个文件里的：
 
@@ -53,7 +53,8 @@ const cloudPrefixKey = 'elog-e2e/yuque-pwd/';
 
 **可以直接改**
 
-- `e2eProfile.image`: 可以在 `imageProfiles.local`、`b2`、`cos`、`github`、`oss`、`qiniu`、`r2`、`upyun` 之间切换。`case.ts` 会根据这里的 `kind` 自动追加对应图床环境变量。
+- `ELOG_E2E_IMAGE`: 可以在 `local`、`b2`、`cos`、`github`、`oss`、`qiniu`、`r2`、`upyun` 之间临时切换。`case.ts` 会根据这里选中的 `kind` 自动追加对应图床环境变量。
+- `e2eProfile.image`: 可以固定成某个 `imageProfiles.<kind>`，适合长期更改默认测试路径。
 - `imageProfiles.local.outputDir`: 可以改成本地图床输出目录，例如 `images`、`assets`。现有断言会按这个值重新计算 Markdown 图片链接前缀。
 - 云图床 profile 的 `prefixKey`: 可以改上传前缀。当前统一用 `cloudPrefixKey = 'elog-e2e/yuque-pwd/'`，也可以给某个云图床单独写值。
 - 云图床插件里的可选字段，例如 `host`、`branch`、`region`: 可以按对应插件能力和环境变量调整。
@@ -83,5 +84,5 @@ const cloudPrefixKey = 'elog-e2e/yuque-pwd/';
 
 - 语雀 Token 登录路径；它由 `yuque-token-to-local` 覆盖。
 - Notion/FlowUs 的 catalog 字段。
-- 云图床全矩阵的真实可用性；这里只通过 profile 保留可切换入口。
-- R2 和其他云图床不是默认运行路径，需要手动切换对应 profile 覆盖。
+- 云图床全矩阵的默认运行；它们需要显式设置 `ELOG_E2E_IMAGE` 覆盖。
+- R2 和其他云图床不是默认运行路径，需要通过 `ELOG_E2E_IMAGE=<kind>` 覆盖。
