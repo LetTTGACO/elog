@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { reportWorkflowResults, throwOnFailedWorkflow } from './results';
-import type { WorkflowResult } from '../../runtime/types';
+import type { WorkflowResult } from '@elog/core';
 
 describe('reportWorkflowResults', () => {
   it('logs formatted workflow result lines', () => {

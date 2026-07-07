@@ -1,5 +1,5 @@
 import out from '../../logging/logger';
-import type { WorkflowResult } from '../../runtime/types';
+import type { WorkflowResult } from '@elog/core';
 import { formatWorkflowResults } from './format';
 
 type FailedWorkflowResult = Extract<WorkflowResult, { status: 'failed' }>;

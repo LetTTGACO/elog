@@ -40,7 +40,7 @@ const sampleSelection: PluginSelection = {
 };
 
 const sampleFiles: GeneratedInitFiles = {
-  configText: "import { defineConfig } from '@elog/cli';\n",
+  configText: "import { defineConfig } from '@elog/core';\n",
 };
 
 describe('createInitDryRunOutput', () => {
@@ -67,6 +67,7 @@ describe('selectedPackages', () => {
   it('extracts unique package names from all plugin kinds', () => {
     const packages = selectedPackages(sampleSelection);
     expect(packages).toEqual([
+      '@elog/core',
       '@elog/plugin-from-notion',
       '@elog/plugin-transform-image-local',
       '@elog/plugin-to-local',
@@ -80,7 +81,7 @@ describe('selectedPackages', () => {
       to: [sampleRegistry.plugins[0]!],
     };
     const packages = selectedPackages(selection);
-    expect(packages).toEqual(['@elog/plugin-from-notion']);
+    expect(packages).toEqual(['@elog/core', '@elog/plugin-from-notion']);
   });
 });
 
@@ -177,7 +178,15 @@ describe('runInitCommand', () => {
     });
 
     expect(installPackages).toHaveBeenCalledWith(
-      expect.objectContaining({ cwd: '/tmp/test-project' }),
+      expect.objectContaining({
+        cwd: '/tmp/test-project',
+        packages: [
+          '@elog/core',
+          '@elog/plugin-from-notion',
+          '@elog/plugin-transform-image-local',
+          '@elog/plugin-to-local',
+        ],
+      }),
     );
   });
 

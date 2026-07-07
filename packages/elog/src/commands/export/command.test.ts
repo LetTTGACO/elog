@@ -1,7 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { runExportCommand, selectedPackages } from './command';
-import type { ElogConfig } from '../../types/common';
-import type { WorkflowResult } from '../../runtime/types';
+import type { ElogConfig, WorkflowResult } from '@elog/core';
 import type { ExportSelection, PluginRegistry, PluginRegistryEntry } from '../init/types';
 
 const fromEntry: PluginRegistryEntry = {

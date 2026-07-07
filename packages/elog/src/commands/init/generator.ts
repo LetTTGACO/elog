@@ -200,7 +200,7 @@ export function generateInitFiles(
 ): GeneratedInitFiles {
   const selection = normalizeSelection(selectionInput);
   const imports = [
-    "import { defineConfig } from '@elog/cli';",
+    "import { defineConfig } from '@elog/core';",
     ...uniquePlugins(selection).map(
       (plugin) => `import ${plugin.importName} from '${plugin.packageName}';`,
     ),

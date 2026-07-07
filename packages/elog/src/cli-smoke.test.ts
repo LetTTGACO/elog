@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import { describe, expect, it } from 'vitest';
+import type { WorkflowResult } from '@elog/core';
 import { createProgram } from './cli';
-import { loadConfigFromFile } from './config/load';
-import elog from './node-entry';
+import { runSyncCommand } from './commands/sync';
 
 describe('CLI command registration', () => {
   it('registers the export command', () => {
@@ -15,23 +15,26 @@ describe('CLI command registration', () => {
 });
 
 describe('fixture sync smoke', () => {
-  it('loads fixture config and runs sync through runtime', async () => {
+  it('runs fixture config through the sync command adapter', async () => {
     const fixtureDir = path.resolve(process.cwd(), '../../tests/fixtures/basic-config');
     const cachePath = path.join(fixtureDir, 'fixture.cache.json');
     const outputPath = path.join(fixtureDir, 'fixture.output.txt');
     const previousCwd = process.cwd();
+    let results: WorkflowResult[] | undefined;
 
     try {
       fs.rmSync(cachePath, { force: true });
       process.chdir(fixtureDir);
 
-      const loaded = await loadConfigFromFile(fixtureDir, 'elog.config.ts');
+      await runSyncCommand('elog.config.ts', undefined, false, {
+        log: () => {},
+        reportResults: (value) => {
+          results = value;
+        },
+      });
 
-      expect(loaded.data).toBeTruthy();
-
-      const results = await elog(loaded.data);
-
-      expect(results[0]).toMatchObject({
+      expect(results).toBeDefined();
+      expect(results![0]).toMatchObject({
         status: 'success',
         workflowId: 'fixture',
         syncedCount: 1,

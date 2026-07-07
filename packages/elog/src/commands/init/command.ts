@@ -9,6 +9,8 @@ import type { GeneratedFileWrite, WriteGeneratedFilesOptions } from './file-writ
 import { runPluginSelectionWizard } from './wizard';
 import type { GeneratedInitFiles, PluginRegistry, PluginSelection } from './types';
 
+const CONFIG_RUNTIME_PACKAGE = '@elog/core';
+
 /** init 命令依赖注入边界，测试可替换交互、安装和写文件副作用。 */
 export interface RunInitCommandOptions {
   cwd: string;
@@ -22,19 +24,22 @@ export interface RunInitCommandOptions {
   log?: (message: string) => void;
 }
 
-/** 从选择结果中提取待安装包，并去重避免同一插件包被重复安装。 */
+/** 收集生成配置所需的 Core 和插件包，并去重避免重复安装。 */
 export function selectedPackages(selection: PluginSelection): string[] {
   const allPlugins = [selection.from, ...selection.transforms, ...selection.to];
-  const seen = new Set<string>();
-  return allPlugins
-    .map((plugin) => plugin.packageName)
-    .filter((name) => {
-      if (seen.has(name)) {
-        return false;
-      }
-      seen.add(name);
-      return true;
-    });
+  const seen = new Set<string>([CONFIG_RUNTIME_PACKAGE]);
+  return [
+    CONFIG_RUNTIME_PACKAGE,
+    ...allPlugins
+      .map((plugin) => plugin.packageName)
+      .filter((name) => {
+        if (seen.has(name)) {
+          return false;
+        }
+        seen.add(name);
+        return true;
+      }),
+  ];
 }
 
 /** dry-run 输出保持可读文本，方便用户预览安装命令和配置内容。 */

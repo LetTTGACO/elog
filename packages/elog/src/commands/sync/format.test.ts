@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { WorkflowResult } from '../../runtime/types';
-import { ElogError } from '../../plugins/errors';
+import { ElogError, type WorkflowResult } from '@elog/core';
 import { formatWorkflowResults } from './format';
 
 describe('formatWorkflowResults', () => {

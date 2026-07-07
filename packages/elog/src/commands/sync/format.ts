@@ -1,4 +1,4 @@
-import type { WorkflowResult } from '../../runtime/types';
+import type { WorkflowResult } from '@elog/core';
 
 /** 将结构化工作流结果格式化为终端输出文本。 */
 export function formatWorkflowResults(results: WorkflowResult[]): string[] {

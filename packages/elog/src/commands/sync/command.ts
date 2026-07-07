@@ -1,35 +1,48 @@
 import path from 'path';
-import dotenv from 'dotenv';
-import { findConfig } from '../../config/find';
-import elog from '../../node-entry';
+import { syncFromConfig } from '@elog/core';
+import type { SyncFromConfigOptions, WorkflowResult } from '@elog/core';
 import out from '../../logging/logger';
 import { reportWorkflowResults, throwOnFailedWorkflow } from './results';
+
+type SyncFromConfig = (options: SyncFromConfigOptions) => Promise<WorkflowResult[]>;
+type EnvLogger = (head: string, message: string) => void;
+
+/** sync 命令依赖注入边界，测试可替换 Core 入口和 CLI 输出副作用。 */
+export interface RunSyncCommandDependencies {
+  cwd?: string;
+  syncFromConfig?: SyncFromConfig;
+  reportResults?: (results: WorkflowResult[]) => void;
+  throwOnFailed?: (results: WorkflowResult[]) => void;
+  log?: EnvLogger;
+}
 
 /** 执行 sync 命令，CLI 只负责加载环境、配置和展示结果。 */
 export async function runSyncCommand(
   customConfigPath?: string,
   envPath?: string,
   enableDebug?: boolean,
+  dependencies: RunSyncCommandDependencies = {},
 ): Promise<void> {
-  if (enableDebug) {
-    // DEBUG 环境变量是全局日志开关，需在配置加载前设置。
-    process.env.DEBUG = 'true';
-  }
-
-  const rootDir = process.cwd();
+  const rootDir = dependencies.cwd ?? process.cwd();
+  const doSyncFromConfig = dependencies.syncFromConfig ?? syncFromConfig;
+  const reportResults = dependencies.reportResults ?? reportWorkflowResults;
+  const throwOnFailed = dependencies.throwOnFailed ?? throwOnFailedWorkflow;
+  const log = dependencies.log ?? out.info;
 
   if (envPath) {
     const resolvedEnvPath = path.resolve(rootDir, envPath);
-    out.info('环境变量', `已指定读取env文件为：${resolvedEnvPath}`);
-    // 用户显式指定 env 时允许覆盖系统环境，方便本地调试不同账号。
-    dotenv.config({ override: true, path: resolvedEnvPath });
+    log('环境变量', `已指定读取env文件为：${resolvedEnvPath}`);
   } else {
-    out.info('环境变量', '未指定env文件，将从系统环境变量中读取');
+    log('环境变量', '未指定env文件，将从系统环境变量中读取');
   }
 
-  const userConfig = await findConfig(customConfigPath);
-  const results = await elog(userConfig);
+  const results = await doSyncFromConfig({
+    cwd: rootDir,
+    configFile: customConfigPath,
+    envFile: envPath,
+    debug: enableDebug,
+  });
 
-  reportWorkflowResults(results);
-  throwOnFailedWorkflow(results);
+  reportResults(results);
+  throwOnFailed(results);
 }

@@ -1,15 +1,21 @@
 import path from 'path';
 import { createRequire } from 'module';
 import { pathToFileURL } from 'url';
-import type { ElogConfig } from '../../types/common';
-import type { FromPlugin, ToPlugin, TransformPlugin } from '../../plugins/types';
+import type { ElogConfig } from '@elog/core';
 import type { ExportSelection, SelectedPlugin } from '../init/types';
 
 /** export 命令错误码区分导入失败和插件工厂执行失败。 */
 type ExportCommandErrorCode = 'EXPORT_PLUGIN_IMPORT_FAILED' | 'EXPORT_PLUGIN_FACTORY_FAILED';
 
 /** 插件包默认导出应为工厂函数，接收向导答案并返回插件实例。 */
-type PluginFactory = (options: Record<string, unknown>) => FromPlugin | TransformPlugin | ToPlugin;
+type RuntimeToPlugin = ElogConfig['to'] extends infer To
+  ? To extends readonly (infer Item)[]
+    ? Item
+    : To
+  : never;
+type RuntimeTransformPlugin = NonNullable<ElogConfig['plugins']>[number];
+type RuntimePlugin = ElogConfig['from'] | RuntimeTransformPlugin | RuntimeToPlugin;
+type PluginFactory = (options: Record<string, unknown>) => RuntimePlugin;
 /** 兼容 ESM default export 和直接导出函数两种模块形态。 */
 type PluginModule = { default?: PluginFactory } | PluginFactory;
 
@@ -60,7 +66,7 @@ async function defaultLoadPlugin(packageName: string, cwd: string): Promise<Plug
 async function createPlugin(
   selected: SelectedPlugin,
   loadPlugin: (packageName: string) => Promise<PluginFactory>,
-): Promise<FromPlugin | TransformPlugin | ToPlugin> {
+): Promise<RuntimePlugin> {
   let factory: PluginFactory;
   try {
     factory = await loadPlugin(selected.entry.packageName);
@@ -92,12 +98,12 @@ export async function buildExportRuntimeConfig(
 ): Promise<ElogConfig> {
   const cwd = options.cwd ?? process.cwd();
   const loadPlugin = options.loadPlugin ?? ((packageName) => defaultLoadPlugin(packageName, cwd));
-  const from = (await createPlugin(selection.from, loadPlugin)) as FromPlugin;
+  const from = (await createPlugin(selection.from, loadPlugin)) as ElogConfig['from'];
   // transform 可并行创建，因为插件实例之间没有共享状态依赖。
   const plugins = (await Promise.all(
     selection.transforms.map((plugin) => createPlugin(plugin, loadPlugin)),
-  )) as TransformPlugin[];
-  const target = (await createPlugin(selection.to, loadPlugin)) as ToPlugin;
+  )) as RuntimeTransformPlugin[];
+  const target = (await createPlugin(selection.to, loadPlugin)) as RuntimeToPlugin;
 
   return {
     disableCache: true,

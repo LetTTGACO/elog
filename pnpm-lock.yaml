@@ -66,6 +66,9 @@ importers:
 
   packages/elog:
     dependencies:
+      '@elog/core':
+        specifier: workspace:^
+        version: link:../core
       '@elog/plugin-sdk':
         specifier: workspace:^
         version: link:../plugin-sdk

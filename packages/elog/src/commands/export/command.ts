@@ -1,6 +1,5 @@
-import elog from '../../node-entry';
-import type { ElogConfig } from '../../types/common';
-import type { WorkflowResult } from '../../runtime/types';
+import { sync } from '@elog/core';
+import type { ElogConfig, WorkflowResult } from '@elog/core';
 import { detectPackageManager, installPackages } from '../init/package-manager';
 import type { InstallPackagesOptions } from '../init/package-manager';
 import { loadBuiltInPluginRegistry } from '../init/registry';
@@ -46,7 +45,7 @@ export async function runExportCommand(options: RunExportCommandOptions): Promis
   const runWizard = options.runWizard ?? runExportWizard;
   const doInstall = options.installPackages ?? installPackages;
   const doBuildRuntimeConfig = options.buildRuntimeConfig ?? buildExportRuntimeConfig;
-  const runRuntime = options.runRuntime ?? elog;
+  const runRuntime = options.runRuntime ?? sync;
   const reportResults = options.reportResults ?? reportWorkflowResults;
   const throwOnFailed = options.throwOnFailed ?? throwOnFailedWorkflow;
 
