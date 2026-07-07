@@ -21,15 +21,19 @@
 
 ## 配置切换
 
-图床切换点在 `tests/e2e/cases/notion-to-local/elog.config.ts` 的 `e2eProfile.image`。
+默认图床是 R2。临时切换图床时，运行测试前设置 `ELOG_E2E_IMAGE`：
 
-默认使用 R2 图床：
-
-```ts
-image: imageProfiles.r2,
+```bash
+ELOG_E2E_IMAGE=local pnpm --dir tests/e2e run test:notion-local
 ```
 
-如果要切到本地图床，改成：
+可选值包括 `local`、`r2`。图床选择点集中在 `tests/e2e/cases/notion-to-local/elog.config.ts`：
+
+```ts
+image: selectImageProfile('r2'),
+```
+
+如果想固定默认图床，也可以直接改成对应 profile：
 
 ```ts
 image: imageProfiles.local,

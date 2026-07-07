@@ -20,9 +20,11 @@ type E2eImageProfile =
       expectFiles?: false;
     };
 
+type E2eImageKind = E2eImageProfile['kind'];
 const env = process.env;
+const caseId = 'flowus-to-local';
 const docOutputDir = 'docs';
-const imageProfiles: Record<E2eImageProfile['kind'], E2eImageProfile> = {
+const imageProfiles: Record<E2eImageKind, E2eImageProfile> = {
   local: {
     kind: 'local',
     outputDir: 'images',
@@ -34,6 +36,23 @@ const imageProfiles: Record<E2eImageProfile['kind'], E2eImageProfile> = {
     prefixKey: 'elog-e2e/flowus/',
   },
 };
+
+function selectImageProfile(defaultKind: E2eImageKind): E2eImageProfile {
+  const imageKind =
+    env.ELOG_E2E_CASE && env.ELOG_E2E_CASE !== caseId
+      ? defaultKind
+      : (env.ELOG_E2E_IMAGE ?? defaultKind);
+
+  if (!(imageKind in imageProfiles)) {
+    throw new Error(
+      `Unsupported ELOG_E2E_IMAGE "${imageKind}". Expected one of: ${Object.keys(
+        imageProfiles,
+      ).join(', ')}`,
+    );
+  }
+
+  return imageProfiles[imageKind as E2eImageKind];
+}
 
 function createImagePlugins(image: E2eImageProfile): TransformPlugin[] {
   if (image.kind === 'local') {
@@ -66,10 +85,10 @@ export const e2eProfile: {
   docOutputDir: string;
   image: E2eImageProfile;
 } = {
-  id: 'flowus-to-local',
+  id: caseId,
   cacheFile: 'elog.cache.json',
   docOutputDir,
-  image: imageProfiles.r2,
+  image: selectImageProfile('r2'),
 };
 
 export default defineConfig({

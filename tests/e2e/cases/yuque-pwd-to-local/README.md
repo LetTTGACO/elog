@@ -26,7 +26,7 @@
 默认图床是 `local`。临时切换图床时，运行测试前设置 `ELOG_E2E_IMAGE`：
 
 ```bash
-ELOG_E2E_IMAGE=r2 pnpm run test:yuque-pwd-local
+ELOG_E2E_IMAGE=r2 pnpm --dir tests/e2e run test:yuque-pwd-local
 ```
 
 可选值包括 `local`、`b2`、`cos`、`github`、`oss`、`qiniu`、`r2`、`upyun`。`case.ts` 会根据 `e2eProfile.image.kind` 自动追加对应图床环境变量；这些环境变量定义在 `tests/e2e/src/helpers/image-expected.ts` 的 `requiredEnvByImageKind`。

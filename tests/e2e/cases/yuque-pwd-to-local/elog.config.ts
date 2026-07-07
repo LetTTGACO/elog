@@ -28,6 +28,7 @@ type E2eImageProfile =
 type E2eImageKind = E2eImageProfile['kind'];
 
 const env = process.env;
+const caseId = 'yuque-pwd-to-local';
 const docOutputDir = 'docs';
 const cloudPrefixKey = 'elog-e2e/yuque-pwd/';
 
@@ -51,7 +52,8 @@ const imageProfiles: Record<E2eImageKind, E2eImageProfile> = {
 };
 
 function selectImageProfile(): E2eImageProfile {
-  const imageKind = env.ELOG_E2E_IMAGE ?? 'local';
+  const imageKind =
+    env.ELOG_E2E_CASE && env.ELOG_E2E_CASE !== caseId ? 'local' : (env.ELOG_E2E_IMAGE ?? 'local');
 
   if (!(imageKind in imageProfiles)) {
     throw new Error(
@@ -148,7 +150,7 @@ export const e2eProfile: {
   docOutputDir: string;
   image: E2eImageProfile;
 } = {
-  id: 'yuque-pwd-to-local',
+  id: caseId,
   cacheFile: 'elog.cache.json',
   docOutputDir,
   image: selectImageProfile(),

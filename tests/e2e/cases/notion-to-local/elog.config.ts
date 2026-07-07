@@ -18,6 +18,8 @@ type E2eImageProfile =
     };
 
 type E2eImageKind = E2eImageProfile['kind'];
+const env = process.env;
+const caseId = 'notion-to-local';
 const docOutputDir = 'docs';
 const imageProfiles: Record<E2eImageKind, E2eImageProfile> = {
   local: {
@@ -32,24 +34,41 @@ const imageProfiles: Record<E2eImageKind, E2eImageProfile> = {
   },
 };
 
+function selectImageProfile(defaultKind: E2eImageKind): E2eImageProfile {
+  const imageKind =
+    env.ELOG_E2E_CASE && env.ELOG_E2E_CASE !== caseId
+      ? defaultKind
+      : (env.ELOG_E2E_IMAGE ?? defaultKind);
+
+  if (!(imageKind in imageProfiles)) {
+    throw new Error(
+      `Unsupported ELOG_E2E_IMAGE "${imageKind}". Expected one of: ${Object.keys(
+        imageProfiles,
+      ).join(', ')}`,
+    );
+  }
+
+  return imageProfiles[imageKind as E2eImageKind];
+}
+
 export const e2eProfile: {
   id: string;
   cacheFile: string;
   docOutputDir: string;
   image: E2eImageProfile;
 } = {
-  id: 'notion-to-local',
+  id: caseId,
   cacheFile: 'elog.cache.json',
   docOutputDir,
-  image: imageProfiles.r2,
+  image: selectImageProfile('r2'),
 };
 
 export default defineConfig({
   id: e2eProfile.id,
   cacheFilePath: e2eProfile.cacheFile,
   from: fromNotion({
-    token: process.env.ELOG_E2E_NOTION_TOKEN,
-    databaseId: process.env.ELOG_E2E_NOTION_DATABASE_ID,
+    token: env.ELOG_E2E_NOTION_TOKEN,
+    databaseId: env.ELOG_E2E_NOTION_DATABASE_ID,
   }),
   plugins:
     e2eProfile.image.kind === 'local'
@@ -62,11 +81,11 @@ export default defineConfig({
         ]
       : [
           imageR2({
-            host: process.env.ELOG_E2E_R2_HOST!,
-            accessKeyId: process.env.ELOG_E2E_R2_ACCESS_KEY_ID!,
-            secretAccessKey: process.env.ELOG_E2E_R2_SECRET_ACCESS_KEY!,
-            bucket: process.env.ELOG_E2E_R2_BUCKET!,
-            endpoint: process.env.ELOG_E2E_R2_ENDPOINT!,
+            host: env.ELOG_E2E_R2_HOST!,
+            accessKeyId: env.ELOG_E2E_R2_ACCESS_KEY_ID!,
+            secretAccessKey: env.ELOG_E2E_R2_SECRET_ACCESS_KEY!,
+            bucket: env.ELOG_E2E_R2_BUCKET!,
+            endpoint: env.ELOG_E2E_R2_ENDPOINT!,
             prefixKey: e2eProfile.image.prefixKey,
           }),
         ],

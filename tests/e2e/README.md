@@ -115,10 +115,10 @@ pnpm exec elog sync --config cases/notion-to-local/elog.config.ts --env .env
 
 ## 图床插件
 
-部分用例可以在对应 `elog.config.ts` 里切换图床：
+部分用例可以用 `ELOG_E2E_IMAGE` 临时切换图床：
 
-```ts
-image: imageProfiles.r2,
+```bash
+ELOG_E2E_IMAGE=local pnpm --dir tests/e2e run test:notion-local
 ```
 
 断言会根据 `e2eProfile.image` 自动调整：
@@ -126,7 +126,8 @@ image: imageProfiles.r2,
 - `local` 且 `expectFiles: true`：检查 `outputDir` 下至少有图片文件。
 - 云图床：不检查本地图片文件；部分 case 会额外检查 Markdown 中的图床 host。
 
-如果要改本地图片路径或云图床前缀，继续改对应 case 的 `e2eProfile.image` 即可。
+如果要改默认图床、本地图片路径或云图床前缀，继续改对应 case 的
+`e2eProfile.image` 或 `imageProfiles.<kind>` 即可。
 
 ## 断言原则
 
