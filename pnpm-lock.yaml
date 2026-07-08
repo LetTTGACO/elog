@@ -182,15 +182,15 @@ importers:
         specifier: workspace:^
         version: link:../../../packages/plugin-sdk
       '@flowusx/flowus-client':
-        specifier: ^0.0.5-beta.4
-        version: 0.0.5-beta.4
+        specifier: ^0.1.0
+        version: 0.1.0
       '@flowusx/flowus-to-md':
-        specifier: ^0.0.5-beta.4
-        version: 0.0.5-beta.5
+        specifier: ^0.1.0
+        version: 0.1.0
     devDependencies:
       '@flowusx/flowus-types':
-        specifier: ^0.0.5-beta.3
-        version: 0.0.5-beta.4
+        specifier: ^0.1.0
+        version: 0.1.0
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
@@ -1591,17 +1591,18 @@ packages:
     resolution: {integrity: sha512-2Xa7zG5Eko20Rdzxg7BWMawN9Q4bpEAiVklxiLLMtIUnGfAVaYRkgK85LGmi+31WGdqPVXypLrEhey1Ls09vRg==}
     engines: {node: '>=20.18.1'}
 
-  '@flowusx/flowus-client@0.0.5-beta.4':
-    resolution: {integrity: sha512-LF50P4PMFCLXjXjnp8alT0VTfvPyUgT7PcGg05sI8O6IqBX7JorqQw3trxyxvcSKO58eprn01a6NQeN5L2BYwA==}
+  '@flowusx/flowus-client@0.1.0':
+    resolution: {integrity: sha512-uSnexZ2zeBOclpYlwENl7k5tqe0TumlK8SvTh56D3oIG+4N4JnxxygPOfSZ5ahK+T5Gc6obXTJyO/QuHjvzVrg==}
 
-  '@flowusx/flowus-shared@0.0.5-beta.4':
-    resolution: {integrity: sha512-VTo3dw04iyPokkOhDGQI3kXhnXXzxZk28P3N4qK3AFNGxkeOi9wNrkwxS8f5arvqDtVn4N1xVXIQXiczqPMIDQ==}
+  '@flowusx/flowus-shared@0.1.0':
+    resolution: {integrity: sha512-lr2NSrBt26dF7AKKPP5UmI7AfrPPLb4vUFdypaTXizWuC2SSAckVeZPkC/MsBesPGKf35A7dheZ2YVb6nIKH2g==}
+    engines: {node: '>=20.18.1'}
 
-  '@flowusx/flowus-to-md@0.0.5-beta.5':
-    resolution: {integrity: sha512-dz0x3ceHjcCCxDqKoUxmhGGbTXmd5aveBLJwXaKyNTtl1mS+PhD7xNsIVJZ/S6q6U4uK+C2h3X8LAumGJTg9Rw==}
+  '@flowusx/flowus-to-md@0.1.0':
+    resolution: {integrity: sha512-RtEUuCLd6LP25g2JR16FT+9q8kly9lYyqDvhf8uAU9DYiSMOi4rd+PJv6p+IYauU/KCP3MorJF4zYvCDpcjZ8A==}
 
-  '@flowusx/flowus-types@0.0.5-beta.4':
-    resolution: {integrity: sha512-aQXSfidzKFRJrF8lVYA7r7QOvucBbiqkjvhx61dVSXMJXH8ePV3zJw5GOKz+woe6N9fRQXJJuXjqU/rIWoKDIA==}
+  '@flowusx/flowus-types@0.1.0':
+    resolution: {integrity: sha512-1u2JIIpgGMPcJsxAn6yz+qY89Xa+cEvIkQTj/pLXTZzPuDT2iseBYqEgcyXVVTMiDqDzzDLFGE/84w43pYAI2w==}
 
   '@halo-dev/api-client@2.10.0':
     resolution: {integrity: sha512-c1fgp+xzE1gQ7O36miWU2Oz+Uh1G4Hqs3clxLSxBD7vuvktgndZGZblNDi5morHB9UkiauAIQP0+PH9L9jwBfA==}
@@ -2585,10 +2586,6 @@ packages:
     peerDependencies:
       esbuild: '>=0.18'
 
-  busboy@1.6.0:
-    resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
-    engines: {node: '>=10.16.0'}
-
   cac@7.0.0:
     resolution: {integrity: sha512-tixWYgm5ZoOD+3g6UTea91eow5z6AAHaho3g0V9CNSNb45gM8SmflpAc+GRd1InC4AqN/07Unrgp56Y94N9hJQ==}
     engines: {node: '>=20.19.0'}
@@ -3032,9 +3029,6 @@ packages:
   forever-agent@0.6.1:
     resolution: {integrity: sha512-j0KLYPhm6zeac4lz3oJ3o65qvgQCcPubiyotZrXqEaG4hNagNYO8qdlUrX5vwqv9ohqeT/Z3j6+yW067yWWdUw==}
 
-  form-data-encoder@1.9.0:
-    resolution: {integrity: sha512-rahaRMkN8P8d/tgK/BLPX+WBVM27NbvdXBxqQujBtkDAIFspaRqN7Od7lfdGQA6KAD+f82fYCLBq1ipvcu8qLw==}
-
   form-data@2.3.2:
     resolution: {integrity: sha512-6DD2fGWwyxCca2EASUT50GsxWEuwNQDpjMhD9TTaBvI1NE3nLkCr5v7nRdtlmG5g+mNqosdOVHVro+UGmp0Kcw==}
     engines: {node: '>= 0.12'}
@@ -3046,10 +3040,6 @@ packages:
   form-data@4.0.6:
     resolution: {integrity: sha512-vKatAh4SlVfgbv+YtmhiRjhEMJsYpsG1Y2rMQtR+SVSbytsSD1YGzDIcrAJmdFec88u/+VoGmxnl+80gL1tRCQ==}
     engines: {node: '>= 6'}
-
-  formdata-node@4.4.1:
-    resolution: {integrity: sha512-0iirZp3uVDjVGt9p49aTaqjk84TrglENEDuqfdlZQ1roC9CWlPk6Avf8EEnZNcAqPonwkG35x4n3ww/1THYAeQ==}
-    engines: {node: '>= 12.20'}
 
   formstream@1.5.2:
     resolution: {integrity: sha512-NASf0lgxC1AyKNXQIrXTEYkiX99LhCEXTkiGObXAkpBui86a4u8FjH1o2bGb3PpqI3kafC+yw4zWeK6l6VHTgg==}
@@ -3616,11 +3606,6 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  node-domexception@1.0.0:
-    resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
-    engines: {node: '>=10.5.0'}
-    deprecated: Use your platform's native DOMException instead
-
   node-fetch-native@1.6.7:
     resolution: {integrity: sha512-g9yhqoedzIUm0nTnTqAQvueMPVOuIY16bqgAJJC8XOOubYFNwz6IER9qs0Gq2Xd0+CecCKFjtdDTMA4u4xG06Q==}
 
@@ -4093,10 +4078,6 @@ packages:
     resolution: {integrity: sha512-gHFfL3px0Kctd6Po0M8TzEvt3De/xu6cnRrjlfYNhwbhLPLwigI2t1nc6jrzNuaYg5C4YF78PPFuQPzRiqn9ew==}
     engines: {node: '>=4.0.0'}
 
-  streamsearch@1.1.0:
-    resolution: {integrity: sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==}
-    engines: {node: '>=10.0.0'}
-
   string-argv@0.3.2:
     resolution: {integrity: sha512-aqD2Q0144Z+/RqG52NeHEkZauTAUWJO8c6yTftGJKO3Tja5tUgIfmIl6kExvhtxSDP7fXB6DvzkfMpCd/F3G+Q==}
     engines: {node: '>=0.6.19'}
@@ -4292,10 +4273,6 @@ packages:
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
-  undici@5.21.2:
-    resolution: {integrity: sha512-f6pTQ9RF4DQtwoWSaC42P/NKlUjvezVvd9r155ohqkwFNRyBKM3f3pcty3ouusefNRyM25XhIQEbeQ46sZDJfQ==}
-    engines: {node: '>=12.18'}
-
   undici@7.28.0:
     resolution: {integrity: sha512-cRZYrTDwWznlnRiPjggAGxZXanty6M8RV1ff8Wm4LWXBp7/IG8v5DnOm74DtUBp9OONpK75YlPnIjQqX0dBDtA==}
     engines: {node: '>=20.18.1'}
@@ -4348,10 +4325,6 @@ packages:
     peerDependenciesMeta:
       proxy-agent:
         optional: true
-
-  urllib@3.13.2:
-    resolution: {integrity: sha512-Z9yWZ9IFOTBGZcEzcAiJYvpPnUXoQlh5Qss0cOHUuTrwfk4vgivYLDLe0FLM/8HUF8tLeG3vu3lVxlSykoII+g==}
-    engines: {node: '>= 14.19.3'}
 
   urllib@4.9.0:
     resolution: {integrity: sha512-Rp3DBvVqy9arSTMH6oN5N7OAN01U3dQ2xc19AadP86MzC4j67MDeqOup5shpWnjkDVGWfLfWPOd8CyqOtd6u3w==}
@@ -4468,10 +4441,6 @@ packages:
 
   wcwidth@1.0.1:
     resolution: {integrity: sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg==}
-
-  web-streams-polyfill@4.0.0-beta.3:
-    resolution: {integrity: sha512-QW95TCTaHmsYfHDybGMwO5IJIM93I/6vTRk+daHTWFPhwh+C8Cg7j7XyKrwrj8Ib6vYXe0ocYNrmzY4xAAN6ug==}
-    engines: {node: '>= 14'}
 
   webidl-conversions@3.0.0:
     resolution: {integrity: sha512-GOK494qXZl0XBbr/YPRW2BL6oLfe+d0KDSWndKH7NdxJwJ0fCdhQG46Q2D7BmIS6cN/FJgtju8srRt/jlG9abA==}
@@ -5937,26 +5906,26 @@ snapshots:
       tslib: 2.8.1
       urllib: 4.9.0
 
-  '@flowusx/flowus-client@0.0.5-beta.4':
+  '@flowusx/flowus-client@0.1.0':
     dependencies:
-      '@flowusx/flowus-shared': 0.0.5-beta.4
-      '@flowusx/flowus-types': 0.0.5-beta.4
+      '@flowusx/flowus-shared': 0.1.0
+      '@flowusx/flowus-types': 0.1.0
 
-  '@flowusx/flowus-shared@0.0.5-beta.4':
+  '@flowusx/flowus-shared@0.1.0':
     dependencies:
       chalk: 4.1.2
       lodash: 4.18.1
       shelljs: 0.8.5
-      urllib: 3.13.2
+      urllib: 4.9.0
 
-  '@flowusx/flowus-to-md@0.0.5-beta.5':
+  '@flowusx/flowus-to-md@0.1.0':
     dependencies:
-      '@flowusx/flowus-client': 0.0.5-beta.4
-      '@flowusx/flowus-shared': 0.0.5-beta.4
-      '@flowusx/flowus-types': 0.0.5-beta.4
+      '@flowusx/flowus-client': 0.1.0
+      '@flowusx/flowus-shared': 0.1.0
+      '@flowusx/flowus-types': 0.1.0
       markdown-table: 2.0.0
 
-  '@flowusx/flowus-types@0.0.5-beta.4': {}
+  '@flowusx/flowus-types@0.1.0': {}
 
   '@halo-dev/api-client@2.10.0': {}
 
@@ -7041,10 +7010,6 @@ snapshots:
       esbuild: 0.28.1
       load-tsconfig: 0.2.5
 
-  busboy@1.6.0:
-    dependencies:
-      streamsearch: 1.1.0
-
   cac@7.0.0: {}
 
   call-bind-apply-helpers@1.0.2:
@@ -7435,8 +7400,6 @@ snapshots:
 
   forever-agent@0.6.1: {}
 
-  form-data-encoder@1.9.0: {}
-
   form-data@2.3.2:
     dependencies:
       asynckit: 0.4.0
@@ -7458,11 +7421,6 @@ snapshots:
       es-set-tostringtag: 2.1.0
       hasown: 2.0.4
       mime-types: 2.1.35
-
-  formdata-node@4.4.1:
-    dependencies:
-      node-domexception: 1.0.0
-      web-streams-polyfill: 4.0.0-beta.3
 
   formstream@1.5.2:
     dependencies:
@@ -7976,8 +7934,6 @@ snapshots:
       thenify-all: 1.6.0
 
   nanoid@3.3.15: {}
-
-  node-domexception@1.0.0: {}
 
   node-fetch-native@1.6.7: {}
 
@@ -8594,8 +8550,6 @@ snapshots:
 
   stream-wormhole@1.1.0: {}
 
-  streamsearch@1.1.0: {}
-
   string-argv@0.3.2: {}
 
   string-width@4.2.3:
@@ -8763,10 +8717,6 @@ snapshots:
 
   undici-types@6.21.0: {}
 
-  undici@5.21.2:
-    dependencies:
-      busboy: 1.6.0
-
   undici@7.28.0: {}
 
   unescape@1.0.1:
@@ -8827,17 +8777,6 @@ snapshots:
       qs: 6.15.3
       statuses: 1.5.0
       utility: 1.18.0
-
-  urllib@3.13.2:
-    dependencies:
-      default-user-agent: 1.0.0
-      digest-header: 1.1.0
-      form-data-encoder: 1.9.0
-      formdata-node: 4.4.1
-      formstream: 1.5.2
-      mime-types: 2.1.35
-      pump: 3.0.4
-      undici: 5.21.2
 
   urllib@4.9.0:
     dependencies:
@@ -8917,8 +8856,6 @@ snapshots:
   wcwidth@1.0.1:
     dependencies:
       defaults: 1.0.4
-
-  web-streams-polyfill@4.0.0-beta.3: {}
 
   webidl-conversions@3.0.0: {}
 

@@ -24,11 +24,11 @@
   "license": "MIT",
   "dependencies": {
     "@elog/plugin-sdk": "workspace:^",
-    "@flowusx/flowus-client": "^0.0.5-beta.4",
-    "@flowusx/flowus-to-md": "^0.0.5-beta.4"
+    "@flowusx/flowus-client": "^0.1.0",
+    "@flowusx/flowus-to-md": "^0.1.0"
   },
   "devDependencies": {
-    "@flowusx/flowus-types": "^0.0.5-beta.3",
+    "@flowusx/flowus-types": "^0.1.0",
     "@types/node": "~22.19.19",
     "tsdown": "^0.22.3",
     "typescript": "~6.0.3"
