@@ -15,7 +15,7 @@ download (from plugin) -> transform (middleware plugins) -> deploy (to plugins)
 
 Main package families:
 
-- `packages/elog`: CLI commands, init/export behavior, terminal reporting, plugin registry.
+- `packages/cli`: CLI commands, init/export behavior, terminal reporting, plugin registry.
 - `packages/core`: config loading/resolution, workflow runtime, cache coordination, sync entrypoints.
 - `packages/plugin-sdk`: plugin contracts, document/image types, plugin context helpers, plugin-facing utilities.
 - `plugins/from/*`: source plugins such as Notion, Feishu, FlowUs, Yuque, Wolai.
@@ -200,7 +200,7 @@ build, or e2e verification command instead.
 - `packages/plugin-sdk/src/doc.ts`
 - `packages/plugin-sdk/src/source.ts`
 - `packages/plugin-sdk/src/context-helpers/ImageContext.ts`
-- `packages/elog/src/commands/sync/command.ts`
+- `packages/cli/src/commands/sync/command.ts`
 - `tests/fixtures/basic-config/elog.config.ts`
 
 ## Agent skills

@@ -13,7 +13,7 @@ export function repoRootFromE2e(): string {
 }
 
 export function elogBinPath(repoRoot = repoRootFromE2e()): string {
-  return path.join(repoRoot, 'packages/elog/bin/elog.js');
+  return path.join(repoRoot, 'packages/cli/bin/elog.js');
 }
 
 export function runNodeScript(args: string[], options: RunCliOptions): Promise<CliResult> {

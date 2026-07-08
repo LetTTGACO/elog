@@ -9,7 +9,7 @@ const commandCase: CommandCase = {
   command: ['--version'],
   expect({ result, repoRoot }) {
     const packageJson = JSON.parse(
-      fs.readFileSync(path.join(repoRoot, 'packages/elog/package.json'), 'utf8'),
+      fs.readFileSync(path.join(repoRoot, 'packages/cli/package.json'), 'utf8'),
     ) as { version: string };
 
     expectExitCode(result, 0);

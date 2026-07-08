@@ -64,7 +64,7 @@ importers:
         specifier: ^4.1.9
         version: 4.1.9(@types/node@22.19.19)(jsdom@21.1.2)(vite@8.0.13(@types/node@22.19.19)(esbuild@0.28.1)(yaml@2.9.0))
 
-  packages/elog:
+  packages/cli:
     dependencies:
       '@elog/core':
         specifier: workspace:^
@@ -592,7 +592,7 @@ importers:
     dependencies:
       '@elog/cli':
         specifier: workspace:*
-        version: link:../../packages/elog
+        version: link:../../packages/cli
       '@elog/core':
         specifier: workspace:*
         version: link:../../packages/core
