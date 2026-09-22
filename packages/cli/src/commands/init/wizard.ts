@@ -34,7 +34,7 @@ function promptType(schema: ElogOptionSchema): string {
     return schema['x-elog-prompt'].type;
   }
   if (schema.enum) {
-    return 'list';
+    return 'select';
   }
   if (schema.type === 'boolean') {
     return 'confirm';
@@ -95,7 +95,7 @@ async function askSelectedPluginOptions(entries: PluginRegistryEntry[]): Promise
   return selected;
 }
 
-/** checkbox 和 list 的答案形态不同，这里统一成数组方便后续查找。 */
+/** checkbox 和 select 的答案形态不同，这里统一成数组方便后续查找。 */
 function toSelectedTypes(answer: string | string[] | undefined): string[] {
   if (Array.isArray(answer)) {
     return answer;
@@ -112,7 +112,7 @@ export async function runPluginSelectionWizard(
   // 来源插件是单选，因为一个工作流只能从一个平台下载文档。
   const fromAnswer = (await inquirer.prompt([
     {
-      type: 'list',
+      type: 'select',
       name: 'from',
       message: '你在哪里写文章？',
       choices: getPluginsByKind(registry, 'from').map(buildPluginChoice),
@@ -123,7 +123,7 @@ export async function runPluginSelectionWizard(
   // init 支持多目标部署，export 需要单目标以便一次性导出语义清晰。
   const toAnswer = (await inquirer.prompt([
     {
-      type: targetSelection === 'single' ? 'list' : 'checkbox',
+      type: targetSelection === 'single' ? 'select' : 'checkbox',
       name: 'to',
       message: '你要发布到哪里？',
       choices: getPluginsByKind(registry, 'to').map(buildPluginChoice),

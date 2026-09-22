@@ -6,7 +6,7 @@ export type JsonSchemaPrimitiveType = 'object' | 'string' | 'number' | 'boolean'
 
 /** Elog 扩展的 prompt 元数据，用于从 schema 生成 inquirer 问题。 */
 export interface ElogPromptMetadata {
-  type?: 'input' | 'password' | 'confirm' | 'number' | 'list' | 'checkbox';
+  type?: 'input' | 'password' | 'confirm' | 'number' | 'select' | 'checkbox';
   message?: string;
   choices?: string[];
 }

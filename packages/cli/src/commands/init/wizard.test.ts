@@ -124,7 +124,7 @@ describe('buildOptionQuestions', () => {
     ]);
   });
 
-  it('produces a list type question for enum properties', () => {
+  it('produces a select type question for enum properties', () => {
     const entry: PluginRegistryEntry = {
       kind: 'from',
       type: 'test-enum',
@@ -145,7 +145,7 @@ describe('buildOptionQuestions', () => {
     };
     expect(buildOptionQuestions(entry)).toEqual([
       {
-        type: 'list',
+        type: 'select',
         name: 'mode',
         message: 'Mode',
         default: undefined,
@@ -357,7 +357,7 @@ describe('runPluginSelectionWizard', () => {
     expect(selection.to).toEqual([localTarget]);
     expect(selection.transforms).toEqual([]);
     expect(prompt.mock.calls[1]?.[0]).toEqual([
-      expect.objectContaining({ type: 'list', name: 'to' }),
+      expect.objectContaining({ type: 'select', name: 'to' }),
     ]);
   });
 });
@@ -391,7 +391,7 @@ describe('runExportWizard', () => {
     expect(selection.to.answers).toEqual({ outputDir: './exported-docs' });
     expect(prompt).toHaveBeenCalledTimes(5);
     expect(prompt.mock.calls[1]?.[0]).toEqual([
-      expect.objectContaining({ type: 'list', name: 'to' }),
+      expect.objectContaining({ type: 'select', name: 'to' }),
     ]);
   });
 });
