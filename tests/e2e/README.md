@@ -23,12 +23,13 @@
 | `notion-to-wordpress` | 测 Notion、R2 图床和 WordPress 部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID`, `ELOG_E2E_WORDPRESS_ENDPOINT`, `ELOG_E2E_WORDPRESS_USERNAME`, `ELOG_E2E_WORDPRESS_PASSWORD`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
 | `notion-to-halo` | 测专用 Notion-Halo fixture、R2 正文/cover 图床和 Halo 部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_HALO_DATABASE_ID`, `ELOG_E2E_HALO_ENDPOINT`, `ELOG_E2E_HALO_TOKEN`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
 
-`pnpm e2e:stable` 会运行稳定同步矩阵，包括 `notion-to-halo`。`stable: false` 的手动/可选用例（例如 WordPress、FlowUs）不会被稳定矩阵选中。
+在 `tests/e2e` 中运行 `pnpm test:stable` 会执行稳定同步矩阵，包括 `notion-to-halo`。`stable: false` 的手动/可选用例（例如 WordPress、FlowUs）不会被稳定矩阵选中。
 
 发布前如果要提前发现 Node 24 兼容问题，用 Node 24 手动跑稳定矩阵：
 
 ```bash
-nvm exec 24 pnpm e2e:stable
+cd tests/e2e
+nvm exec 24 pnpm test:stable
 ```
 
 这条命令会走真实平台 e2e，只适合本地发布前验证，不作为默认 CI 必跑项。
@@ -37,8 +38,8 @@ nvm exec 24 pnpm e2e:stable
 
 ## 环境变量
 
-Vitest 启动时会读取当前目录的 `.env`。从仓库根目录通过 `pnpm e2e:*`
-脚本运行时，当前目录是 `tests/e2e`，所以会读取 `tests/e2e/.env`。
+在 `tests/e2e` 中运行测试时，Vitest 会读取该目录的 `.env`，即 `tests/e2e/.env`。
+根目录的 `pnpm e2e:cli` 也会转发到该目录执行离线 CLI 测试。
 
 运行器控制变量：
 
@@ -71,30 +72,16 @@ Vitest 启动时会读取当前目录的 `.env`。从仓库根目录通过 `pnpm
 
 ## 推荐运行方式
 
-从仓库根目录运行：
+从仓库根目录运行离线 CLI 测试（CI 使用同一入口）：
 
 ```bash
 pnpm e2e:cli
-pnpm e2e:stable
-pnpm e2e:feishu-wiki-local
-pnpm e2e:feishu-space-r2-local
-pnpm e2e:notion-local
-pnpm e2e:notion-catalog-local
-pnpm e2e:yuque-pwd-local
-pnpm e2e:yuque-token-local
-pnpm e2e:notion-wordpress
-pnpm e2e:notion-halo
 ```
 
-跑完整 e2e：
+真实平台测试统一进入 `tests/e2e`，按需选择矩阵或单个用例：
 
 ```bash
-pnpm e2e
-```
-
-进入 `tests/e2e` 也可以跑单个用例：
-
-```bash
+cd tests/e2e
 pnpm run test:stable
 pnpm run test:notion-local
 pnpm run test:notion-catalog-local
@@ -106,19 +93,24 @@ pnpm run test:notion-wordpress
 pnpm run test:notion-halo
 ```
 
-手工调试某个配置：
+在 `tests/e2e` 中运行完整 E2E（包含真实平台用例）：
 
 ```bash
-cd tests/e2e
+pnpm e2e
+```
+
+在 `tests/e2e` 中手工调试某个配置：
+
+```bash
 pnpm exec elog sync --config cases/notion-to-local/elog.config.ts --env .env
 ```
 
 ## 图床插件
 
-部分用例可以用 `ELOG_E2E_IMAGE` 临时切换图床：
+在 `tests/e2e` 中，部分用例可以用 `ELOG_E2E_IMAGE` 临时切换图床：
 
 ```bash
-ELOG_E2E_IMAGE=local pnpm --dir tests/e2e run test:notion-local
+ELOG_E2E_IMAGE=local pnpm run test:notion-local
 ```
 
 断言会根据 `e2eProfile.image` 自动调整：

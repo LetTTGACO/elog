@@ -33,13 +33,8 @@ pnpm test
 pnpm --filter @elog/cli typecheck
 pnpm --filter @elog/cli test
 
-# E2E entry points
+# Offline CLI E2E (repository root)
 pnpm e2e:cli
-pnpm e2e:notion-local
-pnpm e2e:yuque-pwd-local
-pnpm e2e:yuque-token-local
-pnpm e2e:notion-wordpress
-pnpm e2e:notion-halo
 ```
 
 Build/test defaults:
@@ -119,6 +114,10 @@ Cache behavior:
   side effects.
 
 ## E2E Notes
+
+Run offline CLI checks from the repository root with `pnpm e2e:cli`.
+Real platform E2E scripts live in `tests/e2e/package.json` and run from `tests/e2e`.
+For commands, environment setup, and case maintenance, see [the E2E README](tests/e2e/README.md).
 
 `tests/e2e` runs the built CLI in temporary workspaces. Real platform cases skip
 when required env is missing. The runner loads `tests/e2e/.env` through Vitest

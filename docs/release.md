@@ -152,7 +152,8 @@ npm 和 Git。快照位于 `release-report` 的 `recovery/`，包括版本计划
 
 Node 22 和 24 的 CI 除构建、类型检查、单元测试及发布报告测试外，还运行
 `pnpm e2e:cli`。它使用临时目录和本地 fixture 验证版本查询、初始化预演、缺少配置
-时的退出码及离线同步链路。真实平台同步用例仍通过各自的 E2E 命令手动执行。
+时的退出码及离线同步链路。真实平台同步用例在 `tests/e2e` 目录通过
+`pnpm test:notion-local` 等命令手动执行，完整命令见 [E2E README](../tests/e2e/README.md)。
 
 参考：[npm Trusted Publishing](https://docs.npmjs.com/trusted-publishers/)、
 [npm trust](https://docs.npmjs.com/cli/v12/commands/npm-trust/)、

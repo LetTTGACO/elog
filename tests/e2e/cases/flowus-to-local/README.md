@@ -24,7 +24,8 @@
 默认图床是 R2。临时切换图床时，运行测试前设置 `ELOG_E2E_IMAGE`：
 
 ```bash
-ELOG_E2E_CASE=flowus-to-local ELOG_E2E_IMAGE=local pnpm --dir tests/e2e exec vitest run --reporter=verbose src/sync-matrix.e2e.test.ts
+cd tests/e2e
+ELOG_E2E_CASE=flowus-to-local ELOG_E2E_IMAGE=local pnpm exec vitest run --reporter=verbose src/sync-matrix.e2e.test.ts
 ```
 
 可选值包括 `local`、`r2`。图床选择点集中在 `tests/e2e/cases/flowus-to-local/elog.config.ts`：

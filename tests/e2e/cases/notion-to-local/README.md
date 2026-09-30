@@ -24,7 +24,8 @@
 默认图床是 R2。临时切换图床时，运行测试前设置 `ELOG_E2E_IMAGE`：
 
 ```bash
-ELOG_E2E_IMAGE=local pnpm --dir tests/e2e run test:notion-local
+cd tests/e2e
+ELOG_E2E_IMAGE=local pnpm run test:notion-local
 ```
 
 可选值包括 `local`、`r2`。图床选择点集中在 `tests/e2e/cases/notion-to-local/elog.config.ts`：
