@@ -105,8 +105,10 @@ Cache behavior:
 - Internal names use namespace-style strings such as `from:notion`,
   `transform:image-local`, and `to:local`.
 - Release package names use `@elog/plugin-*`.
-- Plugin packages declare `@elog/cli` as an optional peer dependency and add
-  `@elog/cli: "workspace:*"` as a dev dependency.
+- Plugin packages import contracts and author helpers from `@elog/plugin-sdk`
+  and declare it as a normal dependency using `"workspace:^"`.
+- User configs import `defineConfig` from `@elog/core`. Core depends on Plugin SDK;
+  CLI depends on Core and owns command-line behavior.
 - Prefer existing context helpers (`ElogFromContext`, `ElogImageContext`,
   `ElogBaseContext`) over duplicating orchestration logic.
 - Keep source plugins responsible for `DocDetail[]`, transform plugins
@@ -149,8 +151,11 @@ build, or e2e verification command instead.
 
 ## Release And CI
 
-- CI runs `pnpm install --frozen-lockfile`, `pnpm build`, and `pnpm test` on
-  pushes/PRs to `v1`.
+- CI on pushes/PRs to `v1` runs install, build, typecheck, unit tests, release-report
+  tests, and offline CLI E2E on Node 22 and 24, plus workflow linting.
+- Releases run through the manually dispatched GitHub Actions `release.yml`
+  workflow on `v1`, using Nx Release and npm Trusted Publishing. For preflight,
+  channel/version inputs, and failure recovery, see [the release guide](docs/release.md).
 - Publishing uses Nx Release only. Do not create legacy release-state files or
   use git tags to trigger publishing.
 - Only packages listed in `nx.json` `release.projects` are published.
