@@ -17,10 +17,13 @@ function readPackageJson(packageDir: string) {
 }
 
 describe('Core package boundary', () => {
-  it('depends on Plugin SDK without depending on CLI', () => {
+  it('depends on contracts without depending on SDK or CLI', () => {
     const core = readPackageJson('packages/core');
 
-    expect(core.dependencies?.['@elog/plugin-sdk']).toBe('workspace:^');
+    expect(core.dependencies?.['@elog/plugin-contracts']).toBe('workspace:^');
+    expect(core.dependencies?.['@elog/plugin-sdk']).toBeUndefined();
+    expect(core.devDependencies?.['@elog/plugin-sdk']).toBeUndefined();
+    expect(core.peerDependencies?.['@elog/plugin-sdk']).toBeUndefined();
     expect(core.dependencies?.['@elog/cli']).toBeUndefined();
     expect(core.devDependencies?.['@elog/cli']).toBeUndefined();
     expect(core.peerDependencies?.['@elog/cli']).toBeUndefined();
@@ -29,8 +32,19 @@ describe('Core package boundary', () => {
   it('keeps Plugin SDK independent from Core', () => {
     const pluginSdk = readPackageJson('packages/plugin-sdk');
 
+    expect(pluginSdk.dependencies?.['@elog/plugin-contracts']).toBe('workspace:^');
     expect(pluginSdk.dependencies?.['@elog/core']).toBeUndefined();
     expect(pluginSdk.devDependencies?.['@elog/core']).toBeUndefined();
     expect(pluginSdk.peerDependencies?.['@elog/core']).toBeUndefined();
+  });
+
+  it('keeps contracts independent from runtime and helper implementations', () => {
+    const contracts = readPackageJson('packages/plugin-contracts');
+
+    expect(Object.keys(contracts.dependencies ?? {})).toEqual(['@types/node']);
+    for (const dependency of ['@elog/core', '@elog/plugin-sdk', '@elog/cli']) {
+      expect(contracts.devDependencies?.[dependency]).toBeUndefined();
+      expect(contracts.peerDependencies?.[dependency]).toBeUndefined();
+    }
   });
 });

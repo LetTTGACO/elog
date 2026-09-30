@@ -5,7 +5,6 @@ export type {
   DownloadResult,
   ElogPlugin,
   FromPlugin,
-  FromPluginBaseConfig,
   FromPluginReturn,
   ImageUtils,
   IPlugin,
@@ -15,4 +14,4 @@ export type {
   ToPlugin,
   TransformPlugin,
   WorkflowInfo,
-} from '@elog/plugin-sdk';
+} from '@elog/plugin-contracts';

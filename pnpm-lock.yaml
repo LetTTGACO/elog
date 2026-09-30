@@ -24,11 +24,39 @@ importers:
         specifier: ^3.9.4
         version: 3.9.4
 
+  packages/cli:
+    dependencies:
+      '@elog/core':
+        specifier: workspace:^
+        version: link:../core
+      chalk:
+        specifier: ~5.6.2
+        version: 5.6.2
+      commander:
+        specifier: ~15.0.0
+        version: 15.0.0
+      inquirer:
+        specifier: ~14.0.2
+        version: 14.0.2(@types/node@22.19.19)
+    devDependencies:
+      '@types/node':
+        specifier: ~22.19.19
+        version: 22.19.19
+      tsdown:
+        specifier: ^0.22.3
+        version: 0.22.3(typescript@6.0.3)
+      typescript:
+        specifier: ~6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@types/node@22.19.19)(jsdom@21.1.2)(vite@8.0.13(@types/node@22.19.19)(esbuild@0.28.1)(yaml@2.9.0))
+
   packages/core:
     dependencies:
-      '@elog/plugin-sdk':
+      '@elog/plugin-contracts':
         specifier: workspace:^
-        version: link:../plugin-sdk
+        version: link:../plugin-contracts
       bundle-require:
         specifier: ^5.1.0
         version: 5.1.0(esbuild@0.28.1)
@@ -64,24 +92,12 @@ importers:
         specifier: ^4.1.9
         version: 4.1.9(@types/node@22.19.19)(jsdom@21.1.2)(vite@8.0.13(@types/node@22.19.19)(esbuild@0.28.1)(yaml@2.9.0))
 
-  packages/cli:
+  packages/plugin-contracts:
     dependencies:
-      '@elog/core':
-        specifier: workspace:^
-        version: link:../core
-      chalk:
-        specifier: ~5.6.2
-        version: 5.6.2
-      commander:
-        specifier: ~15.0.0
-        version: 15.0.0
-      inquirer:
-        specifier: ~14.0.2
-        version: 14.0.2(@types/node@22.19.19)
-    devDependencies:
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
+    devDependencies:
       tsdown:
         specifier: ^0.22.3
         version: 0.22.3(typescript@6.0.3)
@@ -94,6 +110,12 @@ importers:
 
   packages/plugin-sdk:
     dependencies:
+      '@elog/plugin-contracts':
+        specifier: workspace:^
+        version: link:../plugin-contracts
+      '@types/tiny-async-pool':
+        specifier: ^2.0.3
+        version: 2.0.3
       tiny-async-pool:
         specifier: ~2.1.0
         version: 2.1.0
@@ -101,9 +123,6 @@ importers:
       '@types/node':
         specifier: ~22.19.19
         version: 22.19.19
-      '@types/tiny-async-pool':
-        specifier: ^2.0.3
-        version: 2.0.3
       tsdown:
         specifier: ^0.22.3
         version: 0.22.3(typescript@6.0.3)

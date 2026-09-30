@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
+import { DocSyncStatus as ContractDocSyncStatus } from '@elog/plugin-contracts';
 import {
   DocSyncStatus,
   ElogBaseContext,
@@ -74,6 +75,7 @@ describe('plugin sdk public surface', () => {
     expect(plugin.kind).toBe('to');
     expect(DocSyncStatus.NEW).toBe(1);
     expect(DocSyncStatus.UPDATE).toBe(2);
+    expect(DocSyncStatus).toBe(ContractDocSyncStatus);
   });
 
   it('formats time with the default timezone and process override', () => {

@@ -1,11 +1,11 @@
 {
-  "name": "@elog/core",
+  "name": "@elog/plugin-contracts",
   "version": "1.0.0-beta.1",
-  "description": "",
+  "description": "Shared document, plugin and host capability contracts for Elog.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LetTTGACO/elog.git",
-    "directory": "packages/core"
+    "directory": "packages/plugin-contracts"
   },
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -24,17 +24,9 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@elog/plugin-contracts": "workspace:^",
-    "bundle-require": "^5.1.0",
-    "chalk": "~5.6.2",
-    "dotenv": "~17.4.2",
-    "esbuild": "0.28.1",
-    "image-size": "~2.0.2",
-    "joycon": "3.1.1",
-    "ofetch": "~1.5.1"
+    "@types/node": "~22.19.19"
   },
   "devDependencies": {
-    "@types/node": "~22.19.19",
     "tsdown": "^0.22.3",
     "typescript": "~6.0.3",
     "vitest": "^4.1.9"

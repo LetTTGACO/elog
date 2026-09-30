@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { DocDetail } from '../doc';
+import type { DocDetail } from '../index';
 import type { ImageUploader } from '../image';
-import type { PluginContext } from '../plugin';
+import type { PluginContext } from '../index';
 import { ElogImageContext } from './ImageContext';
 
 const imageBuffer = Buffer.from('decoded-image');

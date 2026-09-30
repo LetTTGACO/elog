@@ -110,7 +110,9 @@ Core 不调用 `process.exit()`，也不负责终端展示或退出码。应用�
 - 错误：`ElogError`、`ElogConfigError`、`ElogPluginError`
 - 类型：`ElogConfig`、`ResolveConfigResult`、`WorkflowResult`
 
-插件契约、文档类型和 Context Helper 由 `@elog/plugin-sdk` 提供。
+Core 直接依赖 `@elog/plugin-contracts` 中的文档、插件生命周期和宿主能力协议。
+插件作者通过 `@elog/plugin-sdk` 获取这些协议的转导出和 Context Helper；单独安装
+Core 时只会安装 contracts 及 Core 自身所需的依赖。
 
 ## 运行要求
 

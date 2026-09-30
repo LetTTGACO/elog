@@ -77,11 +77,12 @@ node --test .github/scripts/release-report.test.mjs
 | Allowed actions      | 允许直接发布 `npm publish` |
 
 Trusted Publisher 按包配置，完整列表以 `nx.json` 的 `release.projects` 为准。
-当前需要配置以下 19 个包：
+当前需要配置以下 20 个包：
 
 - `@elog/cli`
 - `@elog/core`
 - `@elog/plugin-sdk`
+- `@elog/plugin-contracts`
 - `@elog/plugin-from-notion`
 - `@elog/plugin-from-feishu-wiki`
 - `@elog/plugin-from-feishu-space`
@@ -98,6 +99,9 @@ Trusted Publisher 按包配置，完整列表以 `nx.json` 的 `release.projects
 - `@elog/plugin-transform-markdown-to-html`
 - `@elog/plugin-to-local`
 - `@elog/plugin-to-halo`
+
+新增的 `@elog/plugin-contracts` 使用 manifest 中的 Beta 版本作为未发布基线；首次
+发布前确认版本预演及该包的 npm 发布授权，发布后按包独立演进。
 
 也可以使用 npm CLI 11.15.0 及以上版本，在交互登录并完成 2FA 后逐包配置：
 

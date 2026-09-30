@@ -2,7 +2,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { DocSyncStatus, type FromPlugin, type ToPlugin } from '@elog/plugin-sdk';
+import { DocSyncStatus, type FromPlugin, type ToPlugin } from '@elog/plugin-contracts';
 import { ElogConfigError, defineConfig, sync, syncFromConfig } from './index';
 
 let tempDir = '';

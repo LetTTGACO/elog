@@ -1,10 +1,4 @@
-import type { DocDetail } from './doc';
-
-export interface ImageUrl {
-  data: string;
-  originalUrl: string;
-  type: 'url' | 'base64';
-}
+import type { DocDetail } from '@elog/plugin-contracts';
 
 export interface ImageSource {
   fileName: string;
@@ -25,15 +19,4 @@ export interface ImageBaseConfig {
   disable?: boolean;
   limit?: number;
   propertyImageFields?: string[];
-}
-
-export interface ImageFileType {
-  type: string;
-  name?: string;
-}
-
-export interface ImageDataUrl {
-  type: string;
-  payload: string;
-  buffer: Buffer;
 }

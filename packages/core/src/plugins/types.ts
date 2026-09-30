@@ -14,4 +14,4 @@ export type {
   ToPlugin,
   TransformPlugin,
   WorkflowInfo,
-} from '@elog/plugin-sdk';
+} from '@elog/plugin-contracts';

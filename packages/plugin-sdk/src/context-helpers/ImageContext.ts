@@ -1,6 +1,6 @@
-import type { DocDetail } from '../doc';
-import type { ImageBaseConfig, ImageSource, ImageUploader, ImageUrl } from '../image';
-import type { PluginContext } from '../plugin';
+import type { DocDetail, ImageUrl } from '@elog/plugin-contracts';
+import type { ImageBaseConfig, ImageSource, ImageUploader } from '../image';
+import type { PluginContext } from '@elog/plugin-contracts';
 import { asyncPoolFunc } from '../source';
 import { ElogBaseContext } from './BaseContext';
 

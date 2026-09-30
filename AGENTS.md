@@ -17,7 +17,8 @@ Main package families:
 
 - `packages/cli`: CLI commands, init/export behavior, terminal reporting, plugin registry.
 - `packages/core`: config loading/resolution, workflow runtime, cache coordination, sync entrypoints.
-- `packages/plugin-sdk`: plugin contracts, document/image types, plugin context helpers, plugin-facing utilities.
+- `packages/plugin-contracts`: shared document, plugin lifecycle, and host capability contracts.
+- `packages/plugin-sdk`: contract re-exports, plugin context helpers, plugin-facing utilities.
 - `plugins/from/*`: source plugins such as Notion, Feishu, FlowUs, Yuque, Wolai.
 - `plugins/transform/*`: image replacement/rehosting plugins.
 - `plugins/to/*`: deploy plugins such as local, Halo, WordPress, Confluence.
@@ -108,8 +109,11 @@ Cache behavior:
 - Plugin packages import contracts and author helpers from `@elog/plugin-sdk`
   and declare it as a normal dependency using `"workspace:^"`.
 - User configs import `defineConfig` from `@elog/cli`. CLI re-exports config authoring
-  APIs from Core and owns command-line behavior. Core depends on Plugin SDK and is
+  APIs from Core and owns command-line behavior. Core depends on Plugin Contracts and is
   installed through CLI's normal dependency; programmatic consumers can use Core directly.
+- Core and SDK share protocol definitions from `@elog/plugin-contracts`. Keep helper
+  implementations and their configuration types in SDK; contracts only describes the
+  document, lifecycle, and host capabilities shared by Core and plugins.
 - Prefer existing context helpers (`ElogFromContext`, `ElogImageContext`,
   `ElogBaseContext`) over duplicating orchestration logic.
 - Keep source plugins responsible for `DocDetail[]`, transform plugins
@@ -201,8 +205,8 @@ build, or e2e verification command instead.
 - `packages/core/src/config/resolve.ts`
 - `packages/core/src/config/load.ts`
 - `packages/core/src/index.ts`
-- `packages/plugin-sdk/src/plugin.ts`
-- `packages/plugin-sdk/src/doc.ts`
+- `packages/plugin-contracts/src/plugin.ts`
+- `packages/plugin-contracts/src/doc.ts`
 - `packages/plugin-sdk/src/source.ts`
 - `packages/plugin-sdk/src/context-helpers/ImageContext.ts`
 - `packages/cli/src/commands/sync/command.ts`

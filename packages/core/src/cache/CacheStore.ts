@@ -5,7 +5,7 @@ import {
   type DocDetail,
   type DocSyncStatusMap,
   type SortedDoc,
-} from '@elog/plugin-sdk';
+} from '@elog/plugin-contracts';
 import type { CacheConfig } from '../runtime/types';
 import out from '../logging/logger';
 

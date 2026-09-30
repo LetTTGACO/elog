@@ -3,6 +3,10 @@
 Elog 1.0 的插件开发契约与运行时辅助工具。使用它可以为 Elog 编写来源、转换和部署插件，
 而无需依赖 CLI 或 Core 的内部实现。
 
+公共文档、插件生命周期和宿主能力协议定义在 `@elog/plugin-contracts`，由 SDK 统一
+转导出。插件继续从 `@elog/plugin-sdk` 导入类型、常量和 helpers；SDK 会自动安装
+contracts。增量过滤、并发下载、图片替换及其配套类型由 SDK 维护。
+
 > Elog 1.0 目前处于 Beta 阶段，公开契约仍可能在正式版前调整。
 
 ## 安装

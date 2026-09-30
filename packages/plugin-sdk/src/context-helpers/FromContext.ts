@@ -8,8 +8,8 @@ import {
   type GetDocDetail,
   type GetSortedDocList,
 } from '../source';
-import type { DownloadResult, PluginContext } from '../plugin';
-import type { SortedDoc } from '../doc';
+import type { DownloadResult, PluginContext } from '@elog/plugin-contracts';
+import type { SortedDoc } from '@elog/plugin-contracts';
 
 export abstract class ElogFromContext extends ElogBaseContext {
   protected constructor(ctx: PluginContext) {

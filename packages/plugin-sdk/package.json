@@ -24,11 +24,12 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@elog/plugin-contracts": "workspace:^",
+    "@types/tiny-async-pool": "^2.0.3",
     "tiny-async-pool": "~2.1.0"
   },
   "devDependencies": {
     "@types/node": "~22.19.19",
-    "@types/tiny-async-pool": "^2.0.3",
     "tsdown": "^0.22.3",
     "typescript": "~6.0.3",
     "vitest": "^4.1.9"

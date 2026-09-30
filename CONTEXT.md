@@ -21,8 +21,12 @@ A transform plugin that changes the Document Body from one Body Type to another,
 _Avoid_: Adapter, formatExt, target formatter
 
 **Plugin SDK**:
-The package of stable plugin contracts and author-facing helpers shared by source, transform, and target plugins.
+The plugin authoring package that re-exports Plugin Contracts and provides source, transform, and target plugins with optional helpers and utilities.
 _Avoid_: Plugin API, plugin kit, shared
+
+**Plugin Contracts**:
+The shared definitions of documents, plugin lifecycles, and host capabilities implemented by Core and consumed by plugins. Core and Plugin SDK depend on this package independently; helper implementations and their configuration types belong to Plugin SDK.
+_Avoid_: SDK implementation, runtime utilities
 
 **Core**:
 The public package that owns Elog workflow execution, configuration resolution, cache coordination, and programmatic sync without any CLI command behavior.

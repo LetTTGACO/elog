@@ -1,8 +1,1 @@
-export type {
-  ImageBaseConfig,
-  ImageDataUrl,
-  ImageFileType,
-  ImageSource,
-  ImageUploader,
-  ImageUrl,
-} from '@elog/plugin-sdk';
+export type { ImageDataUrl, ImageFileType, ImageUrl } from '@elog/plugin-contracts';

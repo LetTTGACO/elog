@@ -1,7 +1,13 @@
 import asyncPool from 'tiny-async-pool';
-import { DocSyncStatus } from './doc';
-import type { DocDetail, DocSyncStatusMap, FilterDocsResult, SortedDoc } from './doc';
-import type { DownloadResult, Logger } from './plugin';
+import {
+  DocSyncStatus,
+  type DocDetail,
+  type DocSyncStatusMap,
+  type DownloadResult,
+  type Logger,
+  type SortedDoc,
+} from '@elog/plugin-contracts';
+import type { FilterDocsResult } from './doc';
 
 type SourceLogger = Pick<Logger, 'debug' | 'info' | 'success' | 'warn'>;
 

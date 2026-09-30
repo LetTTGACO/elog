@@ -6,4 +6,4 @@ export {
   type DocProperties,
   type DocStructure,
   type SortedDoc,
-} from '@elog/plugin-sdk';
+} from '@elog/plugin-contracts';

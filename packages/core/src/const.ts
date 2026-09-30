@@ -1,1 +1,1 @@
-export { DocSyncStatus } from '@elog/plugin-sdk';
+export { DocSyncStatus } from '@elog/plugin-contracts';
