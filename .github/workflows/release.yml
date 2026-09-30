@@ -162,21 +162,26 @@ jobs:
         if: ${{ !inputs.dry_run }}
         run: node .github/scripts/release-report.mjs run push git push --atomic origin HEAD:refs/heads/v1 --follow-tags
 
+      - name: Save release recovery snapshot
+        id: recovery
+        if: ${{ always() && !inputs.dry_run && contains(fromJSON('["success", "failure", "cancelled"]'), steps.release.outcome) }}
+        timeout-minutes: 1
+        run: node .github/scripts/release-report.mjs recovery
+
       - name: Verify published versions and Git refs
         id: verify
-        if: ${{ always() && !inputs.dry_run && (steps.release.outcome == 'success' || steps.release.outcome == 'failure') }}
+        if: ${{ always() && !inputs.dry_run && contains(fromJSON('["success", "failure", "cancelled"]'), steps.release.outcome) }}
+        timeout-minutes: 2
         run: node .github/scripts/release-report.mjs run verify node .github/scripts/release-report.mjs verify
 
-      - name: Save failed release for recovery
-        if: ${{ failure() && !inputs.dry_run && steps.release.outcome != 'skipped' }}
-        run: git bundle create "$RUNNER_TEMP/release.bundle" --all
-
       - name: Upload failed release history
-        if: ${{ failure() && !inputs.dry_run && steps.release.outcome != 'skipped' }}
+        if: ${{ always() && !inputs.dry_run && steps.recovery.outcome == 'success' && (failure() || cancelled()) }}
+        timeout-minutes: 1
         uses: actions/upload-artifact@v4
         with:
           name: release-recovery-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/release.bundle
+          path: ${{ env.RELEASE_REPORT_DIR }}/recovery/
+          if-no-files-found: error
           retention-days: 7
 
       - name: Generate release summary
