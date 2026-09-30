@@ -39,7 +39,7 @@ function manifests() {
     .map((root) => ({ root, ...readJson(`${root}/package.json`) }));
 }
 
-async function registryState(name, version, channel) {
+async function registryState(name, version, channel, currentVersion) {
   const request = async (url) => {
     const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
     if (response.status === 404) return null;
@@ -48,31 +48,59 @@ async function registryState(name, version, channel) {
   };
   try {
     const encoded = encodeURIComponent(name);
-    const [manifest, tags] = await Promise.all([
+    const [manifest, tags, current] = await Promise.all([
       request(`https://registry.npmjs.org/${encoded}/${encodeURIComponent(version)}`),
       request(`https://registry.npmjs.org/-/package/${encoded}/dist-tags`),
+      currentVersion
+        ? request(`https://registry.npmjs.org/${encoded}/${encodeURIComponent(currentVersion)}`)
+        : null,
     ]);
     return {
       exists: manifest?.version === version,
       tag: tags?.[channel] ?? null,
       integrity: manifest?.dist?.integrity ?? null,
+      ...(currentVersion ? { currentExists: current?.version === currentVersion } : {}),
     };
   } catch (error) {
     return { error: error.message };
   }
 }
 
-async function mapRegistry(packages, channel) {
+async function mapRegistry(packages, channel, includeCurrent = false) {
   const results = {};
   // Bound registry traffic while keeping a failed package from hiding other results.
   for (let index = 0; index < packages.length; index += 4) {
     await Promise.all(
       packages.slice(index, index + 4).map(async (pkg) => {
-        results[pkg.name] = await registryState(pkg.name, pkg.newVersion, channel);
+        results[pkg.name] = await registryState(
+          pkg.name,
+          pkg.newVersion,
+          channel,
+          includeCurrent ? pkg.currentVersion : undefined,
+        );
       }),
     );
   }
   return results;
+}
+
+export function assertPublishable(report) {
+  const issues = report.packages
+    .filter((pkg) => pkg.newVersion)
+    .flatMap((pkg) => {
+      const state = report.registryBefore?.[pkg.name];
+      if (!state || state.error)
+        return [`${pkg.name}：npm 查询失败，无法确认版本可发布（${state?.error ?? '无查询结果'}）`];
+      const errors = [];
+      if (state.exists)
+        errors.push(
+          `${pkg.name}@${pkg.newVersion}：目标版本已存在于 npm，请核对历史 tag 或按失败恢复流程处理`,
+        );
+      if (!pkg.baseline && state.currentExists)
+        errors.push(`${pkg.name}@${pkg.currentVersion}：基线版本已发布，但缺少对应 Git tag`);
+      return errors;
+    });
+  if (issues.length) throw new Error(`发布前检查未通过：\n${issues.join('\n')}`);
 }
 
 async function plan(dir) {
@@ -145,6 +173,14 @@ async function plan(dir) {
     generatedAt: new Date().toISOString(),
   };
   writeJson(path.join(dir, 'plan.json'), report);
+  // The same read-only gate protects previews and real releases before Nx mutates versions.
+  report.registryBefore = await mapRegistry(
+    packages.filter((pkg) => pkg.newVersion),
+    channel,
+    true,
+  );
+  writeJson(path.join(dir, 'plan.json'), report);
+  assertPublishable(report);
   const changelog = await releaseChangelog({
     ...options,
     createRelease: false,
@@ -159,11 +195,6 @@ async function plan(dir) {
       entry.contents,
     ]),
   );
-  if (!dryRun)
-    report.registryBefore = await mapRegistry(
-      packages.filter((pkg) => pkg.newVersion),
-      channel,
-    );
   writeJson(path.join(dir, 'plan.json'), report);
 }
 
@@ -199,10 +230,15 @@ async function run(dir, id, command, args) {
 
 export function packageResult(pkg, report, steps, actual) {
   if (!pkg.newVersion) return '保持不变';
-  if (report.dryRun)
+  if (report.dryRun) {
+    const before = report.registryBefore?.[pkg.name];
+    if (!before || before.error) return '❌ npm 状态未确认，阻止发布';
+    if (before.exists) return '❌ 目标版本已存在，阻止发布';
+    if (!pkg.baseline && before.currentExists) return '❌ 已发布基线缺少 Git tag，阻止发布';
     return steps.release?.outcome === 'success'
       ? '预演通过，计划发布'
       : '计划发布；发布预演未通过或未执行';
+  }
   if (!['success', 'failure'].includes(steps.release?.outcome)) return '未执行发布';
   const observed = actual?.registry?.[pkg.name];
   if (!observed || observed.error) return '⚠️ npm 结果未确认';
@@ -240,7 +276,18 @@ export function renderSummary({
   ];
   if (!dryRun) checks.push(['push', 'Git 提交及标签推送'], ['verify', 'npm / Git 结果核验']);
   const failures = Object.entries(steps).filter(([, step]) => step.outcome === 'failure');
-  const success = failures.length === 0 && checks.every(([id]) => steps[id]?.outcome === 'success');
+  let registryError;
+  if (report) {
+    try {
+      assertPublishable(report);
+    } catch (error) {
+      registryError = error.message;
+    }
+  }
+  const success =
+    !registryError &&
+    failures.length === 0 &&
+    checks.every(([id]) => steps[id]?.outcome === 'success');
   const title = `${channel === 'beta' ? 'Beta ' : '稳定版'}${dryRun ? '发布预演' : '发布结果'}`;
   const repository = report?.repository;
   const baseUrl = repository ? `https://github.com/${repository}` : null;
@@ -254,7 +301,7 @@ export function renderSummary({
   const lines = [
     `# ${title}`,
     '',
-    `**${success ? '✅ 已完成' : failures.length ? '❌ 存在失败' : '⏹ 未完成'}**`,
+    `**${success ? '✅ 已完成' : failures.length || registryError ? '❌ 存在失败' : '⏹ 未完成'}**`,
     '',
     `- 源码：${report ? (baseUrl ? `[${report.sourceSha.slice(0, 8)}](${baseUrl}/commit/${report.sourceSha})` : report.sourceSha.slice(0, 8)) : '版本计划尚未生成'}`,
     `- 渠道：\`${escape(channel)}\` · 计划升级 **${changed.length}** 个包 · 保持不变 **${packages.length - changed.length}** 个包`,
@@ -287,6 +334,27 @@ export function renderSummary({
       `| ${escape(pkg.name)} | ${escape(pkg.currentVersion)} | ${escape(pkg.newVersion ?? '—')} | ${escape(pkg.reason)} | ${escape(packageResult(pkg, report, steps, actual))} |`,
     );
   if (!report) lines.push('', '尚无可用版本计划，请查看失败步骤。');
+  if (report) {
+    lines.push(
+      '',
+      '## npm 发布前检查',
+      '',
+      '| 包 | npm 渠道当前指向 | 目标版本 | npm 中的目标版本 |',
+      '| --- | --- | --- | --- |',
+    );
+    for (const pkg of changed) {
+      const state = report.registryBefore?.[pkg.name];
+      lines.push(
+        `| ${escape(pkg.name)} | ${escape(state?.tag ?? '—')} | ${escape(pkg.newVersion)} | ${!state || state.error ? '⚠️ 查询未确认' : state.exists ? '❌ 已存在' : '✅ 尚未发布'} |`,
+      );
+    }
+    lines.push(
+      '',
+      registryError ? escape(registryError) : '✅ 发布前检查通过。',
+      '',
+      '预演与正式发布使用相同的只读检查；npm 渠道指针不用于替代 Git 版本基线。',
+    );
+  }
   lines.push(
     '',
     '当前版本以包级 Git tag 为基线；没有匹配 tag 时由 Nx 回退到 manifest。',

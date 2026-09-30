@@ -5,7 +5,7 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { packageResult, renderSummary } from './release-report.mjs';
+import { assertPublishable, packageResult, renderSummary } from './release-report.mjs';
 
 const pkg = {
   name: '@elog/core',
@@ -22,6 +22,7 @@ const report = {
   sourceSha: 'b'.repeat(40),
   repository: 'LetTTGACO/elog',
   packages: [pkg],
+  registryBefore: { [pkg.name]: { exists: false, currentExists: true, tag: pkg.currentVersion } },
   changelogs: { '@elog/core': '### Fixes\n\n- Isolate deploy documents' },
 };
 const steps = Object.fromEntries(
@@ -52,6 +53,45 @@ test('preview shows package versions, commit links and aggregated test outcomes 
   assert.match(markdown, /&#124; &lt;details&gt; \\\[link/);
   assert.match(markdown, /Isolate deploy documents/);
   assert.doesNotMatch(markdown, /新版本及渠道已确认/);
+});
+
+test('both preview and real release reject already published targets, even when the channel differs', () => {
+  for (const dryRun of [true, false]) {
+    const conflict = {
+      ...report,
+      dryRun,
+      registryBefore: { [pkg.name]: { exists: true, currentExists: true, tag: '0.15.0-beta.2' } },
+    };
+    assert.throws(() => assertPublishable(conflict), /目标版本已存在于 npm/);
+    const markdown = renderSummary({ report: conflict, steps });
+    assert.match(markdown, /存在失败/);
+    assert.match(markdown, /0\.15\.0-beta\.2/);
+    assert.match(markdown, /❌ 已存在/);
+    assert.doesNotMatch(markdown, /预演通过，计划发布/);
+  }
+});
+
+test('missing historical tags block existing packages but allow a genuinely new package', () => {
+  const missing = { ...report, packages: [{ ...pkg, baseline: null }] };
+  assert.throws(() => assertPublishable(missing), /基线版本已发布，但缺少对应 Git tag/);
+  assert.match(renderSummary({ report: missing, steps }), /已发布基线缺少 Git tag/);
+  const firstRelease = {
+    ...missing,
+    registryBefore: { [pkg.name]: { exists: false, currentExists: false, tag: null } },
+  };
+  assert.doesNotThrow(() => assertPublishable(firstRelease));
+  assert.match(renderSummary({ report: firstRelease, steps }), /预演通过，计划发布/);
+});
+
+test('registry errors and missing results fail closed while unchanged packages need no query', () => {
+  for (const state of [undefined, { error: 'npm registry HTTP 503' }]) {
+    const unknown = { ...report, registryBefore: { [pkg.name]: state } };
+    assert.throws(() => assertPublishable(unknown), /npm 查询失败/);
+    assert.match(renderSummary({ report: unknown, steps }), /npm 状态未确认，阻止发布/);
+    assert.doesNotMatch(renderSummary({ report: unknown, steps }), /✅ 已完成/);
+  }
+  assert.doesNotThrow(() => assertPublishable(report));
+  assert.doesNotThrow(() => assertPublishable({ packages: [{ ...pkg, newVersion: null }] }));
 });
 
 test('a failed build still produces a useful report without package or test data', () => {
