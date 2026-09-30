@@ -137,7 +137,9 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
     return;
   }
 
+  log(`正在安装依赖：${installCommand.display}`);
   doInstall({ cwd: options.cwd, packageManager, packages });
+  log('依赖安装完成');
 
   await doWrite({
     cwd: options.cwd,

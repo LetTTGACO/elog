@@ -14,16 +14,16 @@ describe('detectPackageManager', () => {
     vi.restoreAllMocks();
   });
 
-  it('uses packageManager from package.json before lockfiles', () => {
-    const cwd = makeTempDir();
-    fs.writeFileSync(
-      path.join(cwd, 'package.json'),
-      JSON.stringify({ packageManager: 'yarn@4.0.0' }),
-    );
-    fs.writeFileSync(path.join(cwd, 'pnpm-lock.yaml'), '');
+  it.each(['yarn@4.0.0', 'npm@10.0.0'])(
+    'uses packageManager %s from package.json before lockfiles',
+    (packageManager) => {
+      const cwd = makeTempDir();
+      fs.writeFileSync(path.join(cwd, 'package.json'), JSON.stringify({ packageManager }));
+      fs.writeFileSync(path.join(cwd, 'pnpm-lock.yaml'), '');
 
-    expect(detectPackageManager(cwd)).toBe('yarn');
-  });
+      expect(detectPackageManager(cwd)).toBe(packageManager.split('@')[0]);
+    },
+  );
 
   it('detects pnpm via pnpm-lock.yaml', () => {
     const cwd = makeTempDir();
@@ -55,9 +55,9 @@ describe('detectPackageManager', () => {
     expect(detectPackageManager(cwd)).toBe('bun');
   });
 
-  it('falls back to pnpm when no package manager signal exists', () => {
+  it('falls back to npm when no package manager signal exists', () => {
     const cwd = makeTempDir();
-    expect(detectPackageManager(cwd)).toBe('pnpm');
+    expect(detectPackageManager(cwd)).toBe('npm');
   });
 
   it('returns undefined for malformed package.json and falls through to lockfile', () => {

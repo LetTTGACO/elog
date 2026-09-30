@@ -139,7 +139,7 @@ describe('runInitCommand', () => {
 
     expect(log).toHaveBeenCalledTimes(1);
     const output = log.mock.calls[0]![0] as string;
-    expect(output).toContain('pnpm add');
+    expect(output).toContain('npm install');
   });
 
   it('without dryRun: calls installPackages and writeGeneratedFiles only', async () => {
@@ -288,7 +288,7 @@ describe('runInitCommand', () => {
     const overwriteExisting = vi.fn();
     const log = vi.fn();
     await runInitCommand({ ...baseOptions, dryRun: true, overwriteExisting, log });
-    expect(log.mock.calls[0]?.[0]).toContain(`pnpm add @elog/cli@${packageJson.version}`);
+    expect(log.mock.calls[0]?.[0]).toContain(`npm install @elog/cli@${packageJson.version}`);
     expect(overwriteExisting).not.toHaveBeenCalled();
     expect(fs.readdirSync(cwd)).toEqual(['elog.config.ts']);
   });

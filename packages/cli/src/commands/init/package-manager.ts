@@ -55,7 +55,7 @@ function readPackageManager(cwd: string): PackageManager | undefined {
   return undefined;
 }
 
-/** 推断当前项目包管理器，无法识别时默认 pnpm 以贴合 monorepo 约定。 */
+/** 推断当前项目包管理器，无法识别时默认使用随 Node.js 提供的 npm。 */
 export function detectPackageManager(cwd: string): PackageManager {
   return (
     readPackageManager(cwd) ??
@@ -67,7 +67,7 @@ export function detectPackageManager(cwd: string): PackageManager {
           ? 'npm'
           : hasFile(cwd, 'bun.lockb') || hasFile(cwd, 'bun.lock')
             ? 'bun'
-            : 'pnpm')
+            : 'npm')
   );
 }
 
