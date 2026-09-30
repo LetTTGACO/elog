@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { spawnSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { assertPublishable, packageResult, renderSummary } from './release-report.mjs';
@@ -138,6 +138,78 @@ test('successful npm publication cannot hide a failed Git push', () => {
   assert.match(markdown, /新版本及渠道已确认/);
   assert.match(markdown, /Git 推送步骤：❌ 失败/);
   assert.match(markdown, /Git 远端提交或标签尚未全部确认/);
+});
+
+test('cancelled publication reports observed npm state instead of claiming nothing ran', () => {
+  const real = { ...report, dryRun: false };
+  const cancelled = { ...steps, release: { outcome: 'cancelled' } };
+  const actual = { registry: { [pkg.name]: { exists: true, tag: pkg.newVersion } } };
+  const markdown = renderSummary({ report: real, steps: cancelled, actual });
+  assert.match(markdown, /⏹ 已取消/);
+  assert.match(markdown, /取消不会撤回已上传的 npm 版本/);
+  assert.match(markdown, /新版本及渠道已确认/);
+  assert.doesNotMatch(markdown, /未执行发布/);
+  assert.match(packageResult(pkg, real, cancelled), /npm 结果未确认/);
+  actual.registry[pkg.name] = { exists: false };
+  assert.match(packageResult(pkg, real, cancelled, actual), /目标版本不存在/);
+});
+
+test('recovery preserves release commits and tags as well as interrupted version file changes', () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'elog-release-recovery-test-'));
+  const script = fileURLToPath(new URL('./release-report.mjs', import.meta.url));
+  const repo = path.join(dir, 'repo');
+  const reports = path.join(dir, 'reports');
+  mkdirSync(repo);
+  mkdirSync(reports);
+  const git = (...args) => execFileSync('git', args, { cwd: repo, encoding: 'utf8' }).trim();
+  try {
+    git('init', '--initial-branch=v1');
+    git('config', 'user.name', 'Release test');
+    git('config', 'user.email', 'release@example.invalid');
+    git('config', 'commit.gpgsign', 'false');
+    git('config', 'core.hooksPath', '/dev/null');
+    writeFileSync(path.join(repo, 'package.json'), JSON.stringify({ version: pkg.currentVersion }));
+    git('add', 'package.json');
+    git('commit', '-m', 'fixture release');
+    git('tag', '--no-sign', '-a', `${pkg.name}@${pkg.currentVersion}`, '-m', 'fixture tag');
+    const head = git('rev-parse', 'HEAD');
+    const versionFile = JSON.stringify({ version: pkg.newVersion });
+    writeFileSync(path.join(repo, 'package.json'), versionFile);
+    writeFileSync(path.join(repo, 'CHANGELOG.md'), 'Uncommitted release notes\n');
+    writeFileSync(
+      path.join(reports, 'plan.json'),
+      JSON.stringify({
+        ...report,
+        sourceSha: head,
+        dryRun: false,
+        packages: [{ ...pkg, root: '.' }],
+      }),
+    );
+    const result = spawnSync(process.execPath, [script, 'recovery'], {
+      cwd: repo,
+      env: { ...process.env, RELEASE_REPORT_DIR: reports },
+      encoding: 'utf8',
+    });
+    assert.equal(result.status, 0, result.stderr);
+    const saved = path.join(reports, 'recovery');
+    assert.equal(JSON.parse(readFileSync(path.join(saved, 'state.json'))).head, head);
+    assert.equal(readFileSync(path.join(saved, 'files/package.json'), 'utf8'), versionFile);
+    assert.equal(
+      readFileSync(path.join(saved, 'files/CHANGELOG.md'), 'utf8'),
+      'Uncommitted release notes\n',
+    );
+    assert.match(
+      git('bundle', 'list-heads', path.join(saved, 'release.bundle')),
+      /refs\/tags\/@elog\/core@1\.0\.0-beta\.1/,
+    );
+    const restored = path.join(dir, 'restored');
+    execFileSync('git', ['clone', path.join(saved, 'release.bundle'), restored], { stdio: 'pipe' });
+    execFileSync('git', ['apply', path.join(saved, 'worktree.patch')], { cwd: restored });
+    assert.equal(readFileSync(path.join(restored, 'package.json'), 'utf8'), versionFile);
+    assert.equal(git('rev-parse', 'HEAD'), head);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test('command failure preserves its exit code and logs, and summary runs after it', () => {

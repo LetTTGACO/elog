@@ -1,5 +1,6 @@
 import {
   appendFileSync,
+  copyFileSync,
   existsSync,
   mkdirSync,
   readFileSync,
@@ -239,7 +240,7 @@ export function packageResult(pkg, report, steps, actual) {
       ? '预演通过，计划发布'
       : '计划发布；发布预演未通过或未执行';
   }
-  if (!['success', 'failure'].includes(steps.release?.outcome)) return '未执行发布';
+  if (!['success', 'failure', 'cancelled'].includes(steps.release?.outcome)) return '未执行发布';
   const observed = actual?.registry?.[pkg.name];
   if (!observed || observed.error) return '⚠️ npm 结果未确认';
   if (!observed.exists) return '❌ 目标版本不存在（失败或未执行）';
@@ -276,6 +277,7 @@ export function renderSummary({
   ];
   if (!dryRun) checks.push(['push', 'Git 提交及标签推送'], ['verify', 'npm / Git 结果核验']);
   const failures = Object.entries(steps).filter(([, step]) => step.outcome === 'failure');
+  const cancellations = Object.entries(steps).filter(([, step]) => step.outcome === 'cancelled');
   let registryError;
   if (report) {
     try {
@@ -301,7 +303,7 @@ export function renderSummary({
   const lines = [
     `# ${title}`,
     '',
-    `**${success ? '✅ 已完成' : failures.length || registryError ? '❌ 存在失败' : '⏹ 未完成'}**`,
+    `**${cancellations.length ? '⏹ 已取消' : success ? '✅ 已完成' : failures.length || registryError ? '❌ 存在失败' : '⏹ 未完成'}**`,
     '',
     `- 源码：${report ? (baseUrl ? `[${report.sourceSha.slice(0, 8)}](${baseUrl}/commit/${report.sourceSha})` : report.sourceSha.slice(0, 8)) : '版本计划尚未生成'}`,
     `- 渠道：\`${escape(channel)}\` · 计划升级 **${changed.length}** 个包 · 保持不变 **${packages.length - changed.length}** 个包`,
@@ -314,6 +316,11 @@ export function renderSummary({
   if (failures.length)
     lines.push(
       `失败步骤：${failures.map(([id]) => escape(id)).join('、')}。后续步骤可能未执行。`,
+      '',
+    );
+  if (cancellations.length)
+    lines.push(
+      `取消步骤：${cancellations.map(([id]) => escape(id)).join('、')}。${dryRun ? '' : '取消不会撤回已上传的 npm 版本；请结合逐包核验结果和恢复附件处理。'}`,
       '',
     );
   const fallbackPackages = packages.filter((pkg) => !pkg.baseline);
@@ -470,6 +477,9 @@ export function renderSummary({
     '## 报告附件',
     '',
     '下载本次运行的 `release-report` artifact，包含完整 Markdown、版本计划 JSON、逐包测试结果和各阶段日志。',
+    !dryRun
+      ? '真实发布开始后会在网络核验前保存 recovery 快照，包含 Git bundle、工作区差异和版本文件；失败或取消时另存 release-recovery 附件。'
+      : '',
     '',
     '详细打包文件清单见 `release.log`。预演计划仅对应上方源码提交；真实发布将重新计算。',
     '',
@@ -477,11 +487,42 @@ export function renderSummary({
   return lines.filter((line) => line !== undefined).join('\n');
 }
 
+function recovery(dir) {
+  const report = readJson(path.join(dir, 'plan.json'));
+  if (!report || report.dryRun) return;
+  const destination = path.join(dir, 'recovery');
+  mkdirSync(destination, { recursive: true });
+  // Cancellation can interrupt versioning before its commit or tags exist.
+  writeJson(path.join(destination, 'state.json'), {
+    sourceSha: report.sourceSha,
+    head: git('rev-parse', 'HEAD'),
+    status: git('status', '--porcelain'),
+  });
+  writeFileSync(
+    path.join(destination, 'worktree.patch'),
+    execFileSync('git', ['diff', '--binary', 'HEAD']),
+  );
+  const files = [
+    'package.json',
+    'pnpm-lock.yaml',
+    ...report.packages.flatMap((pkg) => [`${pkg.root}/package.json`, `${pkg.root}/CHANGELOG.md`]),
+  ];
+  for (const file of files) {
+    if (!existsSync(file)) continue;
+    const target = path.join(destination, 'files', file);
+    mkdirSync(path.dirname(target), { recursive: true });
+    copyFileSync(file, target);
+  }
+  copyFileSync(path.join(dir, 'plan.json'), path.join(destination, 'plan.json'));
+  git('bundle', 'create', path.resolve(destination, 'release.bundle'), '--all');
+}
+
 async function verify(dir) {
   const report = readJson(path.join(dir, 'plan.json'));
   if (!report || report.dryRun) return;
   const changed = report.packages.filter((pkg) => pkg.newVersion);
   const actual = { registry: await mapRegistry(changed, report.channel), git: {} };
+  writeJson(path.join(dir, 'actual.json'), actual);
   try {
     actual.git.commit = git('rev-parse', 'HEAD');
     const refs = git(
@@ -573,6 +614,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   if (command === 'plan') await plan(dir);
   else if (command === 'run') await run(dir, ...args.slice(0, 2), args.slice(2));
   else if (command === 'verify') await verify(dir);
+  else if (command === 'recovery') recovery(dir);
   else if (command === 'summary') summary(dir);
   else throw new Error(`Unknown command: ${command}`);
 }
