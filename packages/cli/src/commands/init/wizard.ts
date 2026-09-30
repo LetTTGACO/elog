@@ -126,7 +126,10 @@ export async function runPluginSelectionWizard(
       type: targetSelection === 'single' ? 'select' : 'checkbox',
       name: 'to',
       message: '你要发布到哪里？',
+      default: targetSelection === 'multiple' ? ['local'] : undefined,
       choices: getPluginsByKind(registry, 'to').map(buildPluginChoice),
+      validate: (answer: string | string[]) =>
+        toSelectedTypes(answer).length > 0 || '请至少选择一个发布平台',
     },
   ])) as { to: string | string[] | undefined };
   const toEntries = toSelectedTypes(toAnswer.to).flatMap((type) => {

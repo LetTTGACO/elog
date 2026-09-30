@@ -23,6 +23,31 @@ export interface WriteGeneratedFilesOptions extends PlanGeneratedFileWritesOptio
   overwriteExisting: (filename: string) => boolean | Promise<boolean>;
 }
 
+/** 在交互和安装前检查写入位置，避免安装完成后才发现路径不可用。 */
+export function validateConfigPath(cwd: string, configName: string): string {
+  try {
+    if (!configName.trim()) {
+      throw new Error('配置文件名不能为空。');
+    }
+    const targetPath = path.join(cwd, configName);
+    const parentPath = path.dirname(targetPath);
+    if (!fs.statSync(parentPath).isDirectory()) {
+      throw new Error(`配置文件的父路径不是目录：${parentPath}`);
+    }
+    fs.accessSync(parentPath, fs.constants.W_OK);
+    if (fs.existsSync(targetPath)) {
+      if (!fs.statSync(targetPath).isFile()) {
+        throw new Error(`配置路径不是文件：${targetPath}`);
+      }
+      fs.accessSync(targetPath, fs.constants.W_OK);
+    }
+    return targetPath;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new InitCommandError('CONFIG_PATH_INVALID', `配置路径不可用：${configName}。${message}`);
+  }
+}
+
 /** 配置文件备份名保留原扩展名，便于编辑器继续识别 TypeScript 配置。 */
 function backupName(filename: string, timestamp: string, configName: string): string {
   if (filename === configName && configName.endsWith('.ts')) {

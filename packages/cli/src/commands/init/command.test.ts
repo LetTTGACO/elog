@@ -1,4 +1,8 @@
-import { describe, expect, it, vi } from 'vitest';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import packageJson from '../../../package.json' with { type: 'json' };
 import { createInitDryRunOutput, runInitCommand, selectedPackages } from './command';
 import type { RunInitCommandOptions } from './command';
 import type { GeneratedInitFiles, PluginRegistry, PluginSelection } from './types';
@@ -85,8 +89,16 @@ describe('selectedPackages', () => {
 });
 
 describe('runInitCommand', () => {
+  let cwd: string;
+  beforeEach(() => {
+    cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'elog-init-command-'));
+  });
+  afterEach(() => fs.rmSync(cwd, { recursive: true, force: true }));
+
   const baseOptions: Omit<RunInitCommandOptions, 'dryRun'> = {
-    cwd: '/tmp/test-project',
+    get cwd() {
+      return cwd;
+    },
     configName: 'elog.config.ts',
     loadRegistry: () => sampleRegistry,
     runWizard: async () => sampleSelection,
@@ -178,8 +190,9 @@ describe('runInitCommand', () => {
 
     expect(installPackages).toHaveBeenCalledWith(
       expect.objectContaining({
-        cwd: '/tmp/test-project',
+        cwd,
         packages: [
+          `@elog/cli@${packageJson.version}`,
           '@elog/plugin-from-notion',
           '@elog/plugin-transform-image-local',
           '@elog/plugin-to-local',
@@ -204,21 +217,94 @@ describe('runInitCommand', () => {
     );
   });
 
-  it('without dryRun: uses injected overwriteExisting when provided', async () => {
-    const overwriteExisting = vi.fn(async () => true);
-    const writeGeneratedFiles = vi.fn(async () => []);
+  it('declines overwrite before running the wizard or installing packages', async () => {
+    fs.writeFileSync(path.join(cwd, 'elog.config.ts'), 'old config');
+    const runWizard = vi.fn(async () => sampleSelection);
+    const installPackages = vi.fn();
+    await expect(
+      runInitCommand({
+        ...baseOptions,
+        dryRun: false,
+        runWizard,
+        installPackages,
+        writeGeneratedFiles: undefined,
+        overwriteExisting: async () => false,
+      }),
+    ).rejects.toMatchObject({ code: 'CONFIG_EXISTS_ABORTED' });
+    expect(runWizard).not.toHaveBeenCalled();
+    expect(installPackages).not.toHaveBeenCalled();
+    expect(fs.readdirSync(cwd)).toEqual(['elog.config.ts']);
+    expect(fs.readFileSync(path.join(cwd, 'elog.config.ts'), 'utf8')).toBe('old config');
+  });
 
+  it.each(['missing/elog.config.ts', '', '   ', 'directory'])(
+    'rejects invalid config path %j before the wizard or installation',
+    async (configName) => {
+      fs.mkdirSync(path.join(cwd, 'directory'));
+      const runWizard = vi.fn(async () => sampleSelection);
+      const installPackages = vi.fn();
+      await expect(
+        runInitCommand({
+          ...baseOptions,
+          configName,
+          dryRun: false,
+          runWizard,
+          installPackages,
+          overwriteExisting: async () => true,
+          writeGeneratedFiles: undefined,
+        }),
+      ).rejects.toMatchObject({ code: 'CONFIG_PATH_INVALID' });
+      expect(runWizard).not.toHaveBeenCalled();
+      expect(installPackages).not.toHaveBeenCalled();
+    },
+  );
+
+  it('confirms once before installation and backs up the existing config when writing', async () => {
+    fs.writeFileSync(path.join(cwd, 'elog.config.ts'), 'old config');
+    const events: string[] = [];
+    const overwriteExisting = vi.fn(async () => {
+      events.push('confirm');
+      return true;
+    });
     await runInitCommand({
       ...baseOptions,
       dryRun: false,
+      writeGeneratedFiles: undefined,
       overwriteExisting,
-      writeGeneratedFiles,
+      installPackages: () => {
+        events.push('install');
+        return { command: 'pnpm', args: [], display: '' };
+      },
     });
-
-    expect(writeGeneratedFiles).toHaveBeenCalledWith(
-      expect.objectContaining({
-        overwriteExisting,
-      }),
-    );
+    expect(events).toEqual(['confirm', 'install']);
+    expect(overwriteExisting).toHaveBeenCalledTimes(1);
+    const backup = fs.readdirSync(cwd).find((name) => name.includes('.backup.'))!;
+    expect(fs.readFileSync(path.join(cwd, backup), 'utf8')).toBe('old config');
+    expect(fs.readFileSync(path.join(cwd, 'elog.config.ts'), 'utf8')).toContain("from '@elog/cli'");
   });
+
+  it('includes the current CLI in dry-run installation without confirming overwrite', async () => {
+    fs.writeFileSync(path.join(cwd, 'elog.config.ts'), 'old config');
+    const overwriteExisting = vi.fn();
+    const log = vi.fn();
+    await runInitCommand({ ...baseOptions, dryRun: true, overwriteExisting, log });
+    expect(log.mock.calls[0]?.[0]).toContain(`pnpm add @elog/cli@${packageJson.version}`);
+    expect(overwriteExisting).not.toHaveBeenCalled();
+    expect(fs.readdirSync(cwd)).toEqual(['elog.config.ts']);
+  });
+
+  it.each(['dependencies', 'devDependencies'])(
+    'preserves an existing CLI version in %s',
+    async (field) => {
+      fs.writeFileSync(
+        path.join(cwd, 'package.json'),
+        JSON.stringify({ [field]: { '@elog/cli': '^1.0.0-beta.1' } }),
+      );
+      const installPackages = vi.fn();
+      await runInitCommand({ ...baseOptions, dryRun: false, installPackages });
+      expect(installPackages.mock.calls[0]?.[0].packages).toEqual(
+        selectedPackages(sampleSelection),
+      );
+    },
+  );
 });

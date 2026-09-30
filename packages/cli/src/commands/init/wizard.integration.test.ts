@@ -31,16 +31,42 @@ const registry: PluginRegistry = {
 afterEach(() => vi.restoreAllMocks());
 
 describe('wizard prompt compatibility', () => {
+  it('rejects an empty target selection at the target prompt before continuing', async () => {
+    const prompt = inquirer.createPromptModule();
+    let targetAccepted = false;
+    prompt.registerPrompt('select', async () => 'test');
+    prompt.registerPrompt('checkbox', async (question) => {
+      if (question.message === '你要发布到哪里？') {
+        const validate = question.validate as (answer: string[]) => boolean | string;
+        expect(validate).toBeTypeOf('function');
+        expect(validate([])).toBe('请至少选择一个发布平台');
+        expect(validate(['local'])).toBe(true);
+        targetAccepted = true;
+        return ['local'];
+      }
+      expect(targetAccepted).toBe(true);
+      return [];
+    });
+    vi.spyOn(inquirer, 'prompt').mockImplementation(prompt);
+
+    const selection = await runInitWizard(registry);
+    expect(selection.to.map((entry) => entry.type)).toEqual(['local']);
+    expect(selection.transforms).toEqual([]);
+  });
+
   it.each(['init', 'export'] as const)(
-    'runs %s with registered inquirer prompt types',
+    'runs %s with default selections and registered inquirer prompt types',
     async (command) => {
       const prompt = inquirer.createPromptModule();
       // 保留真实问题解析与类型校验，只替换终端交互，防止 mock 掩盖不支持的类型。
       for (const type of Object.keys(prompt.prompts)) {
         prompt.registerPrompt(type, async (question) => {
-          const choices = question.choices as Array<{ value: string }> | undefined;
+          const choices = question.choices as
+            Array<{ value: string; checked?: boolean }> | undefined;
           const value = choices?.[0]?.value;
-          return type === 'checkbox' ? (value ? [value] : []) : value;
+          return type === 'checkbox'
+            ? (choices?.filter((choice) => choice.checked).map((choice) => choice.value) ?? [])
+            : value;
         });
       }
       vi.spyOn(inquirer, 'prompt').mockImplementation(prompt);

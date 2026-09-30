@@ -1,10 +1,13 @@
 import inquirer from 'inquirer';
+import fs from 'fs';
+import path from 'path';
+import packageJson from '../../../package.json' with { type: 'json' };
 import out from '../../logging/logger';
 import { detectPackageManager, buildInstallCommand, installPackages } from './package-manager';
 import type { InstallPackagesOptions } from './package-manager';
 import { getPluginsByKind, InitCommandError, loadBuiltInPluginRegistry } from './registry';
 import { generateInitFiles } from './generator';
-import { createTimestamp, writeGeneratedFiles } from './file-writer';
+import { createTimestamp, validateConfigPath, writeGeneratedFiles } from './file-writer';
 import type { GeneratedFileWrite, WriteGeneratedFilesOptions } from './file-writer';
 import { runPluginSelectionWizard } from './wizard';
 import type { GeneratedInitFiles, PluginRegistry, PluginSelection } from './types';
@@ -26,6 +29,15 @@ export interface RunInitCommandOptions {
 export function selectedPackages(selection: PluginSelection): string[] {
   const allPlugins = [selection.from, ...selection.transforms, ...selection.to];
   return [...new Set(allPlugins.map((plugin) => plugin.packageName))];
+}
+
+function hasCliDependency(cwd: string): boolean {
+  const manifestPath = path.join(cwd, 'package.json');
+  if (!fs.existsSync(manifestPath)) {
+    return false;
+  }
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  return Boolean(manifest.dependencies?.['@elog/cli'] || manifest.devDependencies?.['@elog/cli']);
 }
 
 /** dry-run 输出保持可读文本，方便用户预览安装命令和配置内容。 */
@@ -67,6 +79,38 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
   const doWrite = options.writeGeneratedFiles ?? writeGeneratedFiles;
   const log = options.log ?? ((message: string) => out.info('初始化', message));
 
+  let overwriteConfirmed = false;
+  const confirmOverwrite = async (filename: string): Promise<boolean> => {
+    if (overwriteConfirmed) {
+      return true;
+    }
+    if (options.overwriteExisting) {
+      overwriteConfirmed = await options.overwriteExisting(filename);
+    } else {
+      const answer = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'overwrite',
+          message: `检测到已有 ${filename}，是否覆写？旧文件会自动备份`,
+          default: true,
+        },
+      ]);
+      overwriteConfirmed = answer.overwrite;
+    }
+    return overwriteConfirmed;
+  };
+
+  if (!options.dryRun) {
+    const targetPath = validateConfigPath(options.cwd, options.configName);
+    if (fs.existsSync(targetPath) && !(await confirmOverwrite(options.configName))) {
+      throw new InitCommandError(
+        'CONFIG_EXISTS_ABORTED',
+        `User declined to overwrite ${options.configName}.`,
+      );
+    }
+  }
+
+  const needsCli = !hasCliDependency(options.cwd);
   const registry = loadRegistry();
   // dry-run 且未注入 wizard 时走默认选择，避免非交互环境被 prompt 阻塞。
   const selection =
@@ -75,6 +119,10 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
       : await runWizard(registry);
   const files = generateInitFiles(selection);
   const packages = selectedPackages(selection);
+  if (needsCli) {
+    // 使用运行中的版本，避免 beta 初始化时被 npm 的默认 tag 切换到其他版本。
+    packages.unshift(`@elog/cli@${packageJson.version}`);
+  }
   const packageManager = detectPackageManager(options.cwd);
   const installCommand = buildInstallCommand(packageManager, packages);
 
@@ -91,25 +139,12 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
 
   doInstall({ cwd: options.cwd, packageManager, packages });
 
-  // 默认覆写前确认并备份，降低 init 对已有项目配置的破坏性。
-  const defaultConfirmOverwrite = async (filename: string): Promise<boolean> => {
-    const answer = (await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'overwrite',
-        message: `检测到已有 ${filename}，是否覆写？旧文件会自动备份`,
-        default: true,
-      },
-    ])) as { overwrite: boolean };
-    return answer.overwrite;
-  };
-
   await doWrite({
     cwd: options.cwd,
     configName: options.configName,
     files,
     timestamp: createTimestamp(),
-    overwriteExisting: options.overwriteExisting ?? defaultConfirmOverwrite,
+    overwriteExisting: confirmOverwrite,
   });
 
   log(
