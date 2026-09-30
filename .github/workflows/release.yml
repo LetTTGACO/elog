@@ -177,7 +177,7 @@ jobs:
       - name: Upload failed release history
         if: ${{ always() && !inputs.dry_run && steps.recovery.outcome == 'success' && (failure() || cancelled()) }}
         timeout-minutes: 1
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release-recovery-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ env.RELEASE_REPORT_DIR }}/recovery/
@@ -192,7 +192,7 @@ jobs:
 
       - name: Upload release report
         if: ${{ always() && steps.checkout.outcome == 'success' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release-report
           path: ${{ runner.temp }}/release-report/
