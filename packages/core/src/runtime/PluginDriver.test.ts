@@ -63,6 +63,54 @@ describe('PluginDriver', () => {
     expect(transformed[0].body).toBe('A-first-second');
   });
 
+  it('allows transforms to reorder documents while preserving identity', async () => {
+    const downloaded = await from.download(ctx);
+    const docs = [downloaded.docDetailList[0], { ...downloaded.docDetailList[0], id: 'b' }];
+    const driver = new PluginDriver(
+      {
+        from,
+        transforms: [
+          {
+            name: 'transform:reorder',
+            kind: 'transform',
+            async transform(input) {
+              return input.reverse();
+            },
+          },
+        ],
+        to: [],
+      },
+      ctx,
+    );
+    expect((await driver.runTransformPipeline(docs)).map((doc) => doc.id)).toEqual(['b', 'a']);
+  });
+
+  it('rejects duplicate IDs even when the transform preserves count', async () => {
+    const downloaded = await from.download(ctx);
+    const docs = [downloaded.docDetailList[0], { ...downloaded.docDetailList[0], id: 'b' }];
+    const driver = new PluginDriver(
+      {
+        from,
+        transforms: [
+          {
+            name: 'transform:duplicate',
+            kind: 'transform',
+            async transform(input) {
+              input[1].id = input[0].id;
+              return input;
+            },
+          },
+        ],
+        to: [],
+      },
+      ctx,
+    );
+    await expect(driver.runTransformPipeline(docs)).rejects.toMatchObject({
+      pluginName: 'transform:duplicate',
+      hookName: 'transform',
+    });
+  });
+
   it('wraps plugin hook failures', async () => {
     const bad: TransformPlugin = {
       name: 'transform:bad',
@@ -156,7 +204,7 @@ describe('PluginDriver', () => {
     expect(calls).toEqual(['first:start', 'second', 'first:end']);
   });
 
-  it('passes shallow-copied docs to each deploy plugin', async () => {
+  it('passes independent docs to each deploy plugin', async () => {
     const docs = [
       {
         id: 'a',

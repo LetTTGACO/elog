@@ -88,6 +88,7 @@ export interface FromPlugin extends BasePlugin {
 
 export interface TransformPlugin extends BasePlugin {
   kind: 'transform';
+  /** 可修改内容、属性和顺序，但必须保持文档 ID 集合、数量及 ID 唯一性。 */
   transform(docs: DocDetail[], ctx: PluginContext): Promise<DocDetail[]>;
 }
 

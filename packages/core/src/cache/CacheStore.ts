@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { createRequire } from 'module';
 import {
   DocSyncStatus,
   type DocDetail,
@@ -9,8 +8,6 @@ import {
 } from '@elog/plugin-sdk';
 import type { CacheConfig } from '../runtime/types';
 import out from '../logging/logger';
-
-const require = createRequire(import.meta.url);
 
 /** 负责单个工作流的缓存读写，运行时只通过这里理解缓存文件结构。 */
 export class CacheStore {
@@ -31,7 +28,7 @@ export class CacheStore {
 
     try {
       const cachePath = path.resolve(process.cwd(), this.config.filePath);
-      const cacheJson = require(cachePath);
+      const cacheJson = JSON.parse(fs.readFileSync(cachePath, 'utf8'));
       return cacheJson.cachedDocList ?? [];
     } catch (error: any) {
       out.debug('缓存不存在', `未获取到缓存: ${error.message}`);

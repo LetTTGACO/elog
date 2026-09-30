@@ -44,7 +44,19 @@ export class PluginDriver {
 
     for (const plugin of this.transforms) {
       try {
+        // 在调用前保存 ID，避免插件原地修改后丢失身份校验依据。
+        const inputIds = new Set(output.map((doc) => doc.id));
+        const inputCount = output.length;
         output = await plugin.transform(output, this.ctx);
+        const outputIds = new Set(output.map((doc) => doc.id));
+        if (
+          inputIds.size !== inputCount ||
+          output.length !== inputCount ||
+          outputIds.size !== inputCount ||
+          [...outputIds].some((id) => !inputIds.has(id))
+        ) {
+          throw new Error('Transform must preserve document IDs and count, with unique IDs');
+        }
       } catch (error) {
         throw new ElogPluginError(plugin.name, 'transform', error);
       }
@@ -68,10 +80,10 @@ export class PluginDriver {
     }
   }
 
-  /** 给每个部署插件提供浅拷贝文档，降低多目标部署时互相污染的风险。 */
+  /** 给每个部署插件提供独立文档，避免嵌套属性修改污染其他目标和缓存。 */
   private async runDeployHook(plugin: ToPlugin, docDetailList: DocDetail[]) {
     try {
-      const docsForDeploy = docDetailList.map((doc) => ({ ...doc }));
+      const docsForDeploy = structuredClone(docDetailList);
       await plugin.deploy(docsForDeploy, this.ctx);
     } catch (error) {
       throw new ElogPluginError(plugin.name, 'deploy', error);

@@ -104,6 +104,111 @@ describe('Graph', () => {
     expect(cache.sortedDocList).toEqual([{ id: 'a', updateTime: 1 }]);
   });
 
+  it.each(['serial', 'parallel'] as const)(
+    'isolates nested deploy mutations from other targets and cache (%s)',
+    async (deployStrategy) => {
+      tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'elog-graph-'));
+      const doc = {
+        ...makeDoc('a'),
+        properties: { title: 'a', urlname: 'a', tags: ['original'] },
+        docStructure: [{ id: 'parent', title: 'Original' }],
+        extra: { nested: ['original'] },
+      };
+      const workflow = makeWorkflow({
+        deployStrategy,
+        from: {
+          name: 'from:mock',
+          kind: 'from',
+          async download() {
+            return {
+              docDetailList: [doc],
+              sortedDocList: [{ id: 'a', updateTime: 1 }],
+              docStatusMap: { a: { _updateIndex: -1, _status: DocSyncStatus.NEW } },
+            };
+          },
+        },
+        to: [
+          {
+            name: 'to:mutate',
+            kind: 'to',
+            deploy(docs) {
+              Reflect.deleteProperty(docs[0].properties, 'urlname');
+              docs[0].properties.tags.push('changed');
+              docs[0].docStructure![0].title = 'Changed';
+              docs[0].extra.nested.push('changed');
+            },
+          },
+          {
+            name: 'to:observe',
+            kind: 'to',
+            deploy(docs) {
+              expect(docs[0]).toEqual(doc);
+              expect(docs[0].properties.tags).toEqual(['original']);
+              expect(docs[0].docStructure![0].title).toBe('Original');
+              expect(docs[0].extra.nested).toEqual(['original']);
+              expect(docs[0].properties.urlname).toBe('a');
+            },
+          },
+        ],
+      });
+
+      expect((await new Graph(workflow).sync()).status).toBe('success');
+      const cache = JSON.parse(fs.readFileSync(workflow.cache.filePath, 'utf8'));
+      expect(cache.cachedDocList[0].properties).toEqual({
+        title: 'a',
+        urlname: 'a',
+        tags: ['original'],
+      });
+      expect(cache.cachedDocList[0].docStructure).toEqual([{ id: 'parent', title: 'Original' }]);
+      expect(cache.cachedDocList[0].extra).toEqual({ nested: ['original'] });
+    },
+  );
+
+  it.each(['add', 'remove', 'rename', 'duplicate'])(
+    'rejects transform identity changes before deploy or cache write (%s)',
+    async (change) => {
+      tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'elog-graph-'));
+      let deployed = false;
+      const workflow = makeWorkflow({
+        transforms: [
+          {
+            name: 'transform:identity',
+            kind: 'transform',
+            async transform(docs) {
+              if (change === 'add') docs.push(makeDoc('b'));
+              if (change === 'remove') docs.pop();
+              if (change === 'rename') docs[0].id = 'renamed';
+              if (change === 'duplicate') docs.push(docs[0]);
+              return docs;
+            },
+          },
+        ],
+        to: [
+          {
+            name: 'to:mock',
+            kind: 'to',
+            deploy() {
+              deployed = true;
+            },
+          },
+        ],
+      });
+      fs.writeFileSync(workflow.cache.filePath, JSON.stringify({ cachedDocList: [] }));
+      const originalCache = fs.readFileSync(workflow.cache.filePath, 'utf8');
+
+      expect(await new Graph(workflow).sync()).toMatchObject({
+        status: 'failed',
+        error: {
+          pluginName: 'transform:identity',
+          hookName: 'transform',
+          cause: { message: 'Transform must preserve document IDs and count, with unique IDs' },
+        },
+      });
+      expect(deployed).toBe(false);
+      expect(fs.readFileSync(workflow.cache.filePath, 'utf8')).toBe(originalCache);
+    },
+  );
+
   it('returns success result without writing cache when cache writes are disabled', async () => {
     tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'elog-graph-'));
     const workflow = makeWorkflow({
