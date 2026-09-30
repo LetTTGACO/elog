@@ -40,7 +40,6 @@ jobs:
       NX_DAEMON: 'false'
       NX_SKIP_NX_CACHE: 'true'
       HUSKY: '0'
-      RELEASE_REPORT_DIR: ${{ runner.temp }}/release-report
       RELEASE_CHANNEL: ${{ inputs.channel }}
       RELEASE_DRY_RUN: ${{ inputs.dry_run }}
       RELEASE_VERSION: ${{ inputs.version }}
@@ -55,6 +54,9 @@ jobs:
             echo '::error::Run this workflow on the v1 branch of LetTTGACO/elog.'
             exit 1
           fi
+
+      - name: Set report directory
+        run: echo "RELEASE_REPORT_DIR=$RUNNER_TEMP/release-report" >> "$GITHUB_ENV"
 
       - uses: actions/checkout@v6
         id: checkout
