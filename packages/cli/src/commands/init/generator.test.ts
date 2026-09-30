@@ -87,7 +87,7 @@ describe('generateInitFiles', () => {
     const files = generateInitFiles(selection);
 
     expect(files).toEqual({
-      configText: `import { defineConfig } from '@elog/core';
+      configText: `import { defineConfig } from '@elog/cli';
 import fromYuque from '@elog/plugin-from-yuque-pwd';
 import imageLocal from '@elog/plugin-transform-image-local';
 import toLocal from '@elog/plugin-to-local';

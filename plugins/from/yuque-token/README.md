@@ -23,7 +23,7 @@ pnpm add @elog/plugin-from-yuque-token
 ## 基本配置
 
 ```ts
-import { defineConfig } from '@elog/core';
+import { defineConfig } from '@elog/cli';
 import fromYuque from '@elog/plugin-from-yuque-token';
 import toLocal from '@elog/plugin-to-local';
 

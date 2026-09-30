@@ -19,7 +19,7 @@ pnpm add @elog/plugin-from-feishu-space
 ## 基本配置
 
 ```ts
-import { defineConfig } from '@elog/core';
+import { defineConfig } from '@elog/cli';
 import fromFeishuSpace from '@elog/plugin-from-feishu-space';
 import imageLocal from '@elog/plugin-transform-image-local';
 import toLocal from '@elog/plugin-to-local';

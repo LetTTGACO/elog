@@ -7,7 +7,7 @@ import { runSyncCommand } from './commands/sync';
 
 function linkFixtureDependency(
   fixtureDir: string,
-  packageName: '@elog/core' | '@elog/plugin-sdk',
+  packageName: '@elog/cli' | '@elog/plugin-sdk',
   packageDir: string,
 ): string {
   const scopeDir = path.join(fixtureDir, 'node_modules', '@elog');
@@ -64,7 +64,7 @@ describe('fixture sync smoke', () => {
 
     try {
       dependencyLinks.push(
-        linkFixtureDependency(fixtureDir, '@elog/core', path.join(repoRoot, 'packages/core')),
+        linkFixtureDependency(fixtureDir, '@elog/cli', path.join(repoRoot, 'packages/cli')),
         linkFixtureDependency(
           fixtureDir,
           '@elog/plugin-sdk',

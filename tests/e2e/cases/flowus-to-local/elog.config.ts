@@ -1,4 +1,4 @@
-import { defineConfig } from '@elog/core';
+import { defineConfig } from '@elog/cli';
 import type { TransformPlugin } from '@elog/plugin-sdk';
 import fromFlowUs from '@elog/plugin-from-flowus';
 import imageLocal from '@elog/plugin-transform-image-local';

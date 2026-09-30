@@ -3,8 +3,8 @@
 Elog 1.0 的配置与工作流运行时。它负责加载和校验配置、依次执行插件生命周期、协调缓存，
 并向调用方返回结构化的工作流结果。
 
-通常应通过 `@elog/cli` 使用 Core；需要把 Elog 嵌入 Node.js 程序时，也可以直接调用这里的
-公开 API。
+CLI 用户通过 `@elog/cli` 安装 Core，并从 CLI 导入 `defineConfig`。需要把 Elog 嵌入
+Node.js 程序时，可以直接安装 Core 并调用下面的公开 API。
 
 > Elog 1.0 目前处于 Beta 阶段，公开 API 仍可能在正式版前调整。
 

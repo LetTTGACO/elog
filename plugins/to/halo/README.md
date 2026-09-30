@@ -20,7 +20,7 @@ Halo 目标要求文档正文是 HTML。来源插件输出 Markdown 时，必须
 ## 基本配置
 
 ```ts
-import { defineConfig } from '@elog/core';
+import { defineConfig } from '@elog/cli';
 import fromNotion from '@elog/plugin-from-notion';
 import imageR2 from '@elog/plugin-transform-image-r2';
 import markdownToHtml from '@elog/plugin-transform-markdown-to-html';

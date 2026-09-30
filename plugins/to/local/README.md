@@ -12,7 +12,7 @@ pnpm add @elog/plugin-to-local
 ## 基本配置
 
 ```ts
-import { defineConfig } from '@elog/core';
+import { defineConfig } from '@elog/cli';
 import fromNotion from '@elog/plugin-from-notion';
 import toLocal from '@elog/plugin-to-local';
 

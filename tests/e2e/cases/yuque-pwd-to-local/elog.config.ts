@@ -1,4 +1,4 @@
-import { defineConfig } from '@elog/core';
+import { defineConfig } from '@elog/cli';
 import type { TransformPlugin } from '@elog/plugin-sdk';
 import fromYuque from '@elog/plugin-from-yuque-pwd';
 import imageB2 from '@elog/plugin-transform-image-b2';

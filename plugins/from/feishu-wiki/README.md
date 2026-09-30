@@ -22,7 +22,7 @@ pnpm add @elog/plugin-from-feishu-wiki
 ## 基本配置
 
 ```ts
-import { defineConfig } from '@elog/core';
+import { defineConfig } from '@elog/cli';
 import fromFeishuWiki from '@elog/plugin-from-feishu-wiki';
 import imageLocal from '@elog/plugin-transform-image-local';
 import toLocal from '@elog/plugin-to-local';

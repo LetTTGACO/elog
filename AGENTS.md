@@ -107,8 +107,9 @@ Cache behavior:
 - Release package names use `@elog/plugin-*`.
 - Plugin packages import contracts and author helpers from `@elog/plugin-sdk`
   and declare it as a normal dependency using `"workspace:^"`.
-- User configs import `defineConfig` from `@elog/core`. Core depends on Plugin SDK;
-  CLI depends on Core and owns command-line behavior.
+- User configs import `defineConfig` from `@elog/cli`. CLI re-exports config authoring
+  APIs from Core and owns command-line behavior. Core depends on Plugin SDK and is
+  installed through CLI's normal dependency; programmatic consumers can use Core directly.
 - Prefer existing context helpers (`ElogFromContext`, `ElogImageContext`,
   `ElogBaseContext`) over duplicating orchestration logic.
 - Keep source plugins responsible for `DocDetail[]`, transform plugins

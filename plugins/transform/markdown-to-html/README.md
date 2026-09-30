@@ -14,7 +14,7 @@ pnpm add @elog/plugin-transform-markdown-to-html
 将插件放入工作流的 `plugins` 数组。转换插件会按照声明顺序依次执行：
 
 ```ts
-import { defineConfig } from '@elog/core';
+import { defineConfig } from '@elog/cli';
 import fromNotion from '@elog/plugin-from-notion';
 import markdownToHtml from '@elog/plugin-transform-markdown-to-html';
 import toLocal from '@elog/plugin-to-local';

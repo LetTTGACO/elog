@@ -11,7 +11,8 @@ const commandCase: CommandCase = {
     expectExitCode(result, 0);
     expectOutputContains(result, 'Install command:');
     expectOutputContains(result, 'elog.config.ts:');
-    expectOutputContains(result, "import { defineConfig } from '@elog/core';");
+    expectOutputContains(result, "import { defineConfig } from '@elog/cli';");
+    expect(result.combinedOutput).not.toContain('@elog/core');
     expectOutputContains(result, 'from:');
     expectOutputContains(result, 'to:');
     expect(result.combinedOutput).not.toContain('.env:');

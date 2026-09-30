@@ -1,4 +1,4 @@
-import { defineConfig } from '@elog/core';
+import { defineConfig, type ElogConfig } from '@elog/cli';
 import { fromFixture, toFixture, transformFixture } from './plugins';
 
 export default defineConfig({
@@ -7,4 +7,4 @@ export default defineConfig({
   from: fromFixture,
   plugins: [transformFixture],
   to: toFixture,
-});
+} satisfies ElogConfig);

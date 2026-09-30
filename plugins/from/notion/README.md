@@ -25,7 +25,7 @@ data source。
 下面的工作流从 Notion 下载文档，并通过 `@elog/plugin-to-local` 写入本地 `docs` 目录：
 
 ```ts
-import { defineConfig } from '@elog/core';
+import { defineConfig } from '@elog/cli';
 import fromNotion from '@elog/plugin-from-notion';
 import toLocal from '@elog/plugin-to-local';
 

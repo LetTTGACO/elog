@@ -18,7 +18,7 @@ pnpm add @elog/plugin-from-yuque-pwd
 `repo` 是 `example-book`。
 
 ```ts
-import { defineConfig } from '@elog/core';
+import { defineConfig } from '@elog/cli';
 import fromYuque from '@elog/plugin-from-yuque-pwd';
 import toLocal from '@elog/plugin-to-local';
 

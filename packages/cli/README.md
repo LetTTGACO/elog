@@ -11,7 +11,8 @@ Elog 1.0 的命令行工具。它负责初始化配置、执行一次性导出�
 pnpm add -D @elog/cli
 ```
 
-安装后通过项目内的 `elog` 命令运行：
+安装 CLI 时会自动安装其依赖的 Core。配置中的 `defineConfig` 和 `ElogConfig` 均从
+`@elog/cli` 导入。安装后通过项目内的 `elog` 命令运行：
 
 ```bash
 pnpm exec elog --help
@@ -25,7 +26,7 @@ pnpm exec elog --help
 pnpm exec elog init
 ```
 
-向导会选择来源、转换和部署插件，使用当前项目的包管理器安装 `@elog/core` 与所选插件，并
+向导会选择来源、转换和部署插件，使用当前项目的包管理器安装所选插件，并
 生成 `elog.config.ts`。如果配置文件已经存在，CLI 会在确认后先创建带时间戳的备份。
 
 完成配置后运行同步：
@@ -77,7 +78,7 @@ pnpm exec elog sync [--config <file>] [--env <file>] [--debug]
 ## 最小配置
 
 ```ts
-import { defineConfig } from '@elog/core';
+import { defineConfig } from '@elog/cli';
 import fromNotion from '@elog/plugin-from-notion';
 import toLocal from '@elog/plugin-to-local';
 
