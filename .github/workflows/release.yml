@@ -40,8 +40,13 @@ jobs:
       NX_DAEMON: 'false'
       NX_SKIP_NX_CACHE: 'true'
       HUSKY: '0'
+      RELEASE_REPORT_DIR: ${{ runner.temp }}/release-report
+      RELEASE_CHANNEL: ${{ inputs.channel }}
+      RELEASE_DRY_RUN: ${{ inputs.dry_run }}
+      RELEASE_VERSION: ${{ inputs.version }}
     steps:
       - name: Check release branch
+        id: branch
         env:
           RELEASE_REF: ${{ github.ref }}
           RELEASE_REPOSITORY: ${{ github.repository }}
@@ -52,30 +57,44 @@ jobs:
           fi
 
       - uses: actions/checkout@v6
+        id: checkout
         with:
           fetch-depth: 0
           ref: ${{ github.sha }}
 
       - uses: actions/setup-node@v6
+        id: node
         with:
           node-version: '24'
           package-manager-cache: false
 
       - uses: pnpm/action-setup@v6
+        id: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        id: install
+        run: node .github/scripts/release-report.mjs run install pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm build
+        id: build
+        run: node .github/scripts/release-report.mjs run build pnpm build
 
       - name: Typecheck
-        run: pnpm typecheck
+        id: typecheck
+        run: node .github/scripts/release-report.mjs run typecheck pnpm typecheck
+
+      - name: Test release report
+        id: report_test
+        run: node .github/scripts/release-report.mjs run report_test node --test .github/scripts/release-report.test.mjs
 
       - name: Test
-        run: pnpm test
+        id: test
+        run: >-
+          node .github/scripts/release-report.mjs run test pnpm test --
+          --reporter=default --reporter="$GITHUB_WORKSPACE/.github/scripts/vitest-report.mjs"
 
       - name: Prepare release commit
+        id: prepare
         run: |
           git checkout -B v1 "$GITHUB_SHA"
           git config user.name 'github-actions[bot]'
@@ -91,23 +110,14 @@ jobs:
             exit 1
           fi
 
-      - name: Release with Nx and OIDC
-        id: release
-        env:
-          RELEASE_CHANNEL: ${{ inputs.channel }}
-          RELEASE_DRY_RUN: ${{ inputs.dry_run }}
-          RELEASE_VERSION: ${{ inputs.version }}
+      - name: Calculate release plan
+        id: plan
         run: |
-          args=()
-          if [[ "$RELEASE_DRY_RUN" == 'true' ]]; then
-            args+=(--dry-run)
-          fi
           if [[ -n "$RELEASE_VERSION" ]]; then
             if [[ ! "$RELEASE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
               echo '::error::version must be an exact semantic version.'
               exit 1
             fi
-            args=("$RELEASE_VERSION" "${args[@]}")
           fi
           if [[ "$RELEASE_CHANNEL" == 'latest' ]]; then
             if [[ "$RELEASE_VERSION" == *-* ]]; then
@@ -127,15 +137,33 @@ jobs:
           NODE
             fi
           fi
+          node .github/scripts/release-report.mjs run plan node .github/scripts/release-report.mjs plan
+
+      - name: Release with Nx and OIDC
+        id: release
+        run: |
+          args=()
+          if [[ "$RELEASE_DRY_RUN" == 'true' ]]; then
+            args+=(--dry-run)
+          fi
+          if [[ -n "$RELEASE_VERSION" ]]; then
+            args=("$RELEASE_VERSION" "${args[@]}")
+          fi
           case "$RELEASE_CHANNEL" in
-            beta) pnpm release:beta "${args[@]}" ;;
-            latest) pnpm release "${args[@]}" ;;
+            beta) node .github/scripts/release-report.mjs run release pnpm release:beta "${args[@]}" ;;
+            latest) node .github/scripts/release-report.mjs run release pnpm release "${args[@]}" ;;
             *) echo '::error::Unknown release channel'; exit 1 ;;
           esac
 
       - name: Push release commit and tags
+        id: push
         if: ${{ !inputs.dry_run }}
-        run: git push --atomic origin HEAD:refs/heads/v1 --follow-tags
+        run: node .github/scripts/release-report.mjs run push git push --atomic origin HEAD:refs/heads/v1 --follow-tags
+
+      - name: Verify published versions and Git refs
+        id: verify
+        if: ${{ always() && !inputs.dry_run && (steps.release.outcome == 'success' || steps.release.outcome == 'failure') }}
+        run: node .github/scripts/release-report.mjs run verify node .github/scripts/release-report.mjs verify
 
       - name: Save failed release for recovery
         if: ${{ failure() && !inputs.dry_run && steps.release.outcome != 'skipped' }}
@@ -148,3 +176,17 @@ jobs:
           name: release-recovery-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/release.bundle
           retention-days: 7
+
+      - name: Generate release summary
+        if: ${{ always() && steps.checkout.outcome == 'success' }}
+        env:
+          RELEASE_STEPS: ${{ toJSON(steps) }}
+        run: node .github/scripts/release-report.mjs summary
+
+      - name: Upload release report
+        if: ${{ always() && steps.checkout.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-report
+          path: ${{ runner.temp }}/release-report/
+          retention-days: 14

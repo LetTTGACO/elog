@@ -31,6 +31,35 @@ gh workflow run release.yml --repo LetTTGACO/elog --ref v1 \
 
 检查预演结果后，将 `dry_run` 改为 `false` 触发真实发布。
 
+## 发布报告
+
+Actions 的 Summary 页面展示一份汇总报告，Markdown 由
+`.github/scripts/release-report.mjs` 生成。Workflow 只负责调用脚本和传递步骤结果。
+
+- 版本表列出每个包的当前版本、目标版本、版本变化依据及执行结果。
+- 逐包折叠详情包含 Nx changelog、包级版本比较链接、包目录提交和计划标签。
+- 验证表汇总依赖安装、构建、类型检查、测试、发布及 Git 推送的结果；未执行的
+  CLI E2E 和真实平台 E2E 单独标明。
+- Vitest 使用独立 reporter 输出逐包 JSON，再汇总通过、失败、跳过和未完成数量。
+  没有测试文件的包显示零个文件，不计为有测试覆盖。
+- 失败时仍生成已取得的数据；完整日志、版本计划、测试数据和 Markdown 保存到
+  `release-report` artifact，保留 14 天。
+
+执行模式与渠道分开显示：Beta 和稳定版都可以预演或真实发布。预演的版本数据来自
+Nx 的只读版本计算和 changelog API；实际执行仍使用原有 Nx Release 命令。
+预演成功表示检查和打包模拟通过，实际 npm 发布授权需在真实发布中验证。
+
+真实发布额外查询 npm，分别核验目标版本是否存在、dist-tag 是否匹配，并检查远端
+`v1` 和包级标签。报告区分原已存在的版本、新出现的版本、缺失版本和无法确认的结果；
+npm 发布与 Git 推送分别展示，部分失败时以逐包结果和恢复 artifact 为准。
+包目录提交只是辅助视图，完整变更和版本计算以 Nx 数据为准。
+
+本地检查报告逻辑：
+
+```bash
+node --test .github/scripts/release-report.test.mjs
+```
+
 ## npm Trusted Publisher 配置
 
 在每个发布包的 npm **Settings → Trusted publishing** 中添加 GitHub Actions：
