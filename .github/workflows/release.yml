@@ -1,0 +1,150 @@
+name: Release
+run-name: Release ${{ inputs.channel }} (dry run=${{ inputs.dry_run }})
+
+on:
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: npm release channel
+        type: choice
+        options:
+          - beta
+          - latest
+        default: beta
+        required: true
+      dry_run:
+        description: Preview versions and packages without publishing or pushing
+        type: boolean
+        default: true
+        required: true
+      version:
+        description: Optional exact version for all release packages (e.g. 1.0.0 to promote betas)
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-v1
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      id-token: write
+    env:
+      NX_DAEMON: 'false'
+      NX_SKIP_NX_CACHE: 'true'
+      HUSKY: '0'
+    steps:
+      - name: Check release branch
+        env:
+          RELEASE_REF: ${{ github.ref }}
+          RELEASE_REPOSITORY: ${{ github.repository }}
+        run: |
+          if [[ "$RELEASE_REPOSITORY" != 'LetTTGACO/elog' || "$RELEASE_REF" != 'refs/heads/v1' ]]; then
+            echo '::error::Run this workflow on the v1 branch of LetTTGACO/elog.'
+            exit 1
+          fi
+
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: ${{ github.sha }}
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+
+      - uses: pnpm/action-setup@v6
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+      - name: Prepare release commit
+        run: |
+          git checkout -B v1 "$GITHUB_SHA"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          remote_sha=$(git ls-remote origin refs/heads/v1 | cut -f1)
+          if [[ "$remote_sha" != "$GITHUB_SHA" ]]; then
+            echo '::error::v1 changed after this run started. Start a new release run.'
+            exit 1
+          fi
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo '::error::Build or verification changed tracked files.'
+            git status --short
+            exit 1
+          fi
+
+      - name: Release with Nx and OIDC
+        id: release
+        env:
+          RELEASE_CHANNEL: ${{ inputs.channel }}
+          RELEASE_DRY_RUN: ${{ inputs.dry_run }}
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: |
+          args=()
+          if [[ "$RELEASE_DRY_RUN" == 'true' ]]; then
+            args+=(--dry-run)
+          fi
+          if [[ -n "$RELEASE_VERSION" ]]; then
+            if [[ ! "$RELEASE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+              echo '::error::version must be an exact semantic version.'
+              exit 1
+            fi
+            args=("$RELEASE_VERSION" "${args[@]}")
+          fi
+          if [[ "$RELEASE_CHANNEL" == 'latest' ]]; then
+            if [[ "$RELEASE_VERSION" == *-* ]]; then
+              echo '::error::Use the beta channel for prerelease versions.'
+              exit 1
+            fi
+            if [[ -z "$RELEASE_VERSION" ]]; then
+              node --input-type=module <<'NODE'
+          import { globSync, readFileSync } from 'node:fs';
+          const { release } = JSON.parse(readFileSync('nx.json', 'utf8'));
+          for (const path of globSync(['packages/*/package.json', 'plugins/*/*/package.json'])) {
+            const pkg = JSON.parse(readFileSync(path, 'utf8'));
+            if (release.projects.includes(pkg.name) && pkg.version.includes('-')) {
+              throw new Error('Set an exact stable version to promote prereleases to latest.');
+            }
+          }
+          NODE
+            fi
+          fi
+          case "$RELEASE_CHANNEL" in
+            beta) pnpm release:beta "${args[@]}" ;;
+            latest) pnpm release "${args[@]}" ;;
+            *) echo '::error::Unknown release channel'; exit 1 ;;
+          esac
+
+      - name: Push release commit and tags
+        if: ${{ !inputs.dry_run }}
+        run: git push --atomic origin HEAD:refs/heads/v1 --follow-tags
+
+      - name: Save failed release for recovery
+        if: ${{ failure() && !inputs.dry_run && steps.release.outcome != 'skipped' }}
+        run: git bundle create "$RUNNER_TEMP/release.bundle" --all
+
+      - name: Upload failed release history
+        if: ${{ failure() && !inputs.dry_run && steps.release.outcome != 'skipped' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-recovery-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/release.bundle
+          retention-days: 7
