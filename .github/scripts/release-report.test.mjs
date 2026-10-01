@@ -1,5 +1,13 @@
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { execFileSync, spawnSync } from 'node:child_process';
@@ -138,6 +146,123 @@ test('successful npm publication cannot hide a failed Git push', () => {
   assert.match(markdown, /新版本及渠道已确认/);
   assert.match(markdown, /Git 推送步骤：❌ 失败/);
   assert.match(markdown, /Git 远端提交或标签尚未全部确认/);
+});
+
+test('Nx release creates commit and tags without an upstream, then the workflow pushes atomically', () => {
+  const root = fileURLToPath(new URL('../../', import.meta.url));
+  const dir = mkdtempSync(path.join(tmpdir(), 'elog-release-git-test-'));
+  const repo = path.join(dir, 'repo');
+  const remote = path.join(dir, 'remote.git');
+  mkdirSync(repo);
+  const git = (...args) =>
+    execFileSync('git', args, { cwd: repo, encoding: 'utf8', stdio: 'pipe' }).trim();
+  const writeJson = (file, value) =>
+    writeFileSync(path.join(repo, file), JSON.stringify(value, null, 2));
+  try {
+    execFileSync('git', ['init', '--bare', '--initial-branch=v1', remote], { stdio: 'pipe' });
+    git('init', '--initial-branch=v1');
+    git('config', 'user.name', 'Release test');
+    git('config', 'user.email', 'release@example.invalid');
+    git('config', 'commit.gpgsign', 'false');
+    git('config', 'tag.gpgsign', 'false');
+    git('config', 'core.hooksPath', '/dev/null');
+    git('config', 'push.default', 'simple');
+    git('config', 'push.autoSetupRemote', 'false');
+    writeFileSync(path.join(repo, '.gitignore'), 'node_modules\n.nx\n.published.json\n');
+    symlinkSync(path.join(root, 'node_modules'), path.join(repo, 'node_modules'), 'dir');
+    const { release } = JSON.parse(readFileSync(path.join(root, 'nx.json'), 'utf8'));
+    release.projects = ['@elog/release-fixture'];
+    release.version.versionActionsOptions = { skipLockFileUpdate: true };
+    writeJson('nx.json', { release });
+    writeJson('package.json', {
+      name: 'release-fixture-workspace',
+      private: true,
+      workspaces: ['packages/*'],
+    });
+    mkdirSync(path.join(repo, 'packages/fixture'), { recursive: true });
+    writeJson('packages/fixture/package.json', {
+      name: '@elog/release-fixture',
+      version: '1.0.0-beta.1',
+    });
+    writeJson('packages/fixture/project.json', {
+      name: '@elog/release-fixture',
+      targets: {
+        'nx-release-publish': {
+          executor: 'nx:run-commands',
+          options: { command: 'node mock-publish.cjs', forwardAllArgs: false },
+        },
+      },
+    });
+    // Exercise real Nx version/changelog/git operations while replacing the npm upload boundary.
+    writeFileSync(
+      path.join(repo, 'mock-publish.cjs'),
+      `const fs = require('node:fs');
+const { execFileSync } = require('node:child_process');
+const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
+if (process.env.NX_DRY_RUN !== 'true') {
+  fs.writeFileSync('.published.json', JSON.stringify({
+    version: JSON.parse(fs.readFileSync('packages/fixture/package.json')).version,
+    commit: git('rev-parse', 'HEAD'),
+    changelog: git('show', 'HEAD:packages/fixture/CHANGELOG.md'),
+  }));
+}
+`,
+    );
+    git('add', '.');
+    git('commit', '-m', 'feat: initial fixture');
+    git('tag', '-a', '@elog/release-fixture@1.0.0-beta.1', '-m', 'initial release');
+    git('remote', 'add', 'origin', remote);
+    git('push', 'origin', 'HEAD:refs/heads/v1', '--follow-tags');
+    const source = git('rev-parse', 'HEAD');
+    const tag = '@elog/release-fixture@1.0.0-beta.2';
+    const nxPackage = JSON.parse(readFileSync(path.join(root, 'node_modules/nx/package.json')));
+    const args = [
+      path.join(root, 'node_modules/nx', nxPackage.bin.nx),
+      'release',
+      '1.0.0-beta.2',
+      '--preid=beta',
+      '--yes',
+    ];
+    const options = {
+      cwd: repo,
+      env: {
+        ...process.env,
+        NX_DAEMON: 'false',
+        NX_ISOLATE_PLUGINS: 'false',
+        NX_SKIP_NX_CACHE: 'true',
+        NX_WORKSPACE_ROOT_PATH: repo,
+        HUSKY: '0',
+      },
+      encoding: 'utf8',
+      timeout: 60000,
+      maxBuffer: 8 * 1024 * 1024,
+    };
+    const preview = spawnSync(process.execPath, [...args, '--dry-run'], options);
+    assert.equal(preview.status, 0, preview.stdout + preview.stderr);
+    assert.equal(git('rev-parse', 'HEAD'), source);
+    assert.equal(git('status', '--porcelain'), '');
+    assert.equal(git('tag', '--list', tag), '');
+    assert.equal(existsSync(path.join(repo, '.published.json')), false);
+
+    const result = spawnSync(process.execPath, args, options);
+    assert.equal(result.status, 0, result.stdout + result.stderr);
+    const published = JSON.parse(readFileSync(path.join(repo, '.published.json')));
+    assert.equal(published.version, '1.0.0-beta.2');
+    assert.notEqual(published.commit, source);
+    assert.match(published.changelog, /1\.0\.0-beta\.2/);
+    assert.equal(git('rev-parse', `${tag}^{}`), published.commit);
+    assert.equal(git('status', '--porcelain'), '');
+    assert.equal(git('ls-remote', 'origin', 'refs/heads/v1').split(/\s/)[0], source);
+    assert.equal(git('ls-remote', 'origin', `refs/tags/${tag}`), '');
+    git('push', '--atomic', 'origin', 'HEAD:refs/heads/v1', '--follow-tags');
+    assert.equal(git('ls-remote', 'origin', 'refs/heads/v1').split(/\s/)[0], published.commit);
+    assert.equal(
+      git('ls-remote', 'origin', `refs/tags/${tag}^{}`).split(/\s/)[0],
+      published.commit,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test('cancelled publication reports observed npm state instead of claiming nothing ran', () => {

@@ -18,6 +18,10 @@ Elog 1.0 通过 GitHub Actions 手动触发 Nx Release，并使用 npm Trusted P
 `pnpm release:beta` 或 `pnpm release`。Nx 根据 Conventional Commits 为各包独立计算版本，
 只发布有新版本的项目。真实发布成功后，工作流原子推送版本提交和包级 tag 到 `v1`。
 
+Nx 在 runner 上生成版本提交和标签，`release.git.push` 设为 `false`。
+Git 推送统一由工作流在 npm 发布成功后执行，使用显式的 `v1` ref 和 `--follow-tags`，
+因此 runner 的本地分支无需配置 upstream。
+
 `version` 留空时沿用独立版本计算。填写精确版本会将该版本应用到整个发布列表。
 当前包仍处于 Beta 阶段，切换 `latest` 时必须显式填写正式版本；后续稳定版发布
 可以留空继续按提交记录计算版本。

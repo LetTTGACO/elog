@@ -60,7 +60,7 @@
     "git": {
       "commit": true,
       "tag": true,
-      "push": true
+      "push": false
     },
     "conventionalCommits": {
       "types": {
