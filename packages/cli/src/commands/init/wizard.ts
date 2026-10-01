@@ -137,16 +137,19 @@ export async function runPluginSelectionWizard(
     return entry ? [entry] : [];
   });
 
+  const imagePlugins = getPluginsByKind(registry, 'transform').filter((plugin) =>
+    plugin.type.startsWith('image-'),
+  );
   const transformAnswer = (await inquirer.prompt([
     {
       type: 'checkbox',
       name: 'transforms',
       message: '是否处理图片？',
-      choices: getPluginsByKind(registry, 'transform').map(buildPluginChoice),
+      choices: imagePlugins.map(buildPluginChoice),
     },
   ])) as { transforms: string[] };
   const transformEntries = transformAnswer.transforms.flatMap((type) => {
-    const entry = findPlugin(registry, 'transform', type);
+    const entry = imagePlugins.find((plugin) => plugin.type === type);
     return entry ? [entry] : [];
   });
 

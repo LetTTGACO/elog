@@ -15,11 +15,18 @@ const commandCase: CommandCase = {
     expect(result.combinedOutput).not.toContain('@elog/core');
     expectOutputContains(result, 'from:');
     expectOutputContains(result, 'to:');
-    expect(result.combinedOutput).not.toContain('.env:');
+    expectOutputContains(result, '.env（新增变量）:');
+    expectOutputContains(
+      result,
+      '# 获取与配置教程：https://elog.1874.cool/notion/gvnxobqogetukays',
+    );
+    expectOutputContains(result, '# Notion Token');
+    expectOutputContains(result, 'NOTION_TOKEN=');
     expect(result.combinedOutput).not.toContain('.env.example');
     expect(result.combinedOutput).not.toContain('redacted');
     expect(fs.existsSync(path.join(workspace, 'elog.config.ts'))).toBe(false);
     expect(fs.existsSync(path.join(workspace, '.env'))).toBe(false);
+    expect(fs.existsSync(path.join(workspace, '.gitignore'))).toBe(false);
     expect(fs.existsSync(path.join(workspace, '.env.example'))).toBe(false);
   },
 };

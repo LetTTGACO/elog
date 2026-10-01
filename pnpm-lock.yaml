@@ -35,6 +35,12 @@ importers:
       commander:
         specifier: ~15.0.0
         version: 15.0.0
+      dotenv:
+        specifier: ~17.4.2
+        version: 17.4.2
+      ignore:
+        specifier: ~7.0.5
+        version: 7.0.5
       inquirer:
         specifier: ~14.0.2
         version: 14.0.2(@types/node@22.19.19)

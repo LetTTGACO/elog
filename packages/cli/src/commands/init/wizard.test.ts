@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import inquirer from 'inquirer';
 import { buildOptionQuestions, buildPluginChoice, withHiddenDefaults } from './wizard';
-import { InitCommandError } from './registry';
+import { InitCommandError, loadBuiltInPluginRegistry } from './registry';
 import type { PluginRegistry, PluginRegistryEntry } from './types';
 
 vi.mock('inquirer', () => ({
@@ -310,6 +310,39 @@ describe('runInitWizard', () => {
 });
 
 describe('runPluginSelectionWizard', () => {
+  it.each(['single', 'multiple'] as const)(
+    'offers only image hosting and local image plugins with %s target selection',
+    async (targetSelection) => {
+      const prompt = vi.mocked(inquirer.prompt);
+      prompt
+        .mockResolvedValueOnce({ from: 'notion' })
+        .mockResolvedValueOnce({ to: targetSelection === 'single' ? 'local' : ['local'] })
+        .mockResolvedValueOnce({ transforms: ['image-local'] });
+
+      const { runPluginSelectionWizard } = await import('./wizard');
+      const selection = await runPluginSelectionWizard(loadBuiltInPluginRegistry(), {
+        targetSelection,
+      });
+
+      expect(prompt.mock.calls[2]?.[0]).toEqual([
+        expect.objectContaining({
+          message: '是否处理图片？',
+          choices: [
+            'image-cos',
+            'image-oss',
+            'image-github',
+            'image-qiniu',
+            'image-upyun',
+            'image-r2',
+            'image-b2',
+            'image-local',
+          ].map((value) => expect.objectContaining({ value })),
+        }),
+      ]);
+      expect(selection.transforms.map((entry) => entry.type)).toEqual(['image-local']);
+    },
+  );
+
   it('asks only plugin selection questions and returns selected entries', async () => {
     const prompt = vi.mocked(inquirer.prompt);
     prompt

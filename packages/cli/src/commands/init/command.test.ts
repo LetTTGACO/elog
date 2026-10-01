@@ -161,7 +161,7 @@ describe('runInitCommand', () => {
     expect(writeGeneratedFiles).toHaveBeenCalledTimes(1);
   });
 
-  it('without dryRun: logs a config generated security reminder', async () => {
+  it('without dryRun: reports the generated config', async () => {
     const log = vi.fn();
 
     await runInitCommand({
@@ -170,9 +170,7 @@ describe('runInitCommand', () => {
       log,
     });
 
-    expect(log).toHaveBeenCalledWith(
-      '已生成配置文件 elog.config.ts；推荐将 Token 等隐私参数写入 .env 文件，并将 .env 加入 .gitignore。',
-    );
+    expect(log).toHaveBeenCalledWith('已生成配置文件 elog.config.ts');
   });
 
   it('without dryRun: passes correct cwd to installPackages', async () => {
@@ -292,6 +290,101 @@ describe('runInitCommand', () => {
     expect(overwriteExisting).not.toHaveBeenCalled();
     expect(fs.readdirSync(cwd)).toEqual(['elog.config.ts']);
   });
+
+  it('creates env placeholders and gitignore, then only appends new variables on repeat init', async () => {
+    const from = {
+      ...sampleSelection.from,
+      optionsSchema: {
+        type: 'object' as const,
+        properties: {
+          token: { type: 'string' as const, title: '访问令牌', 'x-elog-env': 'TOKEN' },
+          shared: { type: 'string' as const, 'x-elog-env': 'TOKEN' },
+        },
+      },
+    };
+    const selection = { ...sampleSelection, from };
+    const log = vi.fn();
+    const options = {
+      ...baseOptions,
+      dryRun: false,
+      writeGeneratedFiles: undefined,
+      runWizard: async () => selection,
+      overwriteExisting: async () => true,
+      log,
+    };
+    await runInitCommand(options);
+    expect(fs.readFileSync(path.join(cwd, '.env'), 'utf8')).toContain('# 访问令牌\nTOKEN=\n');
+    expect(fs.readFileSync(path.join(cwd, '.gitignore'), 'utf8')).toBe('/.env\n');
+    const existing = '# Existing\nTOKEN=keep-me\n';
+    fs.writeFileSync(path.join(cwd, '.env'), existing);
+    selection.to = [
+      {
+        ...sampleSelection.to[0]!,
+        optionsSchema: {
+          type: 'object',
+          properties: {
+            endpoint: {
+              type: 'string',
+              title: '站点地址',
+              description: '填写完整 URL',
+              'x-elog-env': 'ENDPOINT',
+            },
+          },
+        },
+      },
+    ];
+    await runInitCommand(options);
+    const updatedEnv = fs.readFileSync(path.join(cwd, '.env'), 'utf8');
+    expect(updatedEnv.startsWith(existing)).toBe(true);
+    expect(updatedEnv).toContain(
+      '# 获取与配置教程：https://elog.1874.cool/notion/gvnxobqogetukays',
+    );
+    expect(updatedEnv).toContain('# 站点地址\n# 填写完整 URL\nENDPOINT=\n');
+    expect(fs.readFileSync(path.join(cwd, '.gitignore'), 'utf8')).toBe('/.env\n');
+    expect(JSON.stringify(log.mock.calls)).not.toContain('keep-me');
+    expect(log).toHaveBeenCalledWith(expect.stringContaining('-e .env'));
+  });
+
+  it('previews only missing env names without changing env or gitignore', async () => {
+    fs.writeFileSync(path.join(cwd, '.env'), 'NOTION_TOKEN=keep-me\n');
+    const log = vi.fn();
+    await runInitCommand({ cwd, configName: 'elog.config.ts', dryRun: true, log });
+    expect(log.mock.calls[0]?.[0]).toContain('# Notion Data Source ID\nNOTION_DATA_SOURCE_ID=');
+    expect(log.mock.calls[0]?.[0]).not.toContain('keep-me');
+    expect(fs.readdirSync(cwd)).toEqual(['.env']);
+    expect(fs.readFileSync(path.join(cwd, '.env'), 'utf8')).toBe('NOTION_TOKEN=keep-me\n');
+  });
+
+  it.each(['.env', '.gitignore'])(
+    'rejects an unusable %s before installation',
+    async (filename) => {
+      fs.mkdirSync(path.join(cwd, filename));
+      const installPackages = vi.fn();
+      const { loadBuiltInPluginRegistry } = await import('./registry');
+      const { createDefaultInitSelection } = await import('./command');
+      await expect(
+        runInitCommand({
+          ...baseOptions,
+          dryRun: false,
+          runWizard: async () => createDefaultInitSelection(loadBuiltInPluginRegistry()),
+          installPackages,
+        }),
+      ).rejects.toThrow();
+      expect(installPackages).not.toHaveBeenCalled();
+      expect(fs.existsSync(path.join(cwd, 'elog.config.ts'))).toBe(false);
+    },
+  );
+
+  it.each(['.env', '.gitignore'])(
+    'prevents config generation from overwriting %s',
+    async (configName) => {
+      const installPackages = vi.fn();
+      await expect(
+        runInitCommand({ ...baseOptions, configName, dryRun: false, installPackages }),
+      ).rejects.toMatchObject({ code: 'CONFIG_PATH_INVALID' });
+      expect(installPackages).not.toHaveBeenCalled();
+    },
+  );
 
   it.each(['dependencies', 'devDependencies'])(
     'preserves an existing CLI version in %s',

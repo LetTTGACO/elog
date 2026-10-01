@@ -10,6 +10,7 @@ import type {
 export interface EnvValue {
   name: string;
   value: string;
+  description?: string;
 }
 
 /** 给多行对象字面量增加缩进，保证生成的配置文本保持可读。 */
@@ -168,7 +169,8 @@ function uniquePlugins(selection: InitSelection): PluginRegistryEntry[] {
 }
 
 /** 收集需要写入 .env 的字段，配置文件中只保留 process.env 引用。 */
-export function collectEnvValues(selection: InitSelection): EnvValue[] {
+export function collectEnvValues(selectionInput: InitSelection | PluginSelection): EnvValue[] {
+  const selection = normalizeSelection(selectionInput);
   const selected = [selection.from, ...selection.transforms, ...selection.to];
   const values: EnvValue[] = [];
 
@@ -179,7 +181,16 @@ export function collectEnvValues(selection: InitSelection): EnvValue[] {
         continue;
       }
       const value = plugin.answers[key];
-      values.push({ name: envName, value: value === undefined ? '' : String(value) });
+      values.push({
+        name: envName,
+        value: value === undefined ? '' : String(value),
+        description: [
+          property.title ?? property['x-elog-prompt']?.message ?? key,
+          property.description,
+        ]
+          .filter(Boolean)
+          .join('\n'),
+      });
     }
   }
 
@@ -189,7 +200,15 @@ export function collectEnvValues(selection: InitSelection): EnvValue[] {
 /** 生成 .env 文本，includeValues=false 时可用于模板化输出。 */
 export function renderEnvText(values: EnvValue[], includeValues = true): string {
   return values
-    .map((entry) => `${entry.name}=${includeValues ? entry.value : ''}`)
+    .map((entry) => {
+      const comment = entry.description
+        ? entry.description
+            .split(/\r\n|\r|\n/)
+            .map((line) => `# ${line}`)
+            .join('\n') + '\n'
+        : '';
+      return `${comment}${entry.name}=${includeValues ? entry.value : ''}`;
+    })
     .join('\n')
     .concat(values.length ? '\n' : '');
 }

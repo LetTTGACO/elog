@@ -6,7 +6,9 @@ import out from '../../logging/logger';
 import { detectPackageManager, buildInstallCommand, installPackages } from './package-manager';
 import type { InstallPackagesOptions } from './package-manager';
 import { getPluginsByKind, InitCommandError, loadBuiltInPluginRegistry } from './registry';
-import { generateInitFiles } from './generator';
+import { collectEnvValues, generateInitFiles } from './generator';
+import { planEnvFile, writeEnvFile } from './env-file';
+import { ensureEnvIgnored, planEnvIgnore } from './gitignore';
 import { createTimestamp, validateConfigPath, writeGeneratedFiles } from './file-writer';
 import type { GeneratedFileWrite, WriteGeneratedFilesOptions } from './file-writer';
 import { runPluginSelectionWizard } from './wizard';
@@ -42,13 +44,16 @@ function hasCliDependency(cwd: string): boolean {
 
 /** dry-run 输出保持可读文本，方便用户预览安装命令和配置内容。 */
 export function createInitDryRunOutput(
-  files: GeneratedInitFiles & { installCommand: string },
+  files: GeneratedInitFiles & { installCommand: string; envText?: string },
   configName = 'elog.config.ts',
 ): string {
   const sections = [
     `Install command:\n${files.installCommand}`,
     `${configName}:\n${files.configText}`,
   ];
+  if (files.envText) {
+    sections.push(`.env（新增变量）:\n${files.envText}`);
+  }
   return sections.join('\n\n');
 }
 
@@ -78,6 +83,14 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
   const doInstall = options.installPackages ?? installPackages;
   const doWrite = options.writeGeneratedFiles ?? writeGeneratedFiles;
   const log = options.log ?? ((message: string) => out.info('初始化', message));
+
+  if (
+    ['.env', '.gitignore'].some(
+      (name) => path.join(options.cwd, options.configName) === path.join(options.cwd, name),
+    )
+  ) {
+    throw new InitCommandError('CONFIG_PATH_INVALID', '配置文件不能使用 .env 或 .gitignore 路径。');
+  }
 
   let overwriteConfirmed = false;
   const confirmOverwrite = async (filename: string): Promise<boolean> => {
@@ -118,6 +131,12 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
       ? createDefaultInitSelection(registry)
       : await runWizard(registry);
   const files = generateInitFiles(selection);
+  const envVariables = collectEnvValues(selection);
+  const envPlan = envVariables.length ? planEnvFile(options.cwd, envVariables) : undefined;
+  if (!options.dryRun && envPlan) {
+    if (envPlan.append) validateConfigPath(options.cwd, '.env');
+    if (planEnvIgnore(options.cwd).append) validateConfigPath(options.cwd, '.gitignore');
+  }
   const packages = selectedPackages(selection);
   if (needsCli) {
     // 使用运行中的版本，避免 beta 初始化时被 npm 的默认 tag 切换到其他版本。
@@ -130,7 +149,7 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
     // dry-run 不安装依赖也不写文件，只输出可人工检查的结果。
     log(
       createInitDryRunOutput(
-        { ...files, installCommand: installCommand.display },
+        { ...files, installCommand: installCommand.display, envText: envPlan?.append },
         options.configName,
       ),
     );
@@ -149,7 +168,24 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
     overwriteExisting: confirmOverwrite,
   });
 
-  log(
-    `已生成配置文件 ${options.configName}；推荐将 Token 等隐私参数写入 .env 文件，并将 .env 加入 .gitignore。`,
-  );
+  log(`已生成配置文件 ${options.configName}`);
+  if (envVariables.length) {
+    const protection = ensureEnvIgnored(options.cwd);
+    const messages = {
+      ignored: '.env 已匹配忽略规则',
+      created: '已创建 .gitignore 并添加 /.env',
+      updated: '已向 .gitignore 追加 /.env，原有内容已保留',
+      tracked: '注意：.env 已被 Git 跟踪，忽略规则无法停止跟踪，请手动处理。',
+      unignored: '注意：存在明确取消忽略 .env 的规则，已保留原规则，请手动处理。',
+    };
+    log(messages[protection.status]);
+    if (protection.warning) log(protection.warning);
+    const envResult = writeEnvFile(options.cwd, envVariables);
+    log(
+      envResult.created
+        ? `已创建 .env：新增 ${envResult.added.length} 个变量`
+        : `已检查 .env：新增 ${envResult.added.length} 个变量，已有内容已保留`,
+    );
+    log('请按所选插件要求填写 .env；同步时通过 -e .env 加载环境变量。');
+  }
 }
