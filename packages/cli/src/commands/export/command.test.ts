@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { runExportCommand, selectedPackages } from './command';
 import type { ElogConfig, WorkflowResult } from '@elog/core';
 import type { ExportSelection, PluginRegistry, PluginRegistryEntry } from '../init/types';
+import { loadBuiltInPluginRegistry } from '../init/registry';
 
 const fromEntry: PluginRegistryEntry = {
   kind: 'from',
@@ -45,6 +46,23 @@ const selection: ExportSelection = {
 };
 
 describe('selectedPackages', () => {
+  it.each([false, true])('includes Halo defaults once with a shared converter: %s', (shared) => {
+    const builtIn = loadBuiltInPluginRegistry();
+    const converter = builtIn.plugins.find((entry) => entry.type === 'markdown-to-html')!;
+    const halo = builtIn.plugins.find((entry) => entry.kind === 'to' && entry.type === 'halo')!;
+    const packages = selectedPackages(
+      {
+        ...selection,
+        transforms: shared ? [{ entry: converter, answers: {} }] : [],
+        to: { entry: halo, answers: {} },
+      },
+      builtIn,
+    );
+
+    expect(packages).toContain(converter.packageName);
+    expect(packages.filter((name) => name === converter.packageName)).toHaveLength(1);
+  });
+
   it('extracts unique package names from export selection', () => {
     expect(selectedPackages(selection)).toEqual([
       '@elog/plugin-from-yuque-pwd',
@@ -97,7 +115,7 @@ describe('runExportCommand', () => {
         ],
       }),
     );
-    expect(buildRuntimeConfig).toHaveBeenCalledWith(selection, { cwd: '/tmp/project' });
+    expect(buildRuntimeConfig).toHaveBeenCalledWith(selection, { cwd: '/tmp/project', registry });
     expect(runRuntime).toHaveBeenCalledWith(runtimeConfig);
     expect(reportResults).toHaveBeenCalledWith(results);
     expect(throwOnFailed).toHaveBeenCalledWith(results);

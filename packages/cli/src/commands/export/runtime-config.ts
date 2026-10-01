@@ -2,7 +2,9 @@ import path from 'path';
 import { createRequire } from 'module';
 import { pathToFileURL } from 'url';
 import type { ElogConfig } from '@elog/core';
-import type { ExportSelection, SelectedPlugin } from '../init/types';
+import type { ExportSelection, PluginRegistry, SelectedPlugin } from '../init/types';
+import { getTargetPlugins, loadBuiltInPluginRegistry } from '../init/registry';
+import { withHiddenDefaults } from '../init/wizard';
 
 /** export 命令错误码区分导入失败和插件工厂执行失败。 */
 type ExportCommandErrorCode = 'EXPORT_PLUGIN_IMPORT_FAILED' | 'EXPORT_PLUGIN_FACTORY_FAILED';
@@ -22,6 +24,7 @@ type PluginModule = { default?: PluginFactory } | PluginFactory;
 /** 构建临时运行时配置的依赖注入边界，loadPlugin 可在测试中替换。 */
 export interface BuildExportRuntimeConfigOptions {
   cwd?: string;
+  registry?: PluginRegistry;
   loadPlugin?: (packageName: string) => Promise<PluginFactory>;
 }
 
@@ -98,12 +101,24 @@ export async function buildExportRuntimeConfig(
 ): Promise<ElogConfig> {
   const cwd = options.cwd ?? process.cwd();
   const loadPlugin = options.loadPlugin ?? ((packageName) => defaultLoadPlugin(packageName, cwd));
+  const registry = options.registry ?? loadBuiltInPluginRegistry();
   const from = (await createPlugin(selection.from, loadPlugin)) as ElogConfig['from'];
   // transform 可并行创建，因为插件实例之间没有共享状态依赖。
   const plugins = (await Promise.all(
     selection.transforms.map((plugin) => createPlugin(plugin, loadPlugin)),
   )) as RuntimeTransformPlugin[];
-  const target = (await createPlugin(selection.to, loadPlugin)) as RuntimeToPlugin;
+  const targetPlugins = (await Promise.all(
+    getTargetPlugins(registry, selection.to.entry).map((entry) =>
+      createPlugin({ entry, answers: withHiddenDefaults(entry, {}) }, loadPlugin),
+    ),
+  )) as RuntimeTransformPlugin[];
+  const targetSelection = targetPlugins.length
+    ? {
+        ...selection.to,
+        answers: { ...selection.to.answers, plugins: targetPlugins },
+      }
+    : selection.to;
+  const target = (await createPlugin(targetSelection, loadPlugin)) as RuntimeToPlugin;
 
   return {
     disableCache: true,

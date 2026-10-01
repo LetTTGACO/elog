@@ -22,6 +22,9 @@ Halo 目标要求文档正文是 HTML。来源插件输出 Markdown 时，必须
 运行 `elog init` 并选择 Halo 时，会自动安装和导入 `markdownToHtml`，并将它配置在
 `toHalo` 的 `plugins` 中。同时选择本地部署时，本地目标继续接收公共转换后的 Markdown。
 
+运行 `elog export` 并选择 Halo 时，也会自动安装并执行该目标的 Markdown 转 HTML 插件。
+公共图片处理先执行，再转换正文并部署；一次性导出不生成配置文件，也不读取或写入工作流缓存。
+
 ```ts
 import { defineConfig } from '@elog/cli';
 import fromNotion from '@elog/plugin-from-notion';

@@ -2,7 +2,7 @@ import { sync } from '@elog/core';
 import type { ElogConfig, WorkflowResult } from '@elog/core';
 import { detectPackageManager, installPackages } from '../init/package-manager';
 import type { InstallPackagesOptions } from '../init/package-manager';
-import { loadBuiltInPluginRegistry } from '../init/registry';
+import { getTargetPlugins, loadBuiltInPluginRegistry } from '../init/registry';
 import type { ExportSelection, PluginRegistry } from '../init/types';
 import { runExportWizard } from '../init/wizard';
 import { reportWorkflowResults, throwOnFailedWorkflow } from '../sync/results';
@@ -25,18 +25,15 @@ export interface RunExportCommandOptions {
 }
 
 /** 从 export 选择结果中收集需要安装的插件包，并按包名去重。 */
-export function selectedPackages(selection: ExportSelection): string[] {
-  const allPlugins = [selection.from, ...selection.transforms, selection.to];
-  const seen = new Set<string>();
-  return allPlugins
-    .map((plugin) => plugin.entry.packageName)
-    .filter((name) => {
-      if (seen.has(name)) {
-        return false;
-      }
-      seen.add(name);
-      return true;
-    });
+export function selectedPackages(
+  selection: ExportSelection,
+  registry: PluginRegistry = loadBuiltInPluginRegistry(),
+): string[] {
+  const allPlugins = [
+    ...[selection.from, ...selection.transforms, selection.to].map((plugin) => plugin.entry),
+    ...getTargetPlugins(registry, selection.to.entry),
+  ];
+  return [...new Set(allPlugins.map((plugin) => plugin.packageName))];
 }
 
 /** 执行一次性导出：安装所选插件、构造临时运行时配置并立即同步。 */
@@ -51,12 +48,12 @@ export async function runExportCommand(options: RunExportCommandOptions): Promis
 
   const registry = loadRegistry();
   const selection = await runWizard(registry);
-  const packages = selectedPackages(selection);
+  const packages = selectedPackages(selection, registry);
   const packageManager = detectPackageManager(options.cwd);
 
   doInstall({ cwd: options.cwd, packageManager, packages });
 
-  const runtimeConfig = await doBuildRuntimeConfig(selection, { cwd: options.cwd });
+  const runtimeConfig = await doBuildRuntimeConfig(selection, { cwd: options.cwd, registry });
   const results = await runRuntime(runtimeConfig);
   reportResults(results);
   throwOnFailed(results);

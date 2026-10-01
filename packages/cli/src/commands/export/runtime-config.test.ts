@@ -3,7 +3,7 @@ import os from 'os';
 import path from 'path';
 import { describe, expect, it, vi } from 'vitest';
 import { ExportCommandError, buildExportRuntimeConfig } from './runtime-config';
-import type { ExportSelection, PluginRegistryEntry } from '../init/types';
+import type { ExportSelection, PluginRegistry, PluginRegistryEntry } from '../init/types';
 
 const fromEntry: PluginRegistryEntry = {
   kind: 'from',
@@ -79,6 +79,88 @@ function writePluginPackage(cwd: string, packageName: string, pluginName: string
 }
 
 describe('buildExportRuntimeConfig', () => {
+  it('passes ordered target transforms and their defaults to the target factory', async () => {
+    const first: PluginRegistryEntry = {
+      ...transformEntry,
+      type: 'first',
+      packageName: '@fixture/first',
+      optionsSchema: { type: 'object', properties: { mode: { type: 'string', default: 'safe' } } },
+    };
+    const second = { ...transformEntry, type: 'second', packageName: '@fixture/second' };
+    const target = { ...toEntry, defaultPlugins: ['first', 'second'] };
+    const registry: PluginRegistry = {
+      schemaVersion: 1,
+      plugins: [fromEntry, transformEntry, first, second, target],
+    };
+    const selected = {
+      ...createSelection(),
+      to: { entry: target, answers: { outputDir: './docs' } },
+    };
+    const firstPlugin = { name: 'transform:first', kind: 'transform' as const, transform: vi.fn() };
+    const secondPlugin = {
+      name: 'transform:second',
+      kind: 'transform' as const,
+      transform: vi.fn(),
+    };
+    const firstFactory = vi.fn(() => firstPlugin);
+    const secondFactory = vi.fn(() => secondPlugin);
+    const toFactory = vi.fn((options) => ({
+      name: 'to:local',
+      kind: 'to' as const,
+      plugins: options.plugins,
+      deploy: vi.fn(),
+    }));
+    const config = await buildExportRuntimeConfig(selected, {
+      registry,
+      loadPlugin: async (name) => {
+        if (name === first.packageName) return firstFactory;
+        if (name === second.packageName) return secondFactory;
+        if (name === target.packageName) return toFactory;
+        if (name === fromEntry.packageName)
+          return () => ({ name: 'from:fixture', kind: 'from', download: vi.fn() });
+        return () => ({ name: 'transform:shared', kind: 'transform', transform: vi.fn() });
+      },
+    });
+
+    expect(firstFactory).toHaveBeenCalledWith({ mode: 'safe' });
+    expect(secondFactory).toHaveBeenCalledWith({});
+    expect(toFactory).toHaveBeenCalledWith({
+      outputDir: './docs',
+      plugins: [firstPlugin, secondPlugin],
+    });
+    expect(config.plugins).toEqual([expect.objectContaining({ name: 'transform:shared' })]);
+    expect(config.to).toMatchObject({ plugins: [firstPlugin, secondPlugin] });
+    expect(selected.to.answers).toEqual({ outputDir: './docs' });
+  });
+
+  it.each(['import', 'factory'] as const)(
+    'reports target transform %s failures before creating the target',
+    async (failure) => {
+      const target = { ...toEntry, defaultPlugins: [transformEntry.type] };
+      const selected = { ...createSelection(), transforms: [], to: { entry: target, answers: {} } };
+      const toFactory = vi.fn(() => ({ name: 'to:local', kind: 'to' as const, deploy: vi.fn() }));
+      await expect(
+        buildExportRuntimeConfig(selected, {
+          registry: { schemaVersion: 1, plugins: [fromEntry, transformEntry, target] },
+          loadPlugin: async (name) => {
+            if (name === target.packageName) return toFactory;
+            if (name === transformEntry.packageName) {
+              if (failure === 'import') throw new Error('missing target converter');
+              return () => {
+                throw new Error('bad target converter');
+              };
+            }
+            return () => ({ name: 'from:fixture', kind: 'from', download: vi.fn() });
+          },
+        }),
+      ).rejects.toMatchObject({
+        code: failure === 'import' ? 'EXPORT_PLUGIN_IMPORT_FAILED' : 'EXPORT_PLUGIN_FACTORY_FAILED',
+        message: expect.stringContaining(transformEntry.packageName),
+      });
+      expect(toFactory).not.toHaveBeenCalled();
+    },
+  );
+
   it('imports plugin factories, passes answers directly, and disables cache', async () => {
     const fromPlugin = { name: 'from:yuque', kind: 'from' as const, download: vi.fn() };
     const transformPlugin = {
