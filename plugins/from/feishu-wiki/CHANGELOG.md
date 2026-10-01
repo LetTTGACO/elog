@@ -1,3 +1,17 @@
+## 1.0.0-beta.5 (2026-10-01)
+
+### 🚀 Features
+
+- **cli:** expose config authoring and simplify init dependencies ([eb224028](https://github.com/LetTTGACO/elog/commit/eb224028))
+
+### 🧱 Updated Dependencies
+
+- Updated @elog/plugin-sdk to 1.0.0-beta.2
+
+### ❤️ Thank You
+
+- LetTTGACO
+
 ## 1.0.0-beta.4 (2026-07-07)
 
 ### 🧱 Updated Dependencies

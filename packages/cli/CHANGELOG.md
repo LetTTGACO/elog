@@ -1,3 +1,28 @@
+## 1.0.0-beta.5 (2026-10-01)
+
+### 🚀 Features
+
+- support target-specific transforms and Halo init defaults ([909701fe](https://github.com/LetTTGACO/elog/commit/909701fe))
+- **cli:** generate documented env placeholders during init ([75e270ad](https://github.com/LetTTGACO/elog/commit/75e270ad))
+- **cli:** expose config authoring and simplify init dependencies ([eb224028](https://github.com/LetTTGACO/elog/commit/eb224028))
+
+### 🩹 Fixes
+
+- **cli:** apply target transforms during export ([d952a1a9](https://github.com/LetTTGACO/elog/commit/d952a1a9))
+- **cli:** make image selection optional and single-choice ([45f1b8ff](https://github.com/LetTTGACO/elog/commit/45f1b8ff))
+- **cli:** correct local image paths in init configs ([52f03505](https://github.com/LetTTGACO/elog/commit/52f03505))
+- **cli:** default to npm and report init installation progress ([7b9acff3](https://github.com/LetTTGACO/elog/commit/7b9acff3))
+- **cli:** validate init selections and config before installation ([599fae26](https://github.com/LetTTGACO/elog/commit/599fae26))
+- **cli:** use supported inquirer select prompts ([47264211](https://github.com/LetTTGACO/elog/commit/47264211))
+
+### 🧱 Updated Dependencies
+
+- Updated @elog/core to 1.0.0-beta.2
+
+### ❤️ Thank You
+
+- LetTTGACO
+
 ## 1.0.0-beta.4 (2026-07-07)
 
 ### 🚀 Features

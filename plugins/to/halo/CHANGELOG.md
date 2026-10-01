@@ -1,3 +1,22 @@
+## 1.0.0-beta.2 (2026-10-01)
+
+### 🚀 Features
+
+- support target-specific transforms and Halo init defaults ([909701fe](https://github.com/LetTTGACO/elog/commit/909701fe))
+- **cli:** expose config authoring and simplify init dependencies ([eb224028](https://github.com/LetTTGACO/elog/commit/eb224028))
+
+### 🩹 Fixes
+
+- **cli:** apply target transforms during export ([d952a1a9](https://github.com/LetTTGACO/elog/commit/d952a1a9))
+
+### 🧱 Updated Dependencies
+
+- Updated @elog/plugin-sdk to 1.0.0-beta.2
+
+### ❤️ Thank You
+
+- LetTTGACO
+
 ## 1.0.0-beta.1 (2026-07-07)
 
 ### 🚀 Features
