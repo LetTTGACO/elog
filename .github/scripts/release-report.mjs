@@ -9,6 +9,7 @@ import {
 } from 'node:fs';
 import { execFileSync, spawn } from 'node:child_process';
 import path from 'node:path';
+import { setTimeout as sleep } from 'node:timers/promises';
 import { pathToFileURL } from 'node:url';
 
 const readJson = (file, fallback = null) =>
@@ -40,9 +41,12 @@ function manifests() {
     .map((root) => ({ root, ...readJson(`${root}/package.json`) }));
 }
 
-async function registryState(name, version, channel, currentVersion) {
+async function registryState(name, version, channel, currentVersion, signal) {
   const request = async (url) => {
-    const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
+    const timeout = AbortSignal.timeout(15000);
+    const response = await fetch(url, {
+      signal: signal ? AbortSignal.any([timeout, signal]) : timeout,
+    });
     if (response.status === 404) return null;
     if (!response.ok) throw new Error(`npm registry HTTP ${response.status}`);
     return response.json();
@@ -67,7 +71,7 @@ async function registryState(name, version, channel, currentVersion) {
   }
 }
 
-async function mapRegistry(packages, channel, includeCurrent = false) {
+async function mapRegistry(packages, channel, includeCurrent = false, signal) {
   const results = {};
   // Bound registry traffic while keeping a failed package from hiding other results.
   for (let index = 0; index < packages.length; index += 4) {
@@ -78,11 +82,57 @@ async function mapRegistry(packages, channel, includeCurrent = false) {
           pkg.newVersion,
           channel,
           includeCurrent ? pkg.currentVersion : undefined,
+          signal,
         );
       }),
     );
   }
   return results;
+}
+
+export async function verifyRegistry(
+  packages,
+  channel,
+  {
+    query = mapRegistry,
+    sleep: wait = sleep,
+    now = () => performance.now(),
+    onAttempt = () => {},
+  } = {},
+) {
+  const start = now();
+  const deadline = start + 300000;
+  const registry = {};
+  let pending = packages;
+  let attempts = 0;
+  let delay = 10000;
+  const retryDelays = [5000, 10000, 20000, 30000];
+  while (pending.length && now() < deadline) {
+    await wait(Math.min(delay, deadline - now()));
+    const remaining = Math.ceil(deadline - now());
+    if (remaining <= 0) break;
+    // Share the deadline across all request batches, not just each HTTP request.
+    Object.assign(registry, await query(pending, channel, false, AbortSignal.timeout(remaining)));
+    attempts += 1;
+    pending = pending.filter((pkg) => {
+      const state = registry[pkg.name];
+      return !state || state.error || !state.exists || state.tag !== pkg.newVersion;
+    });
+    onAttempt({
+      attempt: attempts,
+      elapsedMs: Math.round(now() - start),
+      pending: pending.map((pkg) => pkg.name),
+      registry: { ...registry },
+    });
+    delay = retryDelays[Math.min(attempts - 1, retryDelays.length - 1)];
+  }
+  return {
+    registry,
+    attempts,
+    elapsedMs: Math.round(now() - start),
+    pending: pending.map((pkg) => pkg.name),
+    timedOut: pending.length > 0,
+  };
 }
 
 export function assertPublishable(report) {
@@ -521,8 +571,25 @@ async function verify(dir) {
   const report = readJson(path.join(dir, 'plan.json'));
   if (!report || report.dryRun) return;
   const changed = report.packages.filter((pkg) => pkg.newVersion);
-  const actual = { registry: await mapRegistry(changed, report.channel), git: {} };
+  const actual = { registry: {}, git: {}, verification: { attempts: [] } };
   writeJson(path.join(dir, 'actual.json'), actual);
+  if (changed.length) console.log('等待 10 秒后核验 npm，查询与重试总时限为 5 分钟。');
+  const observed = await verifyRegistry(changed, report.channel, {
+    onAttempt: (snapshot) => {
+      actual.registry = snapshot.registry;
+      actual.verification.attempts.push(snapshot);
+      writeJson(path.join(dir, 'actual.json'), actual);
+      console.log(
+        `npm 核验第 ${snapshot.attempt} 轮：${changed.length - snapshot.pending.length}/${changed.length} 个包已确认；待确认：${snapshot.pending.join(', ') || '无'}`,
+      );
+    },
+  });
+  actual.registry = observed.registry;
+  actual.verification.elapsedMs = observed.elapsedMs;
+  actual.verification.timedOut = observed.timedOut;
+  writeJson(path.join(dir, 'actual.json'), actual);
+  if (observed.timedOut)
+    console.error(`npm 核验超过 5 分钟，仍未确认：${observed.pending.join(', ')}`);
   try {
     actual.git.commit = git('rev-parse', 'HEAD');
     const refs = git(
@@ -561,7 +628,7 @@ async function verify(dir) {
     !actual.git.remoteContainsCommit ||
     changed.some((pkg) => {
       const state = actual.registry[pkg.name];
-      return state.error || !state.exists || state.tag !== pkg.newVersion;
+      return !state || state.error || !state.exists || state.tag !== pkg.newVersion;
     })
   )
     process.exitCode = 1;

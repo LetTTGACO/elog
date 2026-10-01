@@ -13,7 +13,12 @@ import path from 'node:path';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { assertPublishable, packageResult, renderSummary } from './release-report.mjs';
+import {
+  assertPublishable,
+  packageResult,
+  renderSummary,
+  verifyRegistry,
+} from './release-report.mjs';
 
 const pkg = {
   name: '@elog/core',
@@ -146,6 +151,111 @@ test('successful npm publication cannot hide a failed Git push', () => {
   assert.match(markdown, /新版本及渠道已确认/);
   assert.match(markdown, /Git 推送步骤：❌ 失败/);
   assert.match(markdown, /Git 远端提交或标签尚未全部确认/);
+});
+
+test('publication verification waits ten seconds and retries only packages not yet confirmed', async () => {
+  const packages = [pkg, { ...pkg, name: '@elog/plugin-sdk' }, { ...pkg, name: '@elog/cli' }];
+  let clock = 0;
+  const waits = [];
+  const queries = [];
+  const snapshots = [];
+  const result = await verifyRegistry(packages, 'beta', {
+    now: () => clock,
+    sleep: async (ms) => {
+      waits.push(ms);
+      clock += ms;
+    },
+    query: async (pending, channel) => {
+      assert.equal(channel, 'beta');
+      queries.push({ time: clock, names: pending.map((p) => p.name) });
+      return Object.fromEntries(
+        pending.map((p) => [
+          p.name,
+          queries.length === 1 && p.name === '@elog/core'
+            ? { exists: false, tag: p.currentVersion }
+            : queries.length <= 2 && p.name === '@elog/plugin-sdk'
+              ? { exists: true, tag: p.currentVersion }
+              : { exists: true, tag: p.newVersion, integrity: 'fixture-integrity' },
+        ]),
+      );
+    },
+    onAttempt: (snapshot) => snapshots.push(snapshot),
+  });
+  assert.deepEqual(waits, [10000, 5000, 10000]);
+  assert.deepEqual(queries, [
+    { time: 10000, names: packages.map((p) => p.name) },
+    { time: 15000, names: ['@elog/core', '@elog/plugin-sdk'] },
+    { time: 25000, names: ['@elog/plugin-sdk'] },
+  ]);
+  assert.equal(result.timedOut, false);
+  assert.deepEqual(result.pending, []);
+  assert.equal(result.registry['@elog/cli'].integrity, 'fixture-integrity');
+  assert.equal(snapshots[0].registry['@elog/core'].exists, false);
+  assert.equal(snapshots.at(-1).registry['@elog/core'].exists, true);
+});
+
+test('publication verification recovers from temporary registry errors', async () => {
+  let clock = 0;
+  let calls = 0;
+  const result = await verifyRegistry([pkg], 'beta', {
+    now: () => clock,
+    sleep: async (ms) => {
+      clock += ms;
+    },
+    query: async () => ({
+      [pkg.name]:
+        ++calls === 1 ? { error: 'npm registry HTTP 503' } : { exists: true, tag: pkg.newVersion },
+    }),
+  });
+  assert.equal(calls, 2);
+  assert.equal(result.timedOut, false);
+  assert.deepEqual(result.pending, []);
+});
+
+test('publication verification stops after five minutes and preserves unresolved package states', async () => {
+  let clock = 0;
+  const waits = [];
+  const errors = [
+    { exists: false, tag: pkg.currentVersion },
+    { exists: true, tag: pkg.currentVersion },
+    { error: 'network unavailable' },
+  ];
+  const packages = errors.map((_, i) => ({ ...pkg, name: `@elog/fixture-${i}` }));
+  const result = await verifyRegistry(packages, 'beta', {
+    now: () => clock,
+    sleep: async (ms) => {
+      waits.push(ms);
+      clock += ms;
+    },
+    query: async (pending) => {
+      assert.ok(clock < 300000);
+      // Query time counts against the deadline too.
+      clock += 1000;
+      return Object.fromEntries(pending.map((p, i) => [p.name, errors[i]]));
+    },
+  });
+  assert.deepEqual(waits.slice(0, 5), [10000, 5000, 10000, 20000, 30000]);
+  assert.ok(waits.slice(5).every((ms) => ms <= 30000));
+  assert.equal(clock, 300000);
+  assert.equal(result.timedOut, true);
+  assert.deepEqual(
+    result.pending,
+    packages.map((p) => p.name),
+  );
+  assert.deepEqual(Object.values(result.registry), errors);
+});
+
+test('publication verification skips waiting when there are no changed packages', async () => {
+  const result = await verifyRegistry([], 'beta', {
+    sleep: async () => {
+      assert.fail('unexpected wait');
+    },
+    query: async () => {
+      assert.fail('unexpected query');
+    },
+  });
+  assert.equal(result.timedOut, false);
+  assert.deepEqual(result.pending, []);
 });
 
 test('Nx release creates commit and tags without an upstream, then the workflow pushes atomically', () => {

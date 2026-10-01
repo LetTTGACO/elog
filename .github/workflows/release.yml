@@ -171,7 +171,7 @@ jobs:
       - name: Verify published versions and Git refs
         id: verify
         if: ${{ always() && !inputs.dry_run && contains(fromJSON('["success", "failure", "cancelled"]'), steps.release.outcome) }}
-        timeout-minutes: 2
+        timeout-minutes: 7
         run: node .github/scripts/release-report.mjs run verify node .github/scripts/release-report.mjs verify
 
       - name: Upload failed release history
