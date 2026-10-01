@@ -23,7 +23,7 @@
 | `notion-to-wordpress` | 测 Notion、R2 图床和 WordPress 部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID`, `ELOG_E2E_WORDPRESS_ENDPOINT`, `ELOG_E2E_WORDPRESS_USERNAME`, `ELOG_E2E_WORDPRESS_PASSWORD`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
 | `notion-to-halo` | 测专用 Notion-Halo fixture、R2 正文/cover 图床和 Halo 部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_HALO_DATABASE_ID`, `ELOG_E2E_HALO_ENDPOINT`, `ELOG_E2E_HALO_TOKEN`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
 
-在 `tests/e2e` 中运行 `pnpm test:stable` 会执行稳定同步矩阵，包括 `notion-to-halo`。`stable: false` 的手动/可选用例（例如 WordPress、FlowUs）不会被稳定矩阵选中。
+在 `tests/e2e` 中运行 `pnpm test:stable` 会执行稳定同步矩阵，包括 `notion-to-halo`。`stable: false` 的手动/可选用例（语雀 Token、WordPress、FlowUs）不会被稳定矩阵选中。
 
 发布前如果要提前发现 Node 24 兼容问题，用 Node 24 手动跑稳定矩阵：
 

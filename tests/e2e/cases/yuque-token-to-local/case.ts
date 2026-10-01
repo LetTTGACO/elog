@@ -42,6 +42,7 @@ function expectR2ImageLinks(workspace: string): void {
 const syncCase: SyncCase = {
   id: e2eProfile.id,
   title: 'Yuque token source -> local deploy',
+  stable: false,
   requiredEnv: [
     'ELOG_E2E_YUQUE_TOKEN',
     'ELOG_E2E_YUQUE_LOGIN',

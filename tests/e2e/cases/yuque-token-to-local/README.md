@@ -2,7 +2,7 @@
 
 ## 测试目的
 
-这个 case 用来验证语雀 Token 登录下载、R2 图床替换，以及本地 Markdown 部署的基础链路。
+这个 case 用来验证语雀 Token 登录下载、R2 图床替换，以及本地 Markdown 部署的基础链路。该路径需要会员能力，作为可选用例通过 `pnpm test:yuque-token-local` 单独运行。
 
 ## 覆盖范围
 
