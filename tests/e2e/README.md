@@ -10,7 +10,7 @@
 - `.env`：本地私密环境变量，不提交。
 - `.tmp/`：本地调试输出，不提交。
 
-当前保留的同步用例：
+稳定同步用例：
 
 | 用例 | 作用 | 必需环境变量 |
 | --- | --- | --- |
@@ -19,14 +19,20 @@
 | `feishu-wiki-to-local` | 测飞书 Wiki 下载、本地图床和本地部署 | `ELOG_E2E_FEISHU_APP_ID`, `ELOG_E2E_FEISHU_APP_SECRET`, `ELOG_E2E_FEISHU_WIKI_ID` |
 | `feishu-space-r2-to-local` | 测飞书 Space 下载、R2 图床和本地部署 | `ELOG_E2E_FEISHU_APP_ID`, `ELOG_E2E_FEISHU_APP_SECRET`, `ELOG_E2E_FEISHU_SPACE_FOLDER_TOKEN`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
 | `yuque-pwd-to-local` | 测语雀密码登录、七种图床、目录结构图片路径和本地部署 | `ELOG_E2E_YUQUE_USERNAME`, `ELOG_E2E_YUQUE_PWD`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO_TOC`，以及各图床所需凭据 |
-| `yuque-token-to-local` | 测语雀 Token 登录下载、R2 图床和本地部署 | `ELOG_E2E_YUQUE_TOKEN`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
-| `notion-to-wordpress` | 测 Notion、R2 图床和 WordPress 部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID`, `ELOG_E2E_WORDPRESS_ENDPOINT`, `ELOG_E2E_WORDPRESS_USERNAME`, `ELOG_E2E_WORDPRESS_PASSWORD`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
 | `notion-to-halo` | 测专用 Notion-Halo fixture、R2 正文/cover、Halo 远端回读及文章更新 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_HALO_DATABASE_ID`, `ELOG_E2E_HALO_ENDPOINT`, `ELOG_E2E_HALO_TOKEN`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
 | `yuque-pwd-to-halo` | 测语雀密码登录、R2 正文/cover 和 Halo 远端回读 | `ELOG_E2E_YUQUE_USERNAME`, `ELOG_E2E_YUQUE_PWD`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO_TOC`，以及 Halo、R2 凭据 |
 | `feishu-space-to-halo` | 测飞书空间、R2 正文图片和 Halo 远端回读 | `ELOG_E2E_FEISHU_APP_ID`, `ELOG_E2E_FEISHU_APP_SECRET`, `ELOG_E2E_FEISHU_SPACE_FOLDER_TOKEN`，以及 Halo、R2 凭据 |
 | `feishu-wiki-to-halo` | 测飞书 Wiki、R2 正文图片和 Halo 远端回读 | `ELOG_E2E_FEISHU_APP_ID`, `ELOG_E2E_FEISHU_APP_SECRET`, `ELOG_E2E_FEISHU_WIKI_ID`，以及 Halo、R2 凭据 |
 
-在 `tests/e2e` 中运行 `pnpm test:stable` 会执行稳定同步矩阵，包括 Notion、语雀密码、飞书空间、飞书 Wiki 到 Halo 的四个组合。`stable: false` 的手动/可选用例（语雀 Token、WordPress、FlowUs）不会被稳定矩阵选中。
+在 `tests/e2e` 中运行 `pnpm test:stable` 会执行上述稳定同步矩阵，包括 Notion、语雀密码、飞书空间、飞书 Wiki 到 Halo 的四个组合。
+
+手动可选用例（`stable: false`）：
+
+| 用例 | 作用 | 运行条件 | 必需环境变量 |
+| --- | --- | --- | --- |
+| `yuque-token-to-local` | 测语雀 Token 登录下载、R2 图床和本地部署 | 需要会员能力 | `ELOG_E2E_YUQUE_TOKEN`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO`，以及 R2 凭据 |
+| `flowus-to-local` | 测 FlowUs 下载、R2 图床和本地部署 | 需要会员能力 | `ELOG_E2E_FLOWUS_TABLE_PAGE_ID`，以及 R2 凭据 |
+| `notion-to-wordpress` | 测 Notion、R2 图床和 WordPress 部署 | 需要可用的 WordPress 测试站点 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID`, `ELOG_E2E_WORDPRESS_ENDPOINT`, `ELOG_E2E_WORDPRESS_USERNAME`, `ELOG_E2E_WORDPRESS_PASSWORD`，以及 R2 凭据 |
 
 发布前如果要提前发现 Node 24 兼容问题，用 Node 24 手动跑稳定矩阵：
 
@@ -38,6 +44,7 @@ nvm exec 24 pnpm test:stable
 这条命令会走真实平台 e2e，只适合本地发布前验证，不作为默认 CI 必跑项。
 
 如果某个用例缺少环境变量，Vitest 会跳过它。
+验证时应检查跳过列表，确认有凭据的组合实际执行。
 
 ## 环境变量
 
@@ -61,6 +68,7 @@ nvm exec 24 pnpm test:stable
 | 飞书 | `ELOG_E2E_FEISHU_APP_ID`, `ELOG_E2E_FEISHU_APP_SECRET`, `ELOG_E2E_FEISHU_WIKI_ID`, `ELOG_E2E_FEISHU_WIKI_FOLDER_TOKEN`, `ELOG_E2E_FEISHU_SPACE_FOLDER_TOKEN`, `ELOG_E2E_FEISHU_BASE_URL` |
 | 语雀密码登录 | `ELOG_E2E_YUQUE_USERNAME`, `ELOG_E2E_YUQUE_PWD`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO_TOC` |
 | 语雀 Token 登录 | `ELOG_E2E_YUQUE_TOKEN`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO` |
+| FlowUs | `ELOG_E2E_FLOWUS_TABLE_PAGE_ID` |
 | WordPress | `ELOG_E2E_WORDPRESS_ENDPOINT`, `ELOG_E2E_WORDPRESS_USERNAME`, `ELOG_E2E_WORDPRESS_PASSWORD` |
 | Halo | `ELOG_E2E_HALO_ENDPOINT`, `ELOG_E2E_HALO_TOKEN` |
 | B2 图床 | `ELOG_E2E_B2_HOST`, `ELOG_E2E_B2_APPLICATION_KEY_ID`, `ELOG_E2E_B2_APPLICATION_KEY`, `ELOG_E2E_B2_BUCKET` |
@@ -105,6 +113,15 @@ pnpm run test:notion-halo
 pnpm run test:yuque-pwd-halo
 pnpm run test:feishu-space-halo
 pnpm run test:feishu-wiki-halo
+```
+
+FlowUs 手动用例在构建后通过 Vitest 选择，会员与 fixture 要求见
+[用例说明](cases/flowus-to-local/README.md)：
+
+```bash
+cd tests/e2e
+pnpm build:repo
+ELOG_E2E_CASE=flowus-to-local pnpm exec vitest run --reporter=verbose src/sync-matrix.e2e.test.ts
 ```
 
 在 `tests/e2e` 中运行完整 E2E（包含真实平台用例）：
@@ -152,10 +169,10 @@ ELOG_E2E_IMAGE=local pnpm run test:notion-local
 
 ## 新增用例
 
-新增同步用例时，在 `cases/<from>-to-<to>/` 下放两个文件：
+新增同步用例时，在 `cases/<from>-to-<to>/` 下放三个文件：
 
 - `elog.config.ts`：真实 Elog 配置，并导出 `e2eProfile`。
-- `case.ts`：声明必需环境变量、配置文件名和轻断言。可导出单个用例或多个图床 profile 用例；profile 用例通过 `env` 为子进程设置图床选择。
+- `case.ts`：声明必需环境变量、配置文件名和行为断言。可导出单个用例或多个图床 profile 用例；profile 用例通过 `env` 为子进程设置图床选择。远端部署用例应增加回读断言。
 - `README.md`：说明这个 case 的测试目的、fixture 要求、覆盖范围和不覆盖范围。
   如果 case 支持手动切换图床、profile 或其他关键配置，README 里必须写清楚要改哪个文件、哪个字段，以及切换后需要哪些环境变量。
 

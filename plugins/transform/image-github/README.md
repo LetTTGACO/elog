@@ -42,7 +42,7 @@ Token 建议保存在 env 文件中，并通过 `elog sync --env <file>` 显式�
 | `propertyImageFields` | `string[]` | `[]`                             | 同时处理的文档属性，例如 `cover`          |
 | `disable`             | `boolean`  | `false`                          | 跳过整个图片转换步骤                      |
 
-GitHub 上传固定使用 3 个并发请求，以降低 Contents API 并发提交冲突。`prefixKey` 会自动去除首尾
+GitHub 图片上传采用串行处理，避免 Contents API 同时提交到同一分支时发生冲突。`prefixKey` 会自动去除首尾
 斜杠并保留一个结尾斜杠。
 
 ## 地址与权限

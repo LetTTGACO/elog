@@ -106,8 +106,8 @@ Trusted Publisher 按包配置，完整列表以 `nx.json` 的 `release.projects
 - `@elog/plugin-to-local`
 - `@elog/plugin-to-halo`
 
-新增的 `@elog/plugin-contracts` 使用 manifest 中的 Beta 版本作为未发布基线；首次
-发布前确认版本预演及该包的 npm 发布授权，发布后按包独立演进。
+`@elog/plugin-contracts` 已发布，与其他已发布包一样使用包级 Git tag 作为版本基线。
+Manifest 版本作为未发布新包的回退基线。发布前通过预演核对各包的版本变化和 npm 发布授权。
 
 也可以使用 npm CLI 11.15.0 及以上版本，在交互登录并完成 2FA 后逐包配置：
 
@@ -162,8 +162,13 @@ npm 和 Git。快照位于 `release-report` 的 `recovery/`，包括版本计划
 
 Node 22 和 24 的 CI 除构建、类型检查、单元测试及发布报告测试外，还运行
 `pnpm e2e:cli`。它使用临时目录和本地 fixture 验证版本查询、初始化预演、缺少配置
-时的退出码及离线同步链路。真实平台同步用例在 `tests/e2e` 目录通过
-`pnpm test:notion-local` 等命令手动执行，完整命令见 [E2E README](../tests/e2e/README.md)。
+时的退出码及离线同步链路，包括 Halo 创建、更新和远端回读流程的本地 API 模拟测试。
+
+发布前在 `tests/e2e` 中手动运行 `pnpm test:stable`，验证真实平台稳定矩阵。当前包括
+七种图床，以及 Notion、语雀密码、飞书空间、飞书 Wiki 到 Halo 的四个组合。Halo 用例
+回读正文、图片、cover 和发布快照；Notion-Halo 还验证临时正文变更的更新、发布与恢复。
+检查跳过列表，确认有凭据的组合实际执行。完整命令与 fixture 要求见
+[E2E README](../tests/e2e/README.md)。
 
 参考：[npm Trusted Publishing](https://docs.npmjs.com/trusted-publishers/)、
 [npm trust](https://docs.npmjs.com/cli/v12/commands/npm-trust/)、
