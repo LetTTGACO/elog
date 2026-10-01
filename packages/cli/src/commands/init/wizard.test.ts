@@ -273,7 +273,7 @@ describe('InitCommandError for PLUGIN_SELECTION_EMPTY', () => {
     prompt
       .mockResolvedValueOnce({ from: 'notion' })
       .mockResolvedValueOnce({ to: [] })
-      .mockResolvedValueOnce({ transforms: [] });
+      .mockResolvedValueOnce({ transforms: '' });
 
     const { runInitWizard } = await import('./wizard');
     const { loadBuiltInPluginRegistry } = await import('./registry');
@@ -297,7 +297,7 @@ describe('runInitWizard', () => {
     prompt
       .mockResolvedValueOnce({ from: 'yuque-pwd' })
       .mockResolvedValueOnce({ to: ['local'] })
-      .mockResolvedValueOnce({ transforms: [] });
+      .mockResolvedValueOnce({ transforms: '' });
 
     const { runInitWizard } = await import('./wizard');
     const selection = await runInitWizard(registry);
@@ -317,7 +317,7 @@ describe('runPluginSelectionWizard', () => {
       prompt
         .mockResolvedValueOnce({ from: 'notion' })
         .mockResolvedValueOnce({ to: targetSelection === 'single' ? 'local' : ['local'] })
-        .mockResolvedValueOnce({ transforms: ['image-local'] });
+        .mockResolvedValueOnce({ transforms: 'image-local' });
 
       const { runPluginSelectionWizard } = await import('./wizard');
       const selection = await runPluginSelectionWizard(loadBuiltInPluginRegistry(), {
@@ -326,8 +326,11 @@ describe('runPluginSelectionWizard', () => {
 
       expect(prompt.mock.calls[2]?.[0]).toEqual([
         expect.objectContaining({
+          type: 'select',
           message: '是否处理图片？',
+          default: '',
           choices: [
+            '',
             'image-cos',
             'image-oss',
             'image-github',
@@ -348,7 +351,7 @@ describe('runPluginSelectionWizard', () => {
     prompt
       .mockResolvedValueOnce({ from: 'yuque-pwd' })
       .mockResolvedValueOnce({ to: ['local'] })
-      .mockResolvedValueOnce({ transforms: ['image-local'] });
+      .mockResolvedValueOnce({ transforms: 'image-local' });
 
     const { runPluginSelectionWizard } = await import('./wizard');
     const selection = await runPluginSelectionWizard(registry);
@@ -367,7 +370,7 @@ describe('runPluginSelectionWizard', () => {
     prompt
       .mockResolvedValueOnce({ from: 'yuque-pwd' })
       .mockResolvedValueOnce({ to: [] })
-      .mockResolvedValueOnce({ transforms: [] });
+      .mockResolvedValueOnce({ transforms: '' });
 
     const { runPluginSelectionWizard } = await import('./wizard');
 
@@ -381,7 +384,7 @@ describe('runPluginSelectionWizard', () => {
     prompt
       .mockResolvedValueOnce({ from: 'yuque-pwd' })
       .mockResolvedValueOnce({ to: 'local' })
-      .mockResolvedValueOnce({ transforms: [] });
+      .mockResolvedValueOnce({ transforms: '' });
 
     const { runPluginSelectionWizard } = await import('./wizard');
     const selection = await runPluginSelectionWizard(registry, { targetSelection: 'single' });
@@ -401,7 +404,7 @@ describe('runExportWizard', () => {
     prompt
       .mockResolvedValueOnce({ from: 'yuque-pwd' })
       .mockResolvedValueOnce({ to: 'local' })
-      .mockResolvedValueOnce({ transforms: [] })
+      .mockResolvedValueOnce({ transforms: '' })
       .mockResolvedValueOnce({
         username: '1874@example.com',
         password: 'secret-password',

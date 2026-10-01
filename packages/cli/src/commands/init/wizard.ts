@@ -142,16 +142,15 @@ export async function runPluginSelectionWizard(
   );
   const transformAnswer = (await inquirer.prompt([
     {
-      type: 'checkbox',
+      type: 'select',
       name: 'transforms',
       message: '是否处理图片？',
-      choices: imagePlugins.map(buildPluginChoice),
+      default: '',
+      choices: [{ name: '不处理图片', value: '' }, ...imagePlugins.map(buildPluginChoice)],
     },
-  ])) as { transforms: string[] };
-  const transformEntries = transformAnswer.transforms.flatMap((type) => {
-    const entry = imagePlugins.find((plugin) => plugin.type === type);
-    return entry ? [entry] : [];
-  });
+  ])) as { transforms: string };
+  const imageEntry = imagePlugins.find((plugin) => plugin.type === transformAnswer.transforms);
+  const transformEntries = imageEntry ? [imageEntry] : [];
 
   if (!fromEntry || toEntries.length === 0) {
     // 没有 from/to 的选择无法构成可运行工作流，必须在生成配置前失败。
