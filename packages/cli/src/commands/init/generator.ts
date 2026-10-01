@@ -84,11 +84,29 @@ function normalizeSelection(selection: InitSelection | PluginSelection): InitSel
     return selection;
   }
 
-  return {
+  const normalized: InitSelection = {
     from: selectedPluginFromEntry(selection.from),
     transforms: selection.transforms.map((entry) => selectedPluginFromEntry(entry)),
     to: selection.to.map((entry) => selectedPluginFromEntry(entry)),
   };
+
+  const localTarget = normalized.to.find((plugin) => plugin.entry.type === 'local');
+  if (localTarget?.answers.keepToc || localTarget?.answers.deployByStructure) {
+    // init 保留文档目录时，图片引用也必须按文章所在目录计算。
+    for (const plugin of normalized.transforms) {
+      if (
+        plugin.entry.type === 'image-local' &&
+        plugin.entry.optionsSchema.properties?.pathFollowDoc
+      ) {
+        plugin.answers.pathFollowDoc = {
+          enable: true,
+          docOutputDir: localTarget.answers.outputDir,
+        };
+      }
+    }
+  }
+
+  return normalized;
 }
 
 /** 把注册表条目包装为已选择插件，并填入默认答案。 */

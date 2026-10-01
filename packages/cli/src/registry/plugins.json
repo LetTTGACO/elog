@@ -802,11 +802,21 @@
           "prefixKey": {
             "type": "string",
             "title": "图片访问前缀",
-            "default": "../../images",
+            "default": "../images",
             "x-elog-prompt": {
               "type": "input",
               "message": "请输入图片访问前缀"
             }
+          },
+          "pathFollowDoc": {
+            "type": "object",
+            "title": "图片路径跟随文档目录",
+            "x-elog-hidden": true,
+            "properties": {
+              "enable": { "type": "boolean" },
+              "docOutputDir": { "type": "string" }
+            },
+            "additionalProperties": false
           }
         },
         "additionalProperties": false
