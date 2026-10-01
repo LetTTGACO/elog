@@ -18,7 +18,7 @@
 | `notion-catalog-to-local` | 测 Notion catalog 字段到本地目录结构 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_CATALOG_DATABASE_ID` |
 | `feishu-wiki-to-local` | 测飞书 Wiki 下载、本地图床和本地部署 | `ELOG_E2E_FEISHU_APP_ID`, `ELOG_E2E_FEISHU_APP_SECRET`, `ELOG_E2E_FEISHU_WIKI_ID` |
 | `feishu-space-r2-to-local` | 测飞书 Space 下载、R2 图床和本地部署 | `ELOG_E2E_FEISHU_APP_ID`, `ELOG_E2E_FEISHU_APP_SECRET`, `ELOG_E2E_FEISHU_SPACE_FOLDER_TOKEN`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
-| `yuque-pwd-to-local` | 测语雀密码登录、目录结构图片路径和本地部署 | `ELOG_E2E_YUQUE_USERNAME`, `ELOG_E2E_YUQUE_PWD`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO_TOC` |
+| `yuque-pwd-to-local` | 测语雀密码登录、七种图床、目录结构图片路径和本地部署 | `ELOG_E2E_YUQUE_USERNAME`, `ELOG_E2E_YUQUE_PWD`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO_TOC`，以及各图床所需凭据 |
 | `yuque-token-to-local` | 测语雀 Token 登录下载、R2 图床和本地部署 | `ELOG_E2E_YUQUE_TOKEN`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
 | `notion-to-wordpress` | 测 Notion、R2 图床和 WordPress 部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID`, `ELOG_E2E_WORDPRESS_ENDPOINT`, `ELOG_E2E_WORDPRESS_USERNAME`, `ELOG_E2E_WORDPRESS_PASSWORD`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
 | `notion-to-halo` | 测专用 Notion-Halo fixture、R2 正文/cover 图床和 Halo 部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_HALO_DATABASE_ID`, `ELOG_E2E_HALO_ENDPOINT`, `ELOG_E2E_HALO_TOKEN`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
@@ -68,7 +68,7 @@ nvm exec 24 pnpm test:stable
 | R2 图床 | `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
 | 又拍云图床 | `ELOG_E2E_UPYUN_BUCKET`, `ELOG_E2E_UPYUN_USER`, `ELOG_E2E_UPYUN_PASSWORD` |
 
-图床凭据只在对应 case 的 `e2eProfile.image` 选中云图床时需要。
+图床凭据只在对应图床用例中需要。
 
 ## 推荐运行方式
 
@@ -77,6 +77,14 @@ nvm exec 24 pnpm test:stable
 ```bash
 pnpm e2e:cli
 ```
+
+从仓库根目录运行真实图床验证：
+
+```bash
+pnpm e2e:images
+```
+
+它使用语雀密码来源和 Local 部署，自动验证 `local`、`cos`、`github`、`oss`、`qiniu`、`r2`、`upyun`。每种图床各执行两次同步，检查图片替换和无变化跳过；缺少凭据的图床会跳过。在 `tests/e2e` 中的对应入口是 `pnpm test:images`。
 
 真实平台测试统一进入 `tests/e2e`，按需选择矩阵或单个用例：
 
@@ -116,7 +124,7 @@ ELOG_E2E_IMAGE=local pnpm run test:notion-local
 断言会根据 `e2eProfile.image` 自动调整：
 
 - `local` 且 `expectFiles: true`：检查 `outputDir` 下至少有图片文件。
-- 云图床：不检查本地图片文件；部分 case 会额外检查 Markdown 中的图床 host。
+- 云图床：不检查本地图片文件；语雀密码用例检查所有 Markdown 图片链接的图床域名和上传前缀，其他部分 case 检查 Markdown 中的图床 host。
 
 如果要改默认图床、本地图片路径或云图床前缀，继续改对应 case 的
 `e2eProfile.image` 或 `imageProfiles.<kind>` 即可。
@@ -139,7 +147,7 @@ ELOG_E2E_IMAGE=local pnpm run test:notion-local
 新增同步用例时，在 `cases/<from>-to-<to>/` 下放两个文件：
 
 - `elog.config.ts`：真实 Elog 配置，并导出 `e2eProfile`。
-- `case.ts`：声明必需环境变量、配置文件名和轻断言。
+- `case.ts`：声明必需环境变量、配置文件名和轻断言。可导出单个用例或多个图床 profile 用例；profile 用例通过 `env` 为子进程设置图床选择。
 - `README.md`：说明这个 case 的测试目的、fixture 要求、覆盖范围和不覆盖范围。
   如果 case 支持手动切换图床、profile 或其他关键配置，README 里必须写清楚要改哪个文件、哪个字段，以及切换后需要哪些环境变量。
 

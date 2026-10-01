@@ -25,6 +25,7 @@
     "release:dry-run": "nx release --dry-run",
     "release": "nx release --yes",
     "prepare": "husky",
-    "e2e:cli": "pnpm --filter @elog/e2e test:cli"
+    "e2e:cli": "pnpm --filter @elog/e2e test:cli",
+    "e2e:images": "pnpm --filter @elog/e2e test:images"
   }
 }

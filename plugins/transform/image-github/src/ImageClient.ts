@@ -15,6 +15,7 @@ export default class ImageClient extends ElogImageContext {
    * @param docDetailList
    */
   async processImages(docDetailList: DocDetail[]) {
-    return this.replaceImages(docDetailList, this.api, 3);
+    // 每次上传都会写入仓库提交，串行执行以避免分支更新冲突。
+    return this.replaceImages(docDetailList, this.api, 1);
   }
 }

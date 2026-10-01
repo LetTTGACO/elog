@@ -51,6 +51,7 @@ export interface SyncCase {
   id: string;
   title: string;
   stable?: boolean;
+  env?: NodeJS.ProcessEnv;
   requiredEnv: string[];
   configFile: string;
   expected: SyncCaseExpected;

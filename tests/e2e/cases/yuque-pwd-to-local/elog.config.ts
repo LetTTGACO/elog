@@ -13,7 +13,7 @@ import toLocal from '@elog/plugin-to-local';
 
 type E2eCloudImageKind = 'b2' | 'cos' | 'github' | 'oss' | 'qiniu' | 'r2' | 'upyun';
 
-type E2eImageProfile =
+export type E2eImageProfile =
   | {
       kind: 'local';
       outputDir: string;
@@ -32,7 +32,7 @@ const caseId = 'yuque-pwd-to-local';
 const docOutputDir = 'docs';
 const cloudPrefixKey = 'elog-e2e/yuque-pwd/';
 
-const imageProfiles: Record<E2eImageKind, E2eImageProfile> = {
+export const imageProfiles: Record<E2eImageKind, E2eImageProfile> = {
   local: {
     kind: 'local',
     outputDir: 'images',

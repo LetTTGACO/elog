@@ -4,7 +4,7 @@
 
 这个 case 用来验证语雀密码登录、语雀目录结构、本地图床 `pathFollowDoc`，以及本地 Markdown 部署能串成一个真实同步流程。
 
-当前默认场景是：语雀 TOC Repo -> 本地图床 `pathFollowDoc` -> 本地 Markdown。
+默认自动验证七种图床：`local`、`cos`、`github`、`oss`、`qiniu`、`r2`、`upyun`。每个图床使用独立 workspace 和缓存，流程都是语雀 TOC Repo -> 图片 transform -> 本地 Markdown。
 
 ## 覆盖范围
 
@@ -12,7 +12,8 @@
 - `ELOG_E2E_YUQUE_REPO_TOC` 指向带目录结构的语雀测试知识库。
 - `toLocal.keepToc` 会根据语雀目录信息生成嵌套文档目录。
 - `imageLocal.pathFollowDoc` 会根据文档所在目录计算图片相对路径。
-- 手动切换到 R2 或其他云图床时，会按对应 profile 上传并替换 Markdown 图片地址。
+- 本地图床的 Markdown 图片链接必须指向实际存在且非空的图片文件。
+- 云图床的 Markdown 图片链接必须使用对应图床域名和上传前缀。
 - 第二次运行应命中无变化或跳过逻辑。
 
 ## Fixture 要求
@@ -23,7 +24,15 @@
 
 ## 配置切换
 
-默认图床是 `local`。临时切换图床时，运行测试前设置 `ELOG_E2E_IMAGE`：
+从仓库根目录运行全部自动图床用例：
+
+```bash
+pnpm e2e:images
+```
+
+在 `tests/e2e` 中也可以运行 `pnpm test:images`。完整 E2E、稳定矩阵和 `test:yuque-pwd-local` 同样会选中这七种图床；缺少凭据的用例会跳过。
+
+只运行一个图床时，设置 `ELOG_E2E_IMAGE`：
 
 ```bash
 cd tests/e2e
@@ -32,16 +41,10 @@ ELOG_E2E_IMAGE=r2 pnpm run test:yuque-pwd-local
 
 可选值包括 `local`、`b2`、`cos`、`github`、`oss`、`qiniu`、`r2`、`upyun`。`case.ts` 会根据 `e2eProfile.image.kind` 自动追加对应图床环境变量；这些环境变量定义在 `tests/e2e/src/helpers/image-expected.ts` 的 `requiredEnvByImageKind`。
 
-图床切换点仍然集中在 `tests/e2e/cases/yuque-pwd-to-local/elog.config.ts`：
+图床配置集中在 `tests/e2e/cases/yuque-pwd-to-local/elog.config.ts` 的 `imageProfiles`；CLI 根据环境变量选择当前图床：
 
 ```ts
 image: selectImageProfile(),
-```
-
-如果想固定默认图床，也可以直接改成对应 profile：
-
-```ts
-image: imageProfiles.oss,
 ```
 
 如果切到云图床，上传前缀默认来自同一个文件里的：
@@ -55,7 +58,6 @@ const cloudPrefixKey = 'elog-e2e/yuque-pwd/';
 **可以直接改**
 
 - `ELOG_E2E_IMAGE`: 可以在 `local`、`b2`、`cos`、`github`、`oss`、`qiniu`、`r2`、`upyun` 之间临时切换。`case.ts` 会根据这里选中的 `kind` 自动追加对应图床环境变量。
-- `e2eProfile.image`: 可以固定成某个 `imageProfiles.<kind>`，适合长期更改默认测试路径。
 - `imageProfiles.local.outputDir`: 可以改成本地图床输出目录，例如 `images`、`assets`。现有断言会按这个值重新计算 Markdown 图片链接前缀。
 - 云图床 profile 的 `prefixKey`: 可以改上传前缀。当前统一用 `cloudPrefixKey = 'elog-e2e/yuque-pwd/'`，也可以给某个云图床单独写值。
 - 云图床插件里的可选字段，例如 `host`、`branch`、`region`: 可以按对应插件能力和环境变量调整。
@@ -85,5 +87,3 @@ const cloudPrefixKey = 'elog-e2e/yuque-pwd/';
 
 - 语雀 Token 登录路径；它由 `yuque-token-to-local` 覆盖。
 - Notion/FlowUs 的 catalog 字段。
-- 云图床全矩阵的默认运行；它们需要显式设置 `ELOG_E2E_IMAGE` 覆盖。
-- R2 和其他云图床不是默认运行路径，需要通过 `ELOG_E2E_IMAGE=<kind>` 覆盖。

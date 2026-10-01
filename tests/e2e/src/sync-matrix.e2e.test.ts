@@ -36,6 +36,7 @@ describe('elog sync e2e matrix', () => {
         const firstRun = await runElog(['sync', '--config', syncCase.configFile], {
           cwd: workspace.path,
           repoRoot,
+          env: syncCase.env,
         });
 
         expectExitCode(firstRun, 0);
@@ -45,6 +46,7 @@ describe('elog sync e2e matrix', () => {
         const secondRun = await runElog(['sync', '--config', syncCase.configFile], {
           cwd: workspace.path,
           repoRoot,
+          env: syncCase.env,
         });
 
         expectExitCode(secondRun, 0);

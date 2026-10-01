@@ -6,10 +6,9 @@ import {
   imageRequiredEnvFromProfile,
 } from '../../src/helpers/image-expected';
 import type { SyncCase } from '../../src/helpers/types';
-import { e2eProfile } from './elog.config';
+import { e2eProfile, imageProfiles, type E2eImageProfile } from './elog.config';
 
 const imageLinkPattern = /!\[[^\]]*]\(([^)]+)\)/g;
-const imageFilePattern = /\.(png|jpe?g|gif|webp|svg)([#?].*)?$/i;
 
 function collectMarkdownFiles(directory: string): string[] {
   const files: string[] = [];
@@ -31,86 +30,112 @@ function toPosixPath(filePath: string): string {
   return filePath.split(path.sep).join('/');
 }
 
-function readMarkdownOutput(workspace: string): string {
-  return collectMarkdownFiles(path.join(workspace, e2eProfile.docOutputDir))
-    .map((file) => fs.readFileSync(file, 'utf8'))
-    .join('\n');
-}
-
-function expectR2ImageLinks(workspace: string): void {
-  if (e2eProfile.image.kind !== 'r2') return;
-
-  const host = process.env.ELOG_E2E_R2_HOST;
-  if (!host) {
-    throw new Error('ELOG_E2E_R2_HOST is required for Yuque password R2 e2e');
-  }
-
-  expect(readMarkdownOutput(workspace)).toContain(
-    host.replace(/^https?:\/\//, '').replace(/\/+$/, ''),
+function collectImageLinks(workspace: string): { file: string; href: string }[] {
+  const docDir = path.join(workspace, e2eProfile.docOutputDir);
+  return collectMarkdownFiles(docDir).flatMap((file) =>
+    [...fs.readFileSync(file, 'utf8').matchAll(imageLinkPattern)].map((match) => ({
+      file,
+      href: match[1],
+    })),
   );
 }
 
-function expectPathFollowDocImageLinks(workspace: string): void {
-  if (e2eProfile.image.kind !== 'local' || !e2eProfile.image.pathFollowDoc?.enable) {
-    return;
-  }
-
+function expectLocalImageLinks(workspace: string, image: E2eImageProfile): void {
+  if (image.kind !== 'local') return;
   const docDir = path.join(workspace, e2eProfile.docOutputDir);
-  const imageDir = path.join(workspace, e2eProfile.image.outputDir);
-  const imageLinks: { file: string; href: string; expectedPrefix: string }[] = [];
-
-  for (const markdownFile of collectMarkdownFiles(docDir)) {
-    const content = fs.readFileSync(markdownFile, 'utf8');
-    const expectedPrefix = toPosixPath(path.relative(path.dirname(markdownFile), imageDir));
-
-    for (const match of content.matchAll(imageLinkPattern)) {
-      const href = match[1];
-
-      if (
-        /^(https?:)?\/\//.test(href) ||
-        href.startsWith('data:') ||
-        !imageFilePattern.test(href)
-      ) {
-        continue;
-      }
-
-      imageLinks.push({ file: markdownFile, href, expectedPrefix });
-    }
+  const imageDir = path.join(workspace, image.outputDir);
+  const imageLinks = collectImageLinks(workspace);
+  expect(imageLinks.length).toBeGreaterThan(0);
+  if (image.pathFollowDoc?.enable) {
+    expect(
+      imageLinks.some(({ file }) => path.dirname(file) !== docDir),
+      'TOC repo should include image links in nested docs',
+    ).toBe(true);
   }
 
-  expect(imageLinks.length).toBeGreaterThan(0);
-  expect(
-    imageLinks.some(({ file }) => path.dirname(file) !== docDir),
-    'TOC repo should include image links in nested docs',
-  ).toBe(true);
-
-  for (const { href, expectedPrefix } of imageLinks) {
-    expect(href.startsWith(`${expectedPrefix}/`)).toBe(true);
+  for (const { file, href } of imageLinks) {
+    const expectedPrefix = toPosixPath(path.relative(path.dirname(file), imageDir));
+    expect(href.startsWith(`${expectedPrefix}/`), file).toBe(true);
+    const imagePath = path.resolve(path.dirname(file), href);
+    expect(fs.existsSync(imagePath), file).toBe(true);
+    expect(fs.statSync(imagePath).isFile(), file).toBe(true);
+    expect(fs.statSync(imagePath).size, file).toBeGreaterThan(0);
   }
 }
 
-const syncCase: SyncCase = {
+function expectCloudImageLinks(workspace: string, image: E2eImageProfile): void {
+  if (image.kind === 'local') return;
+  const env = process.env;
+  const githubHost = env.ELOG_E2E_GITHUB_HOST?.includes('cdn.jsdelivr.net')
+    ? 'https://cdn.jsdelivr.net'
+    : env.ELOG_E2E_GITHUB_HOST;
+  const base = {
+    b2: env.ELOG_E2E_B2_HOST,
+    cos:
+      env.ELOG_E2E_COS_HOST ||
+      `${env.ELOG_E2E_COS_BUCKET}.cos.${env.ELOG_E2E_COS_REGION}.myqcloud.com`,
+    github: githubHost
+      ? `${githubHost}/gh/${env.ELOG_E2E_GITHUB_USER}/${env.ELOG_E2E_GITHUB_REPO}`
+      : `https://raw.githubusercontent.com/${env.ELOG_E2E_GITHUB_USER}/${env.ELOG_E2E_GITHUB_REPO}`,
+    oss:
+      env.ELOG_E2E_OSS_HOST || `${env.ELOG_E2E_OSS_BUCKET}.${env.ELOG_E2E_OSS_REGION}.aliyuncs.com`,
+    qiniu: env.ELOG_E2E_QINIU_HOST,
+    r2: env.ELOG_E2E_R2_HOST,
+    upyun: env.ELOG_E2E_UPYUN_HOST || `http://${env.ELOG_E2E_UPYUN_BUCKET}.test.upcdn.net`,
+  }[image.kind];
+  if (!base) throw new Error(`Missing public image host for ${image.kind}`);
+  const expectedUrl = new URL(/^https?:\/\//.test(base) ? base : `https://${base}`);
+  const basePath = expectedUrl.pathname.replace(/\/+$/, '');
+  const prefix = image.prefixKey?.replace(/^\/+|\/+$/g, '') ?? '';
+  const imageLinks = collectImageLinks(workspace);
+  expect(imageLinks.length).toBeGreaterThan(0);
+
+  for (const { file, href } of imageLinks) {
+    const url = new URL(href);
+    expect(url.origin, file).toBe(expectedUrl.origin);
+    expect(url.pathname.startsWith(`${basePath}/`), file).toBe(true);
+    if (image.kind === 'github' && !githubHost && prefix) {
+      // GitHub returns a branch segment between the repository and the upload prefix.
+      expect(url.pathname.slice(basePath.length).includes(`/${prefix}/`), file).toBe(true);
+    } else {
+      expect(url.pathname.startsWith(`${basePath}/${prefix ? `${prefix}/` : ''}`), file).toBe(true);
+    }
+  }
+}
+
+const selectedImage =
+  !process.env.ELOG_E2E_CASE || process.env.ELOG_E2E_CASE === e2eProfile.id
+    ? process.env.ELOG_E2E_IMAGE
+    : undefined;
+const profiles = selectedImage
+  ? [e2eProfile.image]
+  : ['local', 'cos', 'github', 'oss', 'qiniu', 'r2', 'upyun'].map(
+      (kind) => imageProfiles[kind as keyof typeof imageProfiles],
+    );
+
+const syncCases: SyncCase[] = profiles.map((image) => ({
   id: e2eProfile.id,
-  title: 'Yuque password source -> local deploy',
+  title: `Yuque password source -> ${image.kind} image transform -> local deploy`,
+  env: { ELOG_E2E_IMAGE: image.kind },
   requiredEnv: [
     'ELOG_E2E_YUQUE_USERNAME',
     'ELOG_E2E_YUQUE_PWD',
     'ELOG_E2E_YUQUE_LOGIN',
     'ELOG_E2E_YUQUE_REPO_TOC',
-    ...imageRequiredEnvFromProfile(e2eProfile.image),
+    ...imageRequiredEnvFromProfile(image),
   ],
   configFile: 'elog.config.ts',
   expected: {
     cacheFile: e2eProfile.cacheFile,
     outputDir: e2eProfile.docOutputDir,
     minMarkdownFiles: 1,
-    ...imageExpectedFromProfile(e2eProfile.image),
+    ...imageExpectedFromProfile(image),
   },
   assert({ secondRun, workspace }) {
-    expectR2ImageLinks(workspace);
-    expectPathFollowDocImageLinks(workspace);
+    expectCloudImageLinks(workspace, image);
+    expectLocalImageLinks(workspace, image);
     expect(secondRun.combinedOutput).toMatch(/skipped|no-change|无变化|跳过|synced 0/i);
   },
-};
+}));
 
-export default syncCase;
+export default syncCases;

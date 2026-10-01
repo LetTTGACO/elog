@@ -17,12 +17,14 @@
   },
   "scripts": {
     "build": "tsdown",
-    "typecheck": "tsc -p tsconfig.json --noEmit --pretty false"
+    "typecheck": "tsc -p tsconfig.json --noEmit --pretty false",
+    "test": "vitest run --passWithNoTests"
   },
   "devDependencies": {
     "@types/node": "~22.19.19",
     "tsdown": "^0.22.3",
-    "typescript": "~6.0.3"
+    "typescript": "~6.0.3",
+    "vitest": "^4.1.9"
   },
   "dependencies": {
     "@elog/plugin-sdk": "workspace:^"

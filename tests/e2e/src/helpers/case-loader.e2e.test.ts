@@ -1,5 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { filterSyncCases, syncCaseTitle } from './case-loader';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { filterSyncCases, loadSyncCases, syncCaseTitle } from './case-loader';
+import { repoRootFromE2e } from './run-cli';
 import type { SyncCase } from './types';
 
 const cases: SyncCase[] = [
@@ -27,6 +28,43 @@ const cases: SyncCase[] = [
     },
   },
 ];
+
+describe('image sync matrix', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.resetModules();
+  });
+
+  it('loads all automatic image profiles for the stable Yuque password case', async () => {
+    vi.stubEnv('ELOG_E2E_CASE', undefined);
+    vi.stubEnv('ELOG_E2E_IMAGE', undefined);
+    const loaded = await loadSyncCases(repoRootFromE2e());
+    const imageCases = filterSyncCases(loaded, 'yuque-pwd-to-local', true);
+
+    expect(imageCases.map((testCase) => testCase.env?.ELOG_E2E_IMAGE)).toEqual([
+      'local',
+      'cos',
+      'github',
+      'oss',
+      'qiniu',
+      'r2',
+      'upyun',
+    ]);
+    expect(imageCases.every((testCase) => testCase.assert)).toBe(true);
+  });
+
+  it('selects only the requested image profile for a manual run', async () => {
+    vi.stubEnv('ELOG_E2E_CASE', 'yuque-pwd-to-local');
+    vi.stubEnv('ELOG_E2E_IMAGE', 'cos');
+    const loaded = await loadSyncCases(repoRootFromE2e());
+    const imageCases = filterSyncCases(loaded, 'yuque-pwd-to-local', true);
+
+    expect(imageCases).toHaveLength(1);
+    expect(imageCases[0]).toMatchObject({ env: { ELOG_E2E_IMAGE: 'cos' } });
+    expect(imageCases[0]!.requiredEnv).toContain('ELOG_E2E_COS_SECRET_ID');
+    expect(imageCases[0]!.requiredEnv).not.toContain('ELOG_E2E_R2_ACCESS_KEY_ID');
+  });
+});
 
 describe('filterSyncCases', () => {
   it('returns all cases when no filter is provided', () => {

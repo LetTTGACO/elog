@@ -15,8 +15,10 @@ export async function loadSyncCases(repoRoot: string): Promise<SyncCase[]> {
 
   for (const dir of caseDirs) {
     const modulePath = path.join(casesDir, dir, 'case.ts');
-    const loaded = (await import(pathToFileURL(modulePath).href)) as { default: SyncCase };
-    cases.push(loaded.default);
+    const loaded = (await import(pathToFileURL(modulePath).href)) as {
+      default: SyncCase | SyncCase[];
+    };
+    cases.push(...(Array.isArray(loaded.default) ? loaded.default : [loaded.default]));
   }
 
   return cases;
