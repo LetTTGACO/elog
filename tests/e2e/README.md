@@ -21,9 +21,12 @@
 | `yuque-pwd-to-local` | 测语雀密码登录、七种图床、目录结构图片路径和本地部署 | `ELOG_E2E_YUQUE_USERNAME`, `ELOG_E2E_YUQUE_PWD`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO_TOC`，以及各图床所需凭据 |
 | `yuque-token-to-local` | 测语雀 Token 登录下载、R2 图床和本地部署 | `ELOG_E2E_YUQUE_TOKEN`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
 | `notion-to-wordpress` | 测 Notion、R2 图床和 WordPress 部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_DATABASE_ID`, `ELOG_E2E_WORDPRESS_ENDPOINT`, `ELOG_E2E_WORDPRESS_USERNAME`, `ELOG_E2E_WORDPRESS_PASSWORD`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
-| `notion-to-halo` | 测专用 Notion-Halo fixture、R2 正文/cover 图床和 Halo 部署 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_HALO_DATABASE_ID`, `ELOG_E2E_HALO_ENDPOINT`, `ELOG_E2E_HALO_TOKEN`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
+| `notion-to-halo` | 测专用 Notion-Halo fixture、R2 正文/cover、Halo 远端回读及文章更新 | `ELOG_E2E_NOTION_TOKEN`, `ELOG_E2E_NOTION_HALO_DATABASE_ID`, `ELOG_E2E_HALO_ENDPOINT`, `ELOG_E2E_HALO_TOKEN`, `ELOG_E2E_R2_HOST`, `ELOG_E2E_R2_ACCESS_KEY_ID`, `ELOG_E2E_R2_SECRET_ACCESS_KEY`, `ELOG_E2E_R2_BUCKET`, `ELOG_E2E_R2_ENDPOINT` |
+| `yuque-pwd-to-halo` | 测语雀密码登录、R2 正文/cover 和 Halo 远端回读 | `ELOG_E2E_YUQUE_USERNAME`, `ELOG_E2E_YUQUE_PWD`, `ELOG_E2E_YUQUE_LOGIN`, `ELOG_E2E_YUQUE_REPO_TOC`，以及 Halo、R2 凭据 |
+| `feishu-space-to-halo` | 测飞书空间、R2 正文图片和 Halo 远端回读 | `ELOG_E2E_FEISHU_APP_ID`, `ELOG_E2E_FEISHU_APP_SECRET`, `ELOG_E2E_FEISHU_SPACE_FOLDER_TOKEN`，以及 Halo、R2 凭据 |
+| `feishu-wiki-to-halo` | 测飞书 Wiki、R2 正文图片和 Halo 远端回读 | `ELOG_E2E_FEISHU_APP_ID`, `ELOG_E2E_FEISHU_APP_SECRET`, `ELOG_E2E_FEISHU_WIKI_ID`，以及 Halo、R2 凭据 |
 
-在 `tests/e2e` 中运行 `pnpm test:stable` 会执行稳定同步矩阵，包括 `notion-to-halo`。`stable: false` 的手动/可选用例（语雀 Token、WordPress、FlowUs）不会被稳定矩阵选中。
+在 `tests/e2e` 中运行 `pnpm test:stable` 会执行稳定同步矩阵，包括 Notion、语雀密码、飞书空间、飞书 Wiki 到 Halo 的四个组合。`stable: false` 的手动/可选用例（语雀 Token、WordPress、FlowUs）不会被稳定矩阵选中。
 
 发布前如果要提前发现 Node 24 兼容问题，用 Node 24 手动跑稳定矩阵：
 
@@ -99,6 +102,9 @@ pnpm run test:yuque-pwd-local
 pnpm run test:yuque-token-local
 pnpm run test:notion-wordpress
 pnpm run test:notion-halo
+pnpm run test:yuque-pwd-halo
+pnpm run test:feishu-space-halo
+pnpm run test:feishu-wiki-halo
 ```
 
 在 `tests/e2e` 中运行完整 E2E（包含真实平台用例）：
@@ -131,7 +137,7 @@ ELOG_E2E_IMAGE=local pnpm run test:notion-local
 
 ## 断言原则
 
-同步用例只做轻断言：
+同步用例的基础断言：
 
 - CLI 成功退出。
 - 输出里出现同步结果。
@@ -140,7 +146,9 @@ ELOG_E2E_IMAGE=local pnpm run test:notion-local
 - 本地图床用例检查图片文件存在。
 - 第二次运行应命中无变化或跳过逻辑。
 
-不要在端到端 case 里断言具体文件名、文章全文、图片 hash 或远端平台返回细节。这些内容太容易因为真实数据变化而误报。
+远端 CMS 用例还应回读文章，验证部署后的正文、图片、属性和发布状态。`notion-to-halo` 会追加一个临时 Notion 段落，验证 Halo 的更新与发布，再删除段落并同步恢复；凭据与 fixture 要求见[用例说明](cases/notion-to-halo/README.md)。离线 CLI 用例 `sync-halo-readback` 使用本地 Halo API 模拟服务，验证创建和更新的回读结果。
+
+断言应以来源文档和本次变更为依据，避免硬编码真实文章全文、图片 hash 或平台生成的快照名。
 
 ## 新增用例
 
@@ -154,5 +162,6 @@ ELOG_E2E_IMAGE=local pnpm run test:notion-local
 常用组合优先保持少量：
 
 - 每个 `from` 至少有一个 `to-local` 用例。
-- 非 local 的 `to` 平台默认用 Notion 作为来源。
+- Halo 覆盖 Notion、语雀密码、飞书空间和飞书 Wiki 来源，复用远端回读断言。
+- 其他非 local 的 `to` 平台默认用 Notion 作为来源。
 - 图床插件不单独扩展成 case 矩阵，直接改对应 case 的 `e2eProfile.image`。

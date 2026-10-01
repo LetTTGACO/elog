@@ -19,7 +19,10 @@
     "test:yuque-token-local": "pnpm run build:repo && ELOG_E2E_CASE=yuque-token-to-local vitest run --reporter=verbose src/sync-matrix.e2e.test.ts",
     "test:notion-wordpress": "pnpm run build:repo && ELOG_E2E_CASE=notion-to-wordpress vitest run --reporter=verbose src/sync-matrix.e2e.test.ts",
     "test:notion-halo": "pnpm run build:repo && ELOG_E2E_CASE=notion-to-halo vitest run --reporter=verbose src/sync-matrix.e2e.test.ts",
-    "typecheck": "tsc -p tsconfig.json --noEmit --pretty false"
+    "typecheck": "tsc -p tsconfig.json --noEmit --pretty false",
+    "test:yuque-pwd-halo": "pnpm run build:repo && ELOG_E2E_CASE=yuque-pwd-to-halo vitest run --reporter=verbose src/sync-matrix.e2e.test.ts",
+    "test:feishu-space-halo": "pnpm run build:repo && ELOG_E2E_CASE=feishu-space-to-halo vitest run --reporter=verbose src/sync-matrix.e2e.test.ts",
+    "test:feishu-wiki-halo": "pnpm run build:repo && ELOG_E2E_CASE=feishu-wiki-to-halo vitest run --reporter=verbose src/sync-matrix.e2e.test.ts"
   },
   "dependencies": {
     "@elog/cli": "workspace:*",

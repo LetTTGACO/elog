@@ -29,10 +29,37 @@ const cases: SyncCase[] = [
   },
 ];
 
-describe('image sync matrix', () => {
+describe('stable sync matrix', () => {
   afterEach(() => {
     vi.unstubAllEnvs();
     vi.resetModules();
+  });
+
+  it('loads all supported sources to Halo in the stable matrix', async () => {
+    vi.stubEnv('ELOG_E2E_CASE', undefined);
+    vi.stubEnv('ELOG_E2E_IMAGE', undefined);
+    const loaded = await loadSyncCases(repoRootFromE2e());
+    const haloCases = filterSyncCases(loaded, undefined, true).filter((testCase) =>
+      testCase.id.endsWith('-to-halo'),
+    );
+
+    expect(haloCases.map((testCase) => testCase.id)).toEqual([
+      'feishu-space-to-halo',
+      'feishu-wiki-to-halo',
+      'notion-to-halo',
+      'yuque-pwd-to-halo',
+    ]);
+    for (const testCase of haloCases) {
+      expect(testCase.requiredEnv).toEqual(
+        expect.arrayContaining([
+          'ELOG_E2E_HALO_ENDPOINT',
+          'ELOG_E2E_HALO_TOKEN',
+          'ELOG_E2E_R2_HOST',
+          'ELOG_E2E_R2_ACCESS_KEY_ID',
+        ]),
+      );
+      expect(testCase.assert).toBeTypeOf('function');
+    }
   });
 
   it('loads all automatic image profiles for the stable Yuque password case', async () => {
