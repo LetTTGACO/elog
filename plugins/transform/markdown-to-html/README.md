@@ -11,7 +11,7 @@ pnpm add @elog/plugin-transform-markdown-to-html
 
 ## 使用
 
-将插件放入工作流的 `plugins` 数组。转换插件会按照声明顺序依次执行：
+将插件放入部署目标 options 的 `plugins` 数组，仅转换该目标的正文。转换插件会按照声明顺序依次执行：
 
 ```ts
 import { defineConfig } from '@elog/cli';
@@ -24,15 +24,19 @@ export default defineConfig({
     token: process.env.NOTION_TOKEN,
     dataSourceId: process.env.NOTION_DATA_SOURCE_ID,
   }),
-  plugins: [markdownToHtml()],
   to: toLocal({
     outputDir: 'dist',
     fileExt: 'html',
+    plugins: [markdownToHtml()],
   }),
 });
 ```
 
 该插件目前没有配置项。
+
+如果所有部署目标都需要 HTML，也可以将 `markdownToHtml()` 放入工作流顶层的 `plugins`。
+执行顺序为公共转换、复制文档、目标专属转换、部署；顶层转换影响所有目标，目标专属转换
+只影响当前目标。`deployStrategy` 控制整个目标分支的串行或并行执行。
 
 ## 输入与输出
 

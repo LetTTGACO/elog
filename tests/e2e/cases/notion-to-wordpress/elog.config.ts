@@ -39,11 +39,11 @@ export default defineConfig({
       endpoint: process.env.ELOG_E2E_R2_ENDPOINT!,
       prefixKey: e2eProfile.image.prefixKey,
     }),
-    markdownToHtml(),
   ],
   to: toWordPress({
     endpoint: process.env.ELOG_E2E_WORDPRESS_ENDPOINT!,
     username: process.env.ELOG_E2E_WORDPRESS_USERNAME!,
     password: process.env.ELOG_E2E_WORDPRESS_PASSWORD!,
+    plugins: [markdownToHtml()],
   }),
 });

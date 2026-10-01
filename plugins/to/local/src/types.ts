@@ -1,9 +1,9 @@
-import type { DocDetail } from '@elog/plugin-sdk';
+import type { DocDetail, ToPluginOptions } from '@elog/plugin-sdk';
 
 /**
  * local 配置
  */
-export interface LocalConfig {
+export interface LocalConfig extends ToPluginOptions {
   /** 文档输出目录 */
   outputDir: string;
   /** md文件名取值字段，默认为 title */

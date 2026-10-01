@@ -1,7 +1,9 @@
+import { getTargetPlugins, loadBuiltInPluginRegistry } from './registry';
 import type {
   ElogOptionSchema,
   GeneratedInitFiles,
   InitSelection,
+  PluginRegistry,
   PluginRegistryEntry,
   PluginSelection,
   SelectedPlugin,
@@ -143,8 +145,18 @@ export function renderObjectLiteral(
 }
 
 /** 渲染单个插件工厂调用，例如 notion({ token: process.env.NOTION_TOKEN })。 */
-function renderPluginCall(plugin: SelectedPlugin): string {
-  return `${plugin.entry.importName}(${renderObjectLiteral(plugin.answers, plugin.entry.optionsSchema)})`;
+function renderPluginCall(plugin: SelectedPlugin, registry: PluginRegistry): string {
+  let options = renderObjectLiteral(plugin.answers, plugin.entry.optionsSchema);
+  const targetPlugins = getTargetPlugins(registry, plugin.entry).map(selectedPluginFromEntry);
+  if (targetPlugins.length) {
+    const lines = options === '{}' ? ['{'] : options.split('\n').slice(0, -1);
+    const pipeline = indent(renderPluginArray(targetPlugins, registry), 2).trimStart();
+    options = [...lines, `  plugins: ${pipeline},`, '}'].join('\n');
+  }
+  const hasOptions =
+    plugin.entry.kind !== 'transform' ||
+    Object.keys(collectProperties(plugin.entry.optionsSchema)).length > 0;
+  return `${plugin.entry.importName}(${hasOptions ? options : ''})`;
 }
 
 /** 多行插件调用在数组和对象属性中需要尾逗号，便于后续格式化和追加。 */
@@ -156,10 +168,12 @@ function addTrailingComma(text: string): string {
 }
 
 /** 渲染插件数组，保持每个插件调用独立成块。 */
-function renderPluginArray(plugins: SelectedPlugin[]): string {
+function renderPluginArray(plugins: SelectedPlugin[], registry: PluginRegistry): string {
   return [
     '[',
-    plugins.map((plugin) => addTrailingComma(indent(renderPluginCall(plugin), 2))).join('\n'),
+    plugins
+      .map((plugin) => addTrailingComma(indent(renderPluginCall(plugin, registry), 2)))
+      .join('\n'),
     ']',
   ].join('\n');
 }
@@ -172,10 +186,11 @@ function renderConfigProperty(name: string, value: string): string {
 }
 
 /** 收集唯一插件导入，避免同一个包同时作为多个角色时重复 import。 */
-function uniquePlugins(selection: InitSelection): PluginRegistryEntry[] {
-  const plugins = [selection.from, ...selection.transforms, ...selection.to].map(
-    (plugin) => plugin.entry,
-  );
+function uniquePlugins(selection: InitSelection, registry: PluginRegistry): PluginRegistryEntry[] {
+  const plugins = [
+    ...[selection.from, ...selection.transforms, ...selection.to].map((plugin) => plugin.entry),
+    ...selection.to.flatMap((target) => getTargetPlugins(registry, target.entry)),
+  ];
   const seen = new Set<string>();
   return plugins.filter((plugin) => {
     if (seen.has(plugin.packageName)) {
@@ -234,11 +249,12 @@ export function renderEnvText(values: EnvValue[], includeValues = true): string 
 /** 根据用户选择生成 init 需要写入的配置文件内容。 */
 export function generateInitFiles(
   selectionInput: InitSelection | PluginSelection,
+  registry: PluginRegistry = loadBuiltInPluginRegistry(),
 ): GeneratedInitFiles {
   const selection = normalizeSelection(selectionInput);
   const imports = [
     "import { defineConfig } from '@elog/cli';",
-    ...uniquePlugins(selection).map(
+    ...uniquePlugins(selection, registry).map(
       (plugin) => `import ${plugin.importName} from '${plugin.packageName}';`,
     ),
   ];
@@ -246,18 +262,20 @@ export function generateInitFiles(
     ...imports,
     '',
     'export default defineConfig({',
-    renderConfigProperty('from', renderPluginCall(selection.from)),
+    renderConfigProperty('from', renderPluginCall(selection.from, registry)),
   ];
 
   if (selection.transforms.length) {
     // 没有转换插件时省略 plugins 字段，保持最小可用配置。
-    configLines.push(renderConfigProperty('plugins', renderPluginArray(selection.transforms)));
+    configLines.push(
+      renderConfigProperty('plugins', renderPluginArray(selection.transforms, registry)),
+    );
   }
 
   const toValue =
     selection.to.length === 1
-      ? renderPluginCall(selection.to[0]!)
-      : renderPluginArray(selection.to);
+      ? renderPluginCall(selection.to[0]!, registry)
+      : renderPluginArray(selection.to, registry);
   configLines.push(renderConfigProperty('to', toValue), '});', '');
 
   return {

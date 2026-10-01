@@ -41,6 +41,60 @@ const from: FromPlugin = {
 };
 
 describe('PluginDriver', () => {
+  it.each(['serial', 'parallel'] as const)(
+    'runs shared transforms once and target pipelines on separate copies (%s)',
+    async (strategy) => {
+      const calls: string[] = [];
+      const append = (name: string): TransformPlugin => ({
+        name: `transform:${name}`,
+        kind: 'transform',
+        async transform(docs) {
+          calls.push(name);
+          docs[0].body += `-${name}`;
+          return docs;
+        },
+      });
+      const driver = new PluginDriver(
+        {
+          from,
+          transforms: [append('shared')],
+          to: [
+            {
+              name: 'to:html',
+              kind: 'to',
+              plugins: [append('first'), append('second')],
+              deploy(docs) {
+                calls.push('html:deploy');
+                expect(docs[0].body).toBe('A-shared-first-second');
+              },
+            },
+            {
+              name: 'to:markdown',
+              kind: 'to',
+              plugins: [],
+              deploy(docs) {
+                calls.push('markdown:deploy');
+                expect(docs[0].body).toBe('A-shared');
+              },
+            },
+          ],
+        },
+        ctx,
+      );
+      const downloaded = await driver.runDownloadHook();
+      const sharedDocs = await driver.runTransformPipeline(downloaded.docDetailList);
+      await driver.runDeployHooks(sharedDocs, strategy);
+
+      expect(sharedDocs[0].body).toBe('A-shared');
+      expect(calls.filter((name) => name === 'shared')).toHaveLength(1);
+      expect(calls.indexOf('first')).toBeLessThan(calls.indexOf('second'));
+      expect(calls.indexOf('second')).toBeLessThan(calls.indexOf('html:deploy'));
+      if (strategy === 'serial') {
+        expect(calls).toEqual(['shared', 'first', 'second', 'html:deploy', 'markdown:deploy']);
+      }
+    },
+  );
+
   it('runs transform plugins as a serial reducer', async () => {
     const first: TransformPlugin = {
       name: 'transform:first',
@@ -184,10 +238,19 @@ describe('PluginDriver', () => {
     const first: ToPlugin = {
       name: 'to:first',
       kind: 'to',
-      async deploy() {
-        calls.push('first:start');
-        await new Promise((resolve) => setTimeout(resolve, 10));
-        calls.push('first:end');
+      plugins: [
+        {
+          name: 'transform:first',
+          kind: 'transform',
+          async transform(docs) {
+            calls.push('first:transform');
+            await new Promise((resolve) => setTimeout(resolve, 10));
+            return docs;
+          },
+        },
+      ],
+      deploy() {
+        calls.push('first:deploy');
       },
     };
     const second: ToPlugin = {
@@ -201,7 +264,7 @@ describe('PluginDriver', () => {
 
     await driver.runDeployHooks([], 'parallel');
 
-    expect(calls).toEqual(['first:start', 'second', 'first:end']);
+    expect(calls).toEqual(['first:transform', 'second', 'first:deploy']);
   });
 
   it('passes independent docs to each deploy plugin', async () => {

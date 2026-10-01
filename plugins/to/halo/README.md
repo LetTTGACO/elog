@@ -19,6 +19,9 @@ Halo 目标要求文档正文是 HTML。来源插件输出 Markdown 时，必须
 
 ## 基本配置
 
+运行 `elog init` 并选择 Halo 时，会自动安装和导入 `markdownToHtml`，并将它配置在
+`toHalo` 的 `plugins` 中。同时选择本地部署时，本地目标继续接收公共转换后的 Markdown。
+
 ```ts
 import { defineConfig } from '@elog/cli';
 import fromNotion from '@elog/plugin-from-notion';
@@ -40,11 +43,11 @@ export default defineConfig({
       endpoint: process.env.R2_ENDPOINT,
       propertyImageFields: ['cover'],
     }),
-    markdownToHtml(),
   ],
   to: toHalo({
     endpoint: process.env.HALO_ENDPOINT,
     token: process.env.HALO_TOKEN,
+    plugins: [markdownToHtml()],
   }),
 });
 ```
@@ -53,12 +56,17 @@ export default defineConfig({
 
 ## 配置项
 
-| 配置       | 类型     | 默认值 | 说明                         |
-| ---------- | -------- | ------ | ---------------------------- |
-| `endpoint` | `string` | —      | Halo 站点根地址，必填        |
-| `token`    | `string` | —      | Halo 个人令牌，必填          |
+| 配置       | 类型                | 默认值 | 说明                               |
+| ---------- | ------------------- | ------ | ---------------------------------- |
+| `endpoint` | `string`            | —      | Halo 站点根地址，必填               |
+| `token`    | `string`            | —      | Halo 个人令牌，必填                 |
+| `plugins`  | `TransformPlugin[]` | `[]`   | 仅用于当前目标的转换插件，按顺序执行 |
 
 `endpoint` 末尾可以包含 `/`，插件会在请求前将它移除。
+
+工作流顶层的 `plugins` 先执行，其结果供所有部署目标使用。`toHalo` 的 `plugins` 随后由 Core
+在独立文档副本上执行。例如同时部署到 Halo 和本地时，可以将图床转换放在顶层，
+将 `markdownToHtml()` 放在 `toHalo` 中，让本地目标继续接收 Markdown。
 
 ## 文档输入契约
 

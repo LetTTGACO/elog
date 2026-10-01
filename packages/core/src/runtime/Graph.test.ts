@@ -104,15 +104,31 @@ describe('Graph', () => {
     expect(cache.sortedDocList).toEqual([{ id: 'a', updateTime: 1 }]);
   });
 
-  it.each(['serial', 'parallel'] as const)(
-    'isolates nested deploy mutations from other targets and cache (%s)',
-    async (deployStrategy) => {
+  it.each([
+    ['serial', 'transform'],
+    ['parallel', 'transform'],
+    ['serial', 'deploy'],
+    ['parallel', 'deploy'],
+  ] as const)(
+    'isolates nested target mutations from other targets and cache (%s, %s)',
+    async (deployStrategy, stage) => {
       tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'elog-graph-'));
       const doc = {
         ...makeDoc('a'),
         properties: { title: 'a', urlname: 'a', tags: ['original'] },
         docStructure: [{ id: 'parent', title: 'Original' }],
         extra: { nested: ['original'] },
+      };
+      const mutate: TransformPlugin = {
+        name: 'transform:mutate',
+        kind: 'transform',
+        async transform(docs) {
+          Reflect.deleteProperty(docs[0].properties, 'urlname');
+          docs[0].properties.tags.push('changed');
+          docs[0].docStructure![0].title = 'Changed';
+          docs[0].extra.nested.push('changed');
+          return docs;
+        },
       };
       const workflow = makeWorkflow({
         deployStrategy,
@@ -131,11 +147,10 @@ describe('Graph', () => {
           {
             name: 'to:mutate',
             kind: 'to',
-            deploy(docs) {
-              Reflect.deleteProperty(docs[0].properties, 'urlname');
-              docs[0].properties.tags.push('changed');
-              docs[0].docStructure![0].title = 'Changed';
-              docs[0].extra.nested.push('changed');
+            plugins: stage === 'transform' ? [mutate] : [],
+            async deploy(docs, ctx) {
+              if (stage === 'deploy') await mutate.transform(docs, ctx);
+              expect(docs[0].extra.nested).toEqual(['original', 'changed']);
             },
           },
           {
@@ -230,6 +245,65 @@ describe('Graph', () => {
     expect(fs.existsSync(workflow.cache.filePath)).toBe(false);
   });
 
+  it.each(['throw', 'identity'])(
+    'reports target transform failures and preserves cache (%s)',
+    async (failure) => {
+      tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'elog-graph-'));
+      const calls: string[] = [];
+      const workflow = makeWorkflow({
+        to: [
+          {
+            name: 'to:html',
+            kind: 'to',
+            plugins: [
+              {
+                name: 'transform:bad',
+                kind: 'transform',
+                async transform(docs) {
+                  if (failure === 'throw') throw new Error('bad target transform');
+                  docs[0].id = 'renamed';
+                  return docs;
+                },
+              },
+            ],
+            deploy() {
+              calls.push('html');
+            },
+          },
+          {
+            name: 'to:later',
+            kind: 'to',
+            deploy() {
+              calls.push('later');
+            },
+          },
+        ],
+      });
+      const originalCache = JSON.stringify({ cachedDocList: [] });
+      fs.writeFileSync(workflow.cache.filePath, originalCache);
+
+      const result = await new Graph(workflow).sync();
+
+      expect(result).toMatchObject({
+        status: 'failed',
+        error: {
+          pluginName: 'transform:bad',
+          hookName: 'transform',
+          targetPluginName: 'to:html',
+          message: 'Plugin "transform:bad" failed during "transform" hook for target "to:html"',
+          cause: {
+            message:
+              failure === 'throw'
+                ? 'bad target transform'
+                : 'Transform must preserve document IDs and count, with unique IDs',
+          },
+        },
+      });
+      expect(calls).toEqual([]);
+      expect(fs.readFileSync(workflow.cache.filePath, 'utf8')).toBe(originalCache);
+    },
+  );
+
   it('returns failed result and prevents deploy when transform fails', async () => {
     tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'elog-graph-'));
     const deployCalls: DocDetail[][] = [];
@@ -314,6 +388,7 @@ describe('Graph', () => {
     const to: ToPlugin = {
       name: 'to:unused',
       kind: 'to',
+      plugins: [transform],
       deploy() {
         calls.push('deploy');
       },

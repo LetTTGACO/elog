@@ -6,6 +6,7 @@ export default function toConfluence(options: Partial<ConfluenceConfig>): ToPlug
   return {
     name: 'to:confluence',
     kind: 'to',
+    plugins: options.plugins,
     async deploy(docs, ctx) {
       const confluenceDeploy = new ConfluenceDeploy(options as ConfluenceConfig, ctx);
       await confluenceDeploy.deploy(docs);

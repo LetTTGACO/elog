@@ -1,5 +1,10 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import inquirer from 'inquirer';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { runInitCommand } from './command';
+import type { InstallPackagesOptions } from './package-manager';
 import { runExportWizard, runInitWizard } from './wizard';
 import { loadBuiltInPluginRegistry } from './registry';
 import type { PluginRegistry } from './types';
@@ -32,6 +37,70 @@ const registry: PluginRegistry = {
 afterEach(() => vi.restoreAllMocks());
 
 describe('wizard prompt compatibility', () => {
+  it.each([
+    [['halo'], ''],
+    [['local', 'halo'], ''],
+    [['halo', 'local'], 'image-r2'],
+  ] as const)(
+    'initializes Halo with target transforms for %j and image selection %j',
+    async (targets, imageType) => {
+      const prompt = inquirer.createPromptModule();
+      for (const type of Object.keys(prompt.prompts)) {
+        prompt.registerPrompt(type, async (question) => {
+          if (question.name === 'from') return 'notion';
+          if (question.name === 'to') {
+            expect(type).toBe('checkbox');
+            return [...targets];
+          }
+          if (question.name === 'transforms') return imageType;
+          throw new Error(`Unexpected init prompt: ${question.name}`);
+        });
+      }
+      vi.spyOn(inquirer, 'prompt').mockImplementation(prompt);
+      const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'elog-init-halo-'));
+      const installPackages = vi.fn((_options: InstallPackagesOptions) => ({
+        command: 'npm',
+        args: [],
+        display: '',
+      }));
+      try {
+        await runInitCommand({
+          cwd,
+          configName: 'elog.config.ts',
+          dryRun: false,
+          installPackages,
+          log: () => {},
+        });
+
+        const config = fs.readFileSync(path.join(cwd, 'elog.config.ts'), 'utf8');
+        expect(config).toContain(
+          "import markdownToHtml from '@elog/plugin-transform-markdown-to-html';",
+        );
+        expect(config).toMatch(
+          /toHalo\(\{\s+endpoint: process\.env\.HALO_ENDPOINT,\s+token: process\.env\.HALO_TOKEN,\s+plugins: \[\s+markdownToHtml\(\),\s+\],\s+\}\)/,
+        );
+        expect(config.match(/markdownToHtml\(/g)).toHaveLength(1);
+        expect(config).not.toMatch(/toLocal\(\{[^}]*plugins:/);
+        expect(config).toContain(targets.length === 1 ? 'to: toHalo(' : 'to: [');
+        if (imageType) {
+          expect(config.indexOf('imageR2({')).toBeLessThan(config.indexOf('to: ['));
+        } else {
+          expect(config).not.toMatch(/^  plugins:/m);
+        }
+        const packages = installPackages.mock.calls[0]?.[0].packages;
+        expect(packages).toContain('@elog/plugin-transform-markdown-to-html');
+        expect(
+          packages.filter((name: string) => name === '@elog/plugin-transform-markdown-to-html'),
+        ).toHaveLength(1);
+        const env = fs.readFileSync(path.join(cwd, '.env'), 'utf8');
+        expect(env).toContain('HALO_ENDPOINT=');
+        expect(env).toContain('HALO_TOKEN=');
+      } finally {
+        fs.rmSync(cwd, { recursive: true, force: true });
+      }
+    },
+  );
+
   it.each([
     ['init', ''],
     ['init', 'image-local'],

@@ -24,7 +24,8 @@
 这个 case 固定使用 R2 图床：
 
 ```ts
-plugins: [imageR2(...), markdownToHtml()]
+plugins: [imageR2(...)]
+to: toWordPress({ ..., plugins: [markdownToHtml()] })
 ```
 
 这样做是为了避免 WordPress 前台保留 Notion 的临时或受限图片链接。不要在这个远端 CMS case 里使用本地图床：本地图床会生成本机相对路径，部署到 WordPress 后前台通常无法访问。

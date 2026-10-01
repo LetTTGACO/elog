@@ -16,13 +16,21 @@ export class ElogError extends Error {
 export class ElogPluginError extends ElogError {
   readonly pluginName: string;
   readonly hookName: ElogHookName;
+  readonly targetPluginName?: string;
 
-  constructor(pluginName: string, hookName: ElogHookName, cause?: unknown) {
-    const message = `Plugin "${pluginName}" failed during "${hookName}" hook`;
+  constructor(
+    pluginName: string,
+    hookName: ElogHookName,
+    cause?: unknown,
+    targetPluginName?: string,
+  ) {
+    const target = targetPluginName ? ` for target "${targetPluginName}"` : '';
+    const message = `Plugin "${pluginName}" failed during "${hookName}" hook${target}`;
     super(message, cause);
     this.name = 'ElogPluginError';
     this.pluginName = pluginName;
     this.hookName = hookName;
+    this.targetPluginName = targetPluginName;
   }
 }
 

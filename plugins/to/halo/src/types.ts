@@ -1,7 +1,9 @@
+import type { ToPluginOptions } from '@elog/plugin-sdk';
+
 /**
  * local 配置
  */
-export interface HaloConfig {
+export interface HaloConfig extends ToPluginOptions {
   /** Halo站点地址 */
   endpoint: string;
   /** Halo个人令牌 */

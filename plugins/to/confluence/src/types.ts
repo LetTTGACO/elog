@@ -1,4 +1,6 @@
-export interface ConfluenceConfig {
+import type { ToPluginOptions } from '@elog/plugin-sdk';
+
+export interface ConfluenceConfig extends ToPluginOptions {
   user: string;
   password: string;
   baseUrl: string;

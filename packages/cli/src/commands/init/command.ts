@@ -5,7 +5,12 @@ import packageJson from '../../../package.json' with { type: 'json' };
 import out from '../../logging/logger';
 import { detectPackageManager, buildInstallCommand, installPackages } from './package-manager';
 import type { InstallPackagesOptions } from './package-manager';
-import { getPluginsByKind, InitCommandError, loadBuiltInPluginRegistry } from './registry';
+import {
+  getPluginsByKind,
+  getTargetPlugins,
+  InitCommandError,
+  loadBuiltInPluginRegistry,
+} from './registry';
 import { collectEnvValues, generateInitFiles } from './generator';
 import { planEnvFile, writeEnvFile } from './env-file';
 import { ensureEnvIgnored, planEnvIgnore } from './gitignore';
@@ -28,8 +33,16 @@ export interface RunInitCommandOptions {
 }
 
 /** 收集所选插件包，并去重避免重复安装。 */
-export function selectedPackages(selection: PluginSelection): string[] {
-  const allPlugins = [selection.from, ...selection.transforms, ...selection.to];
+export function selectedPackages(
+  selection: PluginSelection,
+  registry: PluginRegistry = loadBuiltInPluginRegistry(),
+): string[] {
+  const allPlugins = [
+    selection.from,
+    ...selection.transforms,
+    ...selection.to,
+    ...selection.to.flatMap((target) => getTargetPlugins(registry, target)),
+  ];
   return [...new Set(allPlugins.map((plugin) => plugin.packageName))];
 }
 
@@ -130,14 +143,14 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
     options.dryRun && !options.runWizard
       ? createDefaultInitSelection(registry)
       : await runWizard(registry);
-  const files = generateInitFiles(selection);
+  const files = generateInitFiles(selection, registry);
   const envVariables = collectEnvValues(selection);
   const envPlan = envVariables.length ? planEnvFile(options.cwd, envVariables) : undefined;
   if (!options.dryRun && envPlan) {
     if (envPlan.append) validateConfigPath(options.cwd, '.env');
     if (planEnvIgnore(options.cwd).append) validateConfigPath(options.cwd, '.gitignore');
   }
-  const packages = selectedPackages(selection);
+  const packages = selectedPackages(selection, registry);
   if (needsCli) {
     // 使用运行中的版本，避免 beta 初始化时被 npm 的默认 tag 切换到其他版本。
     packages.unshift(`@elog/cli@${packageJson.version}`);

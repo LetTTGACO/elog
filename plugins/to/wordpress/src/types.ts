@@ -1,7 +1,9 @@
+import type { ToPluginOptions } from '@elog/plugin-sdk';
+
 /**
  * local 配置
  */
-export interface WordPressConfig {
+export interface WordPressConfig extends ToPluginOptions {
   username: string;
   password: string;
   endpoint: string;

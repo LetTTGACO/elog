@@ -216,4 +216,35 @@ describe('resolveConfig', () => {
     expect(result.diagnostics[0]?.message).toContain('does not auto-migrate');
     expect(result.diagnostics[0]?.message).not.toMatch(/migrate command/i);
   });
+
+  it('preserves target transforms alongside shared transforms', () => {
+    const target = { ...toPlugin, plugins: [transformPlugin] };
+    const result = resolveConfig({
+      from: fromPlugin,
+      plugins: [transformPlugin],
+      to: [target, toPlugin, { ...toPlugin, plugins: [] }],
+    });
+
+    expect(result.diagnostics).toEqual([]);
+    expect(result.workflows[0].transforms).toEqual([transformPlugin]);
+    expect(result.workflows[0].to).toEqual([target, toPlugin, { ...toPlugin, plugins: [] }]);
+  });
+
+  it.each([null, transformPlugin, [undefined], [toPlugin]])(
+    'rejects malformed target transforms before runtime (%j)',
+    (plugins) => {
+      const result = resolveConfig({
+        from: fromPlugin,
+        to: [toPlugin, { ...toPlugin, plugins }],
+      });
+
+      expect(result.workflows).toEqual([]);
+      expect(result.diagnostics).toEqual([
+        expect.objectContaining({
+          code: 'CONFIG_INVALID_TRANSFORM',
+          path: 'workflows[0].to[1].plugins',
+        }),
+      ]);
+    },
+  );
 });

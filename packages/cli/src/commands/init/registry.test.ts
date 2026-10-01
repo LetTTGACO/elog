@@ -114,6 +114,7 @@ describe('loadBuiltInPluginRegistry', () => {
       displayName: 'Halo',
       packageName: '@elog/plugin-to-halo',
       importName: 'toHalo',
+      defaultPlugins: ['markdown-to-html'],
       optionsSchema: {
         type: 'object',
         required: ['endpoint', 'token'],
@@ -136,6 +137,28 @@ describe('loadBuiltInPluginRegistry', () => {
 });
 
 describe('parsePluginRegistry', () => {
+  it.each([
+    ['markdown-to-html', 'defaultPlugins must be an array'],
+    [['missing'], 'references unknown transform plugin "missing"'],
+  ] as const)('rejects malformed target defaults (%j)', (defaultPlugins, message) => {
+    expect(() =>
+      parsePluginRegistry({
+        schemaVersion: 1,
+        plugins: [
+          {
+            kind: 'to',
+            type: 'halo',
+            displayName: 'Halo',
+            packageName: '@elog/plugin-to-halo',
+            importName: 'toHalo',
+            optionsSchema: { type: 'object' },
+            defaultPlugins,
+          },
+        ],
+      }),
+    ).toThrow(message);
+  });
+
   it('accepts official plugin registry entries', () => {
     const registry = parsePluginRegistry({
       schemaVersion: 1,

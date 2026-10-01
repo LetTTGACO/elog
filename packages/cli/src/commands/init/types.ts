@@ -35,6 +35,8 @@ export interface PluginRegistryEntry {
   displayName: string;
   packageName: string;
   importName: string;
+  /** init 为部署目标自动添加的转换插件 type，按顺序执行。 */
+  defaultPlugins?: string[];
   optionsSchema: ElogOptionSchema;
 }
 

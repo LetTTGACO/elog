@@ -55,6 +55,17 @@ function parseEntry(value: unknown, index: number): PluginRegistryEntry {
   assertString(value.packageName, `${path}.packageName`);
   assertString(value.importName, `${path}.importName`);
   assertOptionSchema(value.optionsSchema, `${path}.optionsSchema`);
+  if (value.defaultPlugins !== undefined) {
+    if (value.kind !== 'to' || !Array.isArray(value.defaultPlugins)) {
+      throw new InitCommandError(
+        'REGISTRY_INVALID',
+        `${path}.defaultPlugins must be an array on a to plugin.`,
+      );
+    }
+    value.defaultPlugins.forEach((type, pluginIndex) =>
+      assertString(type, `${path}.defaultPlugins[${pluginIndex}]`),
+    );
+  }
 
   return value as unknown as PluginRegistryEntry;
 }
@@ -83,7 +94,30 @@ export function parsePluginRegistry(raw: unknown): PluginRegistry {
     return parsed;
   });
 
-  return { schemaVersion: 1, plugins };
+  const registry: PluginRegistry = { schemaVersion: 1, plugins };
+  for (const plugin of plugins) {
+    getTargetPlugins(registry, plugin);
+  }
+  return registry;
+}
+
+/** 目标的默认转换同时用于生成配置、导入和依赖安装。 */
+export function getTargetPlugins(
+  registry: PluginRegistry,
+  target: PluginRegistryEntry,
+): PluginRegistryEntry[] {
+  return (target.defaultPlugins ?? []).map((type) => {
+    const plugin = registry.plugins.find(
+      (entry) => entry.kind === 'transform' && entry.type === type,
+    );
+    if (!plugin) {
+      throw new InitCommandError(
+        'REGISTRY_INVALID',
+        `Target "${target.type}" references unknown transform plugin "${type}".`,
+      );
+    }
+    return plugin;
+  });
 }
 
 /** 加载内置插件注册表，所有 JSON 数据仍经过同一套运行时校验。 */

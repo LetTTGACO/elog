@@ -35,16 +35,17 @@ export default defineConfig({
 
 ## 配置项
 
-| 配置                      | 类型       | 默认值  | 说明                                      |
-| ------------------------- | ---------- | ------- | ----------------------------------------- |
-| `outputDir`               | `string`   | —       | 文档输出目录，必填                        |
-| `filename`                | `string`   | `title` | 用作文件名的文档属性                      |
-| `fileExt`                 | `string`   | `md`    | 文件扩展名，不包含点号                    |
-| `keepToc`                 | `boolean`  | `false` | 根据 `docStructure` 创建嵌套目录          |
-| `frontMatter.enable`      | `boolean`  | —       | 是否把文档属性写入 Front Matter           |
-| `frontMatter.include`     | `string[]` | —       | 只保留指定的 Front Matter 属性            |
-| `frontMatter.exclude`     | `string[]` | —       | 从 Front Matter 中排除指定属性            |
-| `deployByStructure`       | `boolean`  | —       | 已废弃，请使用 `keepToc`                  |
+| 配置                      | 类型                | 默认值  | 说明                                      |
+| ------------------------- | ------------------- | ------- | ----------------------------------------- |
+| `outputDir`               | `string`            | —       | 文档输出目录，必填                        |
+| `filename`                | `string`            | `title` | 用作文件名的文档属性                      |
+| `fileExt`                 | `string`            | `md`    | 文件扩展名，不包含点号                    |
+| `keepToc`                 | `boolean`           | `false` | 根据 `docStructure` 创建嵌套目录          |
+| `frontMatter.enable`      | `boolean`           | —       | 是否把文档属性写入 Front Matter           |
+| `frontMatter.include`     | `string[]`          | —       | 只保留指定的 Front Matter 属性            |
+| `frontMatter.exclude`     | `string[]`          | —       | 从 Front Matter 中排除指定属性            |
+| `deployByStructure`       | `boolean`           | —       | 已废弃，请使用 `keepToc`                  |
+| `plugins`                 | `TransformPlugin[]` | `[]`    | 仅用于当前目标的转换插件，按顺序执行      |
 
 `frontMatter.include` 与 `frontMatter.exclude` 只影响写入文件的属性，不会改变传给其他部署目标的
 原始文档。用作文件名的属性始终保留。
@@ -76,8 +77,13 @@ toLocal({
 toLocal({
   outputDir: 'dist',
   fileExt: 'html',
+  plugins: [markdownToHtml()],
 });
 ```
+
+`markdownToHtml` 从 `@elog/plugin-transform-markdown-to-html` 导入。工作流顶层的 `plugins`
+先执行，其结果供所有目标使用；目标的 `plugins` 随后由 Core 在独立文档副本上执行，
+不会改变其他目标收到的正文或属性。
 
 ## Front Matter
 

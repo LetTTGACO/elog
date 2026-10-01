@@ -39,7 +39,7 @@ export interface ElogConfig extends ElogCacheConfig {
   from: FromPlugin;
   /** 部署目标插件，单目标可写对象，多目标写数组。 */
   to: ToPlugin | ToPlugin[];
-  /** 转换插件数组，按声明顺序串行执行。 */
+  /** 公共转换插件，按声明顺序串行执行，结果供所有部署目标使用。 */
   plugins?: TransformPlugin[];
   /** 部署执行策略，默认串行以便调试外部副作用。 */
   deployStrategy?: 'serial' | 'parallel';

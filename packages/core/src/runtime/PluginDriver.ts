@@ -40,9 +40,17 @@ export class PluginDriver {
 
   /** 转换插件按声明顺序串行处理，后一个插件接收前一个插件的输出。 */
   async runTransformPipeline(docDetailList: DocDetail[]): Promise<DocDetail[]> {
+    return this.runTransforms(docDetailList, this.transforms);
+  }
+
+  private async runTransforms(
+    docDetailList: DocDetail[],
+    plugins: TransformPlugin[],
+    targetPluginName?: string,
+  ): Promise<DocDetail[]> {
     let output = docDetailList;
 
-    for (const plugin of this.transforms) {
+    for (const plugin of plugins) {
       try {
         // 在调用前保存 ID，避免插件原地修改后丢失身份校验依据。
         const inputIds = new Set(output.map((doc) => doc.id));
@@ -58,7 +66,7 @@ export class PluginDriver {
           throw new Error('Transform must preserve document IDs and count, with unique IDs');
         }
       } catch (error) {
-        throw new ElogPluginError(plugin.name, 'transform', error);
+        throw new ElogPluginError(plugin.name, 'transform', error, targetPluginName);
       }
     }
 
@@ -80,12 +88,24 @@ export class PluginDriver {
     }
   }
 
-  /** 给每个部署插件提供独立文档，避免嵌套属性修改污染其他目标和缓存。 */
+  /** 目标专属转换和部署共享独立文档，避免污染其他目标和公共缓存。 */
   private async runDeployHook(plugin: ToPlugin, docDetailList: DocDetail[]) {
     try {
       const docsForDeploy = structuredClone(docDetailList);
-      await plugin.deploy(docsForDeploy, this.ctx);
+      const transformedDocs = await this.runTransforms(
+        docsForDeploy,
+        plugin.plugins ?? [],
+        plugin.name,
+      );
+      await plugin.deploy(transformedDocs, this.ctx);
     } catch (error) {
+      if (
+        error instanceof ElogPluginError &&
+        error.hookName === 'transform' &&
+        error.targetPluginName === plugin.name
+      ) {
+        throw error;
+      }
       throw new ElogPluginError(plugin.name, 'deploy', error);
     }
   }

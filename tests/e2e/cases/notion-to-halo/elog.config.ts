@@ -40,10 +40,10 @@ export default defineConfig({
       prefixKey: e2eProfile.image.prefixKey,
       propertyImageFields: ['cover'],
     }),
-    markdownToHtml(),
   ],
   to: toHalo({
     endpoint: process.env.ELOG_E2E_HALO_ENDPOINT!,
     token: process.env.ELOG_E2E_HALO_TOKEN!,
+    plugins: [markdownToHtml()],
   }),
 });

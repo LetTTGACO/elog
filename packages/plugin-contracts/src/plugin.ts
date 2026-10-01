@@ -95,6 +95,8 @@ export interface TransformPlugin extends BasePlugin {
 
 export interface ToPlugin extends BasePlugin {
   kind: 'to';
+  /** 由 Core 在独立文档副本上按顺序执行，仅影响当前部署目标。 */
+  plugins?: TransformPlugin[];
   deploy(docs: DocDetail[], ctx: PluginContext): Promise<DeployResult | void> | DeployResult | void;
 }
 

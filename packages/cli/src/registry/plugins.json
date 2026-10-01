@@ -872,6 +872,7 @@
       "displayName": "Halo",
       "packageName": "@elog/plugin-to-halo",
       "importName": "toHalo",
+      "defaultPlugins": ["markdown-to-html"],
       "optionsSchema": {
         "type": "object",
         "required": ["endpoint", "token"],
