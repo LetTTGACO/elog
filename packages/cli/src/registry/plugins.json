@@ -837,7 +837,7 @@
     {
       "kind": "to",
       "type": "local",
-      "displayName": "本地目录",
+      "displayName": "本地目录(Hexo/Vitepress/HuGo/Astro)",
       "packageName": "@elog/plugin-to-local",
       "importName": "toLocal",
       "optionsSchema": {
