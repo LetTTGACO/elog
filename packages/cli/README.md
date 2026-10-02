@@ -106,5 +106,6 @@ pnpm exec elog sync --env .env
 
 ## 相关链接
 
+- [Elog 1.x AI 配置指南](../../docs/AI-CONFIG.md)：交给 AI Agent，根据来源、目标和图片需求配置同步。
 - [Elog 仓库](https://github.com/LetTTGACO/elog)
 - [报告问题](https://github.com/LetTTGACO/elog/issues)

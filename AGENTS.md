@@ -159,8 +159,7 @@ build, or e2e verification command instead.
 - CI on pushes/PRs to `v1` runs install, build, typecheck, unit tests, release-report
   tests, and offline CLI E2E on Node 22 and 24, plus workflow linting.
 - Releases run through the manually dispatched GitHub Actions `release.yml`
-  workflow on `v1`, using Nx Release and npm Trusted Publishing. For preflight,
-  channel/version inputs, and failure recovery, see [the release guide](docs/release.md).
+  workflow on `v1`, using Nx Release and npm Trusted Publishing.
 - Publishing uses Nx Release only. Do not create legacy release-state files or
   use git tags to trigger publishing.
 - Only packages listed in `nx.json` `release.projects` are published.
@@ -197,6 +196,7 @@ build, or e2e verification command instead.
 
 ## Useful Files
 
+- For user-facing 1.x setup, read [the AI configuration guide](docs/AI-CONFIG.md).
 - `packages/core/src/runtime/WorkflowRunner.ts`
 - `packages/core/src/runtime/Graph.ts`
 - `packages/core/src/runtime/PluginDriver.ts`
