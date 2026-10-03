@@ -1,7 +1,7 @@
 import inquirer from 'inquirer';
 import fs from 'fs';
 import path from 'path';
-import packageJson from '../../../package.json' with { type: 'json' };
+import { cliVersion } from '../../version';
 import out from '../../logging/logger';
 import { detectPackageManager, buildInstallCommand, installPackages } from './package-manager';
 import type { InstallPackagesOptions } from './package-manager';
@@ -153,7 +153,7 @@ export async function runInitCommand(options: RunInitCommandOptions): Promise<vo
   const packages = selectedPackages(selection, registry);
   if (needsCli) {
     // 使用运行中的版本，避免 beta 初始化时被 npm 的默认 tag 切换到其他版本。
-    packages.unshift(`@elog/cli@${packageJson.version}`);
+    packages.unshift(`@elog/cli@${cliVersion}`);
   }
   const packageManager = detectPackageManager(options.cwd);
   const installCommand = buildInstallCommand(packageManager, packages);

@@ -3,7 +3,7 @@ import { runExportCommand } from './commands/export';
 import { runInitCommand } from './commands/init';
 import { runSyncCommand } from './commands/sync';
 import out from './logging/logger';
-import packageJson from '../package.json' with { type: 'json' };
+import { cliVersion } from './version';
 
 /** commander action 的统一错误边界，设置退出码但不让库代码直接退出进程。 */
 async function handleAction(action: () => Promise<void> | void): Promise<void> {
@@ -20,7 +20,7 @@ async function handleAction(action: () => Promise<void> | void): Promise<void> {
 export function createProgram(): Command {
   const program = new Command();
 
-  program.version(packageJson.version);
+  program.version(cliVersion);
 
   program
     .command('init')
