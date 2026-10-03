@@ -1,3 +1,13 @@
+## 1.0.0-beta.7 (2026-10-03)
+
+### 🩹 Fixes
+
+- **cli:** read package version at runtime ([bc630372](https://github.com/LetTTGACO/elog/commit/bc630372))
+
+### ❤️ Thank You
+
+- LetTTGACO
+
 ## 1.0.0-beta.6 (2026-10-03)
 
 ### 🧱 Updated Dependencies
