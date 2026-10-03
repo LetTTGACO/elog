@@ -9,6 +9,10 @@ contracts。增量过滤、并发下载、图片替换及其配套类型由 SDK 
 
 > Elog 1.0 目前处于 Beta 阶段，公开契约仍可能在正式版前调整。
 
+第一次编写插件时，先读[插件开发指南](../../docs/PLUGIN-DEVELOPMENT.md)，再运行
+[三类插件离线示例](../../examples/plugin-development/README.md)。指南覆盖本地文件接入、
+文档与增量缓存、常见定制、测试及独立插件包；本文作为 SDK 的简要参考。
+
 ## 安装
 
 ```bash
@@ -63,7 +67,7 @@ SDK 导出以下核心类型：
 
 - `FromPlugin`、`TransformPlugin`、`ToPlugin` 和联合类型 `ElogPlugin`
 - `PluginContext`、`DownloadResult` 和 `DeployResult`
-- `DocDetail`、`DocProperties`、`DocStructure` 和 `BodyType`
+- `DocDetail`、`CachedDoc`、`DocProperties`、`DocStructure` 和 `BodyType`
 - 图片上传相关的 `ImageUploader`、`ImageSource` 和 `ImageBaseConfig`
 
 插件对象使用 `kind` 作为判别字段。`name` 建议使用 `from:*`、`transform:*` 或 `to:*` 的命名
@@ -83,6 +87,13 @@ SDK 导出以下核心类型：
 
 `ctx.logger.error(message)` 会输出错误并抛出异常，用于终止当前插件 Hook。插件代码不应调用
 `process.exit()`，也不应依赖 Hook 的 `this` 绑定。
+
+`ctx.cache.docList` 的元素为 `CachedDoc`；磁盘缓存省略 `body` 和 `rawBody`，插件不能
+依赖缓存提供正文。`ctx.http` 返回的非成功 HTTP 状态需要插件自行检查。
+
+来源返回本次待同步的 `docDetailList`、当前范围的完整 `sortedDocList` 和 `docStatusMap`。
+缓存写入仅保留完整列表中的 ID；实现增量同步时应始终返回它，包括没有变化的运行。
+建议使用公开的 `getDocDetailList` 或 `ElogFromContext` 计算增量状态。
 
 ## Context Helper
 
