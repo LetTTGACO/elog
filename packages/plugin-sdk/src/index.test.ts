@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, expectTypeOf, it, vi } from 'vitest';
 import { DocSyncStatus as ContractDocSyncStatus } from '@elog/plugin-contracts';
 import {
   DocSyncStatus,
@@ -6,6 +6,8 @@ import {
   ElogFromContext,
   ElogImageContext,
   formatTime,
+  getDocDetailList,
+  type CachedDoc,
   type DocDetail,
   type DownloadResult,
   type PluginContext,
@@ -124,6 +126,40 @@ describe('plugin sdk public surface', () => {
     expect(result.docStatusMap['new-doc']).toEqual({
       _updateIndex: -1,
       _status: DocSyncStatus.NEW,
+    });
+  });
+
+  it('uses bodyless cache metadata to skip unchanged docs and retry failed docs', async () => {
+    const cachedDocList: CachedDoc[] = ['unchanged', 'updated', 'failed'].map((id) => ({
+      id,
+      title: id,
+      updateTime: 1,
+      properties: { title: id, urlname: id },
+      ...(id === 'failed' ? { _status: DocSyncStatus.IMAGE_ERROR } : {}),
+    }));
+    expectTypeOf<CachedDoc['body']>().toEqualTypeOf<string | undefined>();
+    const sortedDocList = ['unchanged', 'updated', 'failed', 'new'].map((id) => ({
+      id,
+      updateTime: id === 'updated' ? 2 : 1,
+      properties: { title: id },
+    }));
+    const getDocDetail = vi.fn(async (doc: (typeof sortedDocList)[number]) =>
+      createDoc({ id: doc.id, updateTime: doc.updateTime }),
+    );
+
+    const result = await getDocDetailList({
+      cachedDocList,
+      getSortedDocList: async () => sortedDocList,
+      getDocDetail,
+      limit: 1,
+    });
+
+    expect(getDocDetail.mock.calls.map(([doc]) => doc.id)).toEqual(['updated', 'failed', 'new']);
+    expect(result.sortedDocList).toEqual(sortedDocList);
+    expect(result.docStatusMap).toEqual({
+      updated: { _updateIndex: 1, _status: DocSyncStatus.UPDATE },
+      failed: { _updateIndex: 2, _status: DocSyncStatus.UPDATE },
+      new: { _updateIndex: -1, _status: DocSyncStatus.NEW },
     });
   });
 

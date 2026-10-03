@@ -1,6 +1,7 @@
 import asyncPool from 'tiny-async-pool';
 import {
   DocSyncStatus,
+  type CachedDoc,
   type DocDetail,
   type DocSyncStatusMap,
   type DownloadResult,
@@ -12,7 +13,7 @@ import type { FilterDocsResult } from './doc';
 type SourceLogger = Pick<Logger, 'debug' | 'info' | 'success' | 'warn'>;
 
 export function filterDocs<T>(
-  cachedDocList: readonly DocDetail[],
+  cachedDocList: readonly CachedDoc[],
   docs: SortedDoc<T>[],
   logger?: SourceLogger,
 ): FilterDocsResult<T> {
@@ -32,7 +33,10 @@ export function filterDocs<T>(
       const cacheDoc = cachedDocList[cacheIndex];
       let needUpdate = doc.updateTime !== cacheDoc.updateTime;
 
-      if ([DocSyncStatus.DOC_ERROR, DocSyncStatus.IMAGE_ERROR].includes(cacheDoc._status)) {
+      if (
+        cacheDoc._status === DocSyncStatus.DOC_ERROR ||
+        cacheDoc._status === DocSyncStatus.IMAGE_ERROR
+      ) {
         logger?.warn(
           `上次同步时【${cacheDoc.properties.title}】存在图片/文档下载失败，本次将尝试重新同步。如果并不需要当前文档参与本次同步，请在缓存文件（默认为 elog.cache.json）中找到此文档并删除 _status 字段`,
         );
@@ -79,7 +83,7 @@ export type GetSortedDocList<T extends DocFrom> = () => Promise<SortedDoc<T>[]>;
 export type GetDocDetail<T extends DocFrom> = (doc: T) => Promise<DocDetail>;
 
 export const getDocDetailList = async <T extends DocFrom>(option: {
-  cachedDocList: readonly DocDetail[];
+  cachedDocList: readonly CachedDoc[];
   getSortedDocList: GetSortedDocList<T>;
   getDocDetail: GetDocDetail<T>;
   limit: number | undefined;

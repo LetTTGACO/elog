@@ -43,6 +43,7 @@ const from: FromPlugin = {
           properties: { title: 'Example', urlname: 'example' },
         },
       ],
+      sortedDocList: [{ id: 'example', updateTime: 1 }],
       docStatusMap: { example: { _updateIndex: -1, _status: DocSyncStatus.NEW } },
     };
   },
@@ -50,6 +51,16 @@ const from: FromPlugin = {
 ```
 
 ## 运行与兼容性
+
+上面的例子每次返回全文，用于展示协议结构。实现增量来源时，建议使用 SDK 的
+`getDocDetailList` 或 `ElogFromContext`，根据宿主缓存计算待下载列表与同步状态。
+
+`docDetailList` 是本次待同步文档，`sortedDocList` 是当前同步范围的完整文档列表。
+后者虽然为可选字段，但缓存写入仅保留其中的 ID；成功部署时省略它会写出空的文档缓存。
+需要增量同步的来源应始终返回完整列表，包括没有待更新文档的运行。
+
+`ctx.cache.docList` 使用 `CachedDoc`，保留 ID、更新时间、属性等元信息；持久化时省略
+`body` 和 `rawBody`，插件不能依赖缓存提供正文。SDK 同样转导出此类型。
 
 仅支持 ESM，Node.js 22.13.0 或更高版本。公开图片协议使用 Node.js `Buffer`，
 因此包依赖 `@types/node` 来解析声明文件；运行时仅导出协议常量。

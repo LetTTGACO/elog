@@ -1,5 +1,5 @@
 import type { Buffer } from 'node:buffer';
-import type { DocDetail, DocSyncStatusMap, SortedDoc } from './doc';
+import type { CachedDoc, DocDetail, DocSyncStatusMap, SortedDoc } from './doc';
 import type { ImageDataUrl, ImageFileType, ImageUrl } from './image';
 import type { LoggingFunction } from './log';
 
@@ -17,7 +17,7 @@ export interface Logger {
 }
 
 export interface CacheReadonlyContext {
-  readonly docList: readonly DocDetail[];
+  readonly docList: readonly CachedDoc[];
 }
 
 export interface ElogHttpClientResponse<T> {
@@ -68,12 +68,16 @@ export interface PluginContext {
 }
 
 export interface DownloadResult {
+  /** 本次需要转换和部署的文档，增量来源只返回新增及更新项。 */
   docDetailList: DocDetail[];
+  /** 当前同步范围的完整列表；缓存写入仅保留其中的 ID。 */
   sortedDocList?: SortedDoc<unknown>[];
+  /** 缓存更新状态；缺少状态的文档仍可部署，但不会加入或更新缓存。 */
   docStatusMap: DocSyncStatusMap;
 }
 
 export interface DeployResult {
+  /** 插件可返回的统计值；当前工作流结果按输入文档数统计，不读取此值。 */
   deployedCount?: number;
 }
 

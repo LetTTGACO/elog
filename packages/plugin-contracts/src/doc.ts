@@ -42,6 +42,17 @@ export interface DocDetail {
   [key: string]: any;
 }
 
+/** 缓存保留文档元信息；磁盘写入会省略 body 和 rawBody。 */
+export interface CachedDoc extends Pick<
+  DocDetail,
+  'id' | 'title' | 'updateTime' | 'properties' | 'bodyType' | 'rawBodyType' | 'docStructure'
+> {
+  body?: string;
+  rawBody?: string;
+  _status?: DocSyncStatus;
+  [key: string]: any;
+}
+
 export type SortedDoc<T> = T & { id: string; updateTime: number };
 
 export interface DocSyncStatusEntry {

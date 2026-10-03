@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import {
   DocSyncStatus,
+  type CachedDoc,
   type DocDetail,
   type DocSyncStatusMap,
   type SortedDoc,
@@ -12,7 +13,7 @@ import out from '../logging/logger';
 /** 负责单个工作流的缓存读写，运行时只通过这里理解缓存文件结构。 */
 export class CacheStore {
   readonly config: CacheConfig;
-  readonly cachedDocList: DocDetail[];
+  readonly cachedDocList: CachedDoc[];
 
   constructor(config: CacheConfig) {
     this.config = config;
@@ -20,7 +21,7 @@ export class CacheStore {
   }
 
   /** 加载缓存失败时按全量同步处理，避免缓存缺失阻断首次运行。 */
-  private load(): DocDetail[] {
+  private load(): CachedDoc[] {
     if (this.config.disabled) {
       out.success('全量更新', '已禁用缓存，将全量更新文档');
       return [];

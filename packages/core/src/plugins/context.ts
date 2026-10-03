@@ -1,4 +1,4 @@
-import type { DocDetail } from '../types/doc';
+import type { CachedDoc } from '@elog/plugin-contracts';
 import { LOGLEVEL_ERROR } from '../logging/levels';
 import out, { println } from '../logging/logger';
 import request from '../http/request';
@@ -19,7 +19,7 @@ import type { PluginContext, WorkflowInfo } from './types';
 /** 创建传给插件的运行时上下文，集中暴露日志、HTTP、缓存和图片工具能力。 */
 export function createPluginContext(options: {
   workflow: WorkflowInfo;
-  cachedDocList: DocDetail[];
+  cachedDocList: readonly CachedDoc[];
 }): PluginContext {
   return {
     workflow: options.workflow,
