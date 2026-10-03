@@ -1,3 +1,17 @@
+## 1.0.0-beta.6 (2026-10-03)
+
+### 🩹 Fixes
+
+- **images:** prevent GitHub upload conflicts and expand e2e coverage ([790f49c2](https://github.com/LetTTGACO/elog/commit/790f49c2))
+
+### 🧱 Updated Dependencies
+
+- Updated @elog/plugin-sdk to 1.0.0-beta.3
+
+### ❤️ Thank You
+
+- LetTTGACO
+
 ## 1.0.0-beta.5 (2026-10-01)
 
 ### 🧱 Updated Dependencies

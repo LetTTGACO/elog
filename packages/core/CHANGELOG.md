@@ -1,3 +1,9 @@
+## 1.0.0-beta.3 (2026-10-03)
+
+### 🧱 Updated Dependencies
+
+- Updated @elog/plugin-contracts to 1.0.0-beta.3
+
 ## 1.0.0-beta.2 (2026-10-01)
 
 ### 🚀 Features
