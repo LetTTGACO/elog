@@ -39,9 +39,17 @@ const report = {
   changelogs: { '@elog/core': '### Fixes\n\n- Isolate deploy documents' },
 };
 const steps = Object.fromEntries(
-  ['install', 'build', 'typecheck', 'report_test', 'test', 'prepare', 'plan', 'release'].map(
-    (id) => [id, { outcome: 'success' }],
-  ),
+  [
+    'install',
+    'build',
+    'typecheck',
+    'report_test',
+    'test',
+    'offline_test',
+    'prepare',
+    'plan',
+    'release',
+  ].map((id) => [id, { outcome: 'success' }]),
 );
 
 test('preview shows package versions, commit links and aggregated test outcomes without claiming publication', () => {
@@ -60,12 +68,44 @@ test('preview shows package versions, commit links and aggregated test outcomes 
   assert.match(markdown, /Beta 发布预演/);
   assert.match(markdown, /1\.0\.0-beta\.1.*1\.0\.0-beta\.2/);
   assert.match(markdown, /5 通过 · 0 失败 · 1 跳过/);
-  assert.match(markdown, /CLI E2E \| — 未执行/);
+  assert.match(markdown, /离线 E2E \| ✅ 通过/);
   assert.match(markdown, /预演通过，计划发布/);
   assert.match(markdown, /compare\/%40elog%2Fcore%401\.0\.0-beta\.1/);
   assert.match(markdown, /&#124; &lt;details&gt; \\\[link/);
   assert.match(markdown, /Isolate deploy documents/);
   assert.doesNotMatch(markdown, /新版本及渠道已确认/);
+});
+
+test('offline E2E is required for completion in previews and real releases', () => {
+  for (const dryRun of [true, false]) {
+    const complete = {
+      ...steps,
+      push: { outcome: 'success' },
+      verify: { outcome: 'success' },
+    };
+    const input = {
+      report: { ...report, dryRun },
+      steps: complete,
+      metrics: { offline_test: { durationMs: 12500 } },
+    };
+    assert.match(renderSummary(input), /✅ 已完成/);
+    assert.match(renderSummary(input), /离线 E2E \| ✅ 通过 \| 12\.5s/);
+
+    for (const outcome of ['failure', 'skipped', undefined]) {
+      const verificationSteps = { ...complete };
+      if (outcome) verificationSteps.offline_test = { outcome };
+      else delete verificationSteps.offline_test;
+      const markdown = renderSummary({
+        ...input,
+        steps: verificationSteps,
+      });
+      assert.doesNotMatch(markdown, /✅ 已完成/);
+      assert.match(
+        markdown,
+        outcome === 'failure' ? /离线 E2E \| ❌ 失败/ : /离线 E2E \| — 未执行/,
+      );
+    }
+  }
 });
 
 test('both preview and real release reject already published targets, even when the channel differs', () => {

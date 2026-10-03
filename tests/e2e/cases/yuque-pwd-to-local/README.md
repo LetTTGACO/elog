@@ -24,13 +24,14 @@
 
 ## 配置切换
 
-从仓库根目录运行全部自动图床用例：
+在 `tests/e2e` 中运行全部自动图床用例：
 
 ```bash
-pnpm e2e:images
+cd tests/e2e
+pnpm test:images
 ```
 
-在 `tests/e2e` 中也可以运行 `pnpm test:images`。完整 E2E、稳定矩阵和 `test:yuque-pwd-local` 同样会选中这七种图床；缺少凭据的用例会跳过。
+完整 E2E、稳定矩阵和 `test:yuque-pwd-local` 同样会选中这七种图床。根目录的 `pnpm e2e:stable` 运行完整稳定矩阵，并在同步前要求全部必需凭据；其他调试入口缺少凭据的用例会跳过。
 
 只运行一个图床时，设置 `ELOG_E2E_IMAGE`：
 

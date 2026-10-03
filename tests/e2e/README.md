@@ -10,6 +10,17 @@
 - `.env`：本地私密环境变量，不提交。
 - `.tmp/`：本地调试输出，不提交。
 
+根目录提供两个 E2E 入口：
+
+| 命令 | 使用场景 | 范围 |
+| --- | --- | --- |
+| `pnpm e2e:offline` | CI、发布预演和正式发布自动化 | CLI 命令、本地模拟服务同步、配置与运行器检查，不需要平台凭据 |
+| `pnpm e2e:stable` | 本地发布前手动验收 | 完整 Stable 真实平台矩阵，包括图床和远端 CMS 回读 |
+
+离线入口通过 `vitest.offline.config.ts` 的固定文件列表选择测试，主 runner 不加载 `.env`。
+运行器控制测试使用空凭据启动真实平台 runner，只验证缺凭据时的失败或跳过行为。
+CI 在 Node 22、24 上执行离线套件；发布预演和正式发布也执行同一入口，失败会停止后续发布步骤，结果、耗时和测试统计纳入发布报告。
+
 稳定同步用例：
 
 | 用例 | 作用 | 必需环境变量 |
@@ -24,7 +35,10 @@
 | `feishu-space-to-halo` | 测飞书空间、R2 正文图片和 Halo 远端回读 | `ELOG_E2E_FEISHU_APP_ID`, `ELOG_E2E_FEISHU_APP_SECRET`, `ELOG_E2E_FEISHU_SPACE_FOLDER_TOKEN`，以及 Halo、R2 凭据 |
 | `feishu-wiki-to-halo` | 测飞书 Wiki、R2 正文图片和 Halo 远端回读 | `ELOG_E2E_FEISHU_APP_ID`, `ELOG_E2E_FEISHU_APP_SECRET`, `ELOG_E2E_FEISHU_WIKI_ID`，以及 Halo、R2 凭据 |
 
-在 `tests/e2e` 中运行 `pnpm test:stable` 会执行上述稳定同步矩阵，包括 Notion、语雀密码、飞书空间、飞书 Wiki 到 Halo 的四个组合。
+根目录运行 `pnpm e2e:stable`，或在 `tests/e2e` 中运行 `pnpm test:stable`，会执行上述稳定同步矩阵，包括 Notion、语雀密码、飞书空间、飞书 Wiki 到 Halo 的四个组合，以及语雀密码来源的七种自动图床 profile。
+
+Stable 在同步开始前检查整个矩阵的必需凭据；缺少凭据时汇总用例和缺失变量名，以非零退出码结束。
+Stable 会清除 `ELOG_E2E_CASE` 和 `ELOG_E2E_IMAGE` 筛选，确保环境中遗留的调试设置不会缩小验收范围。专项验证使用下方单用例入口。
 
 手动可选用例（`stable: false`）：
 
@@ -37,26 +51,25 @@
 发布前如果要提前发现 Node 24 兼容问题，用 Node 24 手动跑稳定矩阵：
 
 ```bash
-cd tests/e2e
-nvm exec 24 pnpm test:stable
+nvm exec 24 pnpm e2e:stable
 ```
 
 这条命令会走真实平台 e2e，只适合本地发布前验证，不作为默认 CI 必跑项。
 
-如果某个用例缺少环境变量，Vitest 会跳过它。
-验证时应检查跳过列表，确认有凭据的组合实际执行。
+单用例和完整 E2E 调试入口中，如果某个用例缺少环境变量，Vitest 会跳过它。
+调试时应检查跳过列表，确认有凭据的组合实际执行。
 
 ## 环境变量
 
-在 `tests/e2e` 中运行测试时，Vitest 会读取该目录的 `.env`，即 `tests/e2e/.env`。
-根目录的 `pnpm e2e:cli` 也会转发到该目录执行离线 CLI 测试。
+真实平台入口的 Vitest 会读取 `tests/e2e/.env`。
+根目录的两个入口都会转发到 `tests/e2e` 执行。
 
 运行器控制变量：
 
 | 变量 | 作用 |
 | --- | --- |
-| `ELOG_E2E_CASE` | 只运行指定同步用例。通常由 `test:notion-local` 等脚本自动设置。 |
-| `ELOG_E2E_STABLE=1` | 只运行稳定同步矩阵，排除 `stable: false` 的手动/可选 case。通常由 `test:stable` 脚本自动设置。也兼容 `true`。 |
+| `ELOG_E2E_CASE` | 单用例入口只运行指定同步用例。通常由 `test:notion-local` 等脚本自动设置；Stable 会清除它。 |
+| `ELOG_E2E_STABLE=1` | 执行完整稳定同步矩阵，排除 `stable: false` 的手动/可选 case，并要求全部必需凭据。由 `test:stable` 脚本设置，也兼容 `true`。 |
 | `ELOG_E2E_STREAM_OUTPUT=1` | 同步时把真实 CLI stdout/stderr 实时输出到控制台，同时仍保留断言捕获。也兼容 `true`。 |
 | `ELOG_E2E_KEEP_TMP=1` | 测试通过后也保留 `.tmp` 临时 workspace，便于调试产物。失败时默认会保留。也兼容 `true`。 |
 
@@ -83,25 +96,26 @@ nvm exec 24 pnpm test:stable
 
 ## 推荐运行方式
 
-从仓库根目录运行离线 CLI 测试（CI 使用同一入口）：
+从仓库根目录运行离线测试（CI 和发布流程使用同一入口）：
 
 ```bash
-pnpm e2e:cli
+pnpm e2e:offline
 ```
 
-从仓库根目录运行真实图床验证：
+从仓库根目录运行发布前真实平台验收：
 
 ```bash
-pnpm e2e:images
+pnpm e2e:stable
 ```
 
-它使用语雀密码来源和 Local 部署，自动验证 `local`、`cos`、`github`、`oss`、`qiniu`、`r2`、`upyun`。每种图床各执行两次同步，检查图片替换和无变化跳过；缺少凭据的图床会跳过。在 `tests/e2e` 中的对应入口是 `pnpm test:images`。
+专项图床验证在 `tests/e2e` 中运行 `pnpm test:images`。它使用语雀密码来源和 Local 部署，验证 `local`、`cos`、`github`、`oss`、`qiniu`、`r2`、`upyun`。每种图床各执行两次同步，检查图片替换和无变化跳过；专项入口缺少凭据的图床会跳过。
 
 真实平台测试统一进入 `tests/e2e`，按需选择矩阵或单个用例：
 
 ```bash
 cd tests/e2e
 pnpm run test:stable
+pnpm run test:images
 pnpm run test:notion-local
 pnpm run test:notion-catalog-local
 pnpm run test:feishu-wiki-local
@@ -138,7 +152,7 @@ pnpm exec elog sync --config cases/notion-to-local/elog.config.ts --env .env
 
 ## 图床插件
 
-在 `tests/e2e` 中，部分用例可以用 `ELOG_E2E_IMAGE` 临时切换图床：
+在 `tests/e2e` 中，部分单用例入口可以用 `ELOG_E2E_IMAGE` 临时切换图床：
 
 ```bash
 ELOG_E2E_IMAGE=local pnpm run test:notion-local

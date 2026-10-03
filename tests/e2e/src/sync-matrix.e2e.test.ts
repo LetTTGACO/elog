@@ -10,10 +10,28 @@ import {
 } from './helpers/temp-workspace';
 
 const repoRoot = repoRootFromE2e();
-const loadedCases = await loadSyncCases(repoRoot);
 const stableOnly =
   process.env.ELOG_E2E_STABLE === '1' || process.env.ELOG_E2E_STABLE?.toLowerCase() === 'true';
+if (stableOnly) {
+  // Clear manual filters before importing configs so Stable always loads every image profile.
+  delete process.env.ELOG_E2E_CASE;
+  delete process.env.ELOG_E2E_IMAGE;
+}
+const loadedCases = await loadSyncCases(repoRoot);
 const syncCases = filterSyncCases(loadedCases, process.env.ELOG_E2E_CASE, stableOnly);
+
+if (stableOnly) {
+  if (syncCases.length === 0) throw new Error('No stable e2e sync cases found');
+  const missing = syncCases.flatMap((syncCase) => {
+    const names = syncCase.requiredEnv.filter((name) => !process.env[name]);
+    return names.length ? [`${syncCase.title}: ${names.join(', ')}`] : [];
+  });
+  if (missing.length) {
+    throw new Error(
+      `Stable e2e requires all platform credentials before syncing:\n${missing.join('\n')}`,
+    );
+  }
+}
 
 describe('elog sync e2e matrix', () => {
   for (const syncCase of syncCases) {

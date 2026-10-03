@@ -37,5 +37,5 @@ jobs:
         run: pnpm test
       - name: Test release report and publication checks
         run: node --test .github/scripts/release-report.test.mjs
-      - name: Test offline CLI E2E
-        run: pnpm e2e:cli
+      - name: Test offline E2E
+        run: pnpm e2e:offline

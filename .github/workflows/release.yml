@@ -95,6 +95,12 @@ jobs:
           node .github/scripts/release-report.mjs run test pnpm test --
           --reporter=default --reporter="$GITHUB_WORKSPACE/.github/scripts/vitest-report.mjs"
 
+      - name: Test offline E2E
+        id: offline_test
+        run: >-
+          node .github/scripts/release-report.mjs run offline_test pnpm e2e:offline
+          --reporter=default --reporter="$GITHUB_WORKSPACE/.github/scripts/vitest-report.mjs"
+
       - name: Prepare release commit
         id: prepare
         run: |

@@ -34,8 +34,11 @@ pnpm test
 pnpm --filter @elog/cli typecheck
 pnpm --filter @elog/cli test
 
-# Offline CLI E2E (repository root)
-pnpm e2e:cli
+# Offline E2E (repository root)
+pnpm e2e:offline
+
+# Manual pre-release platform E2E (repository root)
+pnpm e2e:stable
 ```
 
 Build/test defaults:
@@ -122,17 +125,19 @@ Cache behavior:
 
 ## E2E Notes
 
-Run offline CLI checks from the repository root with `pnpm e2e:cli`.
+Run offline checks from the repository root with `pnpm e2e:offline`.
 Real platform E2E scripts live in `tests/e2e/package.json` and run from `tests/e2e`.
 For commands, environment setup, and case maintenance, see [the E2E README](tests/e2e/README.md).
 
-`tests/e2e` runs the built CLI in temporary workspaces. Real platform cases skip
-when required env is missing. The runner loads `tests/e2e/.env` through Vitest
-setup.
+`tests/e2e` runs the built CLI in temporary workspaces. The offline suite uses an
+explicit file list and needs no platform credentials. Real platform runs load
+`tests/e2e/.env` through Vitest setup. `pnpm e2e:stable` runs the full stable matrix
+and fails before syncing if any required credentials are missing; single-case
+runs skip when required env is missing.
 
 Useful e2e env controls:
 
-- `ELOG_E2E_CASE`: select one sync case; package scripts usually set this.
+- `ELOG_E2E_CASE`: select one sync case for manual runs; Stable runs the full matrix.
 - `ELOG_E2E_STREAM_OUTPUT=1`: stream child CLI output while still capturing it.
 - `ELOG_E2E_KEEP_TMP=1`: keep successful temporary workspaces for inspection.
 
@@ -157,9 +162,11 @@ build, or e2e verification command instead.
 ## Release And CI
 
 - CI on pushes/PRs to `v1` runs install, build, typecheck, unit tests, release-report
-  tests, and offline CLI E2E on Node 22 and 24, plus workflow linting.
+  tests, and offline E2E on Node 22 and 24, plus workflow linting.
 - Releases run through the manually dispatched GitHub Actions `release.yml`
   workflow on `v1`, using Nx Release and npm Trusted Publishing.
+- Release previews and real releases require offline E2E and record its results
+  in the release report. Real platform Stable E2E is run manually before release.
 - Publishing uses Nx Release only. Do not create legacy release-state files or
   use git tags to trigger publishing.
 - Only packages listed in `nx.json` `release.projects` are published.

@@ -321,6 +321,7 @@ export function renderSummary({
     ['typecheck', '类型检查'],
     ['report_test', '发布报告测试'],
     ['test', '单元／集成测试'],
+    ['offline_test', '离线 E2E'],
     ['prepare', '源码及工作区检查'],
     ['plan', '版本与 changelog 计划'],
     ['release', dryRun ? '打包及发布预演' : 'npm 发布流程'],
@@ -426,7 +427,6 @@ export function renderSummary({
       `| ${label} | ${status(steps[id]?.outcome)} | ${metrics[id] ? `${(metrics[id].durationMs / 1000).toFixed(1)}s` : '—'} |`,
     );
   lines.push(
-    '| CLI E2E | — 未执行 | — |',
     '| 真实平台 E2E | — 未执行 | — |',
     '',
     '本流程关闭 Nx 缓存。测试数量仅统计收到的结构化结果，测试步骤状态决定整体是否通过。',

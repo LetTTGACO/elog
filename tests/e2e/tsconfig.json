@@ -3,5 +3,5 @@
   "compilerOptions": {
     "noEmit": true
   },
-  "include": ["src/**/*.ts", "cases/**/*.ts", "command-cases/**/*.ts", "vitest.config.ts"]
+  "include": ["src/**/*.ts", "cases/**/*.ts", "command-cases/**/*.ts", "vitest*.config.ts"]
 }
