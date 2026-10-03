@@ -1,0 +1,23 @@
+{
+  "name": "@elog/example-plugin-development",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "sync": "elog sync",
+    "typecheck": "tsc -p tsconfig.json --noEmit --pretty false",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@elog/cli": "workspace:*",
+    "@elog/core": "workspace:*",
+    "@elog/plugin-sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "~22.19.19",
+    "typescript": "~6.0.3",
+    "vitest": "^4.1.9"
+  }
+}

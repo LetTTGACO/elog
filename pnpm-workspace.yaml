@@ -4,6 +4,7 @@ packages:
   - 'plugins/transform/*'
   - 'plugins/to/*'
   - 'tests/*'
+  - 'examples/*'
 allowBuilds:
   esbuild: true
   nx: true
