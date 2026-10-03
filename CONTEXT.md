@@ -31,3 +31,15 @@ _Avoid_: SDK implementation, runtime utilities
 **Core**:
 The public package that owns Elog workflow execution, configuration resolution, cache coordination, and programmatic sync without any CLI command behavior.
 _Avoid_: CLI, runtime package, engine
+
+**Plugin Diagnostics**:
+The optional local diagnostic capability a plugin declares for Elog doctor, covering configuration requirements and diagnostic facts independently of document syncing. Its conclusions describe local evidence rather than platform availability.
+_Avoid_: Trial sync, platform health check
+
+**Diagnostic Fact**:
+A plugin's declaration of its Body Type semantics or effective document and image paths, used to analyze a workflow's compatibility and output relationships.
+_Avoid_: Validation result, platform verification
+
+**Plugin Rules**:
+A plugin's declared local requirements for its configuration and incoming or outgoing Body Types, shared by diagnostics and execution. They describe valid inputs and body formats rather than platform availability.
+_Avoid_: Diagnostic Fact, user options
