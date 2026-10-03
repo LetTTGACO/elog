@@ -252,7 +252,27 @@ test('publication verification recovers from temporary registry errors', async (
   assert.deepEqual(result.pending, []);
 });
 
-test('publication verification stops after five minutes and preserves unresolved package states', async () => {
+test('publication verification confirms packages that become available after five minutes', async () => {
+  let clock = 0;
+  const result = await verifyRegistry([pkg], 'beta', {
+    now: () => clock,
+    sleep: async (ms) => {
+      clock += ms;
+    },
+    query: async () => ({
+      [pkg.name]:
+        clock < 6 * 60 * 1000
+          ? { exists: false, tag: pkg.currentVersion }
+          : { exists: true, tag: pkg.newVersion },
+    }),
+  });
+  assert.equal(result.timedOut, false);
+  assert.deepEqual(result.pending, []);
+  assert.ok(result.elapsedMs >= 6 * 60 * 1000);
+  assert.ok(result.elapsedMs < 20 * 60 * 1000);
+});
+
+test('publication verification stops after twenty minutes and preserves unresolved package states', async () => {
   let clock = 0;
   const waits = [];
   const errors = [
@@ -268,7 +288,7 @@ test('publication verification stops after five minutes and preserves unresolved
       clock += ms;
     },
     query: async (pending) => {
-      assert.ok(clock < 300000);
+      assert.ok(clock < 20 * 60 * 1000);
       // Query time counts against the deadline too.
       clock += 1000;
       return Object.fromEntries(pending.map((p, i) => [p.name, errors[i]]));
@@ -276,7 +296,7 @@ test('publication verification stops after five minutes and preserves unresolved
   });
   assert.deepEqual(waits.slice(0, 5), [10000, 5000, 10000, 20000, 30000]);
   assert.ok(waits.slice(5).every((ms) => ms <= 30000));
-  assert.equal(clock, 300000);
+  assert.equal(clock, 20 * 60 * 1000);
   assert.equal(result.timedOut, true);
   assert.deepEqual(
     result.pending,

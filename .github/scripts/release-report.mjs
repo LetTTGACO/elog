@@ -101,7 +101,7 @@ export async function verifyRegistry(
   } = {},
 ) {
   const start = now();
-  const deadline = start + 300000;
+  const deadline = start + 20 * 60 * 1000;
   const registry = {};
   let pending = packages;
   let attempts = 0;
@@ -573,7 +573,7 @@ async function verify(dir) {
   const changed = report.packages.filter((pkg) => pkg.newVersion);
   const actual = { registry: {}, git: {}, verification: { attempts: [] } };
   writeJson(path.join(dir, 'actual.json'), actual);
-  if (changed.length) console.log('等待 10 秒后核验 npm，查询与重试总时限为 5 分钟。');
+  if (changed.length) console.log('等待 10 秒后核验 npm，查询与重试总时限为 20 分钟。');
   const observed = await verifyRegistry(changed, report.channel, {
     onAttempt: (snapshot) => {
       actual.registry = snapshot.registry;
@@ -589,7 +589,7 @@ async function verify(dir) {
   actual.verification.timedOut = observed.timedOut;
   writeJson(path.join(dir, 'actual.json'), actual);
   if (observed.timedOut)
-    console.error(`npm 核验超过 5 分钟，仍未确认：${observed.pending.join(', ')}`);
+    console.error(`npm 核验超过 20 分钟，仍未确认：${observed.pending.join(', ')}`);
   try {
     actual.git.commit = git('rev-parse', 'HEAD');
     const refs = git(
