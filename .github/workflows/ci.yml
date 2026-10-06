@@ -16,26 +16,89 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    env:
+      CI_NODE_VERSION: ${{ matrix.node-version }}
     strategy:
       fail-fast: false
       matrix:
         node-version: [22, 24]
     steps:
+      - name: Set report directory
+        run: echo "CI_REPORT_DIR=$RUNNER_TEMP/ci-report" >> "$GITHUB_ENV"
       - uses: actions/checkout@v6
+        id: checkout
       - uses: pnpm/action-setup@v4
+        id: pnpm
       - uses: actions/setup-node@v6
+        id: node
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        id: install
+        run: node .github/scripts/ci-report.mjs run install pnpm install --frozen-lockfile
       - name: Build
-        run: pnpm build
+        id: build
+        run: node .github/scripts/ci-report.mjs run build pnpm build
       - name: Typecheck
-        run: pnpm typecheck
+        id: typecheck
+        run: node .github/scripts/ci-report.mjs run typecheck pnpm typecheck
       - name: Test
-        run: pnpm test
-      - name: Test release report and publication checks
-        run: node --test .github/scripts/release-report.test.mjs
+        id: test
+        run: >-
+          node .github/scripts/ci-report.mjs run test pnpm test --
+          --reporter=default --reporter="$GITHUB_WORKSPACE/.github/scripts/vitest-report.mjs"
+      - name: Test CI and release reports
+        id: report_test
+        run: node .github/scripts/ci-report.mjs run report_test node --test .github/scripts/ci-report.test.mjs .github/scripts/release-report.test.mjs
       - name: Test offline E2E
-        run: pnpm e2e:offline
+        id: offline_test
+        run: >-
+          node .github/scripts/ci-report.mjs run offline_test pnpm e2e:offline
+          --reporter="$GITHUB_WORKSPACE/.github/scripts/vitest-report.mjs"
+      - name: Collect CI report
+        if: ${{ always() && steps.checkout.outcome == 'success' }}
+        env:
+          CI_STEPS: ${{ toJSON(steps) }}
+        run: node .github/scripts/ci-report.mjs collect
+      - name: Upload CI report
+        if: ${{ always() && steps.checkout.outcome == 'success' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ci-report-node-${{ matrix.node-version }}
+          path: ${{ env.CI_REPORT_DIR }}/
+          if-no-files-found: error
+          retention-days: 14
+
+  summary:
+    name: CI summary
+    if: ${{ always() }}
+    needs: [workflow-lint, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set report directory
+        run: echo "CI_REPORT_DIR=$RUNNER_TEMP/ci-reports" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Download CI reports
+        uses: actions/download-artifact@v8
+        with:
+          pattern: ci-report-node-*
+          path: ${{ env.CI_REPORT_DIR }}/
+      - name: Generate CI summary
+        if: ${{ always() }}
+        env:
+          CI_NEEDS: ${{ toJSON(needs) }}
+          CI_NODE_VERSIONS: '[22, 24]'
+        run: node .github/scripts/ci-report.mjs summary
+      - name: Upload combined CI report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ci-report
+          path: ${{ env.CI_REPORT_DIR }}/
+          if-no-files-found: error
+          retention-days: 14

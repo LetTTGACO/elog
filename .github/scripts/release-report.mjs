@@ -249,7 +249,7 @@ async function plan(dir) {
   writeJson(path.join(dir, 'plan.json'), report);
 }
 
-async function run(dir, id, command, args) {
+export async function run(dir, id, command, args) {
   if (!/^[a-z_]+$/.test(id) || !command) throw new Error('Expected run <step_id> <command> [args]');
   const start = Date.now();
   const file = path.join(dir, `${id}.log`);
