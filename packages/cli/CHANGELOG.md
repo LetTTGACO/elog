@@ -1,3 +1,9 @@
+## 1.0.0-beta.8 (2026-10-06)
+
+### 🧱 Updated Dependencies
+
+- Updated @elog/core to 1.0.0-beta.4
+
 ## 1.0.0-beta.7 (2026-10-03)
 
 ### 🩹 Fixes

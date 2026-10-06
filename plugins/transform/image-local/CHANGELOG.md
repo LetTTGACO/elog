@@ -1,3 +1,9 @@
+## 1.0.0-beta.7 (2026-10-06)
+
+### 🧱 Updated Dependencies
+
+- Updated @elog/plugin-sdk to 1.0.0-beta.4
+
 ## 1.0.0-beta.6 (2026-10-03)
 
 ### 🧱 Updated Dependencies

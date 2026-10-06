@@ -1,3 +1,17 @@
+## 1.0.0-beta.4 (2026-10-06)
+
+### 🩹 Fixes
+
+- **plugin-sdk:** align cache metadata types and document source results ([67c193f0](https://github.com/LetTTGACO/elog/commit/67c193f0))
+
+### 🧱 Updated Dependencies
+
+- Updated @elog/plugin-contracts to 1.0.0-beta.4
+
+### ❤️ Thank You
+
+- LetTTGACO
+
 ## 1.0.0-beta.3 (2026-10-03)
 
 ### 🧱 Updated Dependencies
